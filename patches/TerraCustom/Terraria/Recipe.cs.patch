@@ -1,0 +1,240 @@
+--- src/Terraria\Terraria\Recipe.cs
++++ src/TerraCustom\Terraria\Recipe.cs
+@@ -7,20 +7,35 @@
+ 	public class Recipe
+ 	{
+ 		public static int maxRequirements = 15;
++
+ 		public static int maxRecipes = 2000;
++
+ 		public static int numRecipes = 0;
++
+ 		private static Recipe newRecipe = new Recipe();
++
+ 		public Item createItem = new Item();
++
+ 		public Item[] requiredItem = new Item[Recipe.maxRequirements];
++
+ 		public int[] requiredTile = new int[Recipe.maxRequirements];
++
+ 		public bool needHoney;
++
+ 		public bool needWater;
++
+ 		public bool needLava;
++
+ 		public bool anyWood;
++
+ 		public bool anyIronBar;
++
+ 		public bool anyPressurePlate;
++
+ 		public bool anySand;
++
+ 		public bool anyFragment;
++
+ 		public bool alchemy;
+ 
+ 		public Recipe()
+@@ -150,10 +165,10 @@
+ 				}
+ 				switch (reqType)
+ 				{
+-					case 619:
+-					case 620:
+-					case 621:
+-						goto IL_59;
++				case 619:
++				case 620:
++				case 621:
++					goto IL_59;
+ 				}
+ 			}
+ 			else
+@@ -164,9 +179,9 @@
+ 				}
+ 				switch (reqType)
+ 				{
+-					case 2503:
+-					case 2504:
+-						goto IL_59;
++				case 2503:
++				case 2504:
++					goto IL_59;
+ 				}
+ 			}
+ 			return false;
+@@ -179,10 +194,10 @@
+ 				}
+ 				switch (invType)
+ 				{
+-					case 619:
+-					case 620:
+-					case 621:
+-						return true;
++				case 619:
++				case 620:
++				case 621:
++					return true;
+ 				}
+ 			}
+ 			else
+@@ -193,9 +208,9 @@
+ 				}
+ 				switch (invType)
+ 				{
+-					case 2503:
+-					case 2504:
+-						return true;
++				case 2503:
++				case 2504:
++					return true;
+ 				}
+ 			}
+ 			return false;
+@@ -230,25 +245,25 @@
+ 				}
+ 				switch (reqType)
+ 				{
+-					case 541:
+-					case 542:
+-					case 543:
+-						goto IL_54;
++				case 541:
++				case 542:
++				case 543:
++					goto IL_54;
+ 				}
+ 			}
+ 			else
+ 			{
+ 				switch (reqType)
+ 				{
+-					case 852:
+-					case 853:
++				case 852:
++				case 853:
++					goto IL_54;
++				default:
++					if (reqType == 1151)
++					{
+ 						goto IL_54;
+-					default:
+-						if (reqType == 1151)
+-						{
+-							goto IL_54;
+-						}
+-						break;
++					}
++					break;
+ 				}
+ 			}
+ 			return false;
+@@ -261,32 +276,32 @@
+ 				}
+ 				switch (invType)
+ 				{
+-					case 541:
+-					case 542:
+-					case 543:
+-						return true;
++				case 541:
++				case 542:
++				case 543:
++					return true;
+ 				}
+ 			}
+ 			else
+ 			{
+ 				switch (invType)
+ 				{
+-					case 852:
+-					case 853:
++				case 852:
++				case 853:
++					return true;
++				default:
++					if (invType == 1151)
++					{
+ 						return true;
+-					default:
+-						if (invType == 1151)
+-						{
+-							return true;
+-						}
+-						break;
++					}
++					break;
+ 				}
+ 			}
+ 			return false;
+ 		}
+ 
+ 		public static void FindRecipes()
+-		{
++		{/*
+ 			int num = Main.availableRecipe[Main.focusRecipe];
+ 			float num2 = Main.availableRecipeY[Main.focusRecipe];
+ 			for (int i = 0; i < Recipe.maxRecipes; i++)
+@@ -456,10 +471,10 @@
+ 			{
+ 				Main.availableRecipeY[num8] -= num7;
+ 			}
+-		}
++	*/	}
+ 
+ 		public static void SetupRecipes()
+-		{
++		{/*
+ 			int stack = 5;
+ 			int stack2 = 2;
+ 			Recipe.newRecipe.createItem.SetDefaults(8, false);
+@@ -10139,10 +10154,10 @@
+ 				Main.recipe[m].createItem.checkMat();
+ 			}
+ 			int arg_27EA8_0 = Recipe.numRecipes;
+-		}
++	*/	}
+ 
+ 		private static void PlatformReturn()
+-		{
++		{/*
+ 			int num = Recipe.numRecipes;
+ 			for (int i = 0; i < num; i++)
+ 			{
+@@ -10165,10 +10180,10 @@
+ 					Main.recipe[i + 1] = recipe;
+ 				}
+ 			}
+-		}
++	*/	}
+ 
+ 		private static void WallReturn()
+-		{
++		{/*
+ 			int num = Recipe.numRecipes;
+ 			for (int i = 0; i < num; i++)
+ 			{
+@@ -10190,11 +10205,11 @@
+ 					}
+ 					Main.recipe[i + 1] = recipe;
+ 				}
+-			}
++			}/*
+ 		}
+ 
+ 		private static void AddRecipe()
+-		{
++		{/*
+ 			if (Recipe.newRecipe.requiredTile[0] == 13)
+ 			{
+ 				Recipe.newRecipe.alchemy = true;
+@@ -10202,6 +10217,6 @@
+ 			Main.recipe[Recipe.numRecipes] = Recipe.newRecipe;
+ 			Recipe.newRecipe = new Recipe();
+ 			Recipe.numRecipes++;
+-		}
++	*/	}
+ 	}
+ }
+

@@ -1,0 +1,43 @@
+--- src/Terraria\Terraria.World.Generation\WorldGenerator.cs
++++ src/TerraCustom\Terraria.World.Generation\WorldGenerator.cs
+@@ -2,12 +2,13 @@
+ using System.Collections.Generic;
+ using System.Diagnostics;
+ using Terraria.GameContent.UI.States;
++using Terraria.IO;
+ 
+ namespace Terraria.World.Generation
+ {
+ 	internal class WorldGenerator
+ 	{
+-		private List<GenPass> _passes = new List<GenPass>();
++		public List<GenPass> _passes = new List<GenPass>();
+ 		private float _totalLoadWeight;
+ 
+ 		public void Append(GenPass pass)
+@@ -31,7 +32,9 @@
+ 			progress.TotalWeight = num;
+ 			string text = "";
+ 			Main.MenuUI.SetState(new UIWorldLoad(progress));
++			//    Main.menuMode = Terraria.MenuModes.a;
+ 			Main.menuMode = 888;
++			int a = 0;
+ 			foreach (GenPass current2 in this._passes)
+ 			{
+ 				stopwatch.Start();
+@@ -49,6 +52,14 @@
+ 						",\n"
+ 					});
+ 				stopwatch.Reset();
++				if (Main.setting.GenerateWldEachStep)
++				{
++					a++;
++					Main.worldName = "Test_" + a;
++					Main.WorldFileMetadata = FileMetadata.FromCurrentSettings(FileType.World);
++					Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
++					Terraria.IO.WorldFile.saveWorld(false, true);
++				}
+ 			}
+ 		}
+ 	}
+
