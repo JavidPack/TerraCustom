@@ -1,0 +1,19 @@
+--- src/Terraria\Terraria.Achievements\ConditionIntTracker.cs
++++ src/TerraCustom\Terraria.Achievements\ConditionIntTracker.cs
+@@ -5,13 +5,11 @@
+ {
+ 	public class ConditionIntTracker : AchievementTracker<int>
+ 	{
+-		public ConditionIntTracker()
+-			: base(TrackerType.Int)
++		public ConditionIntTracker() : base(TrackerType.Int)
+ 		{
+ 		}
+ 
+-		public ConditionIntTracker(int maxValue)
+-			: base(TrackerType.Int)
++		public ConditionIntTracker(int maxValue) : base(TrackerType.Int)
+ 		{
+ 			this._maxValue = maxValue;
+ 		}
+

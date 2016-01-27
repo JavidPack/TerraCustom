@@ -1,0 +1,2760 @@
+--- src/Terraria\Terraria\Player.cs
++++ src/TerraCustom\Terraria\Player.cs
+@@ -28,15 +28,20 @@
+ 		public class SmartCursorSettings
+ 		{
+ 			public static bool SmartBlocksEnabled = false;
++
+ 			public static bool SmartWallReplacement = true;
++
+ 			public static bool SmartAxeAfterPickaxe = false;
+ 		}
+ 
+ 		public struct OverheadMessage
+ 		{
+ 			public string chatText;
++
+ 			public TextSnippet[] snippets;
++
+ 			public Vector2 messageSize;
++
+ 			public int timeLeft;
+ 
+ 			public void NewMessage(string message, int displayTime)
+@@ -49,688 +54,1371 @@
+ 		}
+ 
+ 		public const int maxSolarShields = 3;
++
+ 		public const int nebulaMaxLevel = 3;
++
+ 		public const int SupportedSlotsArmor = 3;
++
+ 		public const int SupportedSlotsAccs = 7;
++
+ 		public const int SupportedSlotSets = 10;
++
+ 		public const int InitialAccSlotCount = 5;
++
+ 		public const int miscSlotPet = 0;
++
+ 		public const int miscSlotLight = 1;
++
+ 		public const int miscSlotCart = 2;
++
+ 		public const int miscSlotMount = 3;
++
+ 		public const int miscSlotHook = 4;
++
+ 		public const int maxBuffs = 22;
++
+ 		public const int defaultWidth = 20;
++
+ 		public const int defaultHeight = 42;
++
+ 		private const int shadowMax = 3;
++
+ 		private static byte[] ENCRYPTION_KEY = new UnicodeEncoding().GetBytes("h3y_gUyZ");
++
+ 		public Player.OverheadMessage chatOverhead = default(Player.OverheadMessage);
++
+ 		public bool alchemyTable;
++
+ 		private bool GoingDownWithGrapple;
++
+ 		private byte spelunkerTimer;
++
+ 		public bool[] hideInfo = new bool[13];
++
+ 		public int lostCoins;
++
+ 		public string lostCoinString = "";
++
+ 		public int soulDrain;
++
+ 		public float drainBoost;
++
+ 		public int taxMoney;
++
+ 		public int taxTimer;
++
+ 		public static int taxRate = 3600;
++
+ 		public static int crystalLeafDamage = 100;
++
+ 		public static int crystalLeafKB = 10;
++
+ 		public bool[] NPCBannerBuff = new bool[251];
++
+ 		public bool hasBanner;
++
+ 		public Vector2 lastDeathPostion;
++
+ 		public DateTime lastDeathTime;
++
+ 		public bool showLastDeath;
++
+ 		public int extraAccessorySlots = 2;
++
+ 		public bool extraAccessory;
++
+ 		public int tankPet = -1;
++
+ 		public bool tankPetReset;
++
+ 		public int stringColor;
++
+ 		public int counterWeight;
++
+ 		public bool yoyoString;
++
+ 		public bool yoyoGlove;
++
+ 		public int beetleOrbs;
++
+ 		public float beetleCounter;
++
+ 		public int beetleCountdown;
++
+ 		public bool beetleDefense;
++
+ 		public bool beetleOffense;
++
+ 		public bool beetleBuff;
++
+ 		public int solarShields;
++
+ 		public int solarCounter;
++
+ 		public Vector2[] solarShieldPos = new Vector2[3];
++
+ 		public Vector2[] solarShieldVel = new Vector2[3];
++
+ 		public bool solarDashing;
++
+ 		public bool solarDashConsumedFlare;
++
+ 		public int nebulaLevelLife;
++
+ 		public int nebulaLevelMana;
++
+ 		public int nebulaManaCounter;
++
+ 		public int nebulaLevelDamage;
++
+ 		public bool manaMagnet;
++
+ 		public bool lifeMagnet;
++
+ 		public bool lifeForce;
++
+ 		public bool calmed;
++
+ 		public bool inferno;
++
+ 		public float flameRingRot;
++
+ 		public float flameRingScale = 1f;
++
+ 		public byte flameRingFrame;
++
+ 		public byte flameRingAlpha;
++
+ 		public int netManaTime;
++
+ 		public int netLifeTime;
++
+ 		public bool netMana;
++
+ 		public bool netLife;
++
+ 		public Vector2[] beetlePos = new Vector2[3];
++
+ 		public Vector2[] beetleVel = new Vector2[3];
++
+ 		public int beetleFrame;
++
+ 		public int beetleFrameCounter;
++
+ 		public static int manaSickTime = 300;
++
+ 		public static int manaSickTimeMax = 600;
++
+ 		public static float manaSickLessDmg = 0.25f;
++
+ 		public float manaSickReduction;
++
+ 		public bool manaSick;
++
+ 		public bool stairFall;
++
+ 		public int loadStatus;
++
+ 		public Vector2[] itemFlamePos = new Vector2[7];
++
+ 		public int itemFlameCount;
++
+ 		public bool outOfRange;
++
+ 		public float lifeSteal = 99999f;
++
+ 		public float ghostDmg;
++
+ 		public bool teleporting;
++
+ 		public float teleportTime;
++
+ 		public int teleportStyle;
++
+ 		public bool sloping;
++
+ 		public bool chilled;
++
+ 		public bool dazed;
++
+ 		public bool frozen;
++
+ 		public bool stoned;
++
+ 		public bool lastStoned;
++
+ 		public bool ichor;
++
+ 		public bool webbed;
++
+ 		public int ropeCount;
++
+ 		public int manaRegenBonus;
++
+ 		public int manaRegenDelayBonus;
++
+ 		public int dash;
++
+ 		public int dashTime;
++
+ 		public int dashDelay;
++
+ 		public int eocDash;
++
+ 		public int eocHit;
++
+ 		public float accRunSpeed;
++
+ 		public bool cordage;
++
+ 		public int gem = -1;
++
+ 		public int gemCount;
++
+ 		public byte meleeEnchant;
++
+ 		public byte pulleyDir;
++
+ 		public bool pulley;
++
+ 		public int pulleyFrame;
++
+ 		public float pulleyFrameCounter;
++
+ 		public bool blackBelt;
++
+ 		public bool sliding;
++
+ 		public int slideDir;
++
+ 		public int launcherWait;
++
+ 		public bool iceSkate;
++
+ 		public bool carpet;
++
+ 		public int spikedBoots;
++
+ 		public int carpetFrame = -1;
++
+ 		public float carpetFrameCounter;
++
+ 		public bool canCarpet;
++
+ 		public int carpetTime;
++
+ 		public int miscCounter;
++
+ 		public int infernoCounter;
++
+ 		public bool sandStorm;
++
+ 		public bool crimsonRegen;
++
+ 		public bool ghostHeal;
++
+ 		public bool ghostHurt;
++
+ 		public bool sticky;
++
+ 		public bool slippy;
++
+ 		public bool slippy2;
++
+ 		public bool powerrun;
++
+ 		public bool flapSound;
++
+ 		public bool iceBarrier;
++
+ 		public bool dangerSense;
++
+ 		public float endurance;
++
+ 		public bool loveStruck;
++
+ 		public bool stinky;
++
+ 		public bool resistCold;
++
+ 		public bool electrified;
++
+ 		public bool dryadWard;
++
+ 		public bool panic;
++
+ 		public bool brainOfConfusion;
++
+ 		public byte iceBarrierFrame;
++
+ 		public byte iceBarrierFrameCounter;
++
+ 		public bool shadowDodge;
++
+ 		public float shadowDodgeCount;
++
+ 		public bool palladiumRegen;
++
+ 		public bool onHitDodge;
++
+ 		public bool onHitRegen;
++
+ 		public bool onHitPetal;
++
+ 		public int petalTimer;
++
+ 		public int shadowDodgeTimer;
++
+ 		public int fishingSkill;
++
+ 		public bool cratePotion;
++
+ 		public bool sonarPotion;
++
+ 		public bool accFishingLine;
++
+ 		public bool accTackleBox;
++
+ 		public int maxMinions = 1;
++
+ 		public int numMinions;
++
+ 		public float slotsMinions;
++
+ 		public bool pygmy;
++
+ 		public bool raven;
++
+ 		public bool slime;
++
+ 		public bool hornetMinion;
++
+ 		public bool impMinion;
++
+ 		public bool twinsMinion;
++
+ 		public bool spiderMinion;
++
+ 		public bool pirateMinion;
++
+ 		public bool sharknadoMinion;
++
+ 		public bool UFOMinion;
++
+ 		public bool DeadlySphereMinion;
++
+ 		public bool stardustMinion;
++
+ 		public bool stardustGuardian;
++
+ 		public bool stardustDragon;
++
+ 		public float wingTime;
++
+ 		public int wings;
++
+ 		public int wingsLogic;
++
+ 		public int wingTimeMax;
++
+ 		public int wingFrame;
++
+ 		public int wingFrameCounter;
++
+ 		public int skinVariant;
++
+ 		public bool ghost;
++
+ 		public int ghostFrame;
++
+ 		public int ghostFrameCounter;
++
+ 		public int miscTimer;
++
+ 		public bool pvpDeath;
++
+ 		public BitsByte zone1 = 0;
++
+ 		public BitsByte zone2 = 0;
++
+ 		public bool boneArmor;
++
+ 		public bool frostArmor;
++
+ 		public bool honey;
++
+ 		public bool crystalLeaf;
++
+ 		public int[] doubleTapCardinalTimer = new int[4];
++
+ 		public int[] holdDownCardinalTimer = new int[4];
++
+ 		public bool paladinBuff;
++
+ 		public bool paladinGive;
++
+ 		public float[] speedSlice = new float[60];
++
+ 		public float townNPCs;
++
+ 		public double headFrameCounter;
++
+ 		public double bodyFrameCounter;
++
+ 		public double legFrameCounter;
++
+ 		public int netSkip;
++
+ 		public int oldSelectItem;
++
+ 		public bool immune;
++
+ 		public int immuneTime;
++
+ 		public int immuneAlphaDirection;
++
+ 		public int immuneAlpha;
++
+ 		public int team;
++
+ 		public bool hbLocked;
++
+ 		public static int nameLen = 20;
++
+ 		private float maxRegenDelay;
++
+ 		public int sign = -1;
++
+ 		public bool editedChestName;
++
+ 		public int reuseDelay;
++
+ 		public int aggro;
++
+ 		public float activeNPCs;
++
+ 		public bool mouseInterface;
++
+ 		public bool lastMouseInterface;
++
+ 		public int noThrow;
++
+ 		public int changeItem = -1;
++
+ 		public int selectedItem;
++
+ 		public Item[] armor = new Item[20];
++
+ 		public Item[] dye = new Item[10];
++
+ 		public Item[] miscEquips = new Item[5];
++
+ 		public Item[] miscDyes = new Item[5];
++
+ 		public Item trashItem = new Item();
++
+ 		public int itemAnimation;
++
+ 		public int itemAnimationMax;
++
+ 		public int itemTime;
++
+ 		public int toolTime;
++
+ 		public float itemRotation;
++
+ 		public int itemWidth;
++
+ 		public int itemHeight;
++
+ 		public Vector2 itemLocation;
++
+ 		public bool poundRelease;
++
+ 		public float ghostFade;
++
+ 		public float ghostDir = 1f;
++
+ 		public int[] buffType = new int[22];
++
+ 		public int[] buffTime = new int[22];
++
+ 		public bool[] buffImmune = new bool[191];
++
+ 		public int heldProj = -1;
++
+ 		public int breathCD;
++
+ 		public int breathMax = 200;
++
+ 		public int breath = 200;
++
+ 		public int lavaCD;
++
+ 		public int lavaMax;
++
+ 		public int lavaTime;
++
+ 		public bool ignoreWater;
++
+ 		public bool socialShadow;
++
+ 		public bool socialGhost;
++
+ 		public bool shroomiteStealth;
++
+ 		public int stealthTimer;
++
+ 		public float stealth = 1f;
++
+ 		public string setBonus = "";
++
+ 		public Item[] inventory = new Item[59];
++
+ 		public bool[] inventoryChestStack = new bool[59];
++
+ 		public Chest bank = new Chest(true);
++
+ 		public Chest bank2 = new Chest(true);
++
+ 		public float headRotation;
++
+ 		public float bodyRotation;
++
+ 		public float legRotation;
++
+ 		public Vector2 headPosition;
++
+ 		public Vector2 bodyPosition;
++
+ 		public Vector2 legPosition;
++
+ 		public Vector2 headVelocity;
++
+ 		public Vector2 bodyVelocity;
++
+ 		public Vector2 legVelocity;
++
+ 		public float fullRotation;
++
+ 		public Vector2 fullRotationOrigin = Vector2.Zero;
++
+ 		public int nonTorch = -1;
++
+ 		public float gfxOffY;
++
+ 		public float stepSpeed = 1f;
++
+ 		public static bool deadForGood = false;
++
+ 		public bool dead;
++
+ 		public int respawnTimer;
++
+ 		public int attackCD;
++
+ 		public int potionDelay;
++
+ 		public byte difficulty;
++
+ 		public byte wetSlime;
++
+ 		public HitTile hitTile;
++
+ 		public int jump;
++
+ 		public int head = -1;
++
+ 		public int body = -1;
++
+ 		public int legs = -1;
++
+ 		public sbyte handon = -1;
++
+ 		public sbyte handoff = -1;
++
+ 		public sbyte back = -1;
++
+ 		public sbyte front = -1;
++
+ 		public sbyte shoe = -1;
++
+ 		public sbyte waist = -1;
++
+ 		public sbyte shield = -1;
++
+ 		public sbyte neck = -1;
++
+ 		public sbyte face = -1;
++
+ 		public sbyte balloon = -1;
++
+ 		public bool[] hideVisual = new bool[10];
++
+ 		public BitsByte hideMisc = 0;
++
+ 		public Rectangle headFrame;
++
+ 		public Rectangle bodyFrame;
++
+ 		public Rectangle legFrame;
++
+ 		public Rectangle hairFrame;
++
+ 		public bool controlLeft;
++
+ 		public bool controlRight;
++
+ 		public bool controlUp;
++
+ 		public bool controlDown;
++
+ 		public bool controlJump;
++
+ 		public bool controlUseItem;
++
+ 		public bool controlUseTile;
++
+ 		public bool controlThrow;
++
+ 		public bool controlInv;
++
+ 		public bool controlHook;
++
+ 		public bool controlTorch;
++
+ 		public bool controlMap;
++
+ 		public bool controlSmart;
++
+ 		public bool controlMount;
++
+ 		public bool releaseJump;
++
+ 		public bool releaseUp;
++
+ 		public bool releaseUseItem;
++
+ 		public bool releaseUseTile;
++
+ 		public bool releaseInventory;
++
+ 		public bool releaseHook;
++
+ 		public bool releaseThrow;
++
+ 		public bool releaseQuickMana;
++
+ 		public bool releaseQuickHeal;
++
+ 		public bool releaseLeft;
++
+ 		public bool releaseRight;
++
+ 		public bool releaseSmart;
++
+ 		public bool releaseMount;
++
+ 		public bool releaseDown;
++
+ 		public int altFunctionUse;
++
+ 		public bool mapZoomIn;
++
+ 		public bool mapZoomOut;
++
+ 		public bool mapAlphaUp;
++
+ 		public bool mapAlphaDown;
++
+ 		public bool mapFullScreen;
++
+ 		public bool mapStyle;
++
+ 		public bool releaseMapFullscreen;
++
+ 		public bool releaseMapStyle;
++
+ 		public int leftTimer;
++
+ 		public int rightTimer;
++
+ 		public bool delayUseItem;
++
+ 		public bool showItemIcon;
++
+ 		public bool showItemIconR;
++
+ 		public int showItemIcon2;
++
+ 		public string showItemIconText = "";
++
+ 		public int runSoundDelay;
++
+ 		public float shadow;
++
+ 		public Vector2[] shadowPos = new Vector2[3];
++
+ 		public float[] shadowRotation = new float[3];
++
+ 		public Vector2[] shadowOrigin = new Vector2[3];
++
+ 		public int[] shadowDirection = new int[3];
++
+ 		public int shadowCount;
++
+ 		public float manaCost = 1f;
++
+ 		public bool fireWalk;
++
+ 		public bool channel;
++
+ 		public int step = -1;
++
+ 		public int anglerQuestsFinished;
++
+ 		public int armorPenetration;
++
+ 		public int statDefense;
++
+ 		public int statLifeMax = 100;
++
+ 		public int statLifeMax2 = 100;
++
+ 		public int statLife = 100;
++
+ 		public int statMana;
++
+ 		public int statManaMax;
++
+ 		public int statManaMax2;
++
+ 		public int lifeRegen;
++
+ 		public int lifeRegenCount;
++
+ 		public int lifeRegenTime;
++
+ 		public int manaRegen;
++
+ 		public int manaRegenCount;
++
+ 		public int manaRegenDelay;
++
+ 		public bool manaRegenBuff;
++
+ 		public bool noKnockback;
++
+ 		public bool spaceGun;
++
+ 		public float gravDir = 1f;
++
+ 		public bool ammoCost80;
++
+ 		public bool ammoCost75;
++
+ 		public int stickyBreak;
++
+ 		public bool magicQuiver;
++
+ 		public bool magmaStone;
++
+ 		public bool lavaRose;
++
+ 		public int phantasmTime;
++
+ 		public bool ammoBox;
++
+ 		public bool ammoPotion;
++
+ 		public bool chaosState;
++
+ 		public bool strongBees;
++
+ 		public bool sporeSac;
++
+ 		public bool shinyStone;
++
+ 		public int yoraiz0rEye;
++
+ 		public bool yoraiz0rDarkness;
++
+ 		public bool suspiciouslookingTentacle;
++
+ 		public bool crimsonHeart;
++
+ 		public bool lightOrb;
++
+ 		public bool blueFairy;
++
+ 		public bool redFairy;
++
+ 		public bool greenFairy;
++
+ 		public bool bunny;
++
+ 		public bool turtle;
++
+ 		public bool eater;
++
+ 		public bool penguin;
++
+ 		public bool magicLantern;
++
+ 		public bool rabid;
++
+ 		public bool sunflower;
++
+ 		public bool wellFed;
++
+ 		public bool puppy;
++
+ 		public bool grinch;
++
+ 		public bool miniMinotaur;
++
+ 		public bool arcticDivingGear;
++
+ 		public bool wearsRobe;
++
+ 		public bool minecartLeft;
++
+ 		public bool onWrongGround;
++
+ 		public bool onTrack;
++
+ 		public int cartRampTime;
++
+ 		public bool cartFlip;
++
+ 		public float trackBoost;
++
+ 		public Vector2 lastBoost = Vector2.Zero;
++
+ 		public Mount mount;
++
+ 		public bool blackCat;
++
+ 		public bool spider;
++
+ 		public bool squashling;
++
+ 		public bool babyFaceMonster;
++
+ 		public bool magicCuffs;
++
+ 		public bool coldDash;
++
+ 		public bool sailDash;
++
+ 		public bool eyeSpring;
++
+ 		public bool snowman;
++
+ 		public bool scope;
++
+ 		public bool dino;
++
+ 		public bool skeletron;
++
+ 		public bool hornet;
++
+ 		public bool zephyrfish;
++
+ 		public bool tiki;
++
+ 		public bool parrot;
++
+ 		public bool truffle;
++
+ 		public bool sapling;
++
+ 		public bool cSapling;
++
+ 		public bool wisp;
++
+ 		public bool lizard;
++
+ 		public bool archery;
++
+ 		public bool poisoned;
++
+ 		public bool venom;
++
+ 		public bool blind;
++
+ 		public bool blackout;
++
+ 		public bool headcovered;
++
+ 		public bool frostBurn;
++
+ 		public bool onFrostBurn;
++
+ 		public bool burned;
++
+ 		public bool suffocating;
++
+ 		public byte suffocateDelay;
++
+ 		public bool dripping;
++
+ 		public bool drippingSlime;
++
+ 		public bool onFire;
++
+ 		public bool onFire2;
++
+ 		public bool noItems;
++
+ 		public bool wereWolf;
++
+ 		public bool wolfAcc;
++
+ 		public bool hideMerman;
++
+ 		public bool hideWolf;
++
+ 		public bool forceMerman;
++
+ 		public bool forceWerewolf;
++
+ 		public bool rulerGrid;
++
+ 		public bool rulerLine;
++
+ 		public bool bleed;
++
+ 		public bool confused;
++
+ 		public bool accMerman;
++
+ 		public bool merman;
++
+ 		public bool brokenArmor;
++
+ 		public bool silence;
++
+ 		public bool slow;
++
+ 		public bool gross;
++
+ 		public bool tongued;
++
+ 		public bool kbGlove;
++
+ 		public bool kbBuff;
++
+ 		public bool starCloak;
++
+ 		public bool longInvince;
++
+ 		public bool pStone;
++
+ 		public bool manaFlower;
++
+ 		public bool moonLeech;
++
+ 		public bool vortexDebuff;
++
+ 		public bool trapDebuffSource;
++
+ 		public int meleeCrit = 4;
++
+ 		public int rangedCrit = 4;
++
+ 		public int magicCrit = 4;
++
+ 		public int thrownCrit = 4;
++
+ 		public float meleeDamage = 1f;
++
+ 		public float rangedDamage = 1f;
++
+ 		public float thrownDamage = 1f;
++
+ 		public float bulletDamage = 1f;
++
+ 		public float arrowDamage = 1f;
++
+ 		public float rocketDamage = 1f;
++
+ 		public float magicDamage = 1f;
++
+ 		public float minionDamage = 1f;
++
+ 		public float minionKB;
++
+ 		public float meleeSpeed = 1f;
++
+ 		public float thrownVelocity = 1f;
++
+ 		public bool thrownCost50;
++
+ 		public bool thrownCost33;
++
+ 		public float moveSpeed = 1f;
++
+ 		public float pickSpeed = 1f;
++
+ 		public float wallSpeed = 1f;
++
+ 		public float tileSpeed = 1f;
++
+ 		public bool autoPaint;
++
+ 		public int SpawnX = -1;
++
+ 		public int SpawnY = -1;
++
+ 		public int[] spX = new int[200];
++
+ 		public int[] spY = new int[200];
++
+ 		public string[] spN = new string[200];
++
+ 		public int[] spI = new int[200];
++
+ 		public static int tileRangeX = 5;
++
+ 		public static int tileRangeY = 4;
++
+ 		public int lastTileRangeX;
++
+ 		public int lastTileRangeY;
++
+ 		public static int tileTargetX;
++
+ 		public static int tileTargetY;
++
+ 		public static float defaultGravity = 0.4f;
++
+ 		private static int jumpHeight = 15;
++
+ 		private static float jumpSpeed = 5.01f;
++
+ 		public float gravity = Player.defaultGravity;
++
+ 		public float maxFallSpeed = 10f;
++
+ 		public float maxRunSpeed = 3f;
++
+ 		public float runAcceleration = 0.08f;
++
+ 		public float runSlowdown = 0.2f;
++
+ 		public bool adjWater;
++
+ 		public bool adjHoney;
++
+ 		public bool adjLava;
++
+ 		public bool oldAdjWater;
++
+ 		public bool oldAdjHoney;
++
+ 		public bool oldAdjLava;
++
+ 		public bool[] adjTile = new bool[419];
++
+ 		public bool[] oldAdjTile = new bool[419];
++
+ 		private static int defaultItemGrabRange = 38;
++
+ 		private static float itemGrabSpeed = 0.45f;
++
+ 		private static float itemGrabSpeedMax = 4f;
++
+ 		public byte hairDye;
++
+ 		public Color hairDyeColor = Color.Transparent;
++
+ 		public float hairDyeVar;
++
+ 		public Color hairColor = new Color(215, 90, 55);
++
+ 		public Color skinColor = new Color(255, 125, 90);
++
+ 		public Color eyeColor = new Color(105, 90, 75);
++
+ 		public Color shirtColor = new Color(175, 165, 140);
++
+ 		public Color underShirtColor = new Color(160, 180, 215);
++
+ 		public Color pantsColor = new Color(255, 230, 175);
++
+ 		public Color shoeColor = new Color(160, 105, 60);
++
+ 		public int hair;
++
+ 		public bool hostile;
++
+ 		public int accCompass;
++
+ 		public int accWatch;
++
+ 		public int accDepthMeter;
++
+ 		public bool accFishFinder;
++
+ 		public bool accWeatherRadio;
++
+ 		public bool accJarOfSouls;
++
+ 		public bool accCalendar;
++
+ 		public int lastCreatureHit = -1;
++
+ 		public bool accThirdEye;
++
+ 		public byte accThirdEyeCounter;
++
+ 		public byte accThirdEyeNumber;
++
+ 		public bool accStopwatch;
++
+ 		public bool accOreFinder;
++
+ 		public int bestOre = -1;
++
+ 		public bool accCritterGuide;
++
+ 		public byte accCritterGuideCounter;
++
+ 		public byte accCritterGuideNumber;
++
+ 		public bool accDreamCatcher;
++
+ 		public DateTime dpsStart;
++
+ 		public DateTime dpsEnd;
++
+ 		public DateTime dpsLastHit;
++
+ 		public int dpsDamage;
++
+ 		public bool dpsStarted;
++
+ 		public string displayedFishingInfo = "";
++
+ 		public bool discount;
++
+ 		public bool coins;
++
+ 		public bool goldRing;
++
+ 		public bool accDivingHelm;
++
+ 		public bool accFlipper;
++
+ 		public bool doubleJumpCloud;
++
+ 		public bool jumpAgainCloud;
++
+ 		public bool dJumpEffectCloud;
++
+ 		public bool doubleJumpSandstorm;
++
+ 		public bool jumpAgainSandstorm;
++
+ 		public bool dJumpEffectSandstorm;
++
+ 		public bool doubleJumpBlizzard;
++
+ 		public bool jumpAgainBlizzard;
++
+ 		public bool dJumpEffectBlizzard;
++
+ 		public bool doubleJumpFart;
++
+ 		public bool jumpAgainFart;
++
+ 		public bool dJumpEffectFart;
++
+ 		public bool doubleJumpSail;
++
+ 		public bool jumpAgainSail;
++
+ 		public bool dJumpEffectSail;
++
+ 		public bool doubleJumpUnicorn;
++
+ 		public bool jumpAgainUnicorn;
++
+ 		public bool dJumpEffectUnicorn;
++
+ 		public bool autoJump;
++
+ 		public bool justJumped;
++
+ 		public float jumpSpeedBoost;
++
+ 		public int extraFall;
++
+ 		public bool spawnMax;
++
+ 		public int blockRange;
++
+ 		public int[] grappling = new int[20];
++
+ 		public int grapCount;
++
+ 		public int rocketTime;
++
+ 		public int rocketTimeMax = 7;
++
+ 		public int rocketDelay;
++
+ 		public int rocketDelay2;
++
+ 		public bool rocketRelease;
++
+ 		public bool rocketFrame;
++
+ 		public int rocketBoots;
++
+ 		public bool canRocket;
++
+ 		public bool jumpBoost;
++
+ 		public bool noFallDmg;
++
+ 		public int swimTime;
++
+ 		public bool killGuide;
++
+ 		public bool killClothier;
++
+ 		public bool lavaImmune;
++
+ 		public bool gills;
++
+ 		public bool slowFall;
++
+ 		public bool findTreasure;
++
+ 		public bool invis;
++
+ 		public bool detectCreature;
++
+ 		public bool nightVision;
++
+ 		public bool enemySpawns;
++
+ 		public float thorns;
++
+ 		public bool turtleArmor;
++
+ 		public bool turtleThorns;
++
+ 		public bool spiderArmor;
++
+ 		public bool setSolar;
++
+ 		public bool setVortex;
++
+ 		public bool setNebula;
++
+ 		public int nebulaCD;
++
+ 		public bool setStardust;
++
+ 		public bool vortexStealthActive;
++
+ 		public bool waterWalk;
++
+ 		public bool waterWalk2;
++
+ 		public bool gravControl;
++
+ 		public bool gravControl2;
++
+ 		public bool bee;
++
+ 		public int lastChest;
++
+ 		public int flyingPigChest = -1;
++
+ 		public int chest = -1;
++
+ 		public int chestX;
++
+ 		public int chestY;
++
+ 		public int talkNPC = -1;
++
+ 		public int fallStart;
++
+ 		public int fallStart2;
++
+ 		public int potionDelayTime = Item.potionDelay;
++
+ 		public int restorationDelayTime = Item.restorationDelay;
++
+ 		private int cHead;
++
+ 		private int cBody;
++
+ 		private int cLegs;
++
+ 		private int cHandOn;
++
+ 		private int cHandOff;
++
+ 		private int cBack;
++
+ 		private int cFront;
++
+ 		private int cShoe;
++
+ 		private int cWaist;
++
+ 		private int cShield;
++
+ 		private int cNeck;
++
+ 		private int cFace;
++
+ 		private int cBalloon;
++
+ 		private int cWings;
++
+ 		private int cCarpet;
++
+ 		public int cGrapple;
++
+ 		public int cMount;
++
+ 		public int cMinecart;
++
+ 		public int cPet;
++
+ 		public int cLight;
++
+ 		public int cYorai;
++
+ 		public int[] ownedProjectileCounts = new int[651];
++
+ 		public bool[] npcTypeNoAggro = new bool[540];
++
+ 		public int lastPortalColorIndex;
++
+ 		public int _portalPhysicsTime;
++
+ 		public bool portalPhysicsFlag;
++
+ 		public float MountFishronSpecialCounter;
++
+ 		public Vector2 MinionTargetPoint = Vector2.Zero;
++
+ 		public List<Point> TouchedTiles = new List<Point>();
++
+ 		private bool makeStrongBee;
++
+ 		public int _funkytownCheckCD;
++
+ 		public int[] hurtCooldowns;
++
+ 		public static bool lastPound = true;
+ 
+ 		public static event Action<Player> OnEnterWorld;
+@@ -1953,19 +2641,19 @@
+ 					{
+ 						switch (num15)
+ 						{
+-							case 646:
+-								num5 = 647;
+-								goto IL_65E;
+-							case 647:
+-								num5 = 648;
+-								goto IL_65E;
+-							case 648:
+-								num5 = 649;
+-								goto IL_65E;
+-							case 649:
+-								break;
+-							default:
+-								goto IL_65E;
++						case 646:
++							num5 = 647;
++							goto IL_65E;
++						case 647:
++							num5 = 648;
++							goto IL_65E;
++						case 648:
++							num5 = 649;
++							goto IL_65E;
++						case 649:
++							break;
++						default:
++							goto IL_65E;
+ 						}
+ 					}
+ 					num5 = 646;
+@@ -3068,17 +3756,17 @@
+ 				this.QuickSpawnItem(1131, 1);
+ 				this.QuickSpawnItem(3577, 1);
+ 				int item = Utils.SelectRandom<int>(Main.rand, new int[]
+-					{
+-						3063,
+-						3389,
+-						3065,
+-						1553,
+-						3546,
+-						3541,
+-						3570,
+-						3571,
+-						3569
+-					});
++				{
++					3063,
++					3389,
++					3065,
++					1553,
++					3546,
++					3541,
++					3570,
++					3571,
++					3569
++				});
+ 				this.QuickSpawnItem(item, 1);
+ 			}
+ 			int num14 = -1;
+@@ -3206,82 +3894,82 @@
+ 			}
+ 			switch (Main.rand.Next(12))
+ 			{
+-				case 0:
+-					this.QuickSpawnItem(666, 1);
+-					this.QuickSpawnItem(667, 1);
+-					this.QuickSpawnItem(668, 1);
+-					this.QuickSpawnItem(665, 1);
+-					this.QuickSpawnItem(3287, 1);
+-					return;
+-				case 1:
+-					this.QuickSpawnItem(1554, 1);
+-					this.QuickSpawnItem(1555, 1);
+-					this.QuickSpawnItem(1556, 1);
+-					this.QuickSpawnItem(1586, 1);
+-					return;
+-				case 2:
+-					this.QuickSpawnItem(1587, 1);
+-					this.QuickSpawnItem(1588, 1);
+-					this.QuickSpawnItem(1586, 1);
+-					return;
+-				case 3:
+-					this.QuickSpawnItem(1557, 1);
+-					this.QuickSpawnItem(1558, 1);
+-					this.QuickSpawnItem(1559, 1);
+-					this.QuickSpawnItem(1585, 1);
+-					return;
+-				case 4:
+-					this.QuickSpawnItem(1560, 1);
+-					this.QuickSpawnItem(1561, 1);
+-					this.QuickSpawnItem(1562, 1);
+-					this.QuickSpawnItem(1584, 1);
+-					return;
+-				case 5:
+-					this.QuickSpawnItem(1563, 1);
+-					this.QuickSpawnItem(1564, 1);
+-					this.QuickSpawnItem(1565, 1);
+-					this.QuickSpawnItem(3582, 1);
+-					return;
+-				case 6:
+-					this.QuickSpawnItem(1566, 1);
+-					this.QuickSpawnItem(1567, 1);
+-					this.QuickSpawnItem(1568, 1);
+-					return;
+-				case 7:
+-					this.QuickSpawnItem(1580, 1);
+-					this.QuickSpawnItem(1581, 1);
+-					this.QuickSpawnItem(1582, 1);
+-					this.QuickSpawnItem(1583, 1);
+-					return;
+-				case 8:
+-					this.QuickSpawnItem(3226, 1);
+-					this.QuickSpawnItem(3227, 1);
+-					this.QuickSpawnItem(3228, 1);
+-					this.QuickSpawnItem(3288, 1);
+-					return;
+-				case 9:
+-					this.QuickSpawnItem(3583, 1);
+-					this.QuickSpawnItem(3581, 1);
+-					this.QuickSpawnItem(3578, 1);
+-					this.QuickSpawnItem(3579, 1);
+-					this.QuickSpawnItem(3580, 1);
+-					return;
+-				case 10:
+-					this.QuickSpawnItem(3585, 1);
+-					this.QuickSpawnItem(3586, 1);
+-					this.QuickSpawnItem(3587, 1);
+-					this.QuickSpawnItem(3588, 1);
+-					this.QuickSpawnItem(3024, 4);
+-					return;
+-				case 11:
+-					this.QuickSpawnItem(3589, 1);
+-					this.QuickSpawnItem(3590, 1);
+-					this.QuickSpawnItem(3591, 1);
+-					this.QuickSpawnItem(3592, 1);
+-					this.QuickSpawnItem(3599, 4);
+-					return;
+-				default:
+-					return;
++			case 0:
++				this.QuickSpawnItem(666, 1);
++				this.QuickSpawnItem(667, 1);
++				this.QuickSpawnItem(668, 1);
++				this.QuickSpawnItem(665, 1);
++				this.QuickSpawnItem(3287, 1);
++				return;
++			case 1:
++				this.QuickSpawnItem(1554, 1);
++				this.QuickSpawnItem(1555, 1);
++				this.QuickSpawnItem(1556, 1);
++				this.QuickSpawnItem(1586, 1);
++				return;
++			case 2:
++				this.QuickSpawnItem(1587, 1);
++				this.QuickSpawnItem(1588, 1);
++				this.QuickSpawnItem(1586, 1);
++				return;
++			case 3:
++				this.QuickSpawnItem(1557, 1);
++				this.QuickSpawnItem(1558, 1);
++				this.QuickSpawnItem(1559, 1);
++				this.QuickSpawnItem(1585, 1);
++				return;
++			case 4:
++				this.QuickSpawnItem(1560, 1);
++				this.QuickSpawnItem(1561, 1);
++				this.QuickSpawnItem(1562, 1);
++				this.QuickSpawnItem(1584, 1);
++				return;
++			case 5:
++				this.QuickSpawnItem(1563, 1);
++				this.QuickSpawnItem(1564, 1);
++				this.QuickSpawnItem(1565, 1);
++				this.QuickSpawnItem(3582, 1);
++				return;
++			case 6:
++				this.QuickSpawnItem(1566, 1);
++				this.QuickSpawnItem(1567, 1);
++				this.QuickSpawnItem(1568, 1);
++				return;
++			case 7:
++				this.QuickSpawnItem(1580, 1);
++				this.QuickSpawnItem(1581, 1);
++				this.QuickSpawnItem(1582, 1);
++				this.QuickSpawnItem(1583, 1);
++				return;
++			case 8:
++				this.QuickSpawnItem(3226, 1);
++				this.QuickSpawnItem(3227, 1);
++				this.QuickSpawnItem(3228, 1);
++				this.QuickSpawnItem(3288, 1);
++				return;
++			case 9:
++				this.QuickSpawnItem(3583, 1);
++				this.QuickSpawnItem(3581, 1);
++				this.QuickSpawnItem(3578, 1);
++				this.QuickSpawnItem(3579, 1);
++				this.QuickSpawnItem(3580, 1);
++				return;
++			case 10:
++				this.QuickSpawnItem(3585, 1);
++				this.QuickSpawnItem(3586, 1);
++				this.QuickSpawnItem(3587, 1);
++				this.QuickSpawnItem(3588, 1);
++				this.QuickSpawnItem(3024, 4);
++				return;
++			case 11:
++				this.QuickSpawnItem(3589, 1);
++				this.QuickSpawnItem(3590, 1);
++				this.QuickSpawnItem(3591, 1);
++				this.QuickSpawnItem(3592, 1);
++				this.QuickSpawnItem(3599, 4);
++				return;
++			default:
++				return;
+ 			}
+ 		}
+ 
+@@ -5011,14 +5699,14 @@
+ 		{
+ 			switch (Main.rand.Next(3))
+ 			{
+-				case 0:
+-					return this.cHead;
+-				case 1:
+-					return this.cBody;
+-				case 2:
+-					return this.cLegs;
+-				default:
+-					return this.cBody;
++			case 0:
++				return this.cHead;
++			case 1:
++				return this.cBody;
++			case 2:
++				return this.cLegs;
++			default:
++				return this.cBody;
+ 			}
+ 		}
+ 
+@@ -6701,26 +7389,26 @@
+ 			float num3 = 1f;
+ 			switch (this.yoraiz0rEye % 10)
+ 			{
+-				case 1:
+-					return;
+-				case 2:
+-					num3 = 0.5f;
+-					break;
+-				case 3:
+-					num3 = 0.625f;
+-					break;
+-				case 4:
+-					num3 = 0.75f;
+-					break;
+-				case 5:
+-					num3 = 0.875f;
+-					break;
+-				case 6:
+-					num3 = 1f;
+-					break;
+-				case 7:
+-					num3 = 1.1f;
+-					break;
++			case 1:
++				return;
++			case 2:
++				num3 = 0.5f;
++				break;
++			case 3:
++				num3 = 0.625f;
++				break;
++			case 4:
++				num3 = 0.75f;
++				break;
++			case 5:
++				num3 = 0.875f;
++				break;
++			case 6:
++				num3 = 1f;
++				break;
++			case 7:
++				num3 = 1.1f;
++				break;
+ 			}
+ 			if (this.yoraiz0rEye < 7)
+ 			{
+@@ -9806,11 +10494,11 @@
+ 				if (num == 27)
+ 				{
+ 					num = Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							27,
+-							102,
+-							101
+-						});
++					{
++						27,
++						102,
++						101
++					});
+ 				}
+ 				this.AddBuff(num, 3600, true);
+ 				Main.PlaySound(2, (int)this.position.X, (int)this.position.Y, this.miscEquips[1].useSound);
+@@ -9893,41 +10581,41 @@
+ 							{
+ 								switch (type)
+ 								{
+-									case 10:
+-									case 11:
+-									case 13:
+-										break;
+-									case 12:
+-										goto IL_360;
+-									default:
+-										if (type != 21)
+-										{
+-											goto IL_360;
+-										}
+-										break;
+-								}
+-							}
+-						}
+-						else if (type <= 33)
+-						{
+-							if (type != 29 && type != 33)
+-							{
+-								goto IL_360;
+-							}
+-						}
+-						else
+-						{
+-							switch (type)
+-							{
+-								case 49:
+-								case 50:
++								case 10:
++								case 11:
++								case 13:
+ 									break;
++								case 12:
++									goto IL_360;
+ 								default:
+-									if (type != 55)
++									if (type != 21)
+ 									{
+ 										goto IL_360;
+ 									}
+ 									break;
++								}
++							}
++						}
++						else if (type <= 33)
++						{
++							if (type != 29 && type != 33)
++							{
++								goto IL_360;
++							}
++						}
++						else
++						{
++							switch (type)
++							{
++							case 49:
++							case 50:
++								break;
++							default:
++								if (type != 55)
++								{
++									goto IL_360;
++								}
++								break;
+ 							}
+ 						}
+ 					}
+@@ -9965,13 +10653,13 @@
+ 						{
+ 							switch (type)
+ 							{
+-								case 207:
+-								case 209:
+-									break;
+-								case 208:
+-									goto IL_360;
+-								default:
+-									goto IL_360;
++							case 207:
++							case 209:
++								break;
++							case 208:
++								goto IL_360;
++							default:
++								goto IL_360;
+ 							}
+ 						}
+ 					}
+@@ -10007,34 +10695,34 @@
+ 				{
+ 					switch (type)
+ 					{
+-						case 334:
+-						case 335:
+-						case 338:
+-							break;
+-						case 336:
+-						case 337:
++					case 334:
++					case 335:
++					case 338:
++						break;
++					case 336:
++					case 337:
++						goto IL_360;
++					default:
++						if (type != 354)
++						{
+ 							goto IL_360;
+-						default:
+-							if (type != 354)
+-							{
+-								goto IL_360;
+-							}
+-							break;
++						}
++						break;
+ 					}
+ 				}
+ 				else
+ 				{
+ 					switch (type)
+ 					{
+-						case 386:
+-						case 387:
+-							break;
+-						default:
+-							if (type != 411)
+-							{
+-								goto IL_360;
+-							}
+-							break;
++					case 386:
++					case 387:
++						break;
++					default:
++						if (type != 411)
++						{
++							goto IL_360;
++						}
++						break;
+ 					}
+ 				}
+ 				flag = true;
+@@ -11090,8 +11778,7 @@
+ 								list20.Add(new Tuple<int, int>(num103, num104));
+ 							}
+ 						}
+-						IL_3214:
+-						;
++						IL_3214:;
+ 					}
+ 				}
+ 				List<Tuple<int, int>> list21 = new List<Tuple<int, int>>();
+@@ -11131,8 +11818,7 @@
+ 							}
+ 							flag13 = true;
+ 						}
+-						IL_3309:
+-						;
++						IL_3309:;
+ 					}
+ 					if (!flag13)
+ 					{
+@@ -11334,8 +12020,7 @@
+ 							}
+ 							list24.Add(new Tuple<int, int>(num125, num126));
+ 						}
+-						IL_3A84:
+-						;
++						IL_3A84:;
+ 					}
+ 				}
+ 				if (list24.Count > 0)
+@@ -13556,11 +14241,11 @@
+ 							for (float num10 = 0f; num10 < 14f; num10 += 1f)
+ 							{
+ 								Dust dust = Main.dust[Dust.NewDust(center, 0, 0, Utils.SelectRandom<int>(Main.rand, new int[]
+-											{
+-												176,
+-												177,
+-												179
+-											}), 0f, 0f, 0, default(Color), 1f)];
++								{
++									176,
++									177,
++									179
++								}), 0f, 0f, 0, default(Color), 1f)];
+ 								Vector2 vector = Vector2.UnitY.RotatedBy((double)(num10 * 6.28318548f / 14f + num9), default(Vector2));
+ 								vector *= 0.2f * (float)l;
+ 								dust.position = center + vector * value2;
+@@ -14255,11 +14940,11 @@
+ 			if (this.dJumpEffectUnicorn && this.doubleJumpUnicorn && !this.jumpAgainUnicorn && ((this.gravDir == 1f && this.velocity.Y < 0f) || (this.gravDir == -1f && this.velocity.Y > 0f)))
+ 			{
+ 				Dust dust = Main.dust[Dust.NewDust(this.position, this.width, this.height, Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								176,
+-								177,
+-								179
+-							}), 0f, 0f, 0, default(Color), 1f)];
++				{
++					176,
++					177,
++					179
++				}), 0f, 0f, 0, default(Color), 1f)];
+ 				dust.velocity = Vector2.Zero;
+ 				dust.noGravity = true;
+ 				dust.scale = 0.5f + Main.rand.NextFloat() * 0.8f;
+@@ -14659,11 +15344,11 @@
+ 			if (npc.type == 370 && Main.expertMode)
+ 			{
+ 				int num3 = Utils.SelectRandom<int>(Main.rand, new int[]
+-					{
+-						0,
+-						148,
+-						30
+-					});
++				{
++					0,
++					148,
++					30
++				});
+ 				if (num3 != 0)
+ 				{
+ 					this.AddBuff(num3, 60 * Main.rand.Next(3, 11), true);
+@@ -16407,22 +17092,22 @@
+ 						bool flag11 = false;
+ 						switch (num6)
+ 						{
+-							case 0:
+-								flag10 = (this.controlDown && this.releaseDown);
+-								flag11 = this.controlDown;
+-								break;
+-							case 1:
+-								flag10 = (this.controlUp && this.releaseUp);
+-								flag11 = this.controlUp;
+-								break;
+-							case 2:
+-								flag10 = (this.controlRight && this.releaseRight);
+-								flag11 = this.controlRight;
+-								break;
+-							case 3:
+-								flag10 = (this.controlLeft && this.releaseLeft);
+-								flag11 = this.controlLeft;
+-								break;
++						case 0:
++							flag10 = (this.controlDown && this.releaseDown);
++							flag11 = this.controlDown;
++							break;
++						case 1:
++							flag10 = (this.controlUp && this.releaseUp);
++							flag11 = this.controlUp;
++							break;
++						case 2:
++							flag10 = (this.controlRight && this.releaseRight);
++							flag11 = this.controlRight;
++							break;
++						case 3:
++							flag10 = (this.controlLeft && this.releaseLeft);
++							flag11 = this.controlLeft;
++							break;
+ 						}
+ 						if (flag10)
+ 						{
+@@ -17206,21 +17891,21 @@
+ 					{
+ 						switch (num35)
+ 						{
+-							case 169:
+-								num32 = 0f;
+-								num33 = 0.36f;
+-								num34 = 0.4f;
+-								break;
+-							case 170:
+-								num32 = 0.4f;
+-								num33 = 0.16f;
+-								num34 = 0.36f;
+-								break;
+-							case 171:
+-								num32 = 0.5f;
+-								num33 = 0.25f;
+-								num34 = 0.05f;
+-								break;
++						case 169:
++							num32 = 0f;
++							num33 = 0.36f;
++							num34 = 0.4f;
++							break;
++						case 170:
++							num32 = 0.4f;
++							num33 = 0.16f;
++							num34 = 0.36f;
++							break;
++						case 171:
++							num32 = 0.5f;
++							num33 = 0.25f;
++							num34 = 0.05f;
++							break;
+ 						}
+ 					}
+ 					else
+@@ -17251,29 +17936,29 @@
+ 				num35 = this.body;
+ 				switch (num35)
+ 				{
+-					case 175:
+-						num36 = 0f;
+-						num37 = 0.36f;
+-						num38 = 0.4f;
+-						break;
+-					case 176:
+-						num36 = 0.4f;
+-						num37 = 0.16f;
+-						num38 = 0.36f;
+-						break;
+-					case 177:
+-						num36 = 0.5f;
+-						num37 = 0.25f;
+-						num38 = 0.05f;
+-						break;
+-					default:
+-						if (num35 == 190)
+-						{
+-							num32 = 0.9f;
+-							num33 = 0.9f;
+-							num34 = 0.7f;
+-						}
+-						break;
++				case 175:
++					num36 = 0f;
++					num37 = 0.36f;
++					num38 = 0.4f;
++					break;
++				case 176:
++					num36 = 0.4f;
++					num37 = 0.16f;
++					num38 = 0.36f;
++					break;
++				case 177:
++					num36 = 0.5f;
++					num37 = 0.25f;
++					num38 = 0.05f;
++					break;
++				default:
++					if (num35 == 190)
++					{
++						num32 = 0.9f;
++						num33 = 0.9f;
++						num34 = 0.7f;
++					}
++					break;
+ 				}
+ 				float num39 = 0f;
+ 				float num40 = 0f;
+@@ -17281,29 +17966,29 @@
+ 				num35 = this.legs;
+ 				switch (num35)
+ 				{
+-					case 110:
+-						num39 = 0f;
+-						num40 = 0.36f;
+-						num41 = 0.4f;
+-						break;
+-					case 111:
+-						num39 = 0.4f;
+-						num40 = 0.16f;
+-						num41 = 0.36f;
+-						break;
+-					case 112:
+-						num39 = 0.5f;
+-						num40 = 0.25f;
+-						num41 = 0.05f;
+-						break;
+-					default:
+-						if (num35 == 130)
+-						{
+-							num32 = 0.9f;
+-							num33 = 0.9f;
+-							num34 = 0.7f;
+-						}
+-						break;
++				case 110:
++					num39 = 0f;
++					num40 = 0.36f;
++					num41 = 0.4f;
++					break;
++				case 111:
++					num39 = 0.4f;
++					num40 = 0.16f;
++					num41 = 0.36f;
++					break;
++				case 112:
++					num39 = 0.5f;
++					num40 = 0.25f;
++					num41 = 0.05f;
++					break;
++				default:
++					if (num35 == 130)
++					{
++						num32 = 0.9f;
++						num33 = 0.9f;
++						num34 = 0.7f;
++					}
++					break;
+ 				}
+ 				if (num32 != 0f || num33 != 0f || num34 != 0f)
+ 				{
+@@ -19996,90 +20681,90 @@
+ 							this.showItemIcon = true;
+ 							switch (Main.tile[Player.tileTargetX, Player.tileTargetY].frameX / 36)
+ 							{
+-								case 0:
+-									this.showItemIcon2 = 359;
+-									break;
+-								case 1:
+-									this.showItemIcon2 = 2237;
+-									break;
+-								case 2:
+-									this.showItemIcon2 = 2238;
+-									break;
+-								case 3:
+-									this.showItemIcon2 = 2239;
+-									break;
+-								case 4:
+-									this.showItemIcon2 = 2240;
+-									break;
+-								case 5:
+-									this.showItemIcon2 = 2241;
+-									break;
+-								case 6:
+-									this.showItemIcon2 = 2560;
+-									break;
+-								case 7:
+-									this.showItemIcon2 = 2575;
+-									break;
+-								case 8:
+-									this.showItemIcon2 = 2591;
+-									break;
+-								case 9:
+-									this.showItemIcon2 = 2592;
+-									break;
+-								case 10:
+-									this.showItemIcon2 = 2593;
+-									break;
+-								case 11:
+-									this.showItemIcon2 = 2594;
+-									break;
+-								case 12:
+-									this.showItemIcon2 = 2595;
+-									break;
+-								case 13:
+-									this.showItemIcon2 = 2596;
+-									break;
+-								case 14:
+-									this.showItemIcon2 = 2597;
+-									break;
+-								case 15:
+-									this.showItemIcon2 = 2598;
+-									break;
+-								case 16:
+-									this.showItemIcon2 = 2599;
+-									break;
+-								case 17:
+-									this.showItemIcon2 = 2600;
+-									break;
+-								case 18:
+-									this.showItemIcon2 = 2601;
+-									break;
+-								case 19:
+-									this.showItemIcon2 = 2602;
+-									break;
+-								case 20:
+-									this.showItemIcon2 = 2603;
+-									break;
+-								case 21:
+-									this.showItemIcon2 = 2604;
+-									break;
+-								case 22:
+-									this.showItemIcon2 = 2605;
+-									break;
+-								case 23:
+-									this.showItemIcon2 = 2606;
+-									break;
+-								case 24:
+-									this.showItemIcon2 = 2809;
+-									break;
+-								case 25:
+-									this.showItemIcon2 = 3126;
+-									break;
+-								case 26:
+-									this.showItemIcon2 = 3128;
+-									break;
+-								case 27:
+-									this.showItemIcon2 = 3127;
+-									break;
++							case 0:
++								this.showItemIcon2 = 359;
++								break;
++							case 1:
++								this.showItemIcon2 = 2237;
++								break;
++							case 2:
++								this.showItemIcon2 = 2238;
++								break;
++							case 3:
++								this.showItemIcon2 = 2239;
++								break;
++							case 4:
++								this.showItemIcon2 = 2240;
++								break;
++							case 5:
++								this.showItemIcon2 = 2241;
++								break;
++							case 6:
++								this.showItemIcon2 = 2560;
++								break;
++							case 7:
++								this.showItemIcon2 = 2575;
++								break;
++							case 8:
++								this.showItemIcon2 = 2591;
++								break;
++							case 9:
++								this.showItemIcon2 = 2592;
++								break;
++							case 10:
++								this.showItemIcon2 = 2593;
++								break;
++							case 11:
++								this.showItemIcon2 = 2594;
++								break;
++							case 12:
++								this.showItemIcon2 = 2595;
++								break;
++							case 13:
++								this.showItemIcon2 = 2596;
++								break;
++							case 14:
++								this.showItemIcon2 = 2597;
++								break;
++							case 15:
++								this.showItemIcon2 = 2598;
++								break;
++							case 16:
++								this.showItemIcon2 = 2599;
++								break;
++							case 17:
++								this.showItemIcon2 = 2600;
++								break;
++							case 18:
++								this.showItemIcon2 = 2601;
++								break;
++							case 19:
++								this.showItemIcon2 = 2602;
++								break;
++							case 20:
++								this.showItemIcon2 = 2603;
++								break;
++							case 21:
++								this.showItemIcon2 = 2604;
++								break;
++							case 22:
++								this.showItemIcon2 = 2605;
++								break;
++							case 23:
++								this.showItemIcon2 = 2606;
++								break;
++							case 24:
++								this.showItemIcon2 = 2809;
++								break;
++							case 25:
++								this.showItemIcon2 = 3126;
++								break;
++							case 26:
++								this.showItemIcon2 = 3128;
++								break;
++							case 27:
++								this.showItemIcon2 = 3127;
++								break;
+ 							}
+ 						}
+ 						if (Main.tile[Player.tileTargetX, Player.tileTargetY].type == 356)
+@@ -20892,14 +21577,14 @@
+ 										num204 = 12;
+ 									}
+ 									string newText = string.Concat(new object[]
+-										{
+-											"Time: ",
+-											num204,
+-											":",
+-											text2,
+-											" ",
+-											text
+-										});
++									{
++										"Time: ",
++										num204,
++										":",
++										text2,
++										" ",
++										text
++									});
+ 									Main.NewText(newText, 255, 240, 20, false);
+ 								}
+ 								else if (Main.tile[Player.tileTargetX, Player.tileTargetY].type == 237)
+@@ -21995,25 +22680,25 @@
+ 			{
+ 				switch (this.mount.Type)
+ 				{
+-					case 3:
+-						this.wetSlime = 30;
+-						if (this.velocity.Y > 2f)
+-						{
+-							this.velocity.Y = this.velocity.Y * 0.9f;
+-						}
+-						this.velocity.Y = this.velocity.Y - 0.5f;
+-						if (this.velocity.Y < -4f)
+-						{
+-							this.velocity.Y = -4f;
+-						}
+-						break;
+-					case 5:
+-					case 7:
+-						if (this.whoAmI == Main.myPlayer)
+-						{
+-							this.mount.Dismount(this);
+-						}
+-						break;
++				case 3:
++					this.wetSlime = 30;
++					if (this.velocity.Y > 2f)
++					{
++						this.velocity.Y = this.velocity.Y * 0.9f;
++					}
++					this.velocity.Y = this.velocity.Y - 0.5f;
++					if (this.velocity.Y < -4f)
++					{
++						this.velocity.Y = -4f;
++					}
++					break;
++				case 5:
++				case 7:
++					if (this.whoAmI == Main.myPlayer)
++					{
++						this.mount.Dismount(this);
++					}
++					break;
+ 				}
+ 			}
+ 			if (Main.expertMode && this.ZoneSnow && this.wet && !this.lavaWet && !this.honeyWet && !this.arcticDivingGear)
+@@ -22719,21 +23404,21 @@
+ 		{
+ 			bool flag;
+ 			long num = Utils.CoinsCount(out flag, this.inventory, new int[]
+-				{
+-					58,
+-					57,
+-					56,
+-					55,
+-					54
+-				});
++			{
++				58,
++				57,
++				56,
++				55,
++				54
++			});
+ 			long num2 = Utils.CoinsCount(out flag, this.bank.item, new int[0]);
+ 			long num3 = Utils.CoinsCount(out flag, this.bank2.item, new int[0]);
+ 			long num4 = Utils.CoinsCombineStacks(out flag, new long[]
+-				{
+-					num,
+-					num2,
+-					num3
+-				});
++			{
++				num,
++				num2,
++				num3
++			});
+ 			if (num4 < (long)price)
+ 			{
+ 				return false;
+@@ -23329,8 +24014,7 @@
+ 						}
+ 					}
+ 				}
+-				IL_302:
+-				;
++				IL_302:;
+ 			}
+ 			for (int j = 13; j < 18 + this.extraAccessorySlots; j++)
+ 			{
+@@ -24023,102 +24707,102 @@
+ 					{
+ 						switch (type)
+ 						{
+-							case 41:
+-								num = 97;
+-								break;
+-							case 42:
+-								num = 90;
+-								break;
+-							default:
+-								switch (type)
+-								{
+-									case 58:
+-										num = 91;
+-										break;
+-									case 59:
+-										num = 92;
+-										break;
+-									case 60:
+-										num = 93;
+-										break;
+-									case 61:
+-										num = 94;
+-										break;
+-									case 62:
+-										num = 95;
+-										break;
+-									case 63:
+-										num = 96;
+-										break;
+-								}
+-								break;
+-						}
+-					}
+-				}
+-				else if (type <= 167)
+-				{
+-					if (type != 77)
+-					{
+-						switch (type)
+-						{
+-							case 165:
+-								if (!male)
+-								{
+-									num = 118;
+-								}
+-								else
+-								{
+-									num = 99;
+-								}
+-								break;
+-							case 166:
+-								if (!male)
+-								{
+-									num = 119;
+-								}
+-								else
+-								{
+-									num = 100;
+-								}
+-								break;
+-							case 167:
+-								if (!male)
+-								{
+-									num = 102;
+-								}
+-								else
+-								{
+-									num = 101;
+-								}
+-								break;
+-						}
+-					}
+-					else
+-					{
+-						num = 121;
+-					}
+-				}
+-				else
+-				{
+-					switch (type)
+-					{
+-						case 180:
+-							num = 115;
++						case 41:
++							num = 97;
+ 							break;
+-						case 181:
+-							num = 116;
+-							break;
+-						case 182:
+-							break;
+-						case 183:
+-							num = 123;
++						case 42:
++							num = 90;
+ 							break;
+ 						default:
+-							if (type == 191)
+-							{
+-								num = 131;
++							switch (type)
++							{
++							case 58:
++								num = 91;
++								break;
++							case 59:
++								num = 92;
++								break;
++							case 60:
++								num = 93;
++								break;
++							case 61:
++								num = 94;
++								break;
++							case 62:
++								num = 95;
++								break;
++							case 63:
++								num = 96;
++								break;
+ 							}
+ 							break;
++						}
++					}
++				}
++				else if (type <= 167)
++				{
++					if (type != 77)
++					{
++						switch (type)
++						{
++						case 165:
++							if (!male)
++							{
++								num = 118;
++							}
++							else
++							{
++								num = 99;
++							}
++							break;
++						case 166:
++							if (!male)
++							{
++								num = 119;
++							}
++							else
++							{
++								num = 100;
++							}
++							break;
++						case 167:
++							if (!male)
++							{
++								num = 102;
++							}
++							else
++							{
++								num = 101;
++							}
++							break;
++						}
++					}
++					else
++					{
++						num = 121;
++					}
++				}
++				else
++				{
++					switch (type)
++					{
++					case 180:
++						num = 115;
++						break;
++					case 181:
++						num = 116;
++						break;
++					case 182:
++						break;
++					case 183:
++						num = 123;
++						break;
++					default:
++						if (type == 191)
++						{
++							num = 131;
++						}
++						break;
+ 					}
+ 				}
+ 				if (num != -1)
+@@ -24130,18 +24814,18 @@
+ 			{
+ 				switch (type)
+ 				{
+-					case 83:
+-						if (male)
+-						{
+-							num = 117;
+-						}
+-						break;
+-					case 84:
+-						if (male)
+-						{
+-							num = 120;
+-						}
+-						break;
++				case 83:
++					if (male)
++					{
++						num = 117;
++					}
++					break;
++				case 84:
++					if (male)
++					{
++						num = 120;
++					}
++					break;
+ 				}
+ 			}
+ 			return num;
+@@ -25946,14 +26630,14 @@
+ 							Point point = base.Center.ToTileCoordinates();
+ 							Dictionary<ushort, int> dictionary = new Dictionary<ushort, int>();
+ 							WorldUtils.Gen(new Point(point.X - 25, point.Y - 25), new Shapes.Rectangle(50, 50), new Actions.TileScanner(new ushort[]
+-									{
+-										182,
+-										180,
+-										179,
+-										183,
+-										181,
+-										381
+-									}).Output(dictionary));
++							{
++								182,
++								180,
++								179,
++								183,
++								181,
++								381
++							}).Output(dictionary));
+ 							foreach (KeyValuePair<ushort, int> current in dictionary)
+ 							{
+ 								if (current.Value > num57)
+@@ -25965,13 +26649,13 @@
+ 							if (num57 == 0)
+ 							{
+ 								num56 = Utils.SelectRandom<int>(Main.rand, new int[]
+-									{
+-										182,
+-										180,
+-										179,
+-										183,
+-										181
+-									});
++								{
++									182,
++									180,
++									179,
++									183,
++									181
++								});
+ 							}
+ 							if (num56 != 0)
+ 							{
+@@ -31120,10 +31804,10 @@
+ 					if (item.type == 2880 && Main.rand.Next(2) == 0)
+ 					{
+ 						int type5 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								226,
+-								229
+-							});
++						{
++							226,
++							229
++						});
+ 						int num251 = Dust.NewDust(new Vector2((float)r2.X, (float)r2.Y), r2.Width, r2.Height, type5, (float)(this.direction * 2), 0f, 150, default(Color), 1f);
+ 						Main.dust[num251].velocity *= 0.2f;
+ 						Main.dust[num251].noGravity = true;
+@@ -31455,25 +32139,25 @@
+ 						if (type8 == 213)
+ 						{
+ 							list2 = new List<ushort>(new ushort[]
+-								{
+-									3,
+-									24,
+-									52,
+-									61,
+-									62,
+-									71,
+-									73,
+-									74,
+-									82,
+-									83,
+-									84,
+-									110,
+-									113,
+-									115,
+-									184,
+-									205,
+-									201
+-								});
++							{
++								3,
++								24,
++								52,
++								61,
++								62,
++								71,
++								73,
++								74,
++								82,
++								83,
++								84,
++								110,
++								113,
++								115,
++								184,
++								205,
++								201
++							});
+ 						}
+ 						int num285 = r2.X / 16;
+ 						int num286 = (r2.X + r2.Width) / 16 + 1;
+@@ -33496,7 +34180,7 @@
+ 				{
+ 					if (Main.mapEnabled)
+ 					{
+-						Main.Map.Save();
++					//	Main.Map.Save();
+ 					}
+ 				}
+ 				catch
+@@ -34158,13 +34842,13 @@
+ 			else
+ 			{
+ 				string[] array = playerPath.Split(new char[]
+-					{
+-						Path.DirectorySeparatorChar
+-					});
++				{
++					Path.DirectorySeparatorChar
++				});
+ 				player.name = array[array.Length - 1].Split(new char[]
+-					{
+-						'.'
+-					})[0];
++				{
++					'.'
++				})[0];
+ 			}
+ 			playerFileData.Player = player2;
+ 			return playerFileData;
+

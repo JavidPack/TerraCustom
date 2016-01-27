@@ -1,0 +1,20 @@
+--- src/Terraria\Terraria.Achievements\ConditionFloatTracker.cs
++++ src/TerraCustom\Terraria.Achievements\ConditionFloatTracker.cs
+@@ -5,14 +5,12 @@
+ {
+ 	public class ConditionFloatTracker : AchievementTracker<float>
+ 	{
+-		public ConditionFloatTracker(float maxValue)
+-			: base(TrackerType.Float)
++		public ConditionFloatTracker(float maxValue) : base(TrackerType.Float)
+ 		{
+ 			this._maxValue = maxValue;
+ 		}
+ 
+-		public ConditionFloatTracker()
+-			: base(TrackerType.Float)
++		public ConditionFloatTracker() : base(TrackerType.Float)
+ 		{
+ 		}
+ 
+

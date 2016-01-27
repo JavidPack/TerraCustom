@@ -1,0 +1,6311 @@
+--- src/Terraria\Terraria\NPC.cs
++++ src/TerraCustom\Terraria\NPC.cs
+@@ -15,208 +15,411 @@
+ 	public class NPC : Entity
+ 	{
+ 		public const int MaxMoonLordCountdown = 3600;
++
+ 		public const int maxBuffs = 5;
++
+ 		public const int breathMax = 200;
++
+ 		public static readonly int[,,,] MoonLordAttacksArray = NPC.InitializeMoonLordAttacks();
++
+ 		public static readonly int[,] MoonLordAttacksArray2 = NPC.InitializeMoonLordAttacks2();
++
+ 		public static int MoonLordCountdown = 0;
++
+ 		public int teleportStyle;
++
+ 		public float teleportTime;
++
+ 		public static int immuneTime = 20;
++
+ 		public static int maxAI = 4;
++
+ 		public int netSpam;
++
+ 		public static int goldCritterChance = 150;
++
+ 		public static int[] killCount = new int[540];
++
+ 		public static float waveKills = 0f;
++
+ 		public static int waveCount = 0;
++
+ 		public bool dripping;
++
+ 		public bool drippingSlime;
++
+ 		public short catchItem;
++
+ 		public short releaseOwner = 255;
++
+ 		public int rarity;
++
+ 		public static bool taxCollector = false;
++
+ 		public bool[] playerInteraction = new bool[256];
++
+ 		public int lastInteraction = 255;
++
+ 		public float takenDamageMultiplier = 1f;
++
+ 		private static int spawnSpaceX = 3;
++
+ 		private static int spawnSpaceY = 3;
++
+ 		public float gfxOffY;
++
+ 		public float stepSpeed;
++
+ 		private static float gravity = 0.3f;
++
+ 		public bool teleporting;
++
+ 		private static int maxAttack = 20;
++
+ 		private static int[] attackNPC = new int[NPC.maxAttack];
++
+ 		public bool stairFall;
++
+ 		public static int fireFlyFriendly = 0;
++
+ 		public static int fireFlyChance = 0;
++
+ 		public static int fireFlyMultiple = 0;
++
+ 		public static int butterflyChance = 0;
++
+ 		private byte netStream;
++
+ 		private byte[] streamPlayer = new byte[255];
++
+ 		private byte npcNameLookup;
++
+ 		public Vector2[] oldPos = new Vector2[10];
++
+ 		public float[] oldRot = new float[10];
++
+ 		public bool setFrameSize;
++
+ 		public static int golemBoss = -1;
++
+ 		public static int plantBoss = -1;
++
+ 		public static int crimsonBoss = -1;
++
+ 		public int netSkip;
++
+ 		public bool netAlways;
++
+ 		public int realLife = -1;
++
+ 		public static int sWidth = 1920;
++
+ 		public static int sHeight = 1080;
++
+ 		private static int spawnRangeX = (int)((double)(NPC.sWidth / 16) * 0.7);
++
+ 		private static int spawnRangeY = (int)((double)(NPC.sHeight / 16) * 0.7);
++
+ 		public static int safeRangeX = (int)((double)(NPC.sWidth / 16) * 0.52);
++
+ 		public static int safeRangeY = (int)((double)(NPC.sHeight / 16) * 0.52);
++
+ 		private static int activeRangeX = (int)((double)NPC.sWidth * 2.1);
++
+ 		private static int activeRangeY = (int)((double)NPC.sHeight * 2.1);
++
+ 		private static int townRangeX = NPC.sWidth;
++
+ 		private static int townRangeY = NPC.sHeight;
++
+ 		public float npcSlots = 1f;
++
+ 		private static bool noSpawnCycle = false;
++
+ 		private static int activeTime = 750;
++
+ 		private static int defaultSpawnRate = 600;
++
+ 		private static int defaultMaxSpawns = 5;
++
+ 		public bool dontCountMe;
++
+ 		public int[] buffType = new int[5];
++
+ 		public int[] buffTime = new int[5];
++
+ 		public bool[] buffImmune = new bool[191];
++
+ 		public bool midas;
++
+ 		public bool ichor;
++
+ 		public bool onFire;
++
+ 		public bool onFire2;
++
+ 		public bool onFrostBurn;
++
+ 		public bool poisoned;
++
+ 		public bool venom;
++
+ 		public bool shadowFlame;
++
+ 		public bool soulDrain;
++
+ 		public int lifeRegen;
++
+ 		public int lifeRegenCount;
++
+ 		public bool confused;
++
+ 		public bool loveStruck;
++
+ 		public bool stinky;
++
+ 		public bool dryadWard;
++
+ 		public bool immortal;
++
+ 		public bool chaseable = true;
++
+ 		public bool canGhostHeal = true;
++
+ 		public bool javelined;
++
+ 		public bool celled;
++
+ 		public bool dryadBane;
++
+ 		public bool daybreak;
++
+ 		public static bool savedTaxCollector = false;
++
+ 		public static bool savedGoblin = false;
++
+ 		public static bool savedWizard = false;
++
+ 		public static bool savedMech = false;
++
+ 		public static bool savedAngler = false;
++
+ 		public static bool savedStylist = false;
++
+ 		public static bool downedBoss1 = false;
++
+ 		public static bool downedBoss2 = false;
++
+ 		public static bool downedBoss3 = false;
++
+ 		public static bool downedQueenBee = false;
++
+ 		public static bool downedSlimeKing = false;
++
+ 		public static bool downedGoblins = false;
++
+ 		public static bool downedFrost = false;
++
+ 		public static bool downedPirates = false;
++
+ 		public static bool downedClown = false;
++
+ 		public static bool downedPlantBoss = false;
++
+ 		public static bool downedGolemBoss = false;
++
+ 		public static bool downedMartians = false;
++
+ 		public static bool downedFishron = false;
++
+ 		public static bool downedHalloweenTree = false;
++
+ 		public static bool downedHalloweenKing = false;
++
+ 		public static bool downedChristmasIceQueen = false;
++
+ 		public static bool downedChristmasTree = false;
++
+ 		public static bool downedChristmasSantank = false;
++
+ 		public static bool downedAncientCultist = false;
++
+ 		public static bool downedMoonlord = false;
++
+ 		public static bool downedTowerSolar = false;
++
+ 		public static bool downedTowerVortex = false;
++
+ 		public static bool downedTowerNebula = false;
++
+ 		public static bool downedTowerStardust = false;
++
+ 		public static int ShieldStrengthTowerSolar = 0;
++
+ 		public static int ShieldStrengthTowerVortex = 0;
++
+ 		public static int ShieldStrengthTowerNebula = 0;
++
+ 		public static int ShieldStrengthTowerStardust = 0;
++
+ 		public static int LunarShieldPowerNormal = 100;
++
+ 		public static int LunarShieldPowerExpert = 150;
++
+ 		public static bool TowerActiveSolar = false;
++
+ 		public static bool TowerActiveVortex = false;
++
+ 		public static bool TowerActiveNebula = false;
++
+ 		public static bool TowerActiveStardust = false;
++
+ 		public static bool LunarApocalypseIsUp = false;
++
+ 		public static bool downedMechBossAny = false;
++
+ 		public static bool downedMechBoss1 = false;
++
+ 		public static bool downedMechBoss2 = false;
++
+ 		public static bool downedMechBoss3 = false;
++
+ 		private static int spawnRate = NPC.defaultSpawnRate;
++
+ 		private static int maxSpawns = NPC.defaultMaxSpawns;
++
+ 		public int soundDelay;
++
+ 		public int[] immune = new int[256];
++
+ 		public int directionY = 1;
++
+ 		public int type;
++
+ 		public float[] ai = new float[NPC.maxAI];
++
+ 		public float[] localAI = new float[NPC.maxAI];
++
+ 		public int aiAction;
++
+ 		public int aiStyle;
++
+ 		public bool justHit;
++
+ 		public int timeLeft;
++
+ 		public int target = -1;
++
+ 		public int damage;
++
+ 		public int defense;
++
+ 		public int defDamage;
++
+ 		public int defDefense;
++
+ 		public bool coldDamage;
++
+ 		public bool trapImmune;
++
+ 		public int soundHit;
++
+ 		public int soundKilled;
++
+ 		public int life;
++
+ 		public int lifeMax;
++
+ 		public Rectangle targetRect;
++
+ 		public double frameCounter;
++
+ 		public Rectangle frame;
++
+ 		public string displayName;
++
+ 		public Color color;
++
+ 		public int alpha;
++
+ 		public bool hide;
++
+ 		public float scale = 1f;
++
+ 		public float knockBackResist = 1f;
++
+ 		public new int oldDirection;
++
+ 		public int oldDirectionY;
++
+ 		public int oldTarget;
++
+ 		public float rotation;
++
+ 		public bool noGravity;
++
+ 		public bool noTileCollide;
++
+ 		public bool netUpdate;
++
+ 		public bool netUpdate2;
++
+ 		public bool collideX;
++
+ 		public bool collideY;
++
+ 		public bool boss;
++
+ 		public int spriteDirection = -1;
++
+ 		public bool behindTiles;
++
+ 		public bool lavaImmune;
++
+ 		public float value;
++
+ 		public float extraValue;
++
+ 		public bool dontTakeDamage;
++
+ 		public int netID;
++
+ 		public bool townNPC;
++
+ 		public static bool travelNPC = false;
++
+ 		public bool homeless;
++
+ 		public int homeTileX = -1;
++
+ 		public int homeTileY = -1;
++
+ 		public bool oldHomeless;
++
+ 		public int oldHomeTileX = -1;
++
+ 		public int oldHomeTileY = -1;
++
+ 		public bool friendly;
++
+ 		public bool closeDoor;
++
+ 		public int doorX;
++
+ 		public int doorY;
++
+ 		public int friendlyRegen;
++
+ 		public int breath;
++
+ 		public int breathCounter;
++
+ 		public bool reflectingProjectiles;
++
+ 		public int lastPortalColorIndex;
++
+ 		public static int[,] cavernMonsterType = new int[2, 3];
++
+ 		private static int ignorePlayerInteractions = 0;
+ 
+ 		public static bool downedTowers
+@@ -446,1010 +649,1010 @@
+ 				{
+ 					switch (npcType)
+ 					{
++					case 17:
++						switch (WorldGen.genRand.Next(23))
++						{
++						case 0:
++							return "Alfred";
++						case 1:
++							return "Barney";
++						case 2:
++							return "Calvin";
++						case 3:
++							return "Edmund";
++						case 4:
++							return "Edwin";
++						case 5:
++							return "Eugene";
++						case 6:
++							return "Frank";
++						case 7:
++							return "Frederick";
++						case 8:
++							return "Gilbert";
++						case 9:
++							return "Gus";
++						case 10:
++							return "Wilbur";
++						case 11:
++							return "Seymour";
++						case 12:
++							return "Louis";
++						case 13:
++							return "Humphrey";
++						case 14:
++							return "Harold";
++						case 15:
++							return "Milton";
++						case 16:
++							return "Mortimer";
+ 						case 17:
+-							switch (WorldGen.genRand.Next(23))
+-							{
++							return "Howard";
++						case 18:
++							return "Walter";
++						case 19:
++							return "Finn";
++						case 20:
++							return "Isaac";
++						case 21:
++							return "Joseph";
++						default:
++							return "Ralph";
++						}
++						break;
++					case 18:
++						switch (WorldGen.genRand.Next(24))
++						{
++						case 0:
++							return "Molly";
++						case 1:
++							return "Amy";
++						case 2:
++							return "Claire";
++						case 3:
++							return "Emily";
++						case 4:
++							return "Katie";
++						case 5:
++							return "Madeline";
++						case 6:
++							return "Katelyn";
++						case 7:
++							return "Emma";
++						case 8:
++							return "Abigail";
++						case 9:
++							return "Carly";
++						case 10:
++							return "Jenna";
++						case 11:
++							return "Heather";
++						case 12:
++							return "Katherine";
++						case 13:
++							return "Caitlin";
++						case 14:
++							return "Kaitlin";
++						case 15:
++							return "Holly";
++						case 16:
++							return "Kaitlyn";
++						case 17:
++							return "Hannah";
++						case 18:
++							return "Kathryn";
++						case 19:
++							return "Lorraine";
++						case 20:
++							return "Helen";
++						case 21:
++							return "Kayla";
++						case 22:
++							return "Lisa";
++						default:
++							return "Allison";
++						}
++						break;
++					case 19:
++						switch (WorldGen.genRand.Next(24))
++						{
++						case 0:
++							return "DeShawn";
++						case 1:
++							return "DeAndre";
++						case 2:
++							return "Marquis";
++						case 3:
++							return "Darnell";
++						case 4:
++							return "Terrell";
++						case 5:
++							return "Malik";
++						case 6:
++							return "Trevon";
++						case 7:
++							return "Tyrone";
++						case 8:
++							return "Willie";
++						case 9:
++							return "Dominique";
++						case 10:
++							return "Demetrius";
++						case 11:
++							return "Reginald";
++						case 12:
++							return "Jamal";
++						case 13:
++							return "Maurice";
++						case 14:
++							return "Jalen";
++						case 15:
++							return "Darius";
++						case 16:
++							return "Xavier";
++						case 17:
++							return "Terrance";
++						case 18:
++							return "Andre";
++						case 19:
++							return "Dante";
++						case 20:
++							return "Brimst";
++						case 21:
++							return "Bronson";
++						case 22:
++							return "Tony";
++						default:
++							return "Darryl";
++						}
++						break;
++					case 20:
++						switch (WorldGen.genRand.Next(22))
++						{
++						case 0:
++							return "Alalia";
++						case 1:
++							return "Alalia";
++						case 2:
++							return "Alura";
++						case 3:
++							return "Ariella";
++						case 4:
++							return "Caelia";
++						case 5:
++							return "Calista";
++						case 6:
++							return "Chryseis";
++						case 7:
++							return "Emerenta";
++						case 8:
++							return "Elysia";
++						case 9:
++							return "Evvie";
++						case 10:
++							return "Faye";
++						case 11:
++							return "Felicitae";
++						case 12:
++							return "Lunette";
++						case 13:
++							return "Nata";
++						case 14:
++							return "Nissa";
++						case 15:
++							return "Tatiana";
++						case 16:
++							return "Rosalva";
++						case 17:
++							return "Shea";
++						case 18:
++							return "Tania";
++						case 19:
++							return "Isis";
++						case 20:
++							return "Celestia";
++						default:
++							return "Xylia";
++						}
++						break;
++					case 21:
++						break;
++					case 22:
++						switch (WorldGen.genRand.Next(35))
++						{
++						case 0:
++							return "Joe";
++						case 1:
++							return "Connor";
++						case 2:
++							return "Tanner";
++						case 3:
++							return "Wyatt";
++						case 4:
++							return "Cody";
++						case 5:
++							return "Levi";
++						case 6:
++							return "Luke";
++						case 7:
++							return "Jack";
++						case 8:
++							return "Scott";
++						case 9:
++							return "Logan";
++						case 10:
++							return "Cole";
++						case 11:
++							return "Asher";
++						case 12:
++							return "Bradley";
++						case 13:
++							return "Jacob";
++						case 14:
++							return "Garrett";
++						case 15:
++							return "Dylan";
++						case 16:
++							return "Maxwell";
++						case 17:
++							return "Steve";
++						case 18:
++							return "Brett";
++						case 19:
++							return "Andrew";
++						case 20:
++							return "Harley";
++						case 21:
++							return "Kyle";
++						case 22:
++							return "Jake";
++						case 23:
++							return "Ryan";
++						case 24:
++							return "Jeffrey";
++						case 25:
++							return "Seth";
++						case 26:
++							return "Marty";
++						case 27:
++							return "Brandon";
++						case 28:
++							return "Zach";
++						case 29:
++							return "Jeff";
++						case 30:
++							return "Daniel";
++						case 31:
++							return "Trent";
++						case 32:
++							return "Kevin";
++						case 33:
++							return "Brian";
++						default:
++							return "Colin";
++						}
++						break;
++					default:
++						if (npcType != 38)
++						{
++							if (npcType == 54)
++							{
++								switch (WorldGen.genRand.Next(25))
++								{
+ 								case 0:
++									return "Sebastian";
++								case 1:
++									return "Rupert";
++								case 2:
++									return "Clive";
++								case 3:
++									return "Nigel";
++								case 4:
++									return "Mervyn";
++								case 5:
++									return "Cedric";
++								case 6:
++									return "Pip";
++								case 7:
++									return "Cyril";
++								case 8:
++									return "Fitz";
++								case 9:
++									return "Lloyd";
++								case 10:
++									return "Arthur";
++								case 11:
++									return "Rodney";
++								case 12:
++									return "Graham";
++								case 13:
++									return "Edward";
++								case 14:
+ 									return "Alfred";
++								case 15:
++									return "Edmund";
++								case 16:
++									return "Henry";
++								case 17:
++									return "Herald";
++								case 18:
++									return "Roland";
++								case 19:
++									return "Lincoln";
++								case 20:
++									return "Lloyd";
++								case 21:
++									return "Edgar";
++								case 22:
++									return "Eustace";
++								case 23:
++									return "Benjamin";
++								default:
++									return "Rodrick";
++								}
++							}
++						}
++						else
++						{
++							switch (WorldGen.genRand.Next(22))
++							{
++							case 0:
++								return "Dolbere";
++							case 1:
++								return "Bazdin";
++							case 2:
++								return "Durim";
++							case 3:
++								return "Tordak";
++							case 4:
++								return "Garval";
++							case 5:
++								return "Morthal";
++							case 6:
++								return "Oten";
++							case 7:
++								return "Dolgen";
++							case 8:
++								return "Gimli";
++							case 9:
++								return "Gimut";
++							case 10:
++								return "Duerthen";
++							case 11:
++								return "Beldin";
++							case 12:
++								return "Jarut";
++							case 13:
++								return "Ovbere";
++							case 14:
++								return "Norkas";
++							case 15:
++								return "Dolgrim";
++							case 16:
++								return "Boften";
++							case 17:
++								return "Norsun";
++							case 18:
++								return "Dias";
++							case 19:
++								return "Fikod";
++							case 20:
++								return "Urist";
++							default:
++								return "Darur";
++							}
++						}
++						break;
++					}
++				}
++				else
++				{
++					switch (npcType)
++					{
++					case 107:
++						switch (WorldGen.genRand.Next(25))
++						{
++						case 0:
++							return "Grodax";
++						case 1:
++							return "Sarx";
++						case 2:
++							return "Xon";
++						case 3:
++							return "Mrunok";
++						case 4:
++							return "Nuxatk";
++						case 5:
++							return "Tgerd";
++						case 6:
++							return "Darz";
++						case 7:
++							return "Smador";
++						case 8:
++							return "Stazen";
++						case 9:
++							return "Mobart";
++						case 10:
++							return "Knogs";
++						case 11:
++							return "Tkanus";
++						case 12:
++							return "Negurk";
++						case 13:
++							return "Nort";
++						case 14:
++							return "Durnok";
++						case 15:
++							return "Trogem";
++						case 16:
++							return "Stezom";
++						case 17:
++							return "Gnudar";
++						case 18:
++							return "Ragz";
++						case 19:
++							return "Fahd";
++						case 20:
++							return "Xanos";
++						case 21:
++							return "Arback";
++						case 22:
++							return "Fjell";
++						case 23:
++							return "Dalek";
++						default:
++							return "Knub";
++						}
++						break;
++					case 108:
++						switch (WorldGen.genRand.Next(21))
++						{
++						case 0:
++							return "Dalamar";
++						case 1:
++							return "Dulais";
++						case 2:
++							return "Elric";
++						case 3:
++							return "Arddun";
++						case 4:
++							return "Maelor";
++						case 5:
++							return "Leomund";
++						case 6:
++							return "Hirael";
++						case 7:
++							return "Gwentor";
++						case 8:
++							return "Greum";
++						case 9:
++							return "Gearroid";
++						case 10:
++							return "Fizban";
++						case 11:
++							return "Ningauble";
++						case 12:
++							return "Seonag";
++						case 13:
++							return "Sargon";
++						case 14:
++							return "Merlyn";
++						case 15:
++							return "Magius";
++						case 16:
++							return "Berwyn";
++						case 17:
++							return "Arwyn";
++						case 18:
++							return "Alasdair";
++						case 19:
++							return "Tagar";
++						default:
++							return "Xanadu";
++						}
++						break;
++					default:
++						if (npcType != 124)
++						{
++							if (npcType == 160)
++							{
++								switch (WorldGen.genRand.Next(12))
++								{
++								case 0:
++									return "Reishi";
+ 								case 1:
+-									return "Barney";
++									return "Maitake";
+ 								case 2:
+-									return "Calvin";
++									return "Chanterelle";
+ 								case 3:
+-									return "Edmund";
++									return "Porcini";
+ 								case 4:
+-									return "Edwin";
++									return "Shimeji";
+ 								case 5:
+-									return "Eugene";
++									return "Amanita";
+ 								case 6:
+-									return "Frank";
++									return "Muscaria";
+ 								case 7:
+-									return "Frederick";
++									return "Agaric";
+ 								case 8:
+-									return "Gilbert";
++									return "Cremini";
+ 								case 9:
+-									return "Gus";
++									return "Morel";
+ 								case 10:
+-									return "Wilbur";
+-								case 11:
+-									return "Seymour";
+-								case 12:
+-									return "Louis";
+-								case 13:
+-									return "Humphrey";
+-								case 14:
+-									return "Harold";
+-								case 15:
+-									return "Milton";
+-								case 16:
+-									return "Mortimer";
+-								case 17:
+-									return "Howard";
+-								case 18:
+-									return "Walter";
+-								case 19:
+-									return "Finn";
+-								case 20:
+-									return "Isaac";
+-								case 21:
+-									return "Joseph";
++									return "Enoki";
+ 								default:
+-									return "Ralph";
++									return "Shiitake";
++								}
++							}
++						}
++						else
++						{
++							switch (WorldGen.genRand.Next(24))
++							{
++							case 0:
++								return "Shayna";
++							case 1:
++								return "Korrie";
++							case 2:
++								return "Ginger";
++							case 3:
++								return "Brooke";
++							case 4:
++								return "Jenny";
++							case 5:
++								return "Autumn";
++							case 6:
++								return "Nancy";
++							case 7:
++								return "Ella";
++							case 8:
++								return "Kayla";
++							case 9:
++								return "Selah";
++							case 10:
++								return "Sophia";
++							case 11:
++								return "Marshanna";
++							case 12:
++								return "Lauren";
++							case 13:
++								return "Trisha";
++							case 14:
++								return "Shirlena";
++							case 15:
++								return "Sheena";
++							case 16:
++								return "Ellen";
++							case 17:
++								return "Amy";
++							case 18:
++								return "Dawn";
++							case 19:
++								return "Susana";
++							case 20:
++								return "Meredith";
++							case 21:
++								return "Selene";
++							case 22:
++								return "Terra";
++							default:
++								return "Sally";
++							}
++						}
++						break;
++					}
++				}
++			}
++			else if (npcType <= 229)
++			{
++				if (npcType != 178)
++				{
++					switch (npcType)
++					{
++					case 207:
++						switch (WorldGen.genRand.Next(16))
++						{
++						case 0:
++							return "Abdosir";
++						case 1:
++							return "Akbar";
++						case 2:
++							return "Bodashtart";
++						case 3:
++							return "Danel";
++						case 4:
++							return "Hanno";
++						case 5:
++							return "Hiram";
++						case 6:
++							return "Kanmi";
++						case 7:
++							return "Philosir";
++						case 8:
++							return "Tabnit";
++						case 9:
++							return "Yutpan";
++						case 10:
++							return "Ahirom";
++						case 11:
++							return "Batnoam";
++						case 12:
++							return "Sikarbaal";
++						case 13:
++							return "Hannibal";
++						case 14:
++							return "Yehomilk";
++						default:
++							return "Ahinadab";
++						}
++						break;
++					case 208:
++						switch (WorldGen.genRand.Next(17))
++						{
++						case 0:
++							return "Candy";
++						case 1:
++							return "Isis";
++						case 2:
++							return "Trixy";
++						case 3:
++							return "Destiny";
++						case 4:
++							return "Lexus";
++						case 5:
++							return "Bambi";
++						case 6:
++							return "Bailey";
++						case 7:
++							return "Glitter";
++						case 8:
++							return "Sparkle";
++						case 9:
++							return "Paris";
++						case 10:
++							return "Dazzle";
++						case 11:
++							return "Fantasy";
++						case 12:
++							return "Bunny";
++						case 13:
++							return "Sugar";
++						case 14:
++							return "Fantasia";
++						case 15:
++							return "Star";
++						default:
++							return "Cherry";
++						}
++						break;
++					case 209:
++						switch (WorldGen.genRand.Next(23))
++						{
++						case 0:
++							return "Alpha";
++						case 1:
++							return "Beta";
++						case 2:
++							return "Delta";
++						case 3:
++							return "Omega";
++						case 4:
++							return "Gamma";
++						case 5:
++							return "Theta";
++						case 6:
++							return "Kappa";
++						case 7:
++							return "Omicron";
++						case 8:
++							return "Sigma";
++						case 9:
++							return "Upsilon";
++						case 10:
++							return "Phi";
++						case 11:
++							return "Zeta";
++						case 12:
++							return "Lambda";
++						case 13:
++							return "Nu";
++						case 14:
++							return "Ci";
++						case 15:
++							return "Rho";
++						case 16:
++							return "Phi";
++						case 17:
++							return "Fender";
++						case 18:
++							return "T-3E0";
++						case 19:
++							return "Niner-7";
++						case 20:
++							return "A.N.D.Y";
++						case 21:
++							return "Syn-X";
++						default:
++							return "Mu";
++						}
++						break;
++					default:
++						switch (npcType)
++						{
++						case 227:
++							switch (WorldGen.genRand.Next(17))
++							{
++							case 0:
++								return "Marco";
++							case 1:
++								return "Guido";
++							case 2:
++								return "Enzo";
++							case 3:
++								return "Martino";
++							case 4:
++								return "Mauro";
++							case 5:
++								return "Lorenzo";
++							case 6:
++								return "Ludo";
++							case 7:
++								return "Luciano";
++							case 8:
++								return "Carlo";
++							case 9:
++								return "Bruno";
++							case 10:
++								return "Mario";
++							case 11:
++								return "Leonardo";
++							case 12:
++								return "Raphael";
++							case 13:
++								return "Luigi";
++							case 14:
++								return "Luca";
++							case 15:
++								return "Darren";
++							default:
++								return "Stefano";
+ 							}
+ 							break;
++						case 228:
++							switch (WorldGen.genRand.Next(10))
++							{
++							case 0:
++								return "Abibe";
++							case 1:
++								return "Jamundi";
++							case 2:
++								return "U'wa";
++							case 3:
++								return "Tairona";
++							case 4:
++								return "Xirigua";
++							case 5:
++								return "Zop'a";
++							case 6:
++								return "Opuni";
++							case 7:
++								return "Kogi-ghi";
++							case 8:
++								return "Konah";
++							default:
++								return "Gboto";
++							}
++							break;
++						case 229:
++							switch (WorldGen.genRand.Next(11))
++							{
++							case 0:
++								return "David";
++							case 1:
++								return "Red Beard";
++							case 2:
++								return "Jack";
++							case 3:
++								return "Black Beard";
++							case 4:
++								return "Captain Morgan";
++							case 5:
++								return "Wet Beard";
++							case 6:
++								return "James T. Beard";
++							case 7:
++								return "Gunpowder Garry";
++							case 8:
++								return "Captain Stoney Dirt";
++							case 9:
++								return "Jake";
++							default:
++								return "Captain Bullywort";
++							}
++							break;
++						}
++						break;
++					}
++				}
++				else
++				{
++					switch (WorldGen.genRand.Next(20))
++					{
++					case 0:
++						return "Whitney";
++					case 1:
++						return "Verity";
++					case 2:
++						return "Ada";
++					case 3:
++						return "Cornelia";
++					case 4:
++						return "Lydia";
++					case 5:
++						return "Leila";
++					case 6:
++						return "Minerva";
++					case 7:
++						return "Emeline";
++					case 8:
++						return "Cynthia";
++					case 9:
++						return "Fidelia";
++					case 10:
++						return "Lilly";
++					case 11:
++						return "Phoebe";
++					case 12:
++						return "Zylphia";
++					case 13:
++						return "Zelda";
++					case 14:
++						return "Selina";
++					case 15:
++						return "Hope";
++					case 16:
++						return "Isabella";
++					case 17:
++						return "Judith";
++					case 18:
++						return "Savannah";
++					default:
++						return "Vivian";
++					}
++				}
++			}
++			else if (npcType <= 369)
++			{
++				if (npcType != 353)
++				{
++					switch (npcType)
++					{
++					case 368:
++						switch (WorldGen.genRand.Next(13))
++						{
++						case 0:
++							return "Abraham";
++						case 1:
++							return "Bohemas";
++						case 2:
++							return "Eladon";
++						case 3:
++							return "Aphraim";
++						case 4:
++							return "Gallius";
++						case 5:
++							return "Llewellyn";
++						case 6:
++							return "Riley";
++						case 7:
++							return "Rawleigh";
++						case 8:
++							return "Shipton";
++						case 9:
++							return "Romeo";
++						case 10:
++							return "Aedan";
++						case 11:
++							return "Mercer";
++						default:
++							return "Willy";
++						}
++						break;
++					case 369:
++						switch (WorldGen.genRand.Next(22))
++						{
++						case 0:
++							return "Bobby";
++						case 1:
++							return "Sammy";
++						case 2:
++							return "Jimmy";
++						case 3:
++							return "Danny";
++						case 4:
++							return "Timmy";
++						case 5:
++							return "Simon";
++						case 6:
++							return "Johnny";
++						case 7:
++							return "Billy";
++						case 8:
++							return "Matty";
++						case 9:
++							return "Bart";
++						case 10:
++							return "Phillip";
++						case 11:
++							return "Spencer";
++						case 12:
++							return "Nathan";
++						case 13:
++							return "Grayson";
++						case 14:
++							return "Bryce";
++						case 15:
++							return "Miles";
++						case 16:
++							return "Charles";
++						case 17:
++							return "Adam";
+ 						case 18:
+-							switch (WorldGen.genRand.Next(24))
+-							{
+-								case 0:
+-									return "Molly";
+-								case 1:
+-									return "Amy";
+-								case 2:
+-									return "Claire";
+-								case 3:
+-									return "Emily";
+-								case 4:
+-									return "Katie";
+-								case 5:
+-									return "Madeline";
+-								case 6:
+-									return "Katelyn";
+-								case 7:
+-									return "Emma";
+-								case 8:
+-									return "Abigail";
+-								case 9:
+-									return "Carly";
+-								case 10:
+-									return "Jenna";
+-								case 11:
+-									return "Heather";
+-								case 12:
+-									return "Katherine";
+-								case 13:
+-									return "Caitlin";
+-								case 14:
+-									return "Kaitlin";
+-								case 15:
+-									return "Holly";
+-								case 16:
+-									return "Kaitlyn";
+-								case 17:
+-									return "Hannah";
+-								case 18:
+-									return "Kathryn";
+-								case 19:
+-									return "Lorraine";
+-								case 20:
+-									return "Helen";
+-								case 21:
+-									return "Kayla";
+-								case 22:
+-									return "Lisa";
+-								default:
+-									return "Allison";
+-							}
+-							break;
++							return "Tyler";
+ 						case 19:
+-							switch (WorldGen.genRand.Next(24))
+-							{
+-								case 0:
+-									return "DeShawn";
+-								case 1:
+-									return "DeAndre";
+-								case 2:
+-									return "Marquis";
+-								case 3:
+-									return "Darnell";
+-								case 4:
+-									return "Terrell";
+-								case 5:
+-									return "Malik";
+-								case 6:
+-									return "Trevon";
+-								case 7:
+-									return "Tyrone";
+-								case 8:
+-									return "Willie";
+-								case 9:
+-									return "Dominique";
+-								case 10:
+-									return "Demetrius";
+-								case 11:
+-									return "Reginald";
+-								case 12:
+-									return "Jamal";
+-								case 13:
+-									return "Maurice";
+-								case 14:
+-									return "Jalen";
+-								case 15:
+-									return "Darius";
+-								case 16:
+-									return "Xavier";
+-								case 17:
+-									return "Terrance";
+-								case 18:
+-									return "Andre";
+-								case 19:
+-									return "Dante";
+-								case 20:
+-									return "Brimst";
+-								case 21:
+-									return "Bronson";
+-								case 22:
+-									return "Tony";
+-								default:
+-									return "Darryl";
+-							}
+-							break;
++							return "Jey";
+ 						case 20:
+-							switch (WorldGen.genRand.Next(22))
+-							{
+-								case 0:
+-									return "Alalia";
+-								case 1:
+-									return "Alalia";
+-								case 2:
+-									return "Alura";
+-								case 3:
+-									return "Ariella";
+-								case 4:
+-									return "Caelia";
+-								case 5:
+-									return "Calista";
+-								case 6:
+-									return "Chryseis";
+-								case 7:
+-									return "Emerenta";
+-								case 8:
+-									return "Elysia";
+-								case 9:
+-									return "Evvie";
+-								case 10:
+-									return "Faye";
+-								case 11:
+-									return "Felicitae";
+-								case 12:
+-									return "Lunette";
+-								case 13:
+-									return "Nata";
+-								case 14:
+-									return "Nissa";
+-								case 15:
+-									return "Tatiana";
+-								case 16:
+-									return "Rosalva";
+-								case 17:
+-									return "Shea";
+-								case 18:
+-									return "Tania";
+-								case 19:
+-									return "Isis";
+-								case 20:
+-									return "Celestia";
+-								default:
+-									return "Xylia";
+-							}
+-							break;
+-						case 21:
+-							break;
+-						case 22:
+-							switch (WorldGen.genRand.Next(35))
+-							{
+-								case 0:
+-									return "Joe";
+-								case 1:
+-									return "Connor";
+-								case 2:
+-									return "Tanner";
+-								case 3:
+-									return "Wyatt";
+-								case 4:
+-									return "Cody";
+-								case 5:
+-									return "Levi";
+-								case 6:
+-									return "Luke";
+-								case 7:
+-									return "Jack";
+-								case 8:
+-									return "Scott";
+-								case 9:
+-									return "Logan";
+-								case 10:
+-									return "Cole";
+-								case 11:
+-									return "Asher";
+-								case 12:
+-									return "Bradley";
+-								case 13:
+-									return "Jacob";
+-								case 14:
+-									return "Garrett";
+-								case 15:
+-									return "Dylan";
+-								case 16:
+-									return "Maxwell";
+-								case 17:
+-									return "Steve";
+-								case 18:
+-									return "Brett";
+-								case 19:
+-									return "Andrew";
+-								case 20:
+-									return "Harley";
+-								case 21:
+-									return "Kyle";
+-								case 22:
+-									return "Jake";
+-								case 23:
+-									return "Ryan";
+-								case 24:
+-									return "Jeffrey";
+-								case 25:
+-									return "Seth";
+-								case 26:
+-									return "Marty";
+-								case 27:
+-									return "Brandon";
+-								case 28:
+-									return "Zach";
+-								case 29:
+-									return "Jeff";
+-								case 30:
+-									return "Daniel";
+-								case 31:
+-									return "Trent";
+-								case 32:
+-									return "Kevin";
+-								case 33:
+-									return "Brian";
+-								default:
+-									return "Colin";
+-							}
+-							break;
++							return "Ivan";
+ 						default:
+-							if (npcType != 38)
+-							{
+-								if (npcType == 54)
+-								{
+-									switch (WorldGen.genRand.Next(25))
+-									{
+-										case 0:
+-											return "Sebastian";
+-										case 1:
+-											return "Rupert";
+-										case 2:
+-											return "Clive";
+-										case 3:
+-											return "Nigel";
+-										case 4:
+-											return "Mervyn";
+-										case 5:
+-											return "Cedric";
+-										case 6:
+-											return "Pip";
+-										case 7:
+-											return "Cyril";
+-										case 8:
+-											return "Fitz";
+-										case 9:
+-											return "Lloyd";
+-										case 10:
+-											return "Arthur";
+-										case 11:
+-											return "Rodney";
+-										case 12:
+-											return "Graham";
+-										case 13:
+-											return "Edward";
+-										case 14:
+-											return "Alfred";
+-										case 15:
+-											return "Edmund";
+-										case 16:
+-											return "Henry";
+-										case 17:
+-											return "Herald";
+-										case 18:
+-											return "Roland";
+-										case 19:
+-											return "Lincoln";
+-										case 20:
+-											return "Lloyd";
+-										case 21:
+-											return "Edgar";
+-										case 22:
+-											return "Eustace";
+-										case 23:
+-											return "Benjamin";
+-										default:
+-											return "Rodrick";
+-									}
+-								}
+-							}
+-							else
+-							{
+-								switch (WorldGen.genRand.Next(22))
+-								{
+-									case 0:
+-										return "Dolbere";
+-									case 1:
+-										return "Bazdin";
+-									case 2:
+-										return "Durim";
+-									case 3:
+-										return "Tordak";
+-									case 4:
+-										return "Garval";
+-									case 5:
+-										return "Morthal";
+-									case 6:
+-										return "Oten";
+-									case 7:
+-										return "Dolgen";
+-									case 8:
+-										return "Gimli";
+-									case 9:
+-										return "Gimut";
+-									case 10:
+-										return "Duerthen";
+-									case 11:
+-										return "Beldin";
+-									case 12:
+-										return "Jarut";
+-									case 13:
+-										return "Ovbere";
+-									case 14:
+-										return "Norkas";
+-									case 15:
+-										return "Dolgrim";
+-									case 16:
+-										return "Boften";
+-									case 17:
+-										return "Norsun";
+-									case 18:
+-										return "Dias";
+-									case 19:
+-										return "Fikod";
+-									case 20:
+-										return "Urist";
+-									default:
+-										return "Darur";
+-								}
+-							}
+-							break;
++							return "Izzy";
++						}
++						break;
+ 					}
+ 				}
+ 				else
+ 				{
+-					switch (npcType)
+-					{
+-						case 107:
+-							switch (WorldGen.genRand.Next(25))
+-							{
+-								case 0:
+-									return "Grodax";
+-								case 1:
+-									return "Sarx";
+-								case 2:
+-									return "Xon";
+-								case 3:
+-									return "Mrunok";
+-								case 4:
+-									return "Nuxatk";
+-								case 5:
+-									return "Tgerd";
+-								case 6:
+-									return "Darz";
+-								case 7:
+-									return "Smador";
+-								case 8:
+-									return "Stazen";
+-								case 9:
+-									return "Mobart";
+-								case 10:
+-									return "Knogs";
+-								case 11:
+-									return "Tkanus";
+-								case 12:
+-									return "Negurk";
+-								case 13:
+-									return "Nort";
+-								case 14:
+-									return "Durnok";
+-								case 15:
+-									return "Trogem";
+-								case 16:
+-									return "Stezom";
+-								case 17:
+-									return "Gnudar";
+-								case 18:
+-									return "Ragz";
+-								case 19:
+-									return "Fahd";
+-								case 20:
+-									return "Xanos";
+-								case 21:
+-									return "Arback";
+-								case 22:
+-									return "Fjell";
+-								case 23:
+-									return "Dalek";
+-								default:
+-									return "Knub";
+-							}
+-							break;
+-						case 108:
+-							switch (WorldGen.genRand.Next(21))
+-							{
+-								case 0:
+-									return "Dalamar";
+-								case 1:
+-									return "Dulais";
+-								case 2:
+-									return "Elric";
+-								case 3:
+-									return "Arddun";
+-								case 4:
+-									return "Maelor";
+-								case 5:
+-									return "Leomund";
+-								case 6:
+-									return "Hirael";
+-								case 7:
+-									return "Gwentor";
+-								case 8:
+-									return "Greum";
+-								case 9:
+-									return "Gearroid";
+-								case 10:
+-									return "Fizban";
+-								case 11:
+-									return "Ningauble";
+-								case 12:
+-									return "Seonag";
+-								case 13:
+-									return "Sargon";
+-								case 14:
+-									return "Merlyn";
+-								case 15:
+-									return "Magius";
+-								case 16:
+-									return "Berwyn";
+-								case 17:
+-									return "Arwyn";
+-								case 18:
+-									return "Alasdair";
+-								case 19:
+-									return "Tagar";
+-								default:
+-									return "Xanadu";
+-							}
+-							break;
+-						default:
+-							if (npcType != 124)
+-							{
+-								if (npcType == 160)
+-								{
+-									switch (WorldGen.genRand.Next(12))
+-									{
+-										case 0:
+-											return "Reishi";
+-										case 1:
+-											return "Maitake";
+-										case 2:
+-											return "Chanterelle";
+-										case 3:
+-											return "Porcini";
+-										case 4:
+-											return "Shimeji";
+-										case 5:
+-											return "Amanita";
+-										case 6:
+-											return "Muscaria";
+-										case 7:
+-											return "Agaric";
+-										case 8:
+-											return "Cremini";
+-										case 9:
+-											return "Morel";
+-										case 10:
+-											return "Enoki";
+-										default:
+-											return "Shiitake";
+-									}
+-								}
+-							}
+-							else
+-							{
+-								switch (WorldGen.genRand.Next(24))
+-								{
+-									case 0:
+-										return "Shayna";
+-									case 1:
+-										return "Korrie";
+-									case 2:
+-										return "Ginger";
+-									case 3:
+-										return "Brooke";
+-									case 4:
+-										return "Jenny";
+-									case 5:
+-										return "Autumn";
+-									case 6:
+-										return "Nancy";
+-									case 7:
+-										return "Ella";
+-									case 8:
+-										return "Kayla";
+-									case 9:
+-										return "Selah";
+-									case 10:
+-										return "Sophia";
+-									case 11:
+-										return "Marshanna";
+-									case 12:
+-										return "Lauren";
+-									case 13:
+-										return "Trisha";
+-									case 14:
+-										return "Shirlena";
+-									case 15:
+-										return "Sheena";
+-									case 16:
+-										return "Ellen";
+-									case 17:
+-										return "Amy";
+-									case 18:
+-										return "Dawn";
+-									case 19:
+-										return "Susana";
+-									case 20:
+-										return "Meredith";
+-									case 21:
+-										return "Selene";
+-									case 22:
+-										return "Terra";
+-									default:
+-										return "Sally";
+-								}
+-							}
+-							break;
+-					}
+-				}
+-			}
+-			else if (npcType <= 229)
+-			{
+-				if (npcType != 178)
+-				{
+-					switch (npcType)
+-					{
+-						case 207:
+-							switch (WorldGen.genRand.Next(16))
+-							{
+-								case 0:
+-									return "Abdosir";
+-								case 1:
+-									return "Akbar";
+-								case 2:
+-									return "Bodashtart";
+-								case 3:
+-									return "Danel";
+-								case 4:
+-									return "Hanno";
+-								case 5:
+-									return "Hiram";
+-								case 6:
+-									return "Kanmi";
+-								case 7:
+-									return "Philosir";
+-								case 8:
+-									return "Tabnit";
+-								case 9:
+-									return "Yutpan";
+-								case 10:
+-									return "Ahirom";
+-								case 11:
+-									return "Batnoam";
+-								case 12:
+-									return "Sikarbaal";
+-								case 13:
+-									return "Hannibal";
+-								case 14:
+-									return "Yehomilk";
+-								default:
+-									return "Ahinadab";
+-							}
+-							break;
+-						case 208:
+-							switch (WorldGen.genRand.Next(17))
+-							{
+-								case 0:
+-									return "Candy";
+-								case 1:
+-									return "Isis";
+-								case 2:
+-									return "Trixy";
+-								case 3:
+-									return "Destiny";
+-								case 4:
+-									return "Lexus";
+-								case 5:
+-									return "Bambi";
+-								case 6:
+-									return "Bailey";
+-								case 7:
+-									return "Glitter";
+-								case 8:
+-									return "Sparkle";
+-								case 9:
+-									return "Paris";
+-								case 10:
+-									return "Dazzle";
+-								case 11:
+-									return "Fantasy";
+-								case 12:
+-									return "Bunny";
+-								case 13:
+-									return "Sugar";
+-								case 14:
+-									return "Fantasia";
+-								case 15:
+-									return "Star";
+-								default:
+-									return "Cherry";
+-							}
+-							break;
+-						case 209:
+-							switch (WorldGen.genRand.Next(23))
+-							{
+-								case 0:
+-									return "Alpha";
+-								case 1:
+-									return "Beta";
+-								case 2:
+-									return "Delta";
+-								case 3:
+-									return "Omega";
+-								case 4:
+-									return "Gamma";
+-								case 5:
+-									return "Theta";
+-								case 6:
+-									return "Kappa";
+-								case 7:
+-									return "Omicron";
+-								case 8:
+-									return "Sigma";
+-								case 9:
+-									return "Upsilon";
+-								case 10:
+-									return "Phi";
+-								case 11:
+-									return "Zeta";
+-								case 12:
+-									return "Lambda";
+-								case 13:
+-									return "Nu";
+-								case 14:
+-									return "Ci";
+-								case 15:
+-									return "Rho";
+-								case 16:
+-									return "Phi";
+-								case 17:
+-									return "Fender";
+-								case 18:
+-									return "T-3E0";
+-								case 19:
+-									return "Niner-7";
+-								case 20:
+-									return "A.N.D.Y";
+-								case 21:
+-									return "Syn-X";
+-								default:
+-									return "Mu";
+-							}
+-							break;
+-						default:
+-							switch (npcType)
+-							{
+-								case 227:
+-									switch (WorldGen.genRand.Next(17))
+-									{
+-										case 0:
+-											return "Marco";
+-										case 1:
+-											return "Guido";
+-										case 2:
+-											return "Enzo";
+-										case 3:
+-											return "Martino";
+-										case 4:
+-											return "Mauro";
+-										case 5:
+-											return "Lorenzo";
+-										case 6:
+-											return "Ludo";
+-										case 7:
+-											return "Luciano";
+-										case 8:
+-											return "Carlo";
+-										case 9:
+-											return "Bruno";
+-										case 10:
+-											return "Mario";
+-										case 11:
+-											return "Leonardo";
+-										case 12:
+-											return "Raphael";
+-										case 13:
+-											return "Luigi";
+-										case 14:
+-											return "Luca";
+-										case 15:
+-											return "Darren";
+-										default:
+-											return "Stefano";
+-									}
+-									break;
+-								case 228:
+-									switch (WorldGen.genRand.Next(10))
+-									{
+-										case 0:
+-											return "Abibe";
+-										case 1:
+-											return "Jamundi";
+-										case 2:
+-											return "U'wa";
+-										case 3:
+-											return "Tairona";
+-										case 4:
+-											return "Xirigua";
+-										case 5:
+-											return "Zop'a";
+-										case 6:
+-											return "Opuni";
+-										case 7:
+-											return "Kogi-ghi";
+-										case 8:
+-											return "Konah";
+-										default:
+-											return "Gboto";
+-									}
+-									break;
+-								case 229:
+-									switch (WorldGen.genRand.Next(11))
+-									{
+-										case 0:
+-											return "David";
+-										case 1:
+-											return "Red Beard";
+-										case 2:
+-											return "Jack";
+-										case 3:
+-											return "Black Beard";
+-										case 4:
+-											return "Captain Morgan";
+-										case 5:
+-											return "Wet Beard";
+-										case 6:
+-											return "James T. Beard";
+-										case 7:
+-											return "Gunpowder Garry";
+-										case 8:
+-											return "Captain Stoney Dirt";
+-										case 9:
+-											return "Jake";
+-										default:
+-											return "Captain Bullywort";
+-									}
+-									break;
+-							}
+-							break;
+-					}
+-				}
+-				else
+-				{
+ 					switch (WorldGen.genRand.Next(20))
+ 					{
+-						case 0:
+-							return "Whitney";
+-						case 1:
+-							return "Verity";
+-						case 2:
+-							return "Ada";
+-						case 3:
+-							return "Cornelia";
+-						case 4:
+-							return "Lydia";
+-						case 5:
+-							return "Leila";
+-						case 6:
+-							return "Minerva";
+-						case 7:
+-							return "Emeline";
+-						case 8:
+-							return "Cynthia";
+-						case 9:
+-							return "Fidelia";
+-						case 10:
+-							return "Lilly";
+-						case 11:
+-							return "Phoebe";
+-						case 12:
+-							return "Zylphia";
+-						case 13:
+-							return "Zelda";
+-						case 14:
+-							return "Selina";
+-						case 15:
+-							return "Hope";
+-						case 16:
+-							return "Isabella";
+-						case 17:
+-							return "Judith";
+-						case 18:
+-							return "Savannah";
+-						default:
+-							return "Vivian";
+-					}
+-				}
+-			}
+-			else if (npcType <= 369)
+-			{
+-				if (npcType != 353)
+-				{
+-					switch (npcType)
+-					{
+-						case 368:
+-							switch (WorldGen.genRand.Next(13))
+-							{
+-								case 0:
+-									return "Abraham";
+-								case 1:
+-									return "Bohemas";
+-								case 2:
+-									return "Eladon";
+-								case 3:
+-									return "Aphraim";
+-								case 4:
+-									return "Gallius";
+-								case 5:
+-									return "Llewellyn";
+-								case 6:
+-									return "Riley";
+-								case 7:
+-									return "Rawleigh";
+-								case 8:
+-									return "Shipton";
+-								case 9:
+-									return "Romeo";
+-								case 10:
+-									return "Aedan";
+-								case 11:
+-									return "Mercer";
+-								default:
+-									return "Willy";
+-							}
+-							break;
+-						case 369:
+-							switch (WorldGen.genRand.Next(22))
+-							{
+-								case 0:
+-									return "Bobby";
+-								case 1:
+-									return "Sammy";
+-								case 2:
+-									return "Jimmy";
+-								case 3:
+-									return "Danny";
+-								case 4:
+-									return "Timmy";
+-								case 5:
+-									return "Simon";
+-								case 6:
+-									return "Johnny";
+-								case 7:
+-									return "Billy";
+-								case 8:
+-									return "Matty";
+-								case 9:
+-									return "Bart";
+-								case 10:
+-									return "Phillip";
+-								case 11:
+-									return "Spencer";
+-								case 12:
+-									return "Nathan";
+-								case 13:
+-									return "Grayson";
+-								case 14:
+-									return "Bryce";
+-								case 15:
+-									return "Miles";
+-								case 16:
+-									return "Charles";
+-								case 17:
+-									return "Adam";
+-								case 18:
+-									return "Tyler";
+-								case 19:
+-									return "Jey";
+-								case 20:
+-									return "Ivan";
+-								default:
+-									return "Izzy";
+-							}
+-							break;
+-					}
+-				}
+-				else
+-				{
+-					switch (WorldGen.genRand.Next(20))
+-					{
+-						case 0:
+-							return "Bri";
+-						case 1:
+-							return "Brianne";
+-						case 2:
+-							return "Flora";
+-						case 3:
+-							return "Iris";
+-						case 4:
+-							return "Scarlett";
+-						case 5:
+-							return "Lola";
+-						case 6:
+-							return "Hazel";
+-						case 7:
+-							return "Stella";
+-						case 8:
+-							return "Pearl";
+-						case 9:
+-							return "Tallulah";
+-						case 10:
+-							return "Ruby";
+-						case 11:
+-							return "Esmeralda";
+-						case 12:
+-							return "Kylie";
+-						case 13:
+-							return "Kati";
+-						case 14:
+-							return "Biah";
+-						case 15:
+-							return "Meliyah";
+-						case 16:
+-							return "Petra";
+-						case 17:
+-							return "Rox";
+-						case 18:
+-							return "Roxanne";
+-						default:
+-							return "Annabel";
++					case 0:
++						return "Bri";
++					case 1:
++						return "Brianne";
++					case 2:
++						return "Flora";
++					case 3:
++						return "Iris";
++					case 4:
++						return "Scarlett";
++					case 5:
++						return "Lola";
++					case 6:
++						return "Hazel";
++					case 7:
++						return "Stella";
++					case 8:
++						return "Pearl";
++					case 9:
++						return "Tallulah";
++					case 10:
++						return "Ruby";
++					case 11:
++						return "Esmeralda";
++					case 12:
++						return "Kylie";
++					case 13:
++						return "Kati";
++					case 14:
++						return "Biah";
++					case 15:
++						return "Meliyah";
++					case 16:
++						return "Petra";
++					case 17:
++						return "Rox";
++					case 18:
++						return "Roxanne";
++					default:
++						return "Annabel";
+ 					}
+ 				}
+ 			}
+@@ -1459,24 +1662,24 @@
+ 				{
+ 					switch (WorldGen.genRand.Next(8))
+ 					{
+-						case 0:
+-							return "Skellington";
+-						case 1:
+-							return "Bones McGee";
+-						case 2:
+-							return "Gloomy Mays";
+-						case 3:
+-							return "Jack Sellington";
+-						case 4:
+-							return "Billy Marrows";
+-						case 5:
+-							return "Tom";
+-						case 6:
+-							return "Rattles Magoo";
+-						case 7:
+-							return "Mandible Calavera";
+-						default:
+-							return "No-Eyed Wiley";
++					case 0:
++						return "Skellington";
++					case 1:
++						return "Bones McGee";
++					case 2:
++						return "Gloomy Mays";
++					case 3:
++						return "Jack Sellington";
++					case 4:
++						return "Billy Marrows";
++					case 5:
++						return "Tom";
++					case 6:
++						return "Rattles Magoo";
++					case 7:
++						return "Mandible Calavera";
++					default:
++						return "No-Eyed Wiley";
+ 					}
+ 				}
+ 			}
+@@ -1484,44 +1687,44 @@
+ 			{
+ 				switch (WorldGen.genRand.Next(20))
+ 				{
+-					case 0:
+-						return "McKinly";
+-					case 1:
+-						return "Millard";
+-					case 2:
+-						return "Fillmore";
+-					case 3:
+-						return "Rutherford";
+-					case 4:
+-						return "Chester";
+-					case 5:
+-						return "Grover";
+-					case 6:
+-						return "Cleveland";
+-					case 7:
+-						return "Theodore";
+-					case 8:
+-						return "Herbert";
+-					case 9:
+-						return "Warren";
+-					case 10:
+-						return "Lyndon";
+-					case 11:
+-						return "Ronald";
+-					case 12:
+-						return "Harrison";
+-					case 13:
+-						return "Woodrow";
+-					case 14:
+-						return "Tweed";
+-					case 15:
+-						return "Blanton";
+-					case 16:
+-						return "Dwyer";
+-					case 17:
+-						return "Carroll";
+-					default:
+-						return "Agnew";
++				case 0:
++					return "McKinly";
++				case 1:
++					return "Millard";
++				case 2:
++					return "Fillmore";
++				case 3:
++					return "Rutherford";
++				case 4:
++					return "Chester";
++				case 5:
++					return "Grover";
++				case 6:
++					return "Cleveland";
++				case 7:
++					return "Theodore";
++				case 8:
++					return "Herbert";
++				case 9:
++					return "Warren";
++				case 10:
++					return "Lyndon";
++				case 11:
++					return "Ronald";
++				case 12:
++					return "Harrison";
++				case 13:
++					return "Woodrow";
++				case 14:
++					return "Tweed";
++				case 15:
++					return "Blanton";
++				case 16:
++					return "Dwyer";
++				case 17:
++					return "Carroll";
++				default:
++					return "Agnew";
+ 				}
+ 			}
+ 			return "";
+@@ -1794,18 +1997,18 @@
+ 				{
+ 					switch (num)
+ 					{
+-						case 125:
+-							if (this.ai[0] >= 3f)
+-							{
+-								result = 20;
+-							}
+-							break;
+-						case 126:
+-							if (this.ai[0] >= 3f)
+-							{
+-								result = 21;
+-							}
+-							break;
++					case 125:
++						if (this.ai[0] >= 3f)
++						{
++							result = 20;
++						}
++						break;
++					case 126:
++						if (this.ai[0] >= 3f)
++						{
++							result = 21;
++						}
++						break;
+ 					}
+ 				}
+ 				else if (this.ai[0] >= 2f)
+@@ -1817,18 +2020,18 @@
+ 			{
+ 				switch (num)
+ 				{
+-					case 439:
+-						if (this.ai[0] == 5f && this.alpha == 255)
+-						{
+-							result = -1;
+-						}
+-						break;
+-					case 440:
+-						if (this.ai[0] != 5f || this.alpha == 255)
+-						{
+-							result = -1;
+-						}
+-						break;
++				case 439:
++					if (this.ai[0] == 5f && this.alpha == 255)
++					{
++						result = -1;
++					}
++					break;
++				case 440:
++					if (this.ai[0] != 5f || this.alpha == 255)
++					{
++						result = -1;
++					}
++					break;
+ 				}
+ 			}
+ 			else if (this.life <= this.lifeMax / 2)
+@@ -10403,27 +10606,27 @@
+ 				this.npcSlots = 0.5f;
+ 				switch (this.type - 524)
+ 				{
+-					case 1:
+-						this.lifeMax += 70;
+-						this.defense += 4;
+-						this.damage += 10;
+-						this.knockBackResist -= 0.1f;
+-						this.value += 150f;
+-						break;
+-					case 2:
+-						this.lifeMax += 40;
+-						this.defense += 6;
+-						this.damage += 14;
+-						this.knockBackResist -= 0.1f;
+-						this.value += 150f;
+-						break;
+-					case 3:
+-						this.lifeMax += 120;
+-						this.defense += 6;
+-						this.damage += 4;
+-						this.knockBackResist -= 0.2f;
+-						this.value += 250f;
+-						break;
++				case 1:
++					this.lifeMax += 70;
++					this.defense += 4;
++					this.damage += 10;
++					this.knockBackResist -= 0.1f;
++					this.value += 150f;
++					break;
++				case 2:
++					this.lifeMax += 40;
++					this.defense += 6;
++					this.damage += 14;
++					this.knockBackResist -= 0.1f;
++					this.value += 150f;
++					break;
++				case 3:
++					this.lifeMax += 120;
++					this.defense += 6;
++					this.damage += 4;
++					this.knockBackResist -= 0.2f;
++					this.value += 250f;
++					break;
+ 				}
+ 			}
+ 			else if (this.type >= 528 && this.type <= 529)
+@@ -11850,50 +12053,50 @@
+ 			}
+ 			switch (this.type)
+ 			{
+-				case 305:
+-				case 306:
+-				case 307:
+-				case 308:
+-				case 309:
+-				case 310:
+-				case 311:
+-				case 312:
+-				case 313:
+-				case 314:
+-				case 315:
+-				case 326:
+-				case 329:
+-				case 330:
+-					this.lifeMax = (int)((double)this.lifeMax * 0.75);
+-					this.damage = (int)((double)this.damage * 0.75);
+-					break;
+-				case 325:
+-				case 327:
+-					this.lifeMax = (int)((double)this.lifeMax * 0.65);
+-					this.damage = (int)((double)this.damage * 0.75);
+-					break;
++			case 305:
++			case 306:
++			case 307:
++			case 308:
++			case 309:
++			case 310:
++			case 311:
++			case 312:
++			case 313:
++			case 314:
++			case 315:
++			case 326:
++			case 329:
++			case 330:
++				this.lifeMax = (int)((double)this.lifeMax * 0.75);
++				this.damage = (int)((double)this.damage * 0.75);
++				break;
++			case 325:
++			case 327:
++				this.lifeMax = (int)((double)this.lifeMax * 0.65);
++				this.damage = (int)((double)this.damage * 0.75);
++				break;
+ 			}
+ 			switch (this.type)
+ 			{
+-				case 338:
+-				case 339:
+-				case 340:
+-				case 341:
+-				case 342:
+-				case 343:
+-				case 347:
+-				case 348:
+-				case 349:
+-				case 350:
+-					this.lifeMax = (int)((double)this.lifeMax * 0.75);
+-					this.damage = (int)((double)this.damage * 0.75);
+-					break;
+-				case 344:
+-				case 345:
+-				case 346:
+-					this.lifeMax = (int)((double)this.lifeMax * 0.65);
+-					this.damage = (int)((double)this.damage * 0.75);
+-					break;
++			case 338:
++			case 339:
++			case 340:
++			case 341:
++			case 342:
++			case 343:
++			case 347:
++			case 348:
++			case 349:
++			case 350:
++				this.lifeMax = (int)((double)this.lifeMax * 0.75);
++				this.damage = (int)((double)this.damage * 0.75);
++				break;
++			case 344:
++			case 345:
++			case 346:
++				this.lifeMax = (int)((double)this.lifeMax * 0.65);
++				this.damage = (int)((double)this.damage * 0.75);
++				break;
+ 			}
+ 			this.defDefense = this.defense;
+ 			this.defDamage = this.damage;
+@@ -13928,96 +14131,96 @@
+ 					{
+ 						switch (num75)
+ 						{
+-							case 110:
+-							case 111:
+-								break;
+-							default:
+-								if (num75 != 206)
+-								{
+-									goto IL_62C5;
+-								}
+-								break;
++						case 110:
++						case 111:
++							break;
++						default:
++							if (num75 != 206)
++							{
++								goto IL_62C5;
++							}
++							break;
+ 						}
+ 					}
+ 					else
+ 					{
+ 						switch (num75)
+ 						{
+-							case 214:
+-							case 215:
+-							case 216:
+-								break;
+-							default:
+-								switch (num75)
+-								{
+-									case 291:
+-									case 292:
+-									case 293:
+-										break;
+-									default:
+-										if (num75 != 350)
+-										{
+-											goto IL_62C5;
+-										}
+-										break;
+-								}
+-								break;
+-						}
+-					}
+-				}
+-				else if (num75 <= 426)
+-				{
+-					switch (num75)
+-					{
+-						case 379:
+-						case 380:
+-						case 381:
+-						case 382:
++						case 214:
++						case 215:
++						case 216:
+ 							break;
+ 						default:
+ 							switch (num75)
+ 							{
+-								case 409:
+-								case 411:
+-									break;
+-								case 410:
++							case 291:
++							case 292:
++							case 293:
++								break;
++							default:
++								if (num75 != 350)
++								{
+ 									goto IL_62C5;
+-								default:
+-									switch (num75)
+-									{
+-										case 424:
+-										case 426:
+-											break;
+-										case 425:
+-											goto IL_62C5;
+-										default:
+-											goto IL_62C5;
+-									}
+-									break;
++								}
++								break;
+ 							}
+ 							break;
++						}
++					}
++				}
++				else if (num75 <= 426)
++				{
++					switch (num75)
++					{
++					case 379:
++					case 380:
++					case 381:
++					case 382:
++						break;
++					default:
++						switch (num75)
++						{
++						case 409:
++						case 411:
++							break;
++						case 410:
++							goto IL_62C5;
++						default:
++							switch (num75)
++							{
++							case 424:
++							case 426:
++								break;
++							case 425:
++								goto IL_62C5;
++							default:
++								goto IL_62C5;
++							}
++							break;
++						}
++						break;
+ 					}
+ 				}
+ 				else if (num75 != 466)
+ 				{
+ 					switch (num75)
+ 					{
+-						case 498:
+-						case 499:
+-						case 500:
+-						case 501:
+-						case 502:
+-						case 503:
+-						case 504:
+-						case 505:
+-						case 506:
+-							break;
+-						default:
+-							if (num75 != 520)
+-							{
+-								goto IL_62C5;
+-							}
+-							break;
++					case 498:
++					case 499:
++					case 500:
++					case 501:
++					case 502:
++					case 503:
++					case 504:
++					case 505:
++					case 506:
++						break;
++					default:
++						if (num75 != 520)
++						{
++							goto IL_62C5;
++						}
++						break;
+ 					}
+ 				}
+ 				if (this.ai[2] > 0f)
+@@ -15529,10 +15732,10 @@
+ 					if (this.ai[1] >= 57f)
+ 					{
+ 						int num125 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								161,
+-								229
+-							});
++						{
++							161,
++							229
++						});
+ 						Dust dust8 = Main.dust[Dust.NewDust(base.Center + new Vector2((float)((this.spriteDirection == 1) ? 8 : -20), -20f), 8, 8, num125, this.velocity.X, this.velocity.Y, 100, default(Color), 1f)];
+ 						dust8.velocity = dust8.velocity / 4f + base.DirectionTo(Main.player[this.target].Top);
+ 						dust8.scale = 1.2f;
+@@ -18490,88 +18693,88 @@
+ 					{
+ 						switch (num75)
+ 						{
+-							case 8:
+-							case 9:
+-							case 11:
+-							case 12:
+-								break;
+-							case 10:
+-								goto IL_15374;
+-							default:
+-								switch (num75)
+-								{
+-									case 40:
+-									case 41:
+-										break;
+-									default:
+-										switch (num75)
+-										{
+-											case 88:
+-											case 89:
+-											case 90:
+-											case 91:
+-											case 92:
+-											case 96:
+-											case 97:
+-											case 99:
+-											case 100:
+-												break;
+-											case 93:
+-											case 94:
+-											case 95:
+-											case 98:
+-												goto IL_15374;
+-											default:
+-												goto IL_15374;
+-										}
+-										break;
+-								}
+-								break;
+-						}
+-					}
+-					else if (num75 <= 414)
+-					{
+-						switch (num75)
+-						{
+-							case 118:
+-							case 119:
++						case 8:
++						case 9:
++						case 11:
++						case 12:
++							break;
++						case 10:
++							goto IL_15374;
++						default:
++							switch (num75)
++							{
++							case 40:
++							case 41:
+ 								break;
+ 							default:
+ 								switch (num75)
+ 								{
+-									case 413:
+-									case 414:
+-										break;
+-									default:
+-										goto IL_15374;
++								case 88:
++								case 89:
++								case 90:
++								case 91:
++								case 92:
++								case 96:
++								case 97:
++								case 99:
++								case 100:
++									break;
++								case 93:
++								case 94:
++								case 95:
++								case 98:
++									goto IL_15374;
++								default:
++									goto IL_15374;
+ 								}
+ 								break;
+-						}
+-					}
+-					else
++							}
++							break;
++						}
++					}
++					else if (num75 <= 414)
+ 					{
+ 						switch (num75)
+ 						{
+-							case 455:
+-							case 456:
+-							case 457:
+-							case 458:
+-							case 459:
++						case 118:
++						case 119:
++							break;
++						default:
++							switch (num75)
++							{
++							case 413:
++							case 414:
+ 								break;
+ 							default:
+-								switch (num75)
+-								{
+-									case 511:
+-									case 512:
+-									case 514:
+-									case 515:
+-										break;
+-									case 513:
+-										goto IL_15374;
+-									default:
+-										goto IL_15374;
+-								}
++								goto IL_15374;
++							}
++							break;
++						}
++					}
++					else
++					{
++						switch (num75)
++						{
++						case 455:
++						case 456:
++						case 457:
++						case 458:
++						case 459:
++							break;
++						default:
++							switch (num75)
++							{
++							case 511:
++							case 512:
++							case 514:
++							case 515:
+ 								break;
++							case 513:
++								goto IL_15374;
++							default:
++								goto IL_15374;
++							}
++							break;
+ 						}
+ 					}
+ 					if (!Main.npc[(int)this.ai[1]].active || Main.npc[(int)this.ai[1]].aiStyle != this.aiStyle)
+@@ -18587,88 +18790,88 @@
+ 					{
+ 						switch (num75)
+ 						{
+-							case 7:
+-							case 8:
+-							case 10:
+-							case 11:
+-								break;
+-							case 9:
+-								goto IL_154F7;
+-							default:
+-								switch (num75)
+-								{
+-									case 39:
+-									case 40:
+-										break;
+-									default:
+-										switch (num75)
+-										{
+-											case 87:
+-											case 88:
+-											case 89:
+-											case 90:
+-											case 91:
+-											case 95:
+-											case 96:
+-											case 98:
+-											case 99:
+-												break;
+-											case 92:
+-											case 93:
+-											case 94:
+-											case 97:
+-												goto IL_154F7;
+-											default:
+-												goto IL_154F7;
+-										}
+-										break;
+-								}
+-								break;
+-						}
+-					}
+-					else if (num75 <= 413)
+-					{
+-						switch (num75)
+-						{
+-							case 117:
+-							case 118:
++						case 7:
++						case 8:
++						case 10:
++						case 11:
++							break;
++						case 9:
++							goto IL_154F7;
++						default:
++							switch (num75)
++							{
++							case 39:
++							case 40:
+ 								break;
+ 							default:
+ 								switch (num75)
+ 								{
+-									case 412:
+-									case 413:
+-										break;
+-									default:
+-										goto IL_154F7;
++								case 87:
++								case 88:
++								case 89:
++								case 90:
++								case 91:
++								case 95:
++								case 96:
++								case 98:
++								case 99:
++									break;
++								case 92:
++								case 93:
++								case 94:
++								case 97:
++									goto IL_154F7;
++								default:
++									goto IL_154F7;
+ 								}
+ 								break;
+-						}
+-					}
+-					else
++							}
++							break;
++						}
++					}
++					else if (num75 <= 413)
+ 					{
+ 						switch (num75)
+ 						{
+-							case 454:
+-							case 455:
+-							case 456:
+-							case 457:
+-							case 458:
++						case 117:
++						case 118:
++							break;
++						default:
++							switch (num75)
++							{
++							case 412:
++							case 413:
+ 								break;
+ 							default:
+-								switch (num75)
+-								{
+-									case 510:
+-									case 511:
+-									case 513:
+-									case 514:
+-										break;
+-									case 512:
+-										goto IL_154F7;
+-									default:
+-										goto IL_154F7;
+-								}
++								goto IL_154F7;
++							}
++							break;
++						}
++					}
++					else
++					{
++						switch (num75)
++						{
++						case 454:
++						case 455:
++						case 456:
++						case 457:
++						case 458:
++							break;
++						default:
++							switch (num75)
++							{
++							case 510:
++							case 511:
++							case 513:
++							case 514:
+ 								break;
++							case 512:
++								goto IL_154F7;
++							default:
++								goto IL_154F7;
++							}
++							break;
+ 						}
+ 					}
+ 					if (!Main.npc[(int)this.ai[0]].active || Main.npc[(int)this.ai[0]].aiStyle != this.aiStyle)
+@@ -19547,18 +19750,18 @@
+ 				{
+ 					switch (num75)
+ 					{
+-						case 107:
+-							NPC.savedGoblin = true;
+-							break;
+-						case 108:
+-							NPC.savedWizard = true;
+-							break;
+-						default:
+-							if (num75 == 124)
+-							{
+-								NPC.savedMech = true;
+-							}
+-							break;
++					case 107:
++						NPC.savedGoblin = true;
++						break;
++					case 108:
++						NPC.savedWizard = true;
++						break;
++					default:
++						if (num75 == 124)
++						{
++							NPC.savedMech = true;
++						}
++						break;
+ 					}
+ 				}
+ 				else if (num75 != 353)
+@@ -20780,11 +20983,11 @@
+ 					else if (this.type == 209)
+ 					{
+ 						int num420 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								134,
+-								133,
+-								135
+-							});
++						{
++							134,
++							133,
++							135
++						});
+ 						num413 = num420;
+ 						num415 = 1;
+ 						if (num413 == 135)
+@@ -20989,15 +21192,15 @@
+ 						if (this.type == 108)
+ 						{
+ 							int num432 = Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									1,
+-									1,
+-									1,
+-									1,
+-									2,
+-									2,
+-									3
+-								});
++							{
++								1,
++								1,
++								1,
++								1,
++								2,
++								2,
++								3
++							});
+ 							for (int num433 = 0; num433 < num432; num433++)
+ 							{
+ 								Vector2 vector45 = Utils.RandomVector2(Main.rand, -3.4f, 3.4f);
+@@ -36159,26 +36362,26 @@
+ 												int num1472 = 0;
+ 												switch ((int)this.ai[3])
+ 												{
+-													case 0:
+-													case 1:
+-													case 2:
+-													case 3:
+-													case 4:
+-													case 5:
+-													case 6:
+-													case 7:
+-													case 8:
+-													case 9:
+-														num1472 = 1;
+-														break;
+-													case 10:
+-														this.ai[3] = 1f;
+-														num1472 = 2;
+-														break;
+-													case 11:
+-														this.ai[3] = 0f;
+-														num1472 = 3;
+-														break;
++												case 0:
++												case 1:
++												case 2:
++												case 3:
++												case 4:
++												case 5:
++												case 6:
++												case 7:
++												case 8:
++												case 9:
++													num1472 = 1;
++													break;
++												case 10:
++													this.ai[3] = 1f;
++													num1472 = 2;
++													break;
++												case 11:
++													this.ai[3] = 0f;
++													num1472 = 3;
++													break;
+ 												}
+ 												if (flag128)
+ 												{
+@@ -36424,22 +36627,22 @@
+ 												int num1478 = 0;
+ 												switch ((int)this.ai[3])
+ 												{
+-													case 0:
+-													case 1:
+-													case 2:
+-													case 3:
+-													case 4:
+-													case 5:
+-														num1478 = 1;
+-														break;
+-													case 6:
+-														this.ai[3] = 1f;
+-														num1478 = 2;
+-														break;
+-													case 7:
+-														this.ai[3] = 0f;
+-														num1478 = 3;
+-														break;
++												case 0:
++												case 1:
++												case 2:
++												case 3:
++												case 4:
++												case 5:
++													num1478 = 1;
++													break;
++												case 6:
++													this.ai[3] = 1f;
++													num1478 = 2;
++													break;
++												case 7:
++													this.ai[3] = 0f;
++													num1478 = 3;
++													break;
+ 												}
+ 												if (flag129)
+ 												{
+@@ -36663,19 +36866,19 @@
+ 												int num1485 = 0;
+ 												switch ((int)this.ai[3])
+ 												{
+-													case 0:
+-													case 2:
+-													case 3:
+-													case 5:
+-													case 6:
+-													case 7:
+-														num1485 = 1;
+-														break;
+-													case 1:
+-													case 4:
+-													case 8:
+-														num1485 = 2;
+-														break;
++												case 0:
++												case 2:
++												case 3:
++												case 5:
++												case 6:
++												case 7:
++													num1485 = 1;
++													break;
++												case 1:
++												case 4:
++												case 8:
++													num1485 = 2;
++													break;
+ 												}
+ 												if (num1485 == 1)
+ 												{
+@@ -38631,10 +38834,10 @@
+ 												float num1628 = 1f + Main.rand.NextFloat();
+ 												float fadeIn = 0.4f + Main.rand.NextFloat();
+ 												int num1629 = Utils.SelectRandom<int>(Main.rand, new int[]
+-													{
+-														31,
+-														229
+-													});
++												{
++													31,
++													229
++												});
+ #if CLIENT
+ 												if (flag159)
+ 												{
+@@ -40065,30 +40268,30 @@
+ 													int num1710 = 0;
+ 													switch ((int)num1708)
+ 													{
+-														case 0:
+-															num1709 = 0;
+-															num1710 = 2;
+-															break;
+-														case 1:
+-															num1709 = 2;
+-															num1710 = 5;
+-															break;
+-														case 2:
+-															num1709 = 5;
+-															num1710 = 3;
+-															break;
+-														case 3:
+-															num1709 = 3;
+-															num1710 = 1;
+-															break;
+-														case 4:
+-															num1709 = 1;
+-															num1710 = 4;
+-															break;
+-														case 5:
+-															num1709 = 4;
+-															num1710 = 0;
+-															break;
++													case 0:
++														num1709 = 0;
++														num1710 = 2;
++														break;
++													case 1:
++														num1709 = 2;
++														num1710 = 5;
++														break;
++													case 2:
++														num1709 = 5;
++														num1710 = 3;
++														break;
++													case 3:
++														num1709 = 3;
++														num1710 = 1;
++														break;
++													case 4:
++														num1709 = 1;
++														num1710 = 4;
++														break;
++													case 5:
++														num1709 = 4;
++														num1710 = 0;
++														break;
+ 													}
+ 													Vector2 spinningpoint8 = Vector2.UnitY * -30f;
+ 													Vector2 value53 = spinningpoint8.RotatedBy((double)((float)num1709 * 6.28318548f / 6f), default(Vector2));
+@@ -40849,98 +41052,98 @@
+ 														{
+ 															switch ((int)this.ai[3])
+ 															{
+-																case 0:
+-																	num1784 = 0;
+-																	break;
+-																case 1:
+-																	num1784 = 1;
+-																	break;
+-																case 2:
+-																	num1784 = 0;
+-																	break;
+-																case 3:
+-																	num1784 = 5;
+-																	break;
+-																case 4:
+-																	num1784 = 0;
+-																	break;
+-																case 5:
+-																	num1784 = 3;
+-																	break;
+-																case 6:
+-																	num1784 = 0;
+-																	break;
+-																case 7:
+-																	num1784 = 5;
+-																	break;
+-																case 8:
+-																	num1784 = 0;
+-																	break;
+-																case 9:
+-																	num1784 = 2;
+-																	break;
+-																case 10:
+-																	num1784 = 0;
+-																	break;
+-																case 11:
+-																	num1784 = 3;
+-																	break;
+-																case 12:
+-																	num1784 = 0;
+-																	break;
+-																case 13:
+-																	num1784 = 4;
+-																	this.ai[3] = -1f;
+-																	break;
+-																default:
+-																	this.ai[3] = -1f;
+-																	break;
++															case 0:
++																num1784 = 0;
++																break;
++															case 1:
++																num1784 = 1;
++																break;
++															case 2:
++																num1784 = 0;
++																break;
++															case 3:
++																num1784 = 5;
++																break;
++															case 4:
++																num1784 = 0;
++																break;
++															case 5:
++																num1784 = 3;
++																break;
++															case 6:
++																num1784 = 0;
++																break;
++															case 7:
++																num1784 = 5;
++																break;
++															case 8:
++																num1784 = 0;
++																break;
++															case 9:
++																num1784 = 2;
++																break;
++															case 10:
++																num1784 = 0;
++																break;
++															case 11:
++																num1784 = 3;
++																break;
++															case 12:
++																num1784 = 0;
++																break;
++															case 13:
++																num1784 = 4;
++																this.ai[3] = -1f;
++																break;
++															default:
++																this.ai[3] = -1f;
++																break;
+ 															}
+ 														}
+ 														else
+ 														{
+ 															switch ((int)this.ai[3])
+ 															{
+-																case 0:
+-																	num1784 = 0;
+-																	break;
+-																case 1:
+-																	num1784 = 1;
+-																	break;
+-																case 2:
+-																	num1784 = 0;
+-																	break;
+-																case 3:
+-																	num1784 = 2;
+-																	break;
+-																case 4:
+-																	num1784 = 0;
+-																	break;
+-																case 5:
+-																	num1784 = 3;
+-																	break;
+-																case 6:
+-																	num1784 = 0;
+-																	break;
+-																case 7:
+-																	num1784 = 1;
+-																	break;
+-																case 8:
+-																	num1784 = 0;
+-																	break;
+-																case 9:
+-																	num1784 = 2;
+-																	break;
+-																case 10:
+-																	num1784 = 0;
+-																	break;
+-																case 11:
+-																	num1784 = 4;
+-																	this.ai[3] = -1f;
+-																	break;
+-																default:
+-																	this.ai[3] = -1f;
+-																	break;
++															case 0:
++																num1784 = 0;
++																break;
++															case 1:
++																num1784 = 1;
++																break;
++															case 2:
++																num1784 = 0;
++																break;
++															case 3:
++																num1784 = 2;
++																break;
++															case 4:
++																num1784 = 0;
++																break;
++															case 5:
++																num1784 = 3;
++																break;
++															case 6:
++																num1784 = 0;
++																break;
++															case 7:
++																num1784 = 1;
++																break;
++															case 8:
++																num1784 = 0;
++																break;
++															case 9:
++																num1784 = 2;
++																break;
++															case 10:
++																num1784 = 0;
++																break;
++															case 11:
++																num1784 = 4;
++																this.ai[3] = -1f;
++																break;
++															default:
++																this.ai[3] = -1f;
++																break;
+ 															}
+ 														}
+ 														int maxValue12 = 6;
+@@ -43530,12 +43733,12 @@
+ 													Vector2 value90 = new Vector2((Main.rand.NextFloat() - 0.5f) * (float)(this.width - 70), (Main.rand.NextFloat() - 0.5f) * 20f - (float)(this.height / 2) - 20f).RotatedBy((double)this.rotation, default(Vector2));
+ 													value90 += base.Center;
+ 													int num1924 = NPC.NewNPC((int)value90.X, (int)value90.Y, Utils.SelectRandom<int>(Main.rand, new int[]
+-															{
+-																213,
+-																215,
+-																214,
+-																212
+-															}), 0, 0f, 0f, 0f, 0f, 255);
++													{
++														213,
++														215,
++														214,
++														212
++													}), 0, 0f, 0f, 0f, 0f, 255);
+ 													Main.npc[num1924].velocity = new Vector2((Main.rand.NextFloat() - 0.5f) * 5f, -8.01f) + this.velocity;
+ 													Main.npc[num1924].netUpdate = true;
+ 													Main.npc[num1924].timeLeft = 600;
+@@ -43706,10 +43909,10 @@
+ 																dust19.scale = 1.5f + Main.rand.NextFloat() + (float)num1939 * 0.13f;
+ 															}
+ 															Main.PlaySound(3, position9, Utils.SelectRandom<int>(Main.rand, new int[]
+-																	{
+-																		1,
+-																		18
+-																	}));
++															{
++																1,
++																18
++															}));
+ 														}
+ 													}
+ 													if (Main.rand.Next(3) != 0 && this.ai[1] < 150f)
+@@ -43891,10 +44094,10 @@
+ 																	if (num1945 == 0)
+ 																	{
+ 																		num1950 = Utils.SelectRandom<int>(Main.rand, new int[]
+-																			{
+-																				-1,
+-																				1
+-																			});
++																		{
++																			-1,
++																			1
++																		});
+ 																	}
+ 																	else if (num1949 == 1)
+ 																	{
+@@ -45165,20 +45368,20 @@
+ 						int num8 = this.frame.Y / num;
+ 						switch (num4 - num8)
+ 						{
+-							case 1:
+-							case 2:
+-							case 4:
+-							case 5:
++						case 1:
++						case 2:
++						case 4:
++						case 5:
++							goto IL_97D;
++						case 3:
++						default:
++							if (num8 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
+ 								goto IL_97D;
+-							case 3:
+-							default:
+-								if (num8 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-									goto IL_97D;
+-								}
+-								goto IL_97D;
++							}
++							goto IL_97D;
+ 						}
+ 						IL_97D:
+ 						int num9;
+@@ -45308,20 +45511,20 @@
+ 						int num12 = this.frame.Y / num;
+ 						switch (num4 - num12)
+ 						{
+-							case 1:
+-							case 2:
+-							case 4:
+-							case 5:
++						case 1:
++						case 2:
++						case 4:
++						case 5:
++							goto IL_DC7;
++						case 3:
++						default:
++							if (num12 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
+ 								goto IL_DC7;
+-							case 3:
+-							default:
+-								if (num12 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-									goto IL_DC7;
+-								}
+-								goto IL_DC7;
++							}
++							goto IL_DC7;
+ 						}
+ 						IL_DC7:
+ 						int num13 = 0;
+@@ -45365,20 +45568,20 @@
+ 						int num14 = this.frame.Y / num;
+ 						switch (num4 - num14)
+ 						{
+-							case 1:
+-							case 2:
+-							case 4:
+-							case 5:
++						case 1:
++						case 2:
++						case 4:
++						case 5:
++							goto IL_F6F;
++						case 3:
++						default:
++							if (num14 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
+ 								goto IL_F6F;
+-							case 3:
+-							default:
+-								if (num14 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-									goto IL_F6F;
+-								}
+-								goto IL_F6F;
++							}
++							goto IL_F6F;
+ 						}
+ 						IL_F6F:
+ 						int num15;
+@@ -45410,18 +45613,18 @@
+ 						int num16 = this.frame.Y / num;
+ 						switch (num16 - num4)
+ 						{
+-							case 0:
+-							case 1:
+-							case 2:
+-							case 3:
+-								break;
+-							default:
+-								if (num16 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-								}
+-								break;
++						case 0:
++						case 1:
++						case 2:
++						case 3:
++							break;
++						default:
++							if (num16 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
++							}
++							break;
+ 						}
+ 						int num17 = 10;
+ 						int num18 = 6;
+@@ -45458,18 +45661,18 @@
+ 						int num20 = this.frame.Y / num;
+ 						switch (num20 - num4)
+ 						{
+-							case 0:
+-							case 1:
+-							case 2:
+-							case 3:
+-								break;
+-							default:
+-								if (num20 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-								}
+-								break;
++						case 0:
++						case 1:
++						case 2:
++						case 3:
++							break;
++						default:
++							if (num20 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
++							}
++							break;
+ 						}
+ 						float num21 = this.ai[1] / (float)NPCID.Sets.AttackTime[this.type];
+ 						int num22;
+@@ -45501,19 +45704,19 @@
+ 						int num23 = this.frame.Y / num;
+ 						switch (num23 - num4)
+ 						{
+-							case 0:
+-							case 1:
+-							case 2:
+-							case 3:
+-							case 4:
+-								break;
+-							default:
+-								if (num23 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-								}
+-								break;
++						case 0:
++						case 1:
++						case 2:
++						case 3:
++						case 4:
++							break;
++						default:
++							if (num23 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
++							}
++							break;
+ 						}
+ 						int num24 = num4 + this.GetShootingFrame(this.ai[2]);
+ 						this.frame.Y = num * num24;
+@@ -45524,16 +45727,16 @@
+ 						int num25 = this.frame.Y / num;
+ 						switch (num25 - num4)
+ 						{
+-							case 0:
+-							case 1:
+-								break;
+-							default:
+-								if (num25 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-								}
+-								break;
++						case 0:
++						case 1:
++							break;
++						default:
++							if (num25 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
++							}
++							break;
+ 						}
+ 						int num26 = 12;
+ 						int num27 = (this.frameCounter % (double)num26 * 2.0 < (double)num26) ? num4 : (num4 + 1);
+@@ -45545,20 +45748,20 @@
+ 						int num28 = this.frame.Y / num;
+ 						switch (num4 - num28)
+ 						{
+-							case 1:
+-							case 2:
+-							case 4:
+-							case 5:
++						case 1:
++						case 2:
++						case 4:
++						case 5:
++							goto IL_1396;
++						case 3:
++						default:
++							if (num28 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
+ 								goto IL_1396;
+-							case 3:
+-							default:
+-								if (num28 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-									goto IL_1396;
+-								}
+-								goto IL_1396;
++							}
++							goto IL_1396;
+ 						}
+ 						IL_1396:
+ 						bool flag = this.ai[0] == 3f;
+@@ -45669,20 +45872,20 @@
+ 						int num33 = this.frame.Y / num;
+ 						switch (num4 - num33)
+ 						{
+-							case 1:
+-							case 2:
+-							case 4:
+-							case 5:
++						case 1:
++						case 2:
++						case 4:
++						case 5:
++							goto IL_16FF;
++						case 3:
++						default:
++							if (num33 != 0)
++							{
++								this.frame.Y = 0;
++								this.frameCounter = 0.0;
+ 								goto IL_16FF;
+-							case 3:
+-							default:
+-								if (num33 != 0)
+-								{
+-									this.frame.Y = 0;
+-									this.frameCounter = 0.0;
+-									goto IL_16FF;
+-								}
+-								goto IL_16FF;
++							}
++							goto IL_16FF;
+ 						}
+ 						IL_16FF:
+ 						bool flag2 = this.ai[0] == 16f;
+@@ -45834,40 +46037,40 @@
+ 								num39++;
+ 							}
+ 							int num45 = Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									38,
+-									37,
+-									36
+-								});
++							{
++								38,
++								37,
++								36
++							});
+ 							int num46 = num45;
+ 							if (num43 == 0)
+ 							{
+ 								switch (num45)
+ 								{
+-									case 36:
+-										num46 = 38;
+-										break;
+-									case 37:
+-										num46 = 36;
+-										break;
+-									case 38:
+-										num46 = 37;
+-										break;
++								case 36:
++									num46 = 38;
++									break;
++								case 37:
++									num46 = 36;
++									break;
++								case 38:
++									num46 = 37;
++									break;
+ 								}
+ 							}
+ 							else if (num43 == 1)
+ 							{
+ 								switch (num45)
+ 								{
+-									case 36:
+-										num46 = 37;
+-										break;
+-									case 37:
+-										num46 = 38;
+-										break;
+-									case 38:
+-										num46 = 36;
+-										break;
++								case 36:
++									num46 = 37;
++									break;
++								case 37:
++									num46 = 38;
++									break;
++								case 38:
++									num46 = 36;
++									break;
+ 								}
+ 							}
+ 							if (num42 == 0)
+@@ -52771,144 +52974,144 @@
+ 						{
+ 							switch (num)
+ 							{
+-								case 8:
+-								case 9:
+-								case 11:
+-								case 12:
+-								case 14:
+-								case 15:
+-									break;
+-								case 10:
+-								case 13:
+-									goto IL_1E6;
+-								default:
+-									switch (num)
+-									{
+-										case 40:
+-										case 41:
+-											break;
+-										default:
+-											goto IL_1E6;
+-									}
+-									break;
+-							}
+-						}
+-						else
+-						{
+-							switch (num)
+-							{
+-								case 88:
+-								case 89:
+-								case 90:
+-								case 91:
+-								case 92:
+-								case 96:
+-								case 97:
+-								case 99:
+-								case 100:
+-									break;
+-								case 93:
+-								case 94:
+-								case 95:
+-								case 98:
+-									goto IL_1E6;
+-								default:
+-									switch (num)
+-									{
+-										case 113:
+-										case 114:
+-										case 115:
+-										case 118:
+-										case 119:
+-											break;
+-										case 116:
+-										case 117:
+-											goto IL_1E6;
+-										default:
+-											goto IL_1E6;
+-									}
+-									break;
+-							}
+-						}
+-					}
+-					else if (num <= 249)
+-					{
+-						switch (num)
+-						{
+-							case 134:
+-							case 135:
+-							case 136:
++							case 8:
++							case 9:
++							case 11:
++							case 12:
++							case 14:
++							case 15:
+ 								break;
++							case 10:
++							case 13:
++								goto IL_1E6;
+ 							default:
+ 								switch (num)
+ 								{
+-									case 246:
+-									case 247:
+-									case 248:
+-									case 249:
+-										break;
+-									default:
+-										goto IL_1E6;
+-								}
+-								break;
+-						}
+-					}
+-					else if (num != 263 && num != 267)
+-					{
+-						goto IL_1E6;
+-					}
+-				}
+-				else if (num <= 422)
+-				{
+-					if (num <= 380)
+-					{
+-						if (num != 328)
+-						{
+-							switch (num)
+-							{
+-								case 379:
+-								case 380:
++								case 40:
++								case 41:
+ 									break;
+ 								default:
+ 									goto IL_1E6;
+-							}
+-						}
+-					}
+-					else
+-					{
+-						switch (num)
+-						{
+-							case 396:
+-							case 397:
+-							case 398:
+-							case 400:
++								}
+ 								break;
+-							case 399:
++							}
++						}
++						else
++						{
++							switch (num)
++							{
++							case 88:
++							case 89:
++							case 90:
++							case 91:
++							case 92:
++							case 96:
++							case 97:
++							case 99:
++							case 100:
++								break;
++							case 93:
++							case 94:
++							case 95:
++							case 98:
+ 								goto IL_1E6;
+ 							default:
+-								if (num != 422)
+-								{
++								switch (num)
++								{
++								case 113:
++								case 114:
++								case 115:
++								case 118:
++								case 119:
++									break;
++								case 116:
++								case 117:
+ 									goto IL_1E6;
++								default:
++									goto IL_1E6;
+ 								}
+ 								break;
+-						}
+-					}
+-				}
+-				else if (num <= 488)
+-				{
+-					switch (num)
+-					{
+-						case 437:
+-						case 438:
+-						case 439:
+-						case 440:
++							}
++						}
++					}
++					else if (num <= 249)
++					{
++						switch (num)
++						{
++						case 134:
++						case 135:
++						case 136:
+ 							break;
+ 						default:
+-							if (num != 488)
+-							{
++							switch (num)
++							{
++							case 246:
++							case 247:
++							case 248:
++							case 249:
++								break;
++							default:
+ 								goto IL_1E6;
+ 							}
+ 							break;
++						}
++					}
++					else if (num != 263 && num != 267)
++					{
++						goto IL_1E6;
++					}
++				}
++				else if (num <= 422)
++				{
++					if (num <= 380)
++					{
++						if (num != 328)
++						{
++							switch (num)
++							{
++							case 379:
++							case 380:
++								break;
++							default:
++								goto IL_1E6;
++							}
++						}
++					}
++					else
++					{
++						switch (num)
++						{
++						case 396:
++						case 397:
++						case 398:
++						case 400:
++							break;
++						case 399:
++							goto IL_1E6;
++						default:
++							if (num != 422)
++							{
++								goto IL_1E6;
++							}
++							break;
++						}
++					}
++				}
++				else if (num <= 488)
++				{
++					switch (num)
++					{
++					case 437:
++					case 438:
++					case 439:
++					case 440:
++						break;
++					default:
++						if (num != 488)
++						{
++							goto IL_1E6;
++						}
++						break;
+ 					}
+ 				}
+ 				else if (num != 493 && num != 507 && num != 517)
+@@ -52976,15 +53179,15 @@
+ 							{
+ 								switch (num2)
+ 								{
+-									case 35:
+-									case 36:
+-									case 39:
+-										break;
+-									case 37:
+-									case 38:
+-										goto IL_5E1;
+-									default:
+-										goto IL_5E1;
++								case 35:
++								case 36:
++								case 39:
++									break;
++								case 37:
++								case 38:
++									goto IL_5E1;
++								default:
++									goto IL_5E1;
+ 								}
+ 							}
+ 						}
+@@ -52994,50 +53197,49 @@
+ 							{
+ 								switch (num2)
+ 								{
+-									case 127:
+-									case 128:
+-									case 129:
+-									case 130:
+-									case 131:
+-										break;
+-									default:
+-										goto IL_5E1;
+-								}
+-							}
+-						}
+-						else
+-						{
+-							switch (num2)
+-							{
+-								case 392:
+-								case 393:
+-								case 394:
++								case 127:
++								case 128:
++								case 129:
++								case 130:
++								case 131:
+ 									break;
+ 								default:
+-									if (num2 == 399)
++									goto IL_5E1;
++								}
++							}
++						}
++						else
++						{
++							switch (num2)
++							{
++							case 392:
++							case 393:
++							case 394:
++								break;
++							default:
++								if (num2 == 399)
++								{
++									if (this.timeLeft == NPC.activeTime)
+ 									{
+-										if (this.timeLeft == NPC.activeTime)
+-										{
+-											this.timeLeft = NPC.activeTime;
+-										}
+-										flag = true;
+-										goto IL_5E1;
++										this.timeLeft = NPC.activeTime;
+ 									}
+-									switch (num2)
+-									{
+-										case 491:
+-										case 492:
+-											break;
+-										default:
+-											goto IL_5E1;
+-									}
++									flag = true;
++									goto IL_5E1;
++								}
++								switch (num2)
++								{
++								case 491:
++								case 492:
+ 									break;
++								default:
++									goto IL_5E1;
++								}
++								break;
+ 							}
+ 						}
+ 						flag = true;
+ 					}
+-					IL_5E1:
+-					;
++					IL_5E1:;
+ 				}
+ 				this.timeLeft--;
+ 				if (this.timeLeft <= 0)
+@@ -53248,100 +53450,100 @@
+ 					int num4 = array[NPC.waveCount];
+ 					switch (NPC.waveCount)
+ 					{
+-						case 1:
+-							text = "Wave 2: Zombie Elf and Elf Archer";
+-							break;
+-						case 2:
+-							text = "Wave 3: Zombie Elf, Elf Archer, Gingerbread Man, and Nutcracker";
+-							break;
+-						case 3:
+-							text = "Wave 4: Everscream, Zombie Elf, Elf Archer, and Gingerbread Man";
+-							break;
+-						case 4:
+-							text = "Wave 5: Everscream, Zombie Elf, Elf Archer, and Nutcracker";
+-							break;
+-						case 5:
+-							text = "Wave 6: Everscream, Elf Archer, Nutcracker, and Elf Copter";
+-							break;
+-						case 6:
+-							text = "Wave 7: Santa-NK1, Gingerbread Man, Elf Archer, and Zombie Elf";
+-							break;
+-						case 7:
+-							text = "Wave 8: Santa-NK1, Elf Copter, Elf Archer, Nutcracker, and Krampus";
+-							break;
+-						case 8:
+-							text = "Wave 9: Santa-NK1, Everscream, Nutcracker, Elf Copter, and Gingerbread Man";
+-							break;
+-						case 9:
+-							text = "Wave 10: Santa-NK1, Everscream, Krampus, Zombie Elf, and Elf Helicopter";
+-							break;
+-						case 10:
+-							text = "Wave 11: Ice Queen, Flocko, Zombie Elf, and Gingerbread Man";
+-							break;
+-						case 11:
+-							text = "Wave 12: Ice Queen, Everscream, Gingerbread Man, Yeti, and Zombie Elf";
+-							break;
+-						case 12:
+-							text = "Wave 13: Ice Queen, Santa-NK1, Gingerbread Man, Flocko, Yeti, and Elf Helicopter";
+-							break;
+-						case 13:
+-							text = "Wave 14: Ice Queen, Santa-NK1, Everscream, Yeti, and Krampus";
+-							break;
+-						case 14:
+-							text = "Wave 15: Ice Queen, Santa-NK1, Everscream, Yeti, and Elf Copter";
+-							break;
+-						case 15:
+-							text = "Wave 16: Ice Queen, Santa-NK1, Everscream, Yeti and Flocko";
+-							break;
+-						case 16:
+-							text = "Wave 17: Ice Queen, Santa-NK1, Everscream, Yeti, Krampus, Elf Copter";
+-							break;
+-						case 17:
+-							text = "Wave 18: Ice Queen, Santa-NK1, Everscream, Yeti, Nutcracker, Krampus";
+-							break;
+-						case 18:
+-							text = "Wave 19: Ice Queen, Santa-NK1, Everscream, Yeti";
+-							break;
+-						case 19:
+-							text = "Final Wave: Ice Queen, Santa-NK1, and Everscream";
+-							break;
++					case 1:
++						text = "Wave 2: Zombie Elf and Elf Archer";
++						break;
++					case 2:
++						text = "Wave 3: Zombie Elf, Elf Archer, Gingerbread Man, and Nutcracker";
++						break;
++					case 3:
++						text = "Wave 4: Everscream, Zombie Elf, Elf Archer, and Gingerbread Man";
++						break;
++					case 4:
++						text = "Wave 5: Everscream, Zombie Elf, Elf Archer, and Nutcracker";
++						break;
++					case 5:
++						text = "Wave 6: Everscream, Elf Archer, Nutcracker, and Elf Copter";
++						break;
++					case 6:
++						text = "Wave 7: Santa-NK1, Gingerbread Man, Elf Archer, and Zombie Elf";
++						break;
++					case 7:
++						text = "Wave 8: Santa-NK1, Elf Copter, Elf Archer, Nutcracker, and Krampus";
++						break;
++					case 8:
++						text = "Wave 9: Santa-NK1, Everscream, Nutcracker, Elf Copter, and Gingerbread Man";
++						break;
++					case 9:
++						text = "Wave 10: Santa-NK1, Everscream, Krampus, Zombie Elf, and Elf Helicopter";
++						break;
++					case 10:
++						text = "Wave 11: Ice Queen, Flocko, Zombie Elf, and Gingerbread Man";
++						break;
++					case 11:
++						text = "Wave 12: Ice Queen, Everscream, Gingerbread Man, Yeti, and Zombie Elf";
++						break;
++					case 12:
++						text = "Wave 13: Ice Queen, Santa-NK1, Gingerbread Man, Flocko, Yeti, and Elf Helicopter";
++						break;
++					case 13:
++						text = "Wave 14: Ice Queen, Santa-NK1, Everscream, Yeti, and Krampus";
++						break;
++					case 14:
++						text = "Wave 15: Ice Queen, Santa-NK1, Everscream, Yeti, and Elf Copter";
++						break;
++					case 15:
++						text = "Wave 16: Ice Queen, Santa-NK1, Everscream, Yeti and Flocko";
++						break;
++					case 16:
++						text = "Wave 17: Ice Queen, Santa-NK1, Everscream, Yeti, Krampus, Elf Copter";
++						break;
++					case 17:
++						text = "Wave 18: Ice Queen, Santa-NK1, Everscream, Yeti, Nutcracker, Krampus";
++						break;
++					case 18:
++						text = "Wave 19: Ice Queen, Santa-NK1, Everscream, Yeti";
++						break;
++					case 19:
++						text = "Final Wave: Ice Queen, Santa-NK1, and Everscream";
++						break;
+ 					}
+ 					float num5 = 0f;
+ 					switch (this.type)
+ 					{
+-						case 338:
+-						case 339:
+-						case 340:
+-							num5 = 1f;
+-							break;
+-						case 341:
+-							num5 = 20f;
+-							break;
+-						case 342:
+-							num5 = 2f;
+-							break;
+-						case 343:
+-							num5 = 18f;
+-							break;
+-						case 344:
+-							num5 = 50f;
+-							break;
+-						case 345:
+-							num5 = 150f;
+-							break;
+-						case 346:
+-							num5 = 100f;
+-							break;
+-						case 347:
+-							num5 = 8f;
+-							break;
+-						case 348:
+-						case 349:
+-							num5 = 4f;
+-							break;
+-						case 350:
+-							num5 = 3f;
+-							break;
++					case 338:
++					case 339:
++					case 340:
++						num5 = 1f;
++						break;
++					case 341:
++						num5 = 20f;
++						break;
++					case 342:
++						num5 = 2f;
++						break;
++					case 343:
++						num5 = 18f;
++						break;
++					case 344:
++						num5 = 50f;
++						break;
++					case 345:
++						num5 = 150f;
++						break;
++					case 346:
++						num5 = 100f;
++						break;
++					case 347:
++						num5 = 8f;
++						break;
++					case 348:
++					case 349:
++						num5 = 4f;
++						break;
++					case 350:
++						num5 = 3f;
++						break;
+ 					}
+ 					if (Main.expertMode)
+ 					{
+@@ -53407,216 +53609,216 @@
+ 					int num7 = array2[NPC.waveCount];
+ 					switch (NPC.waveCount)
+ 					{
+-						case 1:
+-							text2 = "Wave 2: " + Main.npcName[305] + " and " + Main.npcName[326];
+-							break;
+-						case 2:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 3: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[326],
+-									", and ",
+-									Main.npcName[329]
+-								});
+-							break;
+-						case 3:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 4: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", and ",
+-									Main.npcName[325]
+-								});
+-							break;
+-						case 4:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 5: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", and ",
+-									Main.npcName[325]
+-								});
+-							break;
+-						case 5:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 6: ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", and ",
+-									Main.npcName[325]
+-								});
+-							break;
+-						case 6:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 7: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 7:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 8: ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 8:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 9: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 9:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 10: ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 10:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 11: ",
+-									Main.npcName[305],
+-									", ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 11:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 12: ",
+-									Main.npcName[326],
+-									", ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 12:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 13: ",
+-									Main.npcName[329],
+-									", ",
+-									Main.npcName[330],
+-									", ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 13:
+-							text2 = string.Concat(new string[]
+-								{
+-									"Wave 14: ",
+-									Main.npcName[315],
+-									", ",
+-									Main.npcName[325],
+-									", and ",
+-									Main.npcName[327]
+-								});
+-							break;
+-						case 14:
+-							text2 = "Final Wave: " + Main.npcName[325] + ", and " + Main.npcName[327];
+-							break;
++					case 1:
++						text2 = "Wave 2: " + Main.npcName[305] + " and " + Main.npcName[326];
++						break;
++					case 2:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 3: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[326],
++							", and ",
++							Main.npcName[329]
++						});
++						break;
++					case 3:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 4: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", and ",
++							Main.npcName[325]
++						});
++						break;
++					case 4:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 5: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", and ",
++							Main.npcName[325]
++						});
++						break;
++					case 5:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 6: ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", and ",
++							Main.npcName[325]
++						});
++						break;
++					case 6:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 7: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 7:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 8: ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 8:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 9: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 9:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 10: ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 10:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 11: ",
++							Main.npcName[305],
++							", ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 11:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 12: ",
++							Main.npcName[326],
++							", ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 12:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 13: ",
++							Main.npcName[329],
++							", ",
++							Main.npcName[330],
++							", ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 13:
++						text2 = string.Concat(new string[]
++						{
++							"Wave 14: ",
++							Main.npcName[315],
++							", ",
++							Main.npcName[325],
++							", and ",
++							Main.npcName[327]
++						});
++						break;
++					case 14:
++						text2 = "Final Wave: " + Main.npcName[325] + ", and " + Main.npcName[327];
++						break;
+ 					}
+ 					float num8 = 0f;
+ 					switch (this.type)
+ 					{
+-						case 305:
+-						case 306:
+-						case 307:
+-						case 308:
+-						case 309:
+-						case 310:
+-						case 311:
+-						case 312:
+-						case 313:
+-						case 314:
+-							num8 = 1f;
+-							break;
+-						case 315:
+-							num8 = 25f;
+-							break;
+-						case 325:
+-							num8 = 75f;
+-							break;
+-						case 326:
+-							num8 = 2f;
+-							break;
+-						case 327:
+-							num8 = 150f;
+-							break;
+-						case 329:
+-							num8 = 4f;
+-							break;
+-						case 330:
+-							num8 = 8f;
+-							break;
++					case 305:
++					case 306:
++					case 307:
++					case 308:
++					case 309:
++					case 310:
++					case 311:
++					case 312:
++					case 313:
++					case 314:
++						num8 = 1f;
++						break;
++					case 315:
++						num8 = 25f;
++						break;
++					case 325:
++						num8 = 75f;
++						break;
++					case 326:
++						num8 = 2f;
++						break;
++					case 327:
++						num8 = 150f;
++						break;
++					case 329:
++						num8 = 4f;
++						break;
++					case 330:
++						num8 = 8f;
++						break;
+ 					}
+ 					if (Main.expertMode)
+ 					{
+@@ -53665,37 +53867,37 @@
+ 					{
+ 						switch (num11)
+ 						{
+-							case 212:
+-							case 213:
+-							case 214:
+-							case 215:
+-							case 216:
+-								break;
++						case 212:
++						case 213:
++						case 214:
++						case 215:
++						case 216:
++							break;
++						default:
++							switch (num11)
++							{
++							case 381:
++							case 382:
++							case 383:
++							case 385:
++							case 386:
++							case 388:
++							case 389:
++							case 390:
++							case 391:
++							case 395:
++								num10 = 4;
++								goto IL_122B;
++							case 384:
++							case 387:
++							case 392:
++							case 393:
++							case 394:
++								goto IL_122B;
+ 							default:
+-								switch (num11)
+-								{
+-									case 381:
+-									case 382:
+-									case 383:
+-									case 385:
+-									case 386:
+-									case 388:
+-									case 389:
+-									case 390:
+-									case 391:
+-									case 395:
+-										num10 = 4;
+-										goto IL_122B;
+-									case 384:
+-									case 387:
+-									case 392:
+-									case 393:
+-									case 394:
+-										goto IL_122B;
+-									default:
+-										goto IL_122B;
+-								}
+-								break;
++								goto IL_122B;
++							}
++							break;
+ 						}
+ 					}
+ 					else
+@@ -53714,26 +53916,26 @@
+ 				}
+ 				switch (num11)
+ 				{
+-					case 26:
+-					case 27:
+-					case 28:
+-					case 29:
+-						break;
+-					default:
+-						if (num11 != 111)
+-						{
+-							switch (num11)
+-							{
+-								case 143:
+-								case 144:
+-								case 145:
+-									num10 = 2;
+-									goto IL_122B;
+-								default:
+-									goto IL_122B;
+-							}
+-						}
+-						break;
++				case 26:
++				case 27:
++				case 28:
++				case 29:
++					break;
++				default:
++					if (num11 != 111)
++					{
++						switch (num11)
++						{
++						case 143:
++						case 144:
++						case 145:
++							num10 = 2;
++							goto IL_122B;
++						default:
++							goto IL_122B;
++						}
++					}
++					break;
+ 				}
+ 				IL_1219:
+ 				num10 = 1;
+@@ -53824,42 +54026,42 @@
+ 			int num = this.type;
+ 			switch (num)
+ 			{
+-				case 13:
+-				case 14:
+-				case 15:
+-					if (this.boss)
++			case 13:
++			case 14:
++			case 15:
++				if (this.boss)
++				{
++					AchievementsHelper.NotifyNPCKilled(this);
++				}
++				break;
++			default:
++				switch (num)
++				{
++				case 125:
++				case 126:
++				{
++					int num2 = (this.type == 126) ? 125 : 126;
++					if (!NPC.AnyNPCs(num2))
+ 					{
+ 						AchievementsHelper.NotifyNPCKilled(this);
+-					}
++						AchievementsHelper.CheckMechaMayhem(this.type);
++						goto IL_C1;
++					}
++					goto IL_C1;
++				}
++				case 127:
+ 					break;
+ 				default:
+-					switch (num)
+-					{
+-						case 125:
+-						case 126:
+-							{
+-								int num2 = (this.type == 126) ? 125 : 126;
+-								if (!NPC.AnyNPCs(num2))
+-								{
+-									AchievementsHelper.NotifyNPCKilled(this);
+-									AchievementsHelper.CheckMechaMayhem(this.type);
+-									goto IL_C1;
+-								}
+-								goto IL_C1;
+-							}
+-						case 127:
+-							break;
+-						default:
+-							if (num != 134)
+-							{
+-								AchievementsHelper.NotifyNPCKilled(this);
+-								goto IL_C1;
+-							}
+-							break;
+-					}
+-					AchievementsHelper.CheckMechaMayhem(this.type);
+-					AchievementsHelper.NotifyNPCKilled(this);
++					if (num != 134)
++					{
++						AchievementsHelper.NotifyNPCKilled(this);
++						goto IL_C1;
++					}
+ 					break;
++				}
++				AchievementsHelper.CheckMechaMayhem(this.type);
++				AchievementsHelper.NotifyNPCKilled(this);
++				break;
+ 			}
+ 			IL_C1:
+ 			int num3 = Item.NPCtoBanner(this.BannerID());
+@@ -53882,24 +54084,24 @@
+ 						num5 = this.FindClosestPlayer();
+ 					}
+ 					string text = string.Concat(new object[]
+-						{
+-							"The ",
++					{
++						"The ",
++						NPC.killCount[num3],
++						"th ",
++						Lang.npcName(l, false),
++						" has been defeated!"
++					});
++					if (num5 >= 0 && num5 < 255)
++					{
++						text = string.Concat(new object[]
++						{
++							Main.player[num5].name,
++							" has defeated the ",
+ 							NPC.killCount[num3],
+ 							"th ",
+ 							Lang.npcName(l, false),
+-							" has been defeated!"
++							"!"
+ 						});
+-					if (num5 >= 0 && num5 < 255)
+-					{
+-						text = string.Concat(new object[]
+-							{
+-								Main.player[num5].name,
+-								" has defeated the ",
+-								NPC.killCount[num3],
+-								"th ",
+-								Lang.npcName(l, false),
+-								"!"
+-							});
+ 					}
+ 					if (Main.netMode == 0)
+ 					{
+@@ -53952,23 +54154,23 @@
+ 				{
+ 					switch (num)
+ 					{
+-						case 84:
+-						case 86:
++					case 84:
++					case 86:
++						break;
++					case 85:
++						goto IL_482;
++					default:
++						switch (num)
++						{
++						case 120:
++						case 122:
+ 							break;
+-						case 85:
++						case 121:
+ 							goto IL_482;
+ 						default:
+-							switch (num)
+-							{
+-								case 120:
+-								case 122:
+-									break;
+-								case 121:
+-									goto IL_482;
+-								default:
+-									goto IL_482;
+-							}
+-							break;
++							goto IL_482;
++						}
++						break;
+ 					}
+ 				}
+ 			}
+@@ -53976,15 +54178,15 @@
+ 			{
+ 				switch (num)
+ 				{
+-					case 137:
+-					case 138:
+-						break;
+-					default:
+-						if (num != 171)
+-						{
+-							goto IL_482;
+-						}
+-						break;
++				case 137:
++				case 138:
++					break;
++				default:
++					if (num != 171)
++					{
++						goto IL_482;
++					}
++					break;
+ 				}
+ 			}
+ 			else if (num != 244 && num != 475)
+@@ -54029,11 +54231,11 @@
+ 				}
+ 				switch (this.type)
+ 				{
+-					case 13:
+-					case 14:
+-					case 15:
+-						flag2 = false;
+-						break;
++				case 13:
++				case 14:
++				case 15:
++					flag2 = false;
++					break;
+ 				}
+ 				if (Main.hardMode && this.lifeMax > 1 && this.damage > 0 && !this.friendly && (double)this.position.Y > Main.rockLayer * 16.0 && flag2 && this.type != 121 && this.value > 0f)
+ 				{
+@@ -54632,90 +54834,90 @@
+ 					{
+ 						switch (num)
+ 						{
+-							case 75:
+-								if (Main.rand.Next(2) == 0)
+-								{
+-									num23 = 889;
+-								}
+-								else
+-								{
+-									num23 = 890;
+-								}
+-								if (Main.rand.Next(100) != 0)
++						case 75:
++							if (Main.rand.Next(2) == 0)
++							{
++								num23 = 889;
++							}
++							else
++							{
++								num23 = 890;
++							}
++							if (Main.rand.Next(100) != 0)
++							{
++								goto IL_2B09;
++							}
++							if (num23 == 889)
++							{
++								num24 = 890;
++								goto IL_2B09;
++							}
++							num24 = 889;
++							goto IL_2B09;
++						case 76:
++						case 85:
++						case 86:
++						case 87:
++						case 88:
++						case 89:
++						case 90:
++						case 91:
++						case 92:
++							goto IL_2B09;
++						case 77:
++							goto IL_2A1F;
++						case 78:
++						case 82:
++							num23 = 889;
++							goto IL_2B09;
++						case 79:
++							if (Main.rand.Next(2) == 0)
++							{
++								num23 = 888;
++							}
++							else
++							{
++								num23 = 890;
++							}
++							if (Main.rand.Next(100) != 0)
++							{
++								goto IL_2B09;
++							}
++							if (num23 == 888)
++							{
++								num24 = 890;
++								goto IL_2B09;
++							}
++							num24 = 888;
++							goto IL_2B09;
++						case 80:
++						case 93:
++							break;
++						case 81:
++							num23 = 888;
++							goto IL_2B09;
++						case 83:
++						case 84:
++							goto IL_2A5B;
++						case 94:
++							goto IL_2A67;
++						default:
++							switch (num)
++							{
++							case 102:
++							case 104:
++								goto IL_2A13;
++							case 103:
++								num23 = 890;
++								goto IL_2B09;
++							default:
++								if (num != 109)
+ 								{
+ 									goto IL_2B09;
+ 								}
+-								if (num23 == 889)
+-								{
+-									num24 = 890;
+-									goto IL_2B09;
+-								}
+-								num24 = 889;
+-								goto IL_2B09;
+-							case 76:
+-							case 85:
+-							case 86:
+-							case 87:
+-							case 88:
+-							case 89:
+-							case 90:
+-							case 91:
+-							case 92:
+-								goto IL_2B09;
+-							case 77:
+-								goto IL_2A1F;
+-							case 78:
+-							case 82:
+-								num23 = 889;
+-								goto IL_2B09;
+-							case 79:
+-								if (Main.rand.Next(2) == 0)
+-								{
+-									num23 = 888;
+-								}
+-								else
+-								{
+-									num23 = 890;
+-								}
+-								if (Main.rand.Next(100) != 0)
+-								{
+-									goto IL_2B09;
+-								}
+-								if (num23 == 888)
+-								{
+-									num24 = 890;
+-									goto IL_2B09;
+-								}
+-								num24 = 888;
+-								goto IL_2B09;
+-							case 80:
+-							case 93:
+ 								break;
+-							case 81:
+-								num23 = 888;
+-								goto IL_2B09;
+-							case 83:
+-							case 84:
+-								goto IL_2A5B;
+-							case 94:
+-								goto IL_2A67;
+-							default:
+-								switch (num)
+-								{
+-									case 102:
+-									case 104:
+-										goto IL_2A13;
+-									case 103:
+-										num23 = 890;
+-										goto IL_2B09;
+-									default:
+-										if (num != 109)
+-										{
+-											goto IL_2B09;
+-										}
+-										break;
+-								}
+-								break;
++							}
++							break;
+ 						}
+ 						num23 = 893;
+ 						goto IL_2B09;
+@@ -54750,29 +54952,29 @@
+ 					}
+ 					switch (num)
+ 					{
+-						case 231:
+-						case 232:
+-						case 233:
+-						case 234:
+-						case 235:
+-							goto IL_2A2B;
++					case 231:
++					case 232:
++					case 233:
++					case 234:
++					case 235:
++						goto IL_2A2B;
++					default:
++						switch (num)
++						{
++						case 269:
++						case 270:
++						case 271:
++						case 272:
++							break;
++						case 273:
++						case 274:
++						case 275:
++						case 276:
++							goto IL_2A1F;
+ 						default:
+-							switch (num)
+-							{
+-								case 269:
+-								case 270:
+-								case 271:
+-								case 272:
+-									break;
+-								case 273:
+-								case 274:
+-								case 275:
+-								case 276:
+-									goto IL_2A1F;
+-								default:
+-									goto IL_2B09;
+-							}
+-							break;
++							goto IL_2B09;
++						}
++						break;
+ 					}
+ 				}
+ 				IL_2A13:
+@@ -56351,17 +56553,17 @@
+ 					Item.NewItem((int)this.position.X, (int)this.position.Y, this.width, this.height, 3384, 1, false, -1, false, false);
+ 					Item.NewItem((int)this.position.X, (int)this.position.Y, this.width, this.height, 3460, Main.rand.Next(70, 91), false, -1, false, false);
+ 					int num56 = Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							3063,
+-							3389,
+-							3065,
+-							1553,
+-							3546,
+-							3541,
+-							3570,
+-							3571,
+-							3569
+-						});
++					{
++						3063,
++						3389,
++						3065,
++						1553,
++						3546,
++						3541,
++						3570,
++						3571,
++						3569
++					});
+ 					Item.NewItem((int)this.position.X, (int)this.position.Y, this.width, this.height, num56, 1, false, -1, false, false);
+ 				}
+ 			}
+@@ -56370,91 +56572,91 @@
+ 			{
+ 				switch (num)
+ 				{
+-					case 402:
+-					case 405:
+-					case 407:
+-					case 409:
+-					case 411:
+-						if ((this.type != 406 || Main.rand.Next(3) == 0) && NPC.ShieldStrengthTowerStardust > 0)
+-						{
+-							Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(493), 0f);
+-							goto IL_90BA;
+-						}
++				case 402:
++				case 405:
++				case 407:
++				case 409:
++				case 411:
++					if ((this.type != 406 || Main.rand.Next(3) == 0) && NPC.ShieldStrengthTowerStardust > 0)
++					{
++						Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(493), 0f);
+ 						goto IL_90BA;
+-					case 403:
+-					case 404:
+-					case 406:
+-					case 408:
+-					case 410:
+-					case 428:
++					}
++					goto IL_90BA;
++				case 403:
++				case 404:
++				case 406:
++				case 408:
++				case 410:
++				case 428:
++					goto IL_90BA;
++				case 412:
++				case 413:
++				case 414:
++				case 415:
++				case 416:
++				case 417:
++				case 418:
++				case 419:
++					break;
++				case 420:
++				case 421:
++				case 423:
++				case 424:
++					if (NPC.ShieldStrengthTowerNebula > 0)
++					{
++						Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(507), 0f);
+ 						goto IL_90BA;
+-					case 412:
+-					case 413:
+-					case 414:
+-					case 415:
+-					case 416:
+-					case 417:
+-					case 418:
+-					case 419:
+-						break;
+-					case 420:
+-					case 421:
+-					case 423:
+-					case 424:
+-						if (NPC.ShieldStrengthTowerNebula > 0)
+-						{
+-							Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(507), 0f);
+-							goto IL_90BA;
+-						}
++					}
++					goto IL_90BA;
++				case 422:
++				{
++					int num57 = Main.rand.Next(25, 41) / 2;
++					if (Main.expertMode)
++					{
++						num57 = (int)((float)num57 * 1.5f);
++					}
++					for (int num58 = 0; num58 < num57; num58++)
++					{
++						Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3456, Main.rand.Next(1, 4), false, 0, false, false);
++					}
++					NPC.downedTowerVortex = true;
++					NPC.TowerActiveVortex = false;
++					WorldGen.UpdateLunarApocalypse();
++					WorldGen.MessageLunarApocalypse();
++					goto IL_90BA;
++				}
++				case 425:
++				case 426:
++				case 427:
++				case 429:
++					if (NPC.ShieldStrengthTowerVortex > 0)
++					{
++						Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(422), 0f);
+ 						goto IL_90BA;
+-					case 422:
+-						{
+-							int num57 = Main.rand.Next(25, 41) / 2;
+-							if (Main.expertMode)
+-							{
+-								num57 = (int)((float)num57 * 1.5f);
+-							}
+-							for (int num58 = 0; num58 < num57; num58++)
+-							{
+-								Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3456, Main.rand.Next(1, 4), false, 0, false, false);
+-							}
+-							NPC.downedTowerVortex = true;
+-							NPC.TowerActiveVortex = false;
+-							WorldGen.UpdateLunarApocalypse();
+-							WorldGen.MessageLunarApocalypse();
+-							goto IL_90BA;
+-						}
+-					case 425:
+-					case 426:
+-					case 427:
+-					case 429:
+-						if (NPC.ShieldStrengthTowerVortex > 0)
+-						{
+-							Projectile.NewProjectile(base.Center.X, base.Center.Y, 0f, 0f, 629, 0, 0f, Main.myPlayer, (float)NPC.FindFirstNPC(422), 0f);
+-							goto IL_90BA;
+-						}
++					}
++					goto IL_90BA;
++				default:
++				{
++					if (num != 493)
++					{
+ 						goto IL_90BA;
+-					default:
+-						{
+-							if (num != 493)
+-							{
+-								goto IL_90BA;
+-							}
+-							int num59 = Main.rand.Next(25, 41) / 2;
+-							if (Main.expertMode)
+-							{
+-								num59 = (int)((float)num59 * 1.5f);
+-							}
+-							for (int num60 = 0; num60 < num59; num60++)
+-							{
+-								Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3459, Main.rand.Next(1, 4), false, 0, false, false);
+-							}
+-							NPC.downedTowerStardust = true;
+-							NPC.TowerActiveStardust = false;
+-							WorldGen.UpdateLunarApocalypse();
+-							WorldGen.MessageLunarApocalypse();
+-							goto IL_90BA;
+-						}
++					}
++					int num59 = Main.rand.Next(25, 41) / 2;
++					if (Main.expertMode)
++					{
++						num59 = (int)((float)num59 * 1.5f);
++					}
++					for (int num60 = 0; num60 < num59; num60++)
++					{
++						Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3459, Main.rand.Next(1, 4), false, 0, false, false);
++					}
++					NPC.downedTowerStardust = true;
++					NPC.TowerActiveStardust = false;
++					WorldGen.UpdateLunarApocalypse();
++					WorldGen.MessageLunarApocalypse();
++					goto IL_90BA;
++				}
+ 				}
+ 			}
+ 			else
+@@ -56478,27 +56680,27 @@
+ 				}
+ 				switch (num)
+ 				{
+-					case 517:
+-						{
+-							int num63 = Main.rand.Next(25, 41) / 2;
+-							if (Main.expertMode)
+-							{
+-								num63 = (int)((float)num63 * 1.5f);
+-							}
+-							for (int num64 = 0; num64 < num63; num64++)
+-							{
+-								Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3458, Main.rand.Next(1, 4), false, 0, false, false);
+-							}
+-							NPC.downedTowerSolar = true;
+-							NPC.TowerActiveSolar = false;
+-							WorldGen.UpdateLunarApocalypse();
+-							WorldGen.MessageLunarApocalypse();
+-							goto IL_90BA;
+-						}
+-					case 518:
+-						break;
+-					default:
+-						goto IL_90BA;
++				case 517:
++				{
++					int num63 = Main.rand.Next(25, 41) / 2;
++					if (Main.expertMode)
++					{
++						num63 = (int)((float)num63 * 1.5f);
++					}
++					for (int num64 = 0; num64 < num63; num64++)
++					{
++						Item.NewItem((int)this.position.X + Main.rand.Next(this.width), (int)this.position.Y + Main.rand.Next(this.height), 2, 2, 3458, Main.rand.Next(1, 4), false, 0, false, false);
++					}
++					NPC.downedTowerSolar = true;
++					NPC.TowerActiveSolar = false;
++					WorldGen.UpdateLunarApocalypse();
++					WorldGen.MessageLunarApocalypse();
++					goto IL_90BA;
++				}
++				case 518:
++					break;
++				default:
++					goto IL_90BA;
+ 				}
+ 			}
+ 			if (NPC.ShieldStrengthTowerSolar > 0)
+@@ -56509,24 +56711,24 @@
+ 			num = this.type;
+ 			switch (num)
+ 			{
+-				case 381:
+-				case 382:
+-				case 383:
+-				case 385:
+-				case 386:
+-				case 389:
+-				case 390:
+-					break;
+-				case 384:
+-				case 387:
+-				case 388:
++			case 381:
++			case 382:
++			case 383:
++			case 385:
++			case 386:
++			case 389:
++			case 390:
++				break;
++			case 384:
++			case 387:
++			case 388:
++				goto IL_914D;
++			default:
++				if (num != 520)
++				{
+ 					goto IL_914D;
+-				default:
+-					if (num != 520)
+-					{
+-						goto IL_914D;
+-					}
+-					break;
++				}
++				break;
+ 			}
+ 			if (Main.rand.Next(8) == 0)
+ 			{
+@@ -56552,19 +56754,19 @@
+ 			num = this.type;
+ 			switch (num)
+ 			{
+-				case 381:
+-				case 382:
+-				case 385:
+-					break;
+-				case 383:
+-				case 384:
++			case 381:
++			case 382:
++			case 385:
++				break;
++			case 383:
++			case 384:
++				goto IL_9346;
++			default:
++				if (num != 390)
++				{
+ 					goto IL_9346;
+-				default:
+-					if (num != 390)
+-					{
+-						goto IL_9346;
+-					}
+-					break;
++				}
++				break;
+ 			}
+ 			if (Main.rand.Next(200) == 0)
+ 			{
+@@ -56582,17 +56784,17 @@
+ 			if (this.type == 395)
+ 			{
+ 				Item.NewItem((int)this.position.X, (int)this.position.Y, this.width, this.height, Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							2797,
+-							2749,
+-							2795,
+-							2798,
+-							2796,
+-							2882,
+-							2880,
+-							2769,
+-							2800
+-						}), 1, false, 0, false, false);
++				{
++					2797,
++					2749,
++					2795,
++					2798,
++					2796,
++					2882,
++					2880,
++					2769,
++					2800
++				}), 1, false, 0, false, false);
+ 			}
+ 			if (this.type == 390 && Main.rand.Next(100) == 0)
+ 			{
+@@ -58277,20 +58479,20 @@
+ 							while (flag15)
+ 							{
+ 								num47 = Utils.SelectRandom<int>(Main.rand, new int[]
+-									{
+-										424,
+-										424,
+-										424,
+-										423,
+-										423,
+-										423,
+-										421,
+-										421,
+-										421,
+-										421,
+-										421,
+-										420
+-									});
++								{
++									424,
++									424,
++									424,
++									423,
++									423,
++									423,
++									421,
++									421,
++									421,
++									421,
++									421,
++									420
++								});
+ 								flag15 = false;
+ 								if (num47 == 424 && NPC.CountNPCS(num47) >= 2)
+ 								{
+@@ -58317,17 +58519,17 @@
+ 							while (flag16)
+ 							{
+ 								num48 = Utils.SelectRandom<int>(Main.rand, new int[]
+-									{
+-										429,
+-										429,
+-										429,
+-										429,
+-										427,
+-										427,
+-										425,
+-										425,
+-										426
+-									});
++								{
++									429,
++									429,
++									429,
++									429,
++									427,
++									427,
++									425,
++									425,
++									426
++								});
+ 								flag16 = false;
+ 								if (num48 == 425 && NPC.CountNPCS(num48) >= 3)
+ 								{
+@@ -58350,16 +58552,16 @@
+ 						else if (Main.player[j].ZoneTowerStardust)
+ 						{
+ 							int num49 = Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									411,
+-									411,
+-									411,
+-									409,
+-									409,
+-									407,
+-									402,
+-									405
+-								});
++							{
++								411,
++								411,
++								411,
++								409,
++								409,
++								407,
++								402,
++								405
++							});
+ 							if (num49 != 0)
+ 							{
+ 								num46 = NPC.NewNPC(num * 16 + 8, num2 * 16, num49, 1, 0f, 0f, 0f, 0f, 255);
+@@ -58372,15 +58574,15 @@
+ 							while (flag17)
+ 							{
+ 								num50 = Utils.SelectRandom<int>(Main.rand, new int[]
+-									{
+-										518,
+-										419,
+-										418,
+-										412,
+-										417,
+-										416,
+-										415
+-									});
++								{
++									518,
++									419,
++									418,
++									412,
++									417,
++									416,
++									415
++								});
+ 								flag17 = false;
+ 								if (num50 == 415 && NPC.CountNPCS(num50) >= 2)
+ 								{
+@@ -58664,13 +58866,13 @@
+ 							else
+ 							{
+ 								int num57 = Utils.SelectRandom<int>(Main.rand, new int[]
+-									{
+-										69,
+-										508,
+-										508,
+-										508,
+-										509
+-									});
++								{
++									69,
++									508,
++									508,
++									508,
++									509
++								});
+ 								NPC.NewNPC(num * 16 + 8, num2 * 16, num57, 0, 0f, 0f, 0f, 0f, 255);
+ 							}
+ 						}
+@@ -59000,10 +59202,10 @@
+ 								else if (Main.rand.Next(3) == 0 && (double)num2 <= Main.worldSurface)
+ 								{
+ 									NPC.NewNPC(num * 16 + 8, num2 * 16, (int)Utils.SelectRandom<short>(Main.rand, new short[]
+-											{
+-												299,
+-												538
+-											}), 0, 0f, 0f, 0f, 0f, 255);
++									{
++										299,
++										538
++									}), 0, 0f, 0f, 0f, 0f, 255);
+ 								}
+ 								else
+ 								{
+@@ -60443,10 +60645,10 @@
+ 									else if (Main.rand.Next(3) == 0 && (double)num2 <= Main.worldSurface)
+ 									{
+ 										NPC.NewNPC(num * 16 + 8, num2 * 16, (int)Utils.SelectRandom<short>(Main.rand, new short[]
+-												{
+-													299,
+-													538
+-												}), 0, 0f, 0f, 0f, 0f, 255);
++										{
++											299,
++											538
++										}), 0, 0f, 0f, 0f, 0f, 255);
+ 									}
+ 									else
+ 									{
+@@ -61853,10 +62055,10 @@
+ 				for (int j = 0; j < 20; j++)
+ 				{
+ 					int num6 = Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							229,
+-							240
+-						});
++					{
++						229,
++						240
++					});
+ 					Dust dust2 = Main.dust[Dust.NewDust(this.position, this.width, this.height, num6, 0f, 0f, 0, default(Color), 1f)];
+ 					dust2.noGravity = true;
+ 					dust2.scale = 0.6f + Main.rand.NextFloat() * 1.8f;
+@@ -61869,11 +62071,11 @@
+ 				for (int k = 0; k < 30; k++)
+ 				{
+ 					int num7 = Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							229,
+-							240,
+-							240
+-						});
++					{
++						229,
++						240,
++						240
++					});
+ 					Dust dust3 = Main.dust[Dust.NewDust(this.position, this.width, this.height, num7, 0f, 0f, 0, default(Color), 1f)];
+ 					dust3.noGravity = true;
+ 					dust3.scale = 0.6f + Main.rand.NextFloat() * 1.8f;
+@@ -62284,11 +62486,11 @@
+ 				for (int i = 0; i < 20; i++)
+ 				{
+ 					int num = Utils.SelectRandom<int>(Main.rand, new int[]
+-						{
+-							6,
+-							259,
+-							158
+-						});
++					{
++						6,
++						259,
++						158
++					});
+ 					int num2 = Dust.NewDust(hitbox.TopLeft(), this.width, this.height, num, 0f, -2.5f, 0, default(Color), 1f);
+ 					Main.dust[num2].alpha = 200;
+ 					Main.dust[num2].velocity *= 1.4f;
+@@ -62636,11 +62838,11 @@
+ 					for (int num24 = 0; num24 < 5; num24++)
+ 					{
+ 						int num25 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								6,
+-								259,
+-								158
+-							});
++						{
++							6,
++							259,
++							158
++						});
+ 						int num26 = Dust.NewDust(hitbox2.TopLeft(), this.width, this.height, num25, 2.5f * (float)hitDirection, -2.5f, 0, default(Color), 1f);
+ 						Main.dust[num26].alpha = 200;
+ 						Main.dust[num26].velocity *= 2.4f;
+@@ -62691,11 +62893,11 @@
+ 					for (int num32 = 0; num32 < 30; num32++)
+ 					{
+ 						int num33 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								229,
+-								240,
+-								161
+-							});
++						{
++							229,
++							240,
++							161
++						});
+ 						Dust dust12 = Main.dust[Dust.NewDust(this.position, this.width, this.height, num33, 0f, 0f, 0, default(Color), 1f)];
+ 						dust12.noGravity = true;
+ 						dust12.scale = 1.25f + Main.rand.NextFloat();
+@@ -62745,11 +62947,11 @@
+ 					for (int num38 = 0; num38 < 20; num38++)
+ 					{
+ 						int num39 = Utils.SelectRandom<int>(Main.rand, new int[]
+-							{
+-								229,
+-								229,
+-								240
+-							});
++						{
++							229,
++							229,
++							240
++						});
+ 						Dust dust14 = Main.dust[Dust.NewDust(this.position, this.width, this.height, num39, 0f, 0f, 0, default(Color), 1f)];
+ 						dust14.noGravity = true;
+ 						dust14.scale = 1.25f + Main.rand.NextFloat();
+@@ -63354,35 +63556,35 @@
+ 					for (int num85 = -1; num85 < 2; num85++)
+ 					{
+ 						Gore.NewGore(value2 + vector4 * ((float)this.width * 0.35f) - new Vector2(0f, 200f) + Utils.RandomVector2(Main.rand, -40f, 40f), this.velocity, Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									860,
+-									892,
+-									893
+-								}), this.scale);
++						{
++							860,
++							892,
++							893
++						}), this.scale);
+ 						Gore.NewGore(value2 + vector4 * ((float)this.width * 0.15f) - new Vector2(0f, 200f) + Utils.RandomVector2(Main.rand, -40f, 40f), this.velocity, Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									860,
+-									892,
+-									893
+-								}), this.scale);
++						{
++							860,
++							892,
++							893
++						}), this.scale);
+ 						Gore.NewGore(value2 + vector4 * ((float)this.width * -0.35f) - new Vector2(0f, 200f) + Utils.RandomVector2(Main.rand, -40f, 40f), this.velocity, Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									860,
+-									892,
+-									893
+-								}), this.scale);
++						{
++							860,
++							892,
++							893
++						}), this.scale);
+ 						Gore.NewGore(value2 + vector4 * ((float)this.width * -0.15f) - new Vector2(0f, 300f) + Utils.RandomVector2(Main.rand, -40f, 40f), this.velocity, Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									860,
+-									892,
+-									893
+-								}), this.scale);
++						{
++							860,
++							892,
++							893
++						}), this.scale);
+ 						Gore.NewGore(value2 + vector4 * ((float)this.width * -0.15f) - new Vector2(0f, 300f) + Utils.RandomVector2(Main.rand, -40f, 40f), this.velocity, Utils.SelectRandom<int>(Main.rand, new int[]
+-								{
+-									860,
+-									892,
+-									893
+-								}), this.scale);
++						{
++							860,
++							892,
++							893
++						}), this.scale);
+ 					}
+ 					for (int num86 = 0; num86 < 2; num86++)
+ 					{
+@@ -73001,14 +73203,14 @@
+ 		public override string ToString()
+ 		{
+ 			return string.Concat(new object[]
+-				{
+-					"name:",
+-					this.name,
+-					", active:",
+-					this.active,
+-					", whoAmI:",
+-					this.whoAmI
+-				});
++			{
++				"name:",
++				this.name,
++				", active:",
++				this.active,
++				", whoAmI:",
++				this.whoAmI
++			});
+ 		}
+ 	}
+ }
+

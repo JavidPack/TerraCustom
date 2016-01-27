@@ -1,0 +1,76 @@
+--- src/Terraria\Terraria\Program.cs
++++ src/TerraCustom\Terraria\Program.cs
+@@ -4,24 +4,24 @@
+ using System.Reflection;
+ using System.Runtime.CompilerServices;
+ using System.Threading;
+-
+ #if CLIENT
+ using System.Windows.Forms;
+ #endif
+ using Terraria.Initializers;
+-using Terraria.Social;
++//using Terraria.Social;
+ 
+ namespace Terraria
+ {
+ 	public static class Program
+ 	{
+-		#if CLIENT
++#if CLIENT
+ 		public const bool IsServer = false;
++#else
++        public const bool IsServer = true;
++#endif
+ 
+-#else
+-		public const bool IsServer = true;
+-		#endif
+ 		public static Dictionary<string, string> LaunchParameters = new Dictionary<string, string>();
++
+ 		public static IntPtr JitForcedMethodCache;
+ 
+ 		private static void ForceJITOnAssembly(Assembly assembly)
+@@ -34,9 +34,9 @@
+ #if WINDOWS
+ 				MethodInfo[] methods = type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+ #else
+-				MethodInfo[] methods = type.GetMethods();
++                MethodInfo[] methods = type.GetMethods();
+ #endif
+-				MethodInfo[] array2 = methods;
++                MethodInfo[] array2 = methods;
+ 				for (int j = 0; j < array2.Length; j++)
+ 				{
+ 					MethodInfo methodInfo = array2[j];
+@@ -45,9 +45,9 @@
+ #if WINDOWS
+ 						RuntimeHelpers.PrepareMethod(methodInfo.MethodHandle);
+ #else
+-						Program.JitForcedMethodCache = methodInfo.MethodHandle.GetFunctionPointer();
++                        Program.JitForcedMethodCache = methodInfo.MethodHandle.GetFunctionPointer();
+ #endif
+-					}
++                    }
+ 				}
+ 			}
+ 		}
+@@ -102,7 +102,7 @@
+ 			{
+ 				try
+ 				{
+-					SocialAPI.Initialize(null);
++					//SocialAPI.Initialize(null);
+ 					LaunchInitializer.LoadParameters(main);
+ 					Main.OnEngineLoad += delegate
+ 					{
+@@ -111,7 +111,7 @@
+ #if CLIENT
+ 					main.Run();
+ #else
+-					main.DedServ();
++                    main.DedServ();
+ #endif
+ 				}
+ 				catch (Exception e)
+
