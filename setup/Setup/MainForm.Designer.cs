@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     partial class MainForm
     {
@@ -36,8 +36,8 @@ namespace Terraria.ModLoader.Setup
 			this.buttonDecompile = new System.Windows.Forms.Button();
 			this.buttonDiffTerraria = new System.Windows.Forms.Button();
 			this.buttonPatchTerraria = new System.Windows.Forms.Button();
-			this.buttonPatchModLoader = new System.Windows.Forms.Button();
-			this.buttonDiffModLoader = new System.Windows.Forms.Button();
+			this.buttonPatchTerraCustom = new System.Windows.Forms.Button();
+			this.buttonDiffTerraCustom = new System.Windows.Forms.Button();
 			this.toolTipButtons = new System.Windows.Forms.ToolTip(this.components);
 			this.buttonFormat = new System.Windows.Forms.Button();
 			this.buttonDiffMerged = new System.Windows.Forms.Button();
@@ -139,32 +139,32 @@ namespace Terraria.ModLoader.Setup
 			this.buttonPatchTerraria.UseVisualStyleBackColor = true;
 			this.buttonPatchTerraria.Click += new System.EventHandler(this.buttonTask_Click);
 			// 
-			// buttonPatchModLoader
+			// buttonPatchTerraCustom
 			// 
-			this.buttonPatchModLoader.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.buttonPatchModLoader.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonPatchModLoader.Location = new System.Drawing.Point(180, 129);
-			this.buttonPatchModLoader.Name = "buttonPatchModLoader";
-			this.buttonPatchModLoader.Size = new System.Drawing.Size(129, 23);
-			this.buttonPatchModLoader.TabIndex = 3;
-			this.buttonPatchModLoader.Text = "Patch TerraCustom";
-			this.toolTipButtons.SetToolTip(this.buttonPatchModLoader, "Applies TerraCustom patches to Terraria\r\nEdit the source code in src/TerraCustom af" +
+			this.buttonPatchTerraCustom.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.buttonPatchTerraCustom.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonPatchTerraCustom.Location = new System.Drawing.Point(180, 129);
+			this.buttonPatchTerraCustom.Name = "buttonPatchTerraCustom";
+			this.buttonPatchTerraCustom.Size = new System.Drawing.Size(129, 23);
+			this.buttonPatchTerraCustom.TabIndex = 3;
+			this.buttonPatchTerraCustom.Text = "Patch TerraCustom";
+			this.toolTipButtons.SetToolTip(this.buttonPatchTerraCustom, "Applies TerraCustom patches to Terraria\r\nEdit the source code in src/TerraCustom af" +
         "ter this phase\r\nInternally formats the Terraria sources before patching");
-			this.buttonPatchModLoader.UseVisualStyleBackColor = true;
-			this.buttonPatchModLoader.Click += new System.EventHandler(this.buttonTask_Click);
+			this.buttonPatchTerraCustom.UseVisualStyleBackColor = true;
+			this.buttonPatchTerraCustom.Click += new System.EventHandler(this.buttonTask_Click);
 			// 
-			// buttonDiffModLoader
+			// buttonDiffTerraCustom
 			// 
-			this.buttonDiffModLoader.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.buttonDiffModLoader.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonDiffModLoader.Location = new System.Drawing.Point(45, 129);
-			this.buttonDiffModLoader.Name = "buttonDiffModLoader";
-			this.buttonDiffModLoader.Size = new System.Drawing.Size(129, 23);
-			this.buttonDiffModLoader.TabIndex = 5;
-			this.buttonDiffModLoader.Text = "Diff TerraCustom";
-			this.toolTipButtons.SetToolTip(this.buttonDiffModLoader, resources.GetString("buttonDiffModLoader.ToolTip"));
-			this.buttonDiffModLoader.UseVisualStyleBackColor = true;
-			this.buttonDiffModLoader.Click += new System.EventHandler(this.buttonTask_Click);
+			this.buttonDiffTerraCustom.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.buttonDiffTerraCustom.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonDiffTerraCustom.Location = new System.Drawing.Point(45, 129);
+			this.buttonDiffTerraCustom.Name = "buttonDiffTerraCustom";
+			this.buttonDiffTerraCustom.Size = new System.Drawing.Size(129, 23);
+			this.buttonDiffTerraCustom.TabIndex = 5;
+			this.buttonDiffTerraCustom.Text = "Diff TerraCustom";
+			this.toolTipButtons.SetToolTip(this.buttonDiffTerraCustom, resources.GetString("buttonDiffTerraCustom.ToolTip"));
+			this.buttonDiffTerraCustom.UseVisualStyleBackColor = true;
+			this.buttonDiffTerraCustom.Click += new System.EventHandler(this.buttonTask_Click);
 			// 
 			// toolTipButtons
 			// 
@@ -273,10 +273,10 @@ namespace Terraria.ModLoader.Setup
 			this.Controls.Add(this.buttonPatchMerged);
 			this.Controls.Add(this.buttonDiffMerged);
 			this.Controls.Add(this.buttonFormat);
-			this.Controls.Add(this.buttonDiffModLoader);
+			this.Controls.Add(this.buttonDiffTerraCustom);
 			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.buttonDiffTerraria);
-			this.Controls.Add(this.buttonPatchModLoader);
+			this.Controls.Add(this.buttonPatchTerraCustom);
 			this.Controls.Add(this.buttonPatchTerraria);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.buttonCancel);
@@ -302,8 +302,8 @@ namespace Terraria.ModLoader.Setup
         private System.Windows.Forms.Button buttonDecompile;
         private System.Windows.Forms.Button buttonDiffTerraria;
         private System.Windows.Forms.Button buttonPatchTerraria;
-        private System.Windows.Forms.Button buttonPatchModLoader;
-        private System.Windows.Forms.Button buttonDiffModLoader;
+        private System.Windows.Forms.Button buttonPatchTerraCustom;
+        private System.Windows.Forms.Button buttonDiffTerraCustom;
         private System.Windows.Forms.ToolTip toolTipButtons;
         private System.Windows.Forms.Button buttonFormat;
         private System.Windows.Forms.MenuStrip mainMenuStrip;

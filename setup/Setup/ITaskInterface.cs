@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     public interface ITaskInterface : IWin32Window
     {

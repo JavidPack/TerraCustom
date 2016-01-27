@@ -86,12 +86,12 @@ namespace Terraria.TerraCustom.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2015-01-01")]
-        public global::System.DateTime tModLoaderDiffCutoff {
+        public global::System.DateTime TerraCustomDiffCutoff {
             get {
-                return ((global::System.DateTime)(this["tModLoaderDiffCutoff"]));
+                return ((global::System.DateTime)(this["TerraCustomDiffCutoff"]));
             }
             set {
-                this["tModLoaderDiffCutoff"] = value;
+                this["TerraCustomDiffCutoff"] = value;
             }
         }
     }

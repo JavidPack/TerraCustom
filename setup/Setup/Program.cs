@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     static class Program
     {

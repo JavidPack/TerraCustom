@@ -1,4 +1,4 @@
-﻿namespace Terraria.ModLoader.Setup
+﻿namespace Terraria.TerraCustom.Setup
 {
     partial class SelectFilesForm
     {
@@ -79,7 +79,7 @@
             // buttonFile
             // 
             this.buttonFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFile.BackgroundImage = global::Terraria.ModLoader.Properties.Resources.file;
+            this.buttonFile.BackgroundImage = global::Terraria.TerraCustom.Properties.Resources.file;
             this.buttonFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonFile.Location = new System.Drawing.Point(310, 10);
             this.buttonFile.Name = "buttonFile";
@@ -91,7 +91,7 @@
             // buttonFolder
             // 
             this.buttonFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonFolder.BackgroundImage = global::Terraria.ModLoader.Properties.Resources.folder;
+            this.buttonFolder.BackgroundImage = global::Terraria.TerraCustom.Properties.Resources.folder;
             this.buttonFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonFolder.Location = new System.Drawing.Point(276, 10);
             this.buttonFolder.Name = "buttonFolder";

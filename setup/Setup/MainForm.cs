@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
 	public partial class MainForm : Form, ITaskInterface
 	{
@@ -23,11 +23,11 @@ namespace Terraria.ModLoader.Setup
 			taskButtons[buttonPatchMerged] = () => new PatchTask(this, "src/decompiled", "src/merged", "patches/merged", 0);
 			taskButtons[buttonDiffTerraria] = () => new DiffTask(this, "src/merged", "src/Terraria", "patches/Terraria", 1);
 			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/merged", "src/Terraria", "patches/Terraria", 1);
-			taskButtons[buttonDiffModLoader] = () => new DiffTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.tModLoaderFormat);
-			taskButtons[buttonPatchModLoader] = () => new PatchTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.tModLoaderFormat);
-			taskButtons[buttonFormat] = () => new FormatTask(this, FormatTask.tModLoaderFormat);
+			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.TerraCustomFormat);
+			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.TerraCustomFormat);
+			taskButtons[buttonFormat] = () => new FormatTask(this, FormatTask.TerraCustomFormat);
 			taskButtons[buttonSetup] = () =>
-				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchModLoader }
+				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchTerraCustom }
 					.Select(b => taskButtons[b]()).ToArray());
 
 			menuItemWarnings.Checked = Program.SuppressWarnings.Get();
@@ -97,7 +97,7 @@ namespace Terraria.ModLoader.Setup
 		{
 			DiffTask.MergedDiffCutoff.Set(new DateTime(2015, 1, 1));
 			DiffTask.TerrariaDiffCutoff.Set(new DateTime(2015, 1, 1));
-			DiffTask.tModLoaderDiffCutoff.Set(new DateTime(2015, 1, 1));
+			DiffTask.TerraCustomDiffCutoff.Set(new DateTime(2015, 1, 1));
 		}
 
 		private void buttonTask_Click(object sender, EventArgs e)

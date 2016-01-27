@@ -7,11 +7,11 @@ using System.Windows.Forms;
 using ICSharpCode.NRefactory.CSharp;
 using ICSharpCode.NRefactory.Editor;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     class FormatTask : Task
     {
-        public static CSharpFormattingOptions tModLoaderFormat = FormattingOptionsFactory.CreateAllman();
+        public static CSharpFormattingOptions TerraCustomFormat = FormattingOptionsFactory.CreateAllman();
 
         public static string FormatCode(string text, CSharpFormattingOptions options, CancellationToken ct) {
             var formatter = new CSharpFormatter(options) { FormattingMode = FormattingMode.Intrusive };

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     class SetupTask : Task
     {

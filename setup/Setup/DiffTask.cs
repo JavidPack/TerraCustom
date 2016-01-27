@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.CSharp;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
 	public class DiffTask : Task
 	{
@@ -23,7 +23,7 @@ namespace Terraria.ModLoader.Setup
 
 		public static ProgramSetting<DateTime> MergedDiffCutoff = new ProgramSetting<DateTime>("MergedDiffCutoff");
 		public static ProgramSetting<DateTime> TerrariaDiffCutoff = new ProgramSetting<DateTime>("TerrariaDiffCutoff");
-		public static ProgramSetting<DateTime> tModLoaderDiffCutoff = new ProgramSetting<DateTime>("tModLoaderDiffCutoff");
+		public static ProgramSetting<DateTime> TerraCustomDiffCutoff = new ProgramSetting<DateTime>("TerraCustomDiffCutoff");
 		public int stepNumber;
 
 		public DiffTask(ITaskInterface taskInterface, string baseDir, string srcDir, string patchDir, int stepNumber,
@@ -61,7 +61,7 @@ namespace Terraria.ModLoader.Setup
 				//bool skip = false;
 				if ((stepNumber == 0 && (File.GetLastWriteTime(file) < MergedDiffCutoff.Get())) ||
 					(stepNumber == 1 && (File.GetLastWriteTime(file) < TerrariaDiffCutoff.Get())) ||
-					(stepNumber == 2 && (File.GetLastWriteTime(file) < tModLoaderDiffCutoff.Get())))
+					(stepNumber == 2 && (File.GetLastWriteTime(file) < TerraCustomDiffCutoff.Get())))
 					continue;
 				//skip = true;
 
@@ -89,7 +89,7 @@ namespace Terraria.ModLoader.Setup
 					TerrariaDiffCutoff.Set(DateTime.Now);
 					break;
 				case 2:
-					tModLoaderDiffCutoff.Set(DateTime.Now);
+					TerraCustomDiffCutoff.Set(DateTime.Now);
 					break;
 			}
 		}

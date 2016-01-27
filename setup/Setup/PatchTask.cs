@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.NRefactory.CSharp;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
 	public class PatchTask : Task
 	{
@@ -104,7 +104,7 @@ namespace Terraria.ModLoader.Setup
 					DiffTask.TerrariaDiffCutoff.Set(DateTime.Now);
 					break;
 				case 2:
-					DiffTask.tModLoaderDiffCutoff.Set(DateTime.Now);
+					DiffTask.TerraCustomDiffCutoff.Set(DateTime.Now);
 					break;
 			}
 		}

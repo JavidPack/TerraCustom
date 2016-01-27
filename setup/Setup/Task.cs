@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     public abstract class Task
     {

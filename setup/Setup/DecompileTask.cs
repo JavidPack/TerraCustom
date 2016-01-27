@@ -11,7 +11,7 @@ using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TextView;
 using Mono.Cecil;
 
-namespace Terraria.ModLoader.Setup
+namespace Terraria.TerraCustom.Setup
 {
     public class DecompileTask : Task
     {

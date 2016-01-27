@@ -1,4 +1,4 @@
-﻿namespace Terraria.ModLoader.Setup
+﻿namespace Terraria.TerraCustom.Setup
 {
 	public class ProgramSetting<T>
 	{
