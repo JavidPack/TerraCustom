@@ -1,0 +1,20 @@
+--- src/Terraria\Terraria.Map\MapHelper.cs
++++ src/TerraCustom\Terraria.Map\MapHelper.cs
+@@ -1124,7 +1124,7 @@
+ 			result.B = (byte)((float)result.B * num);
+ 			return result;
+ 		}
+-
++		/*
+ 		public static MapTile CreateMapTile(int i, int j, byte Light)
+ 		{
+ 			Tile tile = Main.tile[i, j];
+@@ -2674,6 +2674,6 @@
+ 				}
+ 			}
+ 			binaryReader.Close();
+-		}
++		}*/
+ 	}
+ }
+
