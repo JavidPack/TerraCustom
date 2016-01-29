@@ -1,0 +1,12 @@
+--- src/Terraria\Terraria\Player.cs
++++ src/TerraCustom\Terraria\Player.cs
+@@ -33496,7 +33496,7 @@
+ 				{
+ 					if (Main.mapEnabled)
+ 					{
+-						Main.Map.Save();
++						//Main.Map.Save();
+ 					}
+ 				}
+ 				catch
+
