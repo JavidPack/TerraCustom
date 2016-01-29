@@ -1,14 +1,6 @@
 --- src/Terraria\Terraria.GameContent.Biomes\DesertBiome.cs
 +++ src/TerraCustom\Terraria.GameContent.Biomes\DesertBiome.cs
-@@ -29,6 +29,7 @@
- 		private class ClusterGroup : List<DesertBiome.Cluster>
- 		{
- 			public int Width;
-+
- 			public int Height;
- 
- 			private void SearchForCluster(bool[,] hubMap, List<Point> pointCluster, int x, int y, int level = 2)
-@@ -461,13 +462,18 @@
+@@ -461,13 +461,18 @@
  			start = new Point(origin.X, num2);
  			return true;
  		}
