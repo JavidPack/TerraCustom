@@ -1,0 +1,5844 @@
+--- src/Terraria\Terraria\WorldGen.cs
++++ src/TerraCustom\Terraria\WorldGen.cs
+@@ -543,7 +543,7 @@
+ 		public static int tTop;
+ 		public static int tBottom;
+ 		public static int tRooms;
+-		public static int[] mossType = new int[3];
++		public static int[] mossType = new int[] { 5, 5, 5 };
+ 		public static int c = 0;
+ 		public static int m = 0;
+ 		public static int a = 0;
+@@ -551,6 +551,8 @@
+ 		public static int ir = 0;
+ 		public static int si = 0;
+ 		public static int go = 0;
++		public static int worldSize = 0;
++		private static int numPyramids = 0;
+ 		public static int copperBar = 20;
+ 		public static int ironBar = 22;
+ 		public static int silverBar = 21;
+@@ -650,7 +652,8 @@
+ 		public static int dungeonX;
+ 		public static int dungeonY;
+ 		public static Vector2 lastDungeonHall = Vector2.Zero;
+-		public static int maxDRooms = 100;
++		public static int maxDRooms = 1000;
++		// TODO? prob?
+ 		public static int numDRooms = 0;
+ 		public static int[] dRoomX = new int[WorldGen.maxDRooms];
+ 		public static int[] dRoomY = new int[WorldGen.maxDRooms];
+@@ -661,12 +664,12 @@
+ 		private static int[] dRoomT = new int[WorldGen.maxDRooms];
+ 		private static int[] dRoomB = new int[WorldGen.maxDRooms];
+ 		private static int numDDoors;
+-		private static int[] DDoorX = new int[300];
+-		private static int[] DDoorY = new int[300];
+-		private static int[] DDoorPos = new int[300];
++		private static int[] DDoorX = new int[3000];
++		private static int[] DDoorY = new int[3000];
++		private static int[] DDoorPos = new int[3000];
+ 		private static int numDPlats;
+-		private static int[] DPlatX = new int[300];
+-		private static int[] DPlatY = new int[300];
++		private static int[] DPlatX = new int[3000];
++		private static int[] DPlatY = new int[3000];
+ 		private static int JungleItemCount = 0;
+ 		private static int[] JChestX = new int[100];
+ 		private static int[] JChestY = new int[100];
+@@ -1763,7 +1766,7 @@
+ 
+ 		public static void dropMeteor()
+ 		{
+-			bool flag = true;
++			bool flag = false;
+ 			if (Main.netMode == 1)
+ 			{
+ 				return;
+@@ -1772,7 +1775,7 @@
+ 			{
+ 				if (Main.player[i].active)
+ 				{
+-					flag = false;
++					//				flag = false;
+ 					break;
+ 				}
+ 			}
+@@ -1786,7 +1789,7 @@
+ 				{
+ 					if (Main.tile[j, num4].active() && Main.tile[j, num4].type == 37)
+ 					{
+-						num++;
++						//num++;
+ 						if (num > num3)
+ 						{
+ 							return;
+@@ -1846,10 +1849,10 @@
+ 						k++;
+ 					}
+ 				}
+-				if (num5 < 100f)
+-				{
+-					return;
+-				}
++				//if (num5 < 100f)
++				//{
++				//	return;
++				//}
+ 			}
+ 		}
+ 
+@@ -2037,15 +2040,17 @@
+ 
+ 		public static void worldGenCallBack(object threadContext)
+ 		{
+-			Main.PlaySound(10, -1, -1, 1);
++			//Main.PlaySound(10, -1, -1, 1);
++			//	Main.tile = new Tile[Main.maxTilesX, Main.maxTilesY];// needed for something?
+ 			WorldGen.clearWorld();
+ 			WorldGen.generateWorld(-1, threadContext as GenerationProgress);
+ 			WorldFile.saveWorld(Main.ActiveWorldFileData.IsCloudSave, true);
+-			if (Main.menuMode == 10 || Main.menuMode == 888)
+-			{
+-				Main.menuMode = 6;
+-			}
+-			Main.PlaySound(10, -1, -1, 1);
++			//	if (Main.menuMode == 10 || Main.menuMode == 888)
++			//	{
++			//		Main.menuMode = 6;
++			//	}
++			//	Main.PlaySound(10, -1, -1, 1);
++			Main.menuMode = 0;
+ 		}
+ 
+ 		public static void CreateNewWorld(GenerationProgress progress = null)
+@@ -2055,14 +2060,14 @@
+ 
+ 		public static void SaveAndQuitCallBack(object threadContext)
+ 		{
+-			try
+-			{
+-				Main.PlaySound(34, -1, -1, 0);
+-				Main.PlaySound(35, -1, -1, 0);
+-			}
+-			catch
+-			{
+-			}
++			//	try
++			//	{
++			//		Main.PlaySound(34, -1, -1, 0);
++			//		Main.PlaySound(35, -1, -1, 0);
++			//	}
++			//	catch
++			//	{
++			//	}
+ 			if (Main.netMode == 0)
+ 			{
+ 				WorldFile.CacheSaveTime();
+@@ -2078,7 +2083,7 @@
+ 			if (Main.netMode == 0)
+ 			{
+ 				WorldFile.saveWorld();
+-				Main.PlaySound(10, -1, -1, 1);
++				//		Main.PlaySound(10, -1, -1, 1);
+ 			}
+ 			else
+ 			{
+@@ -2096,7 +2101,7 @@
+ 
+ 		public static void SaveAndQuit(Action callback = null)
+ 		{
+-			Main.PlaySound(11, -1, -1, 1);
++			//	Main.PlaySound(11, -1, -1, 1);
+ 			ThreadPool.QueueUserWorkItem(new WaitCallback(WorldGen.SaveAndQuitCallBack), callback);
+ 		}
+ 
+@@ -2165,10 +2170,10 @@
+ 					}
+ 				}
+ 			}
+-			if (Main.mapEnabled)
+-			{
+-				Main.Map.Load();
+-			}
++			//if (Main.mapEnabled)
++			//{
++			//	Main.Map.Load();
++			//}
+ 			if (Main.netMode != 2)
+ 			{
+ 				Main.sectionManager.SetAllFramesLoaded();
+@@ -2210,7 +2215,7 @@
+ 			Main.maxRaining = WorldFile.tempMaxRain;
+ 			Main.cloudAlpha = WorldFile.tempMaxRain;
+ 			CultistRitual.delay = WorldFile.tempCultistDelay;
+-			Main.PlaySound(11, -1, -1, 1);
++			//Main.PlaySound(11, -1, -1, 1);
+ 			Main.resetClouds = true;
+ 			WorldGen.noMapUpdate = false;
+ 		}
+@@ -2290,7 +2295,7 @@
+ 					}
+ 				}
+ 			}
+-			Main.PlaySound(10, -1, -1, 1);
++			//Main.PlaySound(10, -1, -1, 1);
+ 			Netplay.StartServer();
+ 			Main.dayTime = WorldFile.tempDayTime;
+ 			Main.time = WorldFile.tempTime;
+@@ -2309,8 +2314,203 @@
+ 			ThreadPool.QueueUserWorkItem(new WaitCallback(WorldGen.serverLoadWorldCallBack), 1);
+ 		}
+ 
++		public static void initializeAll()
++		{
++			WorldGen.initializeTerrain();
++			WorldGen.initializeOres();
++			WorldGen.initializeOreAmount();
++			WorldGen.initializeGraphic();
++			WorldGen.initializeBGs();
++			WorldGen.initializeUGBGs();
++			WorldGen.initializeMiscellaneous();
++			WorldGen.initializeChallenge();
++			//WorldGen.initializeBiomeAmount();
++			WorldGen.initializeVariousSpawnsAmount();
++			WorldGen.initializeMicroBiomesAmount();
++			WorldGen.initializeDowned();
++			WorldGen.initializeFound();
++			WorldGen.initializeChests();
++		}
++
++		public static void initializeTerrain()
++		{
++			Main.setting.SurfaceTerrainHeightMultiplier = 1f;
++			Main.setting.SurfaceTerrainHeightMax = .17f;
++			Main.setting.SurfaceTerrainHeightMin = .3f;
++			Main.setting.DungeonSizeMultiplier = 1f;
++			Main.setting.TempleSizeMultiplier = 1f;
++			Main.setting.SurfaceHorizontalTunnelsMultiplier = 1f;
++			Main.setting.LakeMultiplier = 1f;
++		}
++
++		public static void initializeOres()
++		{
++			Main.setting.IsCopper = 2;
++			Main.setting.IsIron = 2;
++			Main.setting.IsSilver = 2;
++			Main.setting.IsGold = 2;
++			Main.setting.IsCobalt = 2;
++			Main.setting.IsMythril = 2;
++			Main.setting.IsAdaman = 2;
++		}
++
++		public static void initializeOreAmount()
++		{
++			Main.setting.PercIron = 1f;
++			Main.setting.PercCopp = 1f;
++			Main.setting.PercSilv = 1f;
++			Main.setting.PercGold = 1f;
++			Main.setting.PercDemonite = 1f;
++			Main.setting.PercHellstone = 1f;
++			Main.setting.PreSmashAltar = 0f;
++			Main.setting.PreSmashAltarOreAlternates = false;
++		}
++
++		public static void initializeMicroBiomesAmount()
++		{
++			Main.setting.EnchantedSwordBiomeMultiplier = 1f;
++			Main.setting.MiningExplosiveMultiplier = 1f;
++			Main.setting.TrapMultiplier = 1f;
++			Main.setting.TempleTrapMultiplier = 1f;
++			Main.setting.SkyIslandMultiplier = 1f;
++			Main.setting.MineCartMultiplier = 1f;
++			Main.setting.GemCaveMultiplier = 1f;
++			Main.setting.GemCaveSizeMultiplier = 1f;
++			Main.setting.SpiderCaveMultiplier = 1f;
++			Main.setting.GraniteCaveMultiplier = 1f;
++			Main.setting.MarbleCaveMultiplier = 1f;
++			Main.setting.UndergroundCabinMultiplier = 1f;
++		}
++
++		public static void initializeVariousSpawnsAmount()
++		{
++			Main.setting.CrystalHeartMultiplier = 1f;
++			//Main.setting.AltarMultiplier = 1f;
++			Main.setting.PreDropMeteor = 0; 
++			Main.setting.TreeLowerBound = 5; 
++			Main.setting.TreeUpperBound = 16;
++		}
++
++		public static void initializeBiomeAmount()
++		{
++			Main.setting.PercJungle = 0.2f;
++			Main.setting.PercSnow = 0.2f;
++			Main.setting.MultiGemCave = 0.05f;
++		}
++
++		public static void initializeChallenge()
++		{
++			Main.setting.NoTree = false;
++			Main.setting.NoDungeon = false;
++			Main.setting.NoTemple = false;
++			Main.setting.NoSpiderCave = false;
++			Main.setting.NoHive = false;
++			Main.setting.NoSnow = false;
++			Main.setting.NoJungle = false;
++			Main.setting.NoAnthill = false;
++			Main.setting.NoBeach = false;
++			Main.setting.NoChest = false;
++			Main.setting.NoPot = false;
++			Main.setting.NoAltar = false;
++			Main.setting.NoOrbHeart = false;
++		}
++
++		public static void initializeGraphic()
++		{
++			Main.setting.MoonStyle = 3;
++			Main.setting.SelectDungeon = 3;
++			Main.setting.SelectMossType = new int[]
++			{
++				5,
++				5,
++				5
++			};
++			Main.setting.SelectTreeStyle = new int[]
++			{
++				6,
++				6,
++				6,
++				6
++			};
++			Main.setting.ShrineType = 0;
++		}
++
++		public static void initializeMiscellaneous()
++		{
++			Main.setting.IsCorruption = 0;
++			Main.setting.CrimsonCorruptionAvoidJungle = false;
++			Main.setting.DungeonSide = 0;
++			Main.setting.IsPyramid = 2;
++			Main.setting.IsGiantTree = 2;
++			Main.hardMode = false;
++			Main.setting.HardmodeStripes = true;
++		}
++
++		public static void initializeBGs()
++		{
++			Main.setting.ForestStyle = 14;
++			Main.setting.CorruptStyle = 2;
++			Main.setting.JungleStyle = 2;
++			Main.setting.SnowStyle = 11;
++			Main.setting.HallowStyle = 2;
++			Main.setting.CrimsonStyle = 3;
++			Main.setting.DesertStyle = 2;
++			Main.setting.OceanStyle = 3;
++		}
++
++		public static void initializeChests()
++		{
++			Main.setting.BiomeChestSets = 1;
++			Main.setting.PotsMultiplier = 1f;
++			Main.setting.JungleShrineMultiplier = 1f;
++			Main.setting.MahoganyTreeMultiplier = 1f;
++			Main.setting.WaterChestMultiplier = 1f;
++			Main.setting.SurfaceChestMultiplier = 1f;
++			Main.setting.TempleChestMultiplier = 1f;
++			Main.setting.ShadowChestMultiplier = 1f;
++		}
++
++		public static void initializeUGBGs()
++		{
++			Main.setting.IceBackStyle = 0;
++			Main.setting.HellBackStyle = 0;
++			Main.setting.JungleBackStyle = 0;
++			Main.setting.CaveBackStyle1 = 0;
++			Main.setting.CaveBackStyle2 = 0;
++			Main.setting.CaveBackStyle3 = 0;
++			Main.setting.CaveBackStyle4 = 0;
++		}
++
++		public static void initializeDowned()
++		{
++			Main.setting.downedPlantera = false;
++			Main.setting.downedEyeOfCthulu = false;
++			Main.setting.downedEaterBrain = false;
++			Main.setting.downedSkeletron = false;
++			Main.setting.downedQueenBee = false;
++			Main.setting.downedSlimeKing = false;
++			Main.setting.downedTwins = false;
++			Main.setting.downedDestroyer = false;
++			Main.setting.downedSkeletronPrime = false;
++			Main.setting.downedFishron = false;
++			Main.setting.downedGolem = false;
++			Main.setting.downedAncientCultist = false;
++			Main.setting.downedMoonlord = false;
++		}
++
++		public static void initializeFound()
++		{
++			Main.setting.savedStylist = false;
++			Main.setting.savedGoblin = false;
++			Main.setting.savedWizard = false;
++			Main.setting.savedMechanic = false;
++			Main.setting.savedAngler = false;
++			Main.setting.savedTaxCollector = false;
++		}
++
+ 		public static void clearWorld()
+ 		{
++			WorldGen.numPyramids = 0;
+ 			CombatText.clearAll();
+ 			NPC.ResetKillCount();
+ 			Main.checkXMas();
+@@ -2322,7 +2522,7 @@
+ 					float arg_28_0 = (float)i / (float)WorldGen.lastMaxTilesX;
+ 					Main.statusText = Lang.gen[65];
+ 				}
+-				Main.Map.Clear();
++				//	Main.Map.Clear();
+ 			}
+ 			NPC.MoonLordCountdown = 0;
+ 			Main.pumpkinMoon = false;
+@@ -2358,28 +2558,28 @@
+ 			WorldGen.spawnNPC = 0;
+ 			WorldGen.shadowOrbCount = 0;
+ 			WorldGen.altarCount = 0;
+-			WorldGen.oreTier1 = -1;
+-			WorldGen.oreTier2 = -1;
+-			WorldGen.oreTier3 = -1;
++			//	WorldGen.oreTier1 = -1;
++			//	WorldGen.oreTier2 = -1;
++			//	WorldGen.oreTier3 = -1;
+ 			Main.cloudBGActive = 0f;
+ 			Main.raining = false;
+-			Main.hardMode = false;
++			//	Main.hardMode = false;
+ 			Main.helpText = 0;
+ 			Main.dungeonX = 0;
+ 			Main.dungeonY = 0;
+-			NPC.downedBoss1 = false;
+-			NPC.downedBoss2 = false;
+-			NPC.downedBoss3 = false;
+-			NPC.downedQueenBee = false;
+-			NPC.downedSlimeKing = false;
+-			NPC.downedMechBossAny = false;
+-			NPC.downedMechBoss1 = false;
+-			NPC.downedMechBoss2 = false;
+-			NPC.downedMechBoss3 = false;
+-			NPC.downedFishron = false;
++			NPC.downedBoss1 = Main.setting.downedEyeOfCthulu; //false;
++			NPC.downedBoss2 = Main.setting.downedEaterBrain;//false;
++			NPC.downedBoss3 = Main.setting.downedSkeletron;//false;
++			NPC.downedQueenBee = Main.setting.downedQueenBee;//false;
++			NPC.downedSlimeKing = Main.setting.downedSlimeKing;//false;
++			NPC.downedMechBossAny = Main.setting.downedTwins | Main.setting.downedDestroyer | Main.setting.downedSkeletronPrime;//false;
++			NPC.downedMechBoss1 = Main.setting.downedTwins;//false;
++			NPC.downedMechBoss2 = Main.setting.downedDestroyer;//false;
++			NPC.downedMechBoss3 = Main.setting.downedSkeletronPrime;//false;
++			NPC.downedFishron = Main.setting.downedFishron;//false;
+ 			NPC.downedMartians = false;
+-			NPC.downedAncientCultist = false;
+-			NPC.downedMoonlord = false;
++			NPC.downedAncientCultist = Main.setting.downedAncientCultist; //false;
++			NPC.downedMoonlord = Main.setting.downedMoonlord;// false;
+ 			NPC.downedHalloweenKing = false;
+ 			NPC.downedHalloweenTree = false;
+ 			NPC.downedChristmasIceQueen = false;
+@@ -2387,19 +2587,19 @@
+ 			NPC.downedChristmasTree = false;
+ 			NPC.downedTowerSolar = (NPC.downedTowerVortex = (NPC.downedTowerNebula = (NPC.downedTowerStardust = (NPC.LunarApocalypseIsUp = false))));
+ 			NPC.TowerActiveSolar = (NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveStardust = false)));
+-			NPC.downedPlantBoss = false;
+-			NPC.savedStylist = false;
+-			NPC.savedGoblin = false;
+-			NPC.savedWizard = false;
+-			NPC.savedMech = false;
++			NPC.downedPlantBoss = Main.setting.downedPlantera; //false;
++			NPC.savedStylist = Main.setting.savedStylist; //false;
++			NPC.savedGoblin = Main.setting.savedGoblin; //false;
++			NPC.savedWizard = Main.setting.savedWizard; //false;
++			NPC.savedMech = Main.setting.savedMechanic; //false;
+ 			NPC.downedGoblins = false;
+ 			NPC.downedClown = false;
+ 			NPC.downedFrost = false;
+ 			NPC.downedPirates = false;
+-			NPC.savedAngler = false;
++			NPC.savedAngler = Main.setting.savedAngler; //false;
+ 			NPC.downedMartians = false;
+-			NPC.downedGolemBoss = false;
+-			NPC.savedTaxCollector = false;
++			NPC.downedGolemBoss = Main.setting.downedGolem; // false;
++			NPC.savedTaxCollector = Main.setting.savedTaxCollector; //false;
+ 			WorldGen.shadowOrbSmashed = false;
+ 			WorldGen.spawnMeteor = false;
+ 			WorldGen.stopDrops = false;
+@@ -2412,10 +2612,10 @@
+ 			Main.treeX[0] = Main.maxTilesX;
+ 			Main.treeX[1] = Main.maxTilesX;
+ 			Main.treeX[2] = Main.maxTilesX;
+-			Main.treeStyle[0] = 0;
+-			Main.treeStyle[1] = 0;
+-			Main.treeStyle[2] = 0;
+-			Main.treeStyle[3] = 0;
++			//Main.treeStyle[0] = 0;
++			//Main.treeStyle[1] = 0;
++			//Main.treeStyle[2] = 0;
++			//Main.treeStyle[3] = 0;
+ 			WorldGen.noLiquidCheck = false;
+ 			Liquid.numLiquid = 0;
+ 			LiquidBuffer.numLiquidBuffer = 0;
+@@ -2508,8 +2708,8 @@
+ 			WorldGen.setWorldSize();
+ 			WorldGen.worldCleared = true;
+ 		}
+-
+-		public static void setBG(int bg, int style)
++		// findBackgrounds??
++		public static void findBackgrounds(int bg, int style)
+ 		{
+ 			if (bg == 0)
+ 			{
+@@ -2538,7 +2738,7 @@
+ 					Main.treeBG[2] = 92;
+ 					return;
+ 				}
+-				if (style == 31)
++				if (style == 9)
+ 				{
+ 					Main.treeMntBG[1] = 90;
+ 					Main.treeBG[0] = 91;
+@@ -2564,7 +2764,7 @@
+ 					Main.treeBG[2] = 55;
+ 					return;
+ 				}
+-				if (style == 51)
++				if (style == 10)
+ 				{
+ 					Main.treeMntBG[0] = 93;
+ 					Main.treeMntBG[1] = 94;
+@@ -2591,7 +2791,7 @@
+ 					Main.treeBG[2] = -1;
+ 					return;
+ 				}
+-				if (style == 71)
++				if (style == 11)
+ 				{
+ 					Main.treeMntBG[0] = 176;
+ 					Main.treeMntBG[1] = 177;
+@@ -2600,7 +2800,7 @@
+ 					Main.treeBG[2] = 11;
+ 					return;
+ 				}
+-				if (style == 72)
++				if (style == 12)
+ 				{
+ 					Main.treeMntBG[0] = 176;
+ 					Main.treeMntBG[1] = 177;
+@@ -2609,7 +2809,7 @@
+ 					Main.treeBG[2] = 52;
+ 					return;
+ 				}
+-				if (style == 73)
++				if (style == 13)
+ 				{
+ 					Main.treeMntBG[0] = 176;
+ 					Main.treeMntBG[1] = 177;
+@@ -2683,7 +2883,25 @@
+ 					Main.snowBG[2] = -1;
+ 					return;
+ 				}
+-				if (style == 21)
++				if (style == 3)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 100;
++					Main.snowBG[0] = -1;
++					Main.snowBG[1] = -1;
++					Main.snowBG[2] = -1;
++					return;
++				}
++				if (style == 4)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 101;
++					Main.snowBG[0] = -1;
++					Main.snowBG[1] = -1;
++					Main.snowBG[2] = -1;
++					return;
++				}
++				if (style == 5)
+ 				{
+ 					Main.snowMntBG[0] = 98;
+ 					Main.snowMntBG[1] = 99;
+@@ -2692,7 +2910,7 @@
+ 					Main.snowBG[2] = 97;
+ 					return;
+ 				}
+-				if (style == 22)
++				if (style == 6)
+ 				{
+ 					Main.snowMntBG[0] = 98;
+ 					Main.snowMntBG[1] = 99;
+@@ -2701,6 +2919,312 @@
+ 					Main.snowBG[2] = 39;
+ 					return;
+ 				}
++            
++				if (style == 7)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 100;
++					Main.snowBG[0] = 95;
++					Main.snowBG[1] = 96;
++					Main.snowBG[2] = 97;
++					return;
++				}
++				if (style == 8)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 100;
++					Main.snowBG[0] = 37;
++					Main.snowBG[1] = 38;
++					Main.snowBG[2] = 39;
++					return;
++				}
++              
++				if (style == 9)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 101;
++					Main.snowBG[0] = 95;
++					Main.snowBG[1] = 96;
++					Main.snowBG[2] = 97;
++					return;
++				}
++				if (style == 10)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 101;
++					Main.snowBG[0] = 37;
++					Main.snowBG[1] = 38;
++					Main.snowBG[2] = 39;
++					return;
++				}
++				Main.snowBG[0] = 37;
++				Main.snowBG[1] = 38;
++				Main.snowBG[2] = 39;
++				return;
++			}
++			else if (bg == 4)
++			{
++				WorldGen.hallowBG = style;
++				if (style == 1)
++				{
++					Main.hallowBG[0] = 102;
++					Main.hallowBG[1] = 103;
++					Main.hallowBG[2] = 104;
++					return;
++				}
++				Main.hallowBG[0] = 29;
++				Main.hallowBG[1] = 30;
++				Main.hallowBG[2] = 31;
++				return;
++			}
++			else if (bg == 5)
++			{
++				WorldGen.crimsonBG = style;
++				if (style == 1)
++				{
++					Main.crimsonBG[0] = 105;
++					Main.crimsonBG[1] = 106;
++					Main.crimsonBG[2] = 107;
++					return;
++				}
++				if (style == 2)
++				{
++					Main.crimsonBG[0] = 174;
++					Main.crimsonBG[1] = -1;
++					Main.crimsonBG[2] = 175;
++					return;
++				}
++				Main.crimsonBG[0] = 43;
++				Main.crimsonBG[1] = 44;
++				Main.crimsonBG[2] = 45;
++				return;
++			}
++			else
++			{
++				if (bg != 6)
++				{
++					if (bg == 7)
++					{
++						WorldGen.oceanBG = style;
++						if (style == 1)
++						{
++							Main.oceanBG = 110;
++							return;
++						}
++						if (style == 2)
++						{
++							Main.oceanBG = 111;
++							return;
++						}
++						Main.oceanBG = 28;
++					}
++					return;
++				}
++				WorldGen.desertBG = style;
++				if (style == 1)
++				{
++					Main.desertBG[0] = 108;
++					Main.desertBG[1] = 109;
++					return;
++				}
++				Main.desertBG[0] = 21;
++				Main.desertBG[1] = 20;
++				return;
++			}
++		}
++		// findBackgrounds??
++		public static void setBG(int bg, int style)
++		{
++			if (bg == 0)
++			{
++				WorldGen.treeBG = style;
++				Main.treeMntBG[0] = 7;
++				Main.treeMntBG[1] = 8;
++				if (style == 1)
++				{
++					Main.treeBG[0] = 50;
++					Main.treeBG[1] = 51;
++					Main.treeBG[2] = 52;
++					return;
++				}
++				if (style == 2)
++				{
++					Main.treeBG[0] = 53;
++					Main.treeBG[1] = 54;
++					Main.treeBG[2] = 55;
++					return;
++				}
++				if (style == 3)
++				{
++					Main.treeMntBG[1] = 90;
++					Main.treeBG[0] = 91;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 92;
++					return;
++				}
++				if (style == 31)
++				{
++					Main.treeMntBG[1] = 90;
++					Main.treeBG[0] = 91;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 11;
++					return;
++				}
++				if (style == 4)
++				{
++					Main.treeMntBG[0] = 93;
++					Main.treeMntBG[1] = 94;
++					Main.treeBG[0] = -1;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = -1;
++					return;
++				}
++				if (style == 5)
++				{
++					Main.treeMntBG[0] = 93;
++					Main.treeMntBG[1] = 94;
++					Main.treeBG[0] = -1;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 55;
++					return;
++				}
++				if (style == 51)
++				{
++					Main.treeMntBG[0] = 93;
++					Main.treeMntBG[1] = 94;
++					Main.treeBG[0] = -1;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 11;
++					return;
++				}
++				if (style == 6)
++				{
++					Main.treeMntBG[0] = 171;
++					Main.treeMntBG[1] = 172;
++					Main.treeBG[0] = 173;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = -1;
++					return;
++				}
++				if (style == 7)
++				{
++					Main.treeMntBG[0] = 176;
++					Main.treeMntBG[1] = 177;
++					Main.treeBG[0] = 178;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = -1;
++					return;
++				}
++				if (style == 71)
++				{
++					Main.treeMntBG[0] = 176;
++					Main.treeMntBG[1] = 177;
++					Main.treeBG[0] = 178;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 11;
++					return;
++				}
++				if (style == 72)
++				{
++					Main.treeMntBG[0] = 176;
++					Main.treeMntBG[1] = 177;
++					Main.treeBG[0] = 178;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 52;
++					return;
++				}
++				if (style == 73)
++				{
++					Main.treeMntBG[0] = 176;
++					Main.treeMntBG[1] = 177;
++					Main.treeBG[0] = 178;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = 55;
++					return;
++				}
++				if (style == 8)
++				{
++					Main.treeMntBG[0] = 179;
++					Main.treeMntBG[1] = 180;
++					Main.treeBG[0] = 184;
++					Main.treeBG[1] = -1;
++					Main.treeBG[2] = -1;
++					return;
++				}
++				Main.treeBG[0] = 9;
++				Main.treeBG[1] = 10;
++				Main.treeBG[2] = 11;
++				return;
++			}
++			else if (bg == 1)
++			{
++				WorldGen.corruptBG = style;
++				if (style == 1)
++				{
++					Main.corruptBG[0] = 56;
++					Main.corruptBG[1] = 57;
++					Main.corruptBG[2] = 58;
++					return;
++				}
++				Main.corruptBG[0] = 12;
++				Main.corruptBG[1] = 13;
++				Main.corruptBG[2] = 14;
++				return;
++			}
++			else if (bg == 2)
++			{
++				WorldGen.jungleBG = style;
++				if (style == 1)
++				{
++					Main.jungleBG[0] = 59;
++					Main.jungleBG[1] = 60;
++					Main.jungleBG[2] = 61;
++					return;
++				}
++				Main.jungleBG[0] = 15;
++				Main.jungleBG[1] = 16;
++				Main.jungleBG[2] = 17;
++				return;
++			}
++			else if (bg == 3)
++			{
++				WorldGen.snowBG = style;
++				Main.snowMntBG[0] = 35;
++				Main.snowMntBG[1] = 36;
++				if (style == 1)
++				{
++					Main.snowBG[0] = 97;
++					Main.snowBG[1] = 96;
++					Main.snowBG[2] = 95;
++					return;
++				}
++				if (style == 2)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 99;
++					Main.snowBG[0] = -1;
++					Main.snowBG[1] = -1;
++					Main.snowBG[2] = -1;
++					return;
++				}
++				if (style == 21)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 99;
++					Main.snowBG[0] = 95;
++					Main.snowBG[1] = 96;
++					Main.snowBG[2] = 97;
++					return;
++				}
++				if (style == 22)
++				{
++					Main.snowMntBG[0] = 98;
++					Main.snowMntBG[1] = 99;
++					Main.snowBG[0] = 37;
++					Main.snowBG[1] = 38;
++					Main.snowBG[2] = 39;
++					return;
++				}
+ 				if (style == 3)
+ 				{
+ 					Main.snowMntBG[0] = 98;
+@@ -2848,12 +3372,176 @@
+ 
+ 		public static void RandomizeMoonState()
+ 		{
+-			Main.moonType = WorldGen.genRand.Next(Main.maxMoons);
++			//Main.moonType = WorldGen.genRand.Next(Main.maxMoons);
++			if (Main.setting.MoonStyle == 3)
++			{
++				Main.moonType = WorldGen.genRand.Next(Main.maxMoons);
++			}
+ 		}
+-
++		// aka, randomBackgrounds
+ 		public static void RandomizeBackgrounds()
+ 		{
+-			WorldGen.treeBG = WorldGen.genRand.Next(9);
++			if (Main.setting.ForestStyle == 14)
++			{
++				WorldGen.treeBG = WorldGen.genRand.Next(9);
++				if ((WorldGen.treeBG == 1 || WorldGen.treeBG == 2) && WorldGen.genRand.Next(2) == 0)
++				{
++					WorldGen.treeBG = WorldGen.genRand.Next(7);
++				}
++				if (WorldGen.treeBG == 0)
++				{
++					WorldGen.treeBG = WorldGen.genRand.Next(7);
++				}
++				if (WorldGen.treeBG == 3 && WorldGen.genRand.Next(3) == 0)
++				{
++					WorldGen.treeBG = 31;
++				}
++				if (WorldGen.treeBG == 5 && WorldGen.genRand.Next(2) == 0)
++				{
++					WorldGen.treeBG = 51;
++				}
++				if (WorldGen.treeBG == 7 && WorldGen.genRand.Next(4) == 0)
++				{
++					WorldGen.treeBG = WorldGen.genRand.Next(71, 74);
++				}
++				WorldGen.setBG(0, WorldGen.treeBG);
++			}
++			else
++			{
++				switch (Main.setting.ForestStyle)
++				{
++					case 9:
++						WorldGen.setBG(0, 31);
++						break;
++					case 10:
++						WorldGen.setBG(0, 51);
++						break;
++					case 11:
++						WorldGen.setBG(0, 71);
++						break;
++					case 12:
++						WorldGen.setBG(0, 72);
++						break;
++					case 13:
++						WorldGen.setBG(0, 73);
++						break;
++					default:
++						WorldGen.setBG(0, Main.setting.ForestStyle);
++						break;
++				}
++			}
++			if (Main.setting.CorruptStyle == 2)
++			{
++				WorldGen.setBG(1, WorldGen.genRand.Next(2));
++			}
++			else
++			{
++				WorldGen.setBG(1, Main.setting.CorruptStyle);
++			}
++			if (Main.setting.JungleStyle == 2)
++			{
++				WorldGen.setBG(2, WorldGen.genRand.Next(2));
++			}
++			else
++			{
++				WorldGen.setBG(2, Main.setting.JungleStyle);
++			}
++			if (Main.setting.SnowStyle == 11)
++			{
++				WorldGen.snowBG = WorldGen.genRand.Next(6);
++				if (WorldGen.snowBG == 2 && WorldGen.genRand.Next(2) == 0)
++				{
++					if (WorldGen.genRand.Next(2) == 0)
++					{
++						WorldGen.snowBG = 21;
++					}
++					else
++					{
++						WorldGen.snowBG = 22;
++					}
++				}
++				if (WorldGen.snowBG == 3 && WorldGen.genRand.Next(2) == 0)
++				{
++					if (WorldGen.genRand.Next(2) == 0)
++					{
++						WorldGen.snowBG = 31;
++					}
++					else
++					{
++						WorldGen.snowBG = 32;
++					}
++				}
++				if (WorldGen.snowBG == 4 && WorldGen.genRand.Next(2) == 0)
++				{
++					if (WorldGen.genRand.Next(2) == 0)
++					{
++						WorldGen.snowBG = 41;
++					}
++					else
++					{
++						WorldGen.snowBG = 42;
++					}
++				}
++				WorldGen.setBG(3, WorldGen.snowBG);
++			}
++			else
++			{
++				switch (Main.setting.SnowStyle)
++				{
++					case 5:
++						WorldGen.setBG(3, 21);
++						break;
++					case 6:
++						WorldGen.setBG(3, 22);
++						break;
++					case 7:
++						WorldGen.setBG(3, 31);
++						break;
++					case 8:
++						WorldGen.setBG(3, 32);
++						break;
++					case 9:
++						WorldGen.setBG(3, 41);
++						break;
++					case 10:
++						WorldGen.setBG(3, 42);
++						break;
++					default:
++						WorldGen.setBG(3, Main.setting.SnowStyle);
++						break;
++				}
++			}
++			if (Main.setting.HallowStyle == 2)
++			{
++				WorldGen.setBG(4, WorldGen.genRand.Next(2));
++			}
++			else
++			{
++				WorldGen.setBG(4, Main.setting.HallowStyle);
++			}
++			if (Main.setting.CrimsonStyle == 3)
++			{
++				WorldGen.setBG(5, WorldGen.genRand.Next(3));
++			}
++			else
++			{
++				WorldGen.setBG(5, Main.setting.CrimsonStyle);
++			}
++			if (Main.setting.DesertStyle == 2)
++			{
++				WorldGen.setBG(6, WorldGen.genRand.Next(2));
++			}
++			else
++			{
++				WorldGen.setBG(6, Main.setting.DesertStyle);
++			}
++			if (Main.setting.OceanStyle == 3)
++			{
++				WorldGen.setBG(7, WorldGen.genRand.Next(3));
++				return;
++			}
++			WorldGen.setBG(7, Main.setting.OceanStyle);
++			/*	WorldGen.treeBG = WorldGen.genRand.Next(9);
+ 			if ((WorldGen.treeBG == 1 || WorldGen.treeBG == 2) && WorldGen.genRand.Next(2) == 0)
+ 			{
+ 				WorldGen.treeBG = WorldGen.genRand.Next(7);
+@@ -2915,17 +3603,29 @@
+ 			WorldGen.setBG(4, WorldGen.genRand.Next(2));
+ 			WorldGen.setBG(5, WorldGen.genRand.Next(3));
+ 			WorldGen.setBG(6, WorldGen.genRand.Next(2));
+-			WorldGen.setBG(7, WorldGen.genRand.Next(3));
++			WorldGen.setBG(7, WorldGen.genRand.Next(3));*/
+ 		}
+ 
+ 		public static void RandomizeTreeStyle()
+ 		{
++			Main.setting.SelectTreeStyle.CopyTo(Main.treeStyle, 0);
+ 			if (Main.maxTilesX == 4200)
+ 			{
+ 				Main.treeX[0] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.5 - (double)((float)Main.maxTilesX * 0.25f)), (int)((double)Main.maxTilesX * 0.5 + (double)((float)Main.maxTilesX * 0.25f)));
+-				Main.treeStyle[0] = WorldGen.genRand.Next(6);
+-				Main.treeStyle[1] = WorldGen.genRand.Next(6);
+-				while (Main.treeStyle[1] == Main.treeStyle[0])
++				if (Main.treeStyle[0] == 6 && Main.treeStyle[1] == 6)
++				{
++					Main.treeStyle[0] = WorldGen.genRand.Next(6);
++					Main.treeStyle[1] = WorldGen.genRand.Next(6);
++					while (Main.treeStyle[1] == Main.treeStyle[0])
++					{
++						Main.treeStyle[1] = WorldGen.genRand.Next(6);
++					}
++				}
++				else if (Main.treeStyle[0] == 6)
++				{
++					Main.treeStyle[0] = WorldGen.genRand.Next(6);
++				}
++				else if (Main.treeStyle[1] == 6)
+ 				{
+ 					Main.treeStyle[1] = WorldGen.genRand.Next(6);
+ 				}
+@@ -2937,9 +3637,44 @@
+ 			{
+ 				Main.treeX[0] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.334 - (double)((float)Main.maxTilesX * 0.2f)), (int)((double)Main.maxTilesX * 0.334 + (double)((float)Main.maxTilesX * 0.2f)));
+ 				Main.treeX[1] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.667 - (double)((float)Main.maxTilesX * 0.2f)), (int)((double)Main.maxTilesX * 0.667 + (double)((float)Main.maxTilesX * 0.2f)));
++				if (Main.treeStyle[0] == 6 && Main.treeStyle[1] == 6 && Main.treeStyle[2] == 6)
++				{
++					Main.treeStyle[0] = WorldGen.genRand.Next(6);
++					Main.treeStyle[1] = WorldGen.genRand.Next(6);
++					Main.treeStyle[2] = WorldGen.genRand.Next(6);
++					while (Main.treeStyle[1] == Main.treeStyle[0])
++					{
++						Main.treeStyle[1] = WorldGen.genRand.Next(6);
++					}
++					while (Main.treeStyle[2] == Main.treeStyle[0] || Main.treeStyle[2] == Main.treeStyle[1])
++					{
++						Main.treeStyle[2] = WorldGen.genRand.Next(6);
++					}
++				}
++				else if (Main.treeStyle[0] == 6)
++				{
++					Main.treeStyle[0] = WorldGen.genRand.Next(6);
++				}
++				else if (Main.treeStyle[1] == 6)
++				{
++					Main.treeStyle[1] = WorldGen.genRand.Next(6);
++				}
++				else if (Main.treeStyle[2] == 6)
++				{
++					Main.treeStyle[2] = WorldGen.genRand.Next(6);
++				}
++				Main.treeX[2] = Main.maxTilesX;
++				return;
++			}
++			Main.treeX[0] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.25 + (double)((float)Main.maxTilesX * 0.15f)));
++			Main.treeX[1] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.5 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.5 + (double)((float)Main.maxTilesX * 0.15f)));
++			Main.treeX[2] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.75 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.75 + (double)((float)Main.maxTilesX * 0.15f)));
++			if (Main.treeStyle[0] == 6 && Main.treeStyle[1] == 6 && Main.treeStyle[2] == 6 && Main.treeStyle[3] == 6)
++			{
+ 				Main.treeStyle[0] = WorldGen.genRand.Next(6);
+ 				Main.treeStyle[1] = WorldGen.genRand.Next(6);
+ 				Main.treeStyle[2] = WorldGen.genRand.Next(6);
++				Main.treeStyle[3] = WorldGen.genRand.Next(6);
+ 				while (Main.treeStyle[1] == Main.treeStyle[0])
+ 				{
+ 					Main.treeStyle[1] = WorldGen.genRand.Next(6);
+@@ -2948,25 +3683,24 @@
+ 				{
+ 					Main.treeStyle[2] = WorldGen.genRand.Next(6);
+ 				}
+-				Main.treeX[2] = Main.maxTilesX;
+-				return;
+-			}
+-			Main.treeX[0] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.25 + (double)((float)Main.maxTilesX * 0.15f)));
+-			Main.treeX[1] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.5 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.5 + (double)((float)Main.maxTilesX * 0.15f)));
+-			Main.treeX[2] = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.75 - (double)((float)Main.maxTilesX * 0.15f)), (int)((double)Main.maxTilesX * 0.75 + (double)((float)Main.maxTilesX * 0.15f)));
+-			Main.treeStyle[0] = WorldGen.genRand.Next(6);
+-			Main.treeStyle[1] = WorldGen.genRand.Next(6);
+-			Main.treeStyle[2] = WorldGen.genRand.Next(6);
+-			Main.treeStyle[3] = WorldGen.genRand.Next(6);
+-			while (Main.treeStyle[1] == Main.treeStyle[0])
++				while (Main.treeStyle[3] == Main.treeStyle[0] || Main.treeStyle[3] == Main.treeStyle[1] || Main.treeStyle[3] == Main.treeStyle[2])
++				{
++					Main.treeStyle[3] = WorldGen.genRand.Next(6);
++				}
++			}
++			else if (Main.treeStyle[0] == 6)
++			{
++				Main.treeStyle[0] = WorldGen.genRand.Next(6);
++			}
++			else if (Main.treeStyle[1] == 6)
+ 			{
+ 				Main.treeStyle[1] = WorldGen.genRand.Next(6);
+ 			}
+-			while (Main.treeStyle[2] == Main.treeStyle[0] || Main.treeStyle[2] == Main.treeStyle[1])
++			else if (Main.treeStyle[2] == 6)
+ 			{
+ 				Main.treeStyle[2] = WorldGen.genRand.Next(6);
+ 			}
+-			while (Main.treeStyle[3] == Main.treeStyle[0] || Main.treeStyle[3] == Main.treeStyle[1] || Main.treeStyle[3] == Main.treeStyle[2])
++			else if (Main.treeStyle[3] == 6)
+ 			{
+ 				Main.treeStyle[3] = WorldGen.genRand.Next(6);
+ 			}
+@@ -3029,6 +3763,13 @@
+ 			Main.iceBackStyle = WorldGen.genRand.Next(4);
+ 			Main.hellBackStyle = WorldGen.genRand.Next(3);
+ 			Main.jungleBackStyle = WorldGen.genRand.Next(2);
++			Main.iceBackStyle = Main.setting.IceBackStyle == 0 ? Main.iceBackStyle : Main.setting.IceBackStyle - 1;
++			Main.hellBackStyle = Main.setting.HellBackStyle == 0 ? Main.hellBackStyle : Main.setting.HellBackStyle - 1;
++			Main.jungleBackStyle = Main.setting.JungleBackStyle == 0 ? Main.jungleBackStyle : Main.setting.JungleBackStyle - 1;
++			Main.caveBackStyle[0] = Main.setting.CaveBackStyle1 == 0 ? Main.caveBackStyle[0] : Main.setting.CaveBackStyle1 - 1;
++			Main.caveBackStyle[1] = Main.setting.CaveBackStyle2 == 0 ? Main.caveBackStyle[1] : Main.setting.CaveBackStyle2 - 1;
++			Main.caveBackStyle[2] = Main.setting.CaveBackStyle3 == 0 ? Main.caveBackStyle[2] : Main.setting.CaveBackStyle3 - 1;
++			Main.caveBackStyle[3] = Main.setting.CaveBackStyle4 == 0 ? Main.caveBackStyle[3] : Main.setting.CaveBackStyle4 - 1;
+ 		}
+ 
+ 		private static void ResetGenerator()
+@@ -3447,6 +4188,7 @@
+ 
+ 		public static bool placeTrap(int x2, int y2, int type = -1)
+ 		{
++			int wireType = WorldGen.genRand.Next(3);
+ 			int num = y2;
+ 			while (!WorldGen.SolidTile(x2, num))
+ 			{
+@@ -3590,25 +4332,91 @@
+ 				int num10 = num;
+ 				while (num9 != num2 || num10 != num3)
+ 				{
+-					Main.tile[num9, num10].wire(true);
+-					if (num9 > num2)
+-					{
+-						num9--;
+-					}
+-					if (num9 < num2)
+-					{
+-						num9++;
+-					}
+-					Main.tile[num9, num10].wire(true);
+-					if (num10 > num3)
+-					{
+-						num10--;
+-					}
+-					if (num10 < num3)
+-					{
+-						num10++;
+-					}
+-					Main.tile[num9, num10].wire(true);
++					if (wireType == 0)
++					{
++						Main.tile[num9, num10].wire(true);
++						if (num9 > num2)
++						{
++							num9--;
++						}
++						if (num9 < num2)
++						{
++							num9++;
++						}
++						Main.tile[num9, num10].wire(true);
++						if (num10 > num3)
++						{
++							num10--;
++						}
++						if (num10 < num3)
++						{
++							num10++;
++						}
++						Main.tile[num9, num10].wire(true);
++					}
++					else if (wireType == 1)
++					{
++						Main.tile[num9, num10].wire2(true);
++						if (num9 > num2)
++						{
++							num9--;
++						}
++						if (num9 < num2)
++						{
++							num9++;
++						}
++						Main.tile[num9, num10].wire2(true);
++						if (num10 > num3)
++						{
++							num10--;
++						}
++						if (num10 < num3)
++						{
++							num10++;
++						}
++						Main.tile[num9, num10].wire2(true);
++					}
++					else
++					{
++						Main.tile[num9, num10].wire3(true);
++						if (num9 > num2)
++						{
++							num9--;
++						}
++						if (num9 < num2)
++						{
++							num9++;
++						}
++						Main.tile[num9, num10].wire3(true);
++						if (num10 > num3)
++						{
++							num10--;
++						}
++						if (num10 < num3)
++						{
++							num10++;
++						}
++						Main.tile[num9, num10].wire3(true);
++					}
++					//Main.tile[num9, num10].wire(true);
++					//if (num9 > num2)
++					//{
++					//	num9--;
++					//}
++					//if (num9 < num2)
++					//{
++					//	num9++;
++					//}
++					//Main.tile[num9, num10].wire(true);
++					//if (num10 > num3)
++					//{
++					//	num10--;
++					//}
++					//if (num10 < num3)
++					//{
++					//	num10++;
++					//}
++					//Main.tile[num9, num10].wire(true);
+ 				}
+ 				return true;
+ 			}
+@@ -3649,25 +4457,91 @@
+ 						int num15 = num;
+ 						while (num14 != num12 || num15 != num13)
+ 						{
+-							Main.tile[num14, num15].wire(true);
+-							if (num14 > num12)
+-							{
+-								num14--;
+-							}
+-							if (num14 < num12)
+-							{
+-								num14++;
+-							}
+-							Main.tile[num14, num15].wire(true);
+-							if (num15 > num13)
+-							{
+-								num15--;
+-							}
+-							if (num15 < num13)
+-							{
+-								num15++;
+-							}
+-							Main.tile[num14, num15].wire(true);
++							if (wireType == 0)
++							{
++								Main.tile[num14, num15].wire(true);
++								if (num14 > num12)
++								{
++									num14--;
++								}
++								if (num14 < num12)
++								{
++									num14++;
++								}
++								Main.tile[num14, num15].wire(true);
++								if (num15 > num13)
++								{
++									num15--;
++								}
++								if (num15 < num13)
++								{
++									num15++;
++								}
++								Main.tile[num14, num15].wire(true);
++							}
++							else if (wireType == 1)
++							{
++								Main.tile[num14, num15].wire2(true);
++								if (num14 > num12)
++								{
++									num14--;
++								}
++								if (num14 < num12)
++								{
++									num14++;
++								}
++								Main.tile[num14, num15].wire2(true);
++								if (num15 > num13)
++								{
++									num15--;
++								}
++								if (num15 < num13)
++								{
++									num15++;
++								}
++								Main.tile[num14, num15].wire2(true);
++							}
++							else
++							{
++								Main.tile[num14, num15].wire3(true);
++								if (num14 > num12)
++								{
++									num14--;
++								}
++								if (num14 < num12)
++								{
++									num14++;
++								}
++								Main.tile[num14, num15].wire3(true);
++								if (num15 > num13)
++								{
++									num15--;
++								}
++								if (num15 < num13)
++								{
++									num15++;
++								}
++								Main.tile[num14, num15].wire3(true);
++							}
++							//Main.tile[num14, num15].wire(true);
++							//if (num14 > num12)
++							//{
++							//	num14--;
++							//}
++							//if (num14 < num12)
++							//{
++							//	num14++;
++							//}
++							//Main.tile[num14, num15].wire(true);
++							//if (num15 > num13)
++							//{
++							//	num15--;
++							//}
++							//if (num15 < num13)
++							//{
++							//	num15++;
++							//}
++							//Main.tile[num14, num15].wire(true);
+ 						}
+ 					}
+ 					return false;
+@@ -3732,22 +4606,22 @@
+ 				WorldGen.PlaceTile(num17 + 1, num16 + 2, 130, true, false, -1, 0);
+ 				WorldGen.PlaceTile(num17 + 1, num16 + 1, 138, true, false, -1, 0);
+ 				num16 += 2;
+-				Main.tile[num17, num16].wire(true);
+-				Main.tile[num17 + 1, num16].wire(true);
++				Main.tile[num17, num16].wire(true, wireType);
++				Main.tile[num17 + 1, num16].wire(true, wireType);
+ 				num16++;
+ 				WorldGen.PlaceTile(num17, num16, 130, true, false, -1, 0);
+ 				WorldGen.PlaceTile(num17 + 1, num16, 130, true, false, -1, 0);
+-				Main.tile[num17, num16].wire(true);
+-				Main.tile[num17 + 1, num16].wire(true);
++				Main.tile[num17, num16].wire(true, wireType);
++				Main.tile[num17 + 1, num16].wire(true, wireType);
+ 				WorldGen.PlaceTile(num17, num16 + 1, 130, true, false, -1, 0);
+ 				WorldGen.PlaceTile(num17 + 1, num16 + 1, 130, true, false, -1, 0);
+-				Main.tile[num17, num16 + 1].wire(true);
+-				Main.tile[num17 + 1, num16 + 1].wire(true);
++				Main.tile[num17, num16 + 1].wire(true, wireType);
++				Main.tile[num17 + 1, num16 + 1].wire(true, wireType);
+ 				int num24 = x2;
+ 				int num25 = num;
+ 				while (num24 != num17 || num25 != num16)
+ 				{
+-					Main.tile[num24, num25].wire(true);
++					Main.tile[num24, num25].wire(true, wireType);
+ 					if (num24 > num17)
+ 					{
+ 						num24--;
+@@ -3756,7 +4630,7 @@
+ 					{
+ 						num24++;
+ 					}
+-					Main.tile[num24, num25].wire(true);
++					Main.tile[num24, num25].wire(true, wireType);
+ 					if (num25 > num16)
+ 					{
+ 						num25--;
+@@ -3765,7 +4639,7 @@
+ 					{
+ 						num25++;
+ 					}
+-					Main.tile[num24, num25].wire(true);
++					Main.tile[num24, num25].wire(true, wireType);
+ 				}
+ 				return true;
+ 			}
+@@ -3961,14 +4835,31 @@
+ 
+ 		public static void randMoss()
+ 		{
+-			WorldGen.mossType[0] = WorldGen.genRand.Next(5);
+-			WorldGen.mossType[1] = WorldGen.genRand.Next(5);
+-			while (WorldGen.mossType[1] == WorldGen.mossType[0])
+-			{
++			Main.setting.SelectMossType.CopyTo(WorldGen.mossType, 0);
++			if (WorldGen.mossType[0] == 5 && WorldGen.mossType[1] == 5 && WorldGen.mossType[2] == 5)
++			{
++				WorldGen.mossType[0] = WorldGen.genRand.Next(5);
+ 				WorldGen.mossType[1] = WorldGen.genRand.Next(5);
+-			}
+-			WorldGen.mossType[2] = WorldGen.genRand.Next(5);
+-			while (WorldGen.mossType[2] == WorldGen.mossType[0] || WorldGen.mossType[2] == WorldGen.mossType[1])
++				while (WorldGen.mossType[1] == WorldGen.mossType[0])
++				{
++					WorldGen.mossType[1] = WorldGen.genRand.Next(5);
++				}
++				WorldGen.mossType[2] = WorldGen.genRand.Next(5);
++				while (WorldGen.mossType[2] == WorldGen.mossType[0] || WorldGen.mossType[2] == WorldGen.mossType[1])
++				{
++					WorldGen.mossType[2] = WorldGen.genRand.Next(5);
++				}
++				return;
++			}
++			if (WorldGen.mossType[0] == 5)
++			{
++				WorldGen.mossType[0] = WorldGen.genRand.Next(5);
++			}
++			if (WorldGen.mossType[1] == 5)
++			{
++				WorldGen.mossType[1] = WorldGen.genRand.Next(5);
++			}
++			if (WorldGen.mossType[2] == 5)
+ 			{
+ 				WorldGen.mossType[2] = WorldGen.genRand.Next(5);
+ 			}
+@@ -4153,6 +5044,7 @@
+ 
+ 		public static void generateWorld(int seed = -1, GenerationProgress customProgressObject = null)
+ 		{
++			
+ 			WorldGen._generator = new WorldGenerator();
+ 			if (seed > 0)
+ 			{
+@@ -4223,7 +5115,7 @@
+ 					WorldGen.heartCount = 0;
+ 					Main.checkXMas();
+ 					Main.checkHalloween();
+-					WorldGen.gen = true;
++					WorldGen.gen = true;				
+ 					WorldGen.ResetGenerator();
+ 					WorldGen.numLarva = 0;
+ 					int num = 86400;
+@@ -4237,33 +5129,44 @@
+ 					WorldGen.ironBar = 22;
+ 					WorldGen.silverBar = 21;
+ 					WorldGen.goldBar = 19;
+-					if (WorldGen.genRand.Next(2) == 0)
++					//if (WorldGen.genRand.Next(2) == 0)
++					if (Main.setting.IsCopper == 0 || (Main.setting.IsCopper == 2 && WorldGen.genRand.Next(2) == 0))
+ 					{
+ 						copper = 166;
+ 						WorldGen.copperBar = 703;
+ 						WorldGen.CopperTierOre = 166;
+ 					}
+-					if (WorldGen.genRand.Next(2) == 0)
++					//if (WorldGen.genRand.Next(2) == 0)
++					if (Main.setting.IsIron == 0 || (Main.setting.IsIron == 2 && WorldGen.genRand.Next(2) == 0))
+ 					{
+ 						iron = 167;
+ 						WorldGen.ironBar = 704;
+ 						WorldGen.IronTierOre = 167;
+ 					}
+-					if (WorldGen.genRand.Next(2) == 0)
++					if (Main.setting.IsSilver == 0 || (Main.setting.IsSilver == 2 && WorldGen.genRand.Next(2) == 0))
+ 					{
+ 						silver = 168;
+ 						WorldGen.silverBar = 705;
+ 						WorldGen.SilverTierOre = 168;
+ 					}
+-					if (WorldGen.genRand.Next(2) == 0)
++					if (Main.setting.IsGold == 0 || (Main.setting.IsGold == 2 && WorldGen.genRand.Next(2) == 0))
+ 					{
+ 						gold = 169;
+ 						WorldGen.goldBar = 706;
+ 						WorldGen.GoldTierOre = 169;
+ 					}
+ 					WorldGen.crimson = (WorldGen.genRand.Next(2) == 0);
++					jungleHut = (ushort)Main.setting.ShrineType;
+ 					if (jungleHut == 0)
+ 					{
++						jungleHut = (ushort)WorldGen.genRand.Next(5);
++					}
++					else
++					{
++						jungleHut--;
++					}
++					if (jungleHut == 0)
++					{
+ 						jungleHut = 119;
+ 					}
+ 					else if (jungleHut == 1)
+@@ -4282,19 +5185,45 @@
+ 					{
+ 						jungleHut = 45;
+ 					}
++					else
++					{
++						jungleHut = 45;
++					}
++					switch (Main.setting.IsCorruption)
++					{
++						case 2:
++						case 4:
++							WorldGen.crimson = true;
++							goto IL_203;
++						case 1:
++						case 3:
++							WorldGen.crimson = false;
++							goto IL_203;
++					}
++					WorldGen.crimson = (WorldGen.genRand.Next(2) == 0);
++					IL_203:
+ 					Main.worldID = WorldGen.genRand.Next(2147483647);
+ 					WorldGen.RandomizeTreeStyle();
+ 					WorldGen.RandomizeCaveBackgrounds();
+ 					WorldGen.RandomizeBackgrounds();
+ 					WorldGen.RandomizeMoonState();
+ 					dungeonSide = ((WorldGen.genRand.Next(2) == 0) ? -1 : 1);
++					switch (Main.setting.DungeonSide)
++					{
++						case 1:
++							dungeonSide = -1;
++							break;
++						case 2:
++							dungeonSide = 1;
++							break;
++					}
+ 				});
+ 			WorldGen.AddGenerationPass("Terrain", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[0];
+ 					int num = 0;
+ 					int num2 = 0;
+-					worldSurface = (double)Main.maxTilesY * 0.3;
++					worldSurface = (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMin/*0.3*/;
+ 					worldSurface *= (double)WorldGen.genRand.Next(90, 110) * 0.005;
+ 					rockLayer = worldSurface + (double)Main.maxTilesY * 0.2;
+ 					rockLayer *= (double)WorldGen.genRand.Next(90, 110) * 0.01;
+@@ -4302,6 +5231,7 @@
+ 					worldSurfaceHigh = worldSurface;
+ 					rockLayerLow = rockLayer;
+ 					rockLayerHigh = rockLayer;
++					double oldWorldSurface = worldSurface;
+ 					for (int k = 0; k < Main.maxTilesX; k++)
+ 					{
+ 						float value = (float)k / (float)Main.maxTilesX;
+@@ -4331,23 +5261,23 @@
+ 								num2 *= (int)((double)WorldGen.genRand.Next(5, 30) * 0.2);
+ 							}
+ 						}
+-						num2--;
+-						if ((double)k > (double)Main.maxTilesX * 0.43 && (double)k < (double)Main.maxTilesX * 0.57 && num >= 3)
++						num2--; // randomness??
++						if ((double)k > (double)Main.maxTilesX * 0.43 && (double)k < (double)Main.maxTilesX * 0.57 && num >= 3) // flatish near bigger middle
+ 						{
+ 							num = WorldGen.genRand.Next(3);
+ 						}
+-						if ((double)k > (double)Main.maxTilesX * 0.47 && (double)k < (double)Main.maxTilesX * 0.53)
++						if ((double)k > (double)Main.maxTilesX * 0.47 && (double)k < (double)Main.maxTilesX * 0.53) // flat near middle
+ 						{
+ 							num = 0;
+ 						}
+-						if (num == 0)
++						if (num == 0)  // +/- 1: 1/7th chance
+ 						{
+ 							while (WorldGen.genRand.Next(0, 7) == 0)
+ 							{
+ 								worldSurface += (double)WorldGen.genRand.Next(-1, 2);
+ 							}
+ 						}
+-						else if (num == 1)
++						else if (num == 1) // 1/4 chance -1(up) 1/10 chance down
+ 						{
+ 							while (WorldGen.genRand.Next(0, 4) == 0)
+ 							{
+@@ -4358,7 +5288,7 @@
+ 								worldSurface += 1.0;
+ 							}
+ 						}
+-						else if (num == 2)
++						else if (num == 2)  // 1/10 chance -1(up) 1/4 chance down
+ 						{
+ 							while (WorldGen.genRand.Next(0, 4) == 0)
+ 							{
+@@ -4369,7 +5299,7 @@
+ 								worldSurface -= 1.0;
+ 							}
+ 						}
+-						else if (num == 3)
++						else if (num == 3)   // 1/2 chance -1(up) 1/6 chance down
+ 						{
+ 							while (WorldGen.genRand.Next(0, 2) == 0)
+ 							{
+@@ -4380,7 +5310,7 @@
+ 								worldSurface += 1.0;
+ 							}
+ 						}
+-						else if (num == 4)
++						else if (num == 4)  // 1/5 chance -1(up) 1/2 chance down
+ 						{
+ 							while (WorldGen.genRand.Next(0, 2) == 0)
+ 							{
+@@ -4391,21 +5321,24 @@
+ 								worldSurface -= 1.0;
+ 							}
+ 						}
+-						if (worldSurface < (double)Main.maxTilesY * 0.17)
+-						{
+-							worldSurface = (double)Main.maxTilesY * 0.17;
++						worldSurface = oldWorldSurface + ((worldSurface - oldWorldSurface) * Main.setting.SurfaceTerrainHeightMultiplier);
++						double a = worldSurface - Math.Truncate(worldSurface);
++						if (worldSurface < (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMax/*0.17*/) // prevent surface from going to high
++						{
++							worldSurface = (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMax;
+ 							num2 = 0;
+ 						}
+-						else if (worldSurface > (double)Main.maxTilesY * 0.3)
+-						{
+-							worldSurface = (double)Main.maxTilesY * 0.3;
++						else if (worldSurface > (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMin/*0.3*/) // prevent surface from going too deep
++						{
++							worldSurface = (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMin/*0.3*/;
+ 							num2 = 0;
+ 						}
+-						if ((k < 275 || k > Main.maxTilesX - 275) && worldSurface > (double)Main.maxTilesY * 0.25)
+-						{
+-							worldSurface = (double)Main.maxTilesY * 0.25;
++						if ((k < 275 || k > Main.maxTilesX - 275) && worldSurface > (double)Main.maxTilesY * (Main.setting.SurfaceTerrainHeightMin - .05)/*0.25*/) // prevent ocean from being too deep
++						{
++							worldSurface = (double)Main.maxTilesY * (Main.setting.SurfaceTerrainHeightMin - .05)/*0.25*/;
+ 							num2 = 1;
+ 						}
++						oldWorldSurface = worldSurface + a;
+ 						while (WorldGen.genRand.Next(0, 3) == 0)
+ 						{
+ 							rockLayer += (double)WorldGen.genRand.Next(-2, 3);
+@@ -4421,7 +5354,7 @@
+ 						int num3 = 0;
+ 						while ((double)num3 < worldSurface)
+ 						{
+-							Main.tile[k, num3].active(false);
++							Main.tile[k, num3].active(false); // sky
+ 							Main.tile[k, num3].frameX = -1;
+ 							Main.tile[k, num3].frameY = -1;
+ 							num3++;
+@@ -4431,14 +5364,14 @@
+ 							if ((double)l < rockLayer)
+ 							{
+ 								Main.tile[k, l].active(true);
+-								Main.tile[k, l].type = 0;
++								Main.tile[k, l].type = 0;// TileID.Dirt
+ 								Main.tile[k, l].frameX = -1;
+ 								Main.tile[k, l].frameY = -1;
+ 							}
+ 							else
+ 							{
+ 								Main.tile[k, l].active(true);
+-								Main.tile[k, l].type = 1;
++								Main.tile[k, l].type = 1;// TileID.Stone
+ 								Main.tile[k, l].frameX = -1;
+ 								Main.tile[k, l].frameY = -1;
+ 							}
+@@ -4451,10 +5384,11 @@
+ 					WorldGen.waterLine = (int)(Main.rockLayer + (double)Main.maxTilesY) / 2;
+ 					WorldGen.waterLine += WorldGen.genRand.Next(-100, 20);
+ 					WorldGen.lavaLine = WorldGen.waterLine + WorldGen.genRand.Next(50, 80);
++					// TODO, lava world, set lavaline to real high
+ 				});
+ 			WorldGen.AddGenerationPass("Tunnels", delegate(GenerationProgress progress)
+ 				{
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.0015); k++)
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.0015 * Main.setting.SurfaceHorizontalTunnelsMultiplier); k++)
+ 					{
+ 						int[] array = new int[10];
+ 						int[] array2 = new int[10];
+@@ -4562,7 +5496,16 @@
+ 							{
+ 								if (Main.tile[l, num8].active())
+ 								{
+-									if (l == (num5 + num6) / 2 && WorldGen.genRand.Next(6) == 0)
++									if (Main.setting.IsPyramid == 2 || Main.setting.IsPyramid == 0)
++									{
++										if (l == (num5 + num6) / 2 && WorldGen.genRand.Next(6) == 0)
++										{
++											PyrX[numPyr] = l;
++											PyrY[numPyr] = num8;
++											numPyr++;
++										}
++									}
++									else if (Main.setting.IsPyramid == 1 && l == (num5 + num6) / 2)
+ 									{
+ 										PyrX[numPyr] = l;
+ 										PyrY[numPyr] = num8;
+@@ -4593,6 +5536,7 @@
+ 					}
+ 					for (int n = 0; n < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 8E-06); n++)
+ 					{
++						// TODO sand ammount  TileID.Sand 
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)Main.worldSurface, (int)Main.rockLayer), (double)WorldGen.genRand.Next(15, 70), WorldGen.genRand.Next(20, 130), 53, false, 0f, 0f, false, true);
+ 					}
+ 				});
+@@ -4736,6 +5680,7 @@
+ 			WorldGen.AddGenerationPass("Clay", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[6];
++					// TODO clay spawn
+ 					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05); k++)
+ 					{
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(0, (int)WorldGen.worldSurfaceLow), (double)WorldGen.genRand.Next(4, 14), WorldGen.genRand.Next(10, 50), 40, false, 0f, 0f, false, true);
+@@ -4913,110 +5858,113 @@
+ 						num6++;
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Slush Check", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[56];
+-					snowTop = (int)Main.worldSurface;
+-					int num = WorldGen.genRand.Next(Main.maxTilesX);
+-					if (dungeonSide == 1)
+-					{
+-						while ((float)num < (float)Main.maxTilesX * 0.55f || (float)num > (float)Main.maxTilesX * 0.7f)
+-						{
+-							num = WorldGen.genRand.Next(Main.maxTilesX);
+-						}
+-					}
+-					else
+-					{
+-						while ((float)num < (float)Main.maxTilesX * 0.3f || (float)num > (float)Main.maxTilesX * 0.45f)
+-						{
+-							num = WorldGen.genRand.Next(Main.maxTilesX);
+-						}
+-					}
+-					int num2 = WorldGen.genRand.Next(50, 90);
+-					float num3 = (float)(Main.maxTilesX / 4200);
+-					num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
+-					num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
+-					int num4 = num - num2;
+-					num2 = WorldGen.genRand.Next(50, 90);
+-					num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
+-					num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
+-					int num5 = num + num2;
+-					if (num4 < 0)
+-					{
+-						num4 = 0;
+-					}
+-					if (num5 > Main.maxTilesX)
+-					{
+-						num5 = Main.maxTilesX;
+-					}
+-					int num6 = 10;
+-					for (int k = 0; k <= WorldGen.lavaLine - 140; k++)
+-					{
+-						num4 += WorldGen.genRand.Next(-4, 4);
+-						num5 += WorldGen.genRand.Next(-3, 5);
+-						snowMinX[k] = num4;
+-						snowMaxX[k] = num5;
+-						for (int l = num4; l < num5; l++)
+-						{
+-							if (k < WorldGen.lavaLine - 140)
+-							{
+-								if (Main.tile[l, k].wall == 2)
+-								{
+-									Main.tile[l, k].wall = 40;
+-								}
+-								int type = (int)Main.tile[l, k].type;
+-								if (type == 0 || type == 2 || type == 23 || type == 40 || type == 53)
+-								{
+-									Main.tile[l, k].type = 147;
+-								}
+-								else if (type == 1)
+-								{
+-									Main.tile[l, k].type = 161;
+-								}
+-							}
+-							else
+-							{
+-								num6 += WorldGen.genRand.Next(-3, 4);
+-								if (WorldGen.genRand.Next(3) == 0)
+-								{
+-									num6 += WorldGen.genRand.Next(-4, 5);
++			if (!Main.setting.NoSnow)
++			{
++				WorldGen.AddGenerationPass("Slush Check", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[56];
++						snowTop = (int)Main.worldSurface;
++						int num = WorldGen.genRand.Next(Main.maxTilesX);
++						if (dungeonSide == 1)
++						{
++							while ((float)num < (float)Main.maxTilesX * 0.55f || (float)num > (float)Main.maxTilesX * 0.7f)
++							{
++								num = WorldGen.genRand.Next(Main.maxTilesX);
++							}
++						}
++						else
++						{
++							while ((float)num < (float)Main.maxTilesX * 0.3f || (float)num > (float)Main.maxTilesX * 0.45f)
++							{
++								num = WorldGen.genRand.Next(Main.maxTilesX);
++							}
++						}
++						int num2 = WorldGen.genRand.Next(50, 90);
++						float num3 = (float)(Main.maxTilesX / 4200);
++						num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
++						num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
++						int num4 = num - num2;
++						num2 = WorldGen.genRand.Next(50, 90);
++						num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
++						num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
++						int num5 = num + num2;
++						if (num4 < 0)
++						{
++							num4 = 0;
++						}
++						if (num5 > Main.maxTilesX)
++						{
++							num5 = Main.maxTilesX;
++						}
++						int num6 = 10;
++						for (int k = 0; k <= WorldGen.lavaLine - 140; k++)
++						{
++							num4 += WorldGen.genRand.Next(-4, 4);
++							num5 += WorldGen.genRand.Next(-3, 5);
++							snowMinX[k] = num4;
++							snowMaxX[k] = num5;
++							for (int l = num4; l < num5; l++)
++							{
++								if (k < WorldGen.lavaLine - 140)
++								{
++									if (Main.tile[l, k].wall == 2)
++									{
++										Main.tile[l, k].wall = 40;
++									}
++									int type = (int)Main.tile[l, k].type;
++									if (type == 0 || type == 2 || type == 23 || type == 40 || type == 53)
++									{
++										Main.tile[l, k].type = 147;
++									}
++									else if (type == 1)
++									{
++										Main.tile[l, k].type = 161;
++									}
++								}
++								else
++								{
++									num6 += WorldGen.genRand.Next(-3, 4);
+ 									if (WorldGen.genRand.Next(3) == 0)
+ 									{
+-										num6 += WorldGen.genRand.Next(-6, 7);
+-									}
+-								}
+-								if (num6 < 0)
+-								{
+-									num6 = WorldGen.genRand.Next(3);
+-								}
+-								else if (num6 > 50)
+-								{
+-									num6 = 50 - WorldGen.genRand.Next(3);
+-								}
+-								for (int m = k; m < k + num6; m++)
+-								{
+-									if (Main.tile[l, m].wall == 2)
+-									{
+-										Main.tile[l, m].wall = 40;
+-									}
+-									int type2 = (int)Main.tile[l, m].type;
+-									if (type2 == 0 || type2 == 2 || type2 == 23 || type2 == 40 || type2 == 53)
+-									{
+-										Main.tile[l, m].type = 147;
+-									}
+-									else if (type2 == 1)
+-									{
+-										Main.tile[l, m].type = 161;
+-									}
+-								}
+-							}
+-						}
+-						if (snowBottom < k)
+-						{
+-							snowBottom = k;
+-						}
+-					}
+-				});
++										num6 += WorldGen.genRand.Next(-4, 5);
++										if (WorldGen.genRand.Next(3) == 0)
++										{
++											num6 += WorldGen.genRand.Next(-6, 7);
++										}
++									}
++									if (num6 < 0)
++									{
++										num6 = WorldGen.genRand.Next(3);
++									}
++									else if (num6 > 50)
++									{
++										num6 = 50 - WorldGen.genRand.Next(3);
++									}
++									for (int m = k; m < k + num6; m++)
++									{
++										if (Main.tile[l, m].wall == 2)
++										{
++											Main.tile[l, m].wall = 40;
++										}
++										int type2 = (int)Main.tile[l, m].type;
++										if (type2 == 0 || type2 == 2 || type2 == 23 || type2 == 40 || type2 == 53)
++										{
++											Main.tile[l, m].type = 147;
++										}
++										else if (type2 == 1)
++										{
++											Main.tile[l, m].type = 161;
++										}
++									}
++								}
++							}
++							if (snowBottom < k)
++							{
++								snowBottom = k;
++							}
++						}
++					});
++			}
+ 			WorldGen.AddGenerationPass("Grass", delegate(GenerationProgress progress)
+ 				{
+ 					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.002); k++)
+@@ -5045,144 +5993,147 @@
+ 						}
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Jungle", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[11];
+-					float num = (float)(Main.maxTilesX / 4200);
+-					num *= 1.5f;
+-					float num2 = (float)WorldGen.genRand.Next(15, 30) * 0.01f;
+-					int num3;
+-					if (dungeonSide == -1)
+-					{
+-						num2 = 1f - num2;
+-						num3 = (int)((float)Main.maxTilesX * num2);
+-					}
+-					else
+-					{
+-						num3 = (int)((float)Main.maxTilesX * num2);
+-					}
+-					int num4 = (int)((double)Main.maxTilesY + Main.rockLayer) / 2;
+-					num3 += WorldGen.genRand.Next((int)(-100f * num), (int)(101f * num));
+-					num4 += WorldGen.genRand.Next((int)(-100f * num), (int)(101f * num));
+-					int num5 = num3;
+-					int num6 = num4;
+-					WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, (float)(dungeonSide * 3), 0f, false, true);
+-					int num7 = 0;
+-					while ((float)num7 < 6f * num)
+-					{
+-						WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(63, 65), false, 0f, 0f, false, true);
+-						num7++;
+-					}
+-					WorldGen.mudWall = true;
+-					progress.Set(0.15f);
+-					num3 += WorldGen.genRand.Next((int)(-250f * num), (int)(251f * num));
+-					num4 += WorldGen.genRand.Next((int)(-150f * num), (int)(151f * num));
+-					int num8 = num3;
+-					int num9 = num4;
+-					int num10 = num3;
+-					int num11 = num4;
+-					WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, 0f, 0f, false, true);
+-					WorldGen.mudWall = false;
+-					int num12 = 0;
+-					while ((float)num12 < 6f * num)
+-					{
+-						WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(65, 67), false, 0f, 0f, false, true);
+-						num12++;
+-					}
+-					WorldGen.mudWall = true;
+-					progress.Set(0.3f);
+-					num3 += WorldGen.genRand.Next((int)(-400f * num), (int)(401f * num));
+-					num4 += WorldGen.genRand.Next((int)(-150f * num), (int)(151f * num));
+-					int num13 = num3;
+-					int num14 = num4;
+-					WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, (float)(dungeonSide * -3), 0f, false, true);
+-					WorldGen.mudWall = false;
+-					int num15 = 0;
+-					while ((float)num15 < 6f * num)
+-					{
+-						WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(67, 69), false, 0f, 0f, false, true);
+-						num15++;
+-					}
+-					WorldGen.mudWall = true;
+-					progress.Set(0.45f);
+-					num3 = (num5 + num8 + num13) / 3;
+-					num4 = (num6 + num9 + num14) / 3;
+-					WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(400f * num), (int)(600f * num)), 10000, 59, false, 0f, -20f, true, true);
+-					WorldGen.JungleRunner(num3, num4);
+-					progress.Set(0.6f);
+-					WorldGen.mudWall = false;
+-					for (int k = 0; k < Main.maxTilesX / 4; k++)
+-					{
+-						num3 = WorldGen.genRand.Next(20, Main.maxTilesX - 20);
+-						num4 = WorldGen.genRand.Next((int)worldSurface + 10, Main.maxTilesY - 200);
+-						while (Main.tile[num3, num4].wall != 64 && Main.tile[num3, num4].wall != 15)
++			if (!Main.setting.NoJungle)
++			{
++				WorldGen.AddGenerationPass("Jungle", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[11];
++						float num = (float)(Main.maxTilesX / 4200);
++						num *= 1.5f;
++						float num2 = (float)WorldGen.genRand.Next(15, 30) * 0.01f;
++						int num3;
++						if (dungeonSide == -1)
++						{
++							num2 = 1f - num2;
++							num3 = (int)((float)Main.maxTilesX * num2);
++						}
++						else
++						{
++							num3 = (int)((float)Main.maxTilesX * num2);
++						}
++						int num4 = (int)((double)Main.maxTilesY + Main.rockLayer) / 2;
++						num3 += WorldGen.genRand.Next((int)(-100f * num), (int)(101f * num));
++						num4 += WorldGen.genRand.Next((int)(-100f * num), (int)(101f * num));
++						int num5 = num3;
++						int num6 = num4;
++						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, (float)(dungeonSide * 3), 0f, false, true);
++						int num7 = 0;
++						while ((float)num7 < 6f * num)
++						{
++							WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(63, 65), false, 0f, 0f, false, true);
++							num7++;
++						}
++						WorldGen.mudWall = true;
++						progress.Set(0.15f);
++						num3 += WorldGen.genRand.Next((int)(-250f * num), (int)(251f * num));
++						num4 += WorldGen.genRand.Next((int)(-150f * num), (int)(151f * num));
++						int num8 = num3;
++						int num9 = num4;
++						int num10 = num3;
++						int num11 = num4;
++						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, 0f, 0f, false, true);
++						WorldGen.mudWall = false;
++						int num12 = 0;
++						while ((float)num12 < 6f * num)
++						{
++							WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(65, 67), false, 0f, 0f, false, true);
++							num12++;
++						}
++						WorldGen.mudWall = true;
++						progress.Set(0.3f);
++						num3 += WorldGen.genRand.Next((int)(-400f * num), (int)(401f * num));
++						num4 += WorldGen.genRand.Next((int)(-150f * num), (int)(151f * num));
++						int num13 = num3;
++						int num14 = num4;
++						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(250f * num), (int)(500f * num)), WorldGen.genRand.Next(50, 150), 59, false, (float)(dungeonSide * -3), 0f, false, true);
++						WorldGen.mudWall = false;
++						int num15 = 0;
++						while ((float)num15 < 6f * num)
++						{
++							WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), num4 + WorldGen.genRand.Next(-(int)(125f * num), (int)(125f * num)), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 8), WorldGen.genRand.Next(67, 69), false, 0f, 0f, false, true);
++							num15++;
++						}
++						WorldGen.mudWall = true;
++						progress.Set(0.45f);
++						num3 = (num5 + num8 + num13) / 3;
++						num4 = (num6 + num9 + num14) / 3;
++						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next((int)(400f * num), (int)(600f * num)), 10000, 59, false, 0f, -20f, true, true);
++						WorldGen.JungleRunner(num3, num4);
++						progress.Set(0.6f);
++						WorldGen.mudWall = false;
++						for (int k = 0; k < Main.maxTilesX / 4; k++)
+ 						{
+ 							num3 = WorldGen.genRand.Next(20, Main.maxTilesX - 20);
+ 							num4 = WorldGen.genRand.Next((int)worldSurface + 10, Main.maxTilesY - 200);
+-						}
+-						WorldGen.MudWallRunner(num3, num4);
+-					}
+-					num3 = num10;
+-					num4 = num11;
+-					int num16 = 0;
+-					while ((float)num16 <= 20f * num)
+-					{
+-						progress.Set((60f + (float)num16 / num) * 0.01f);
+-						num3 += WorldGen.genRand.Next((int)(-5f * num), (int)(6f * num));
+-						num4 += WorldGen.genRand.Next((int)(-5f * num), (int)(6f * num));
+-						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(40, 100), WorldGen.genRand.Next(300, 500), 59, false, 0f, 0f, false, true);
+-						num16++;
+-					}
+-					int num17 = 0;
+-					while ((float)num17 <= 10f * num)
+-					{
+-						progress.Set((80f + (float)num17 / num * 2f) * 0.01f);
+-						num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
+-						num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
+-						while (num3 < 1 || num3 >= Main.maxTilesX - 1 || num4 < 1 || num4 >= Main.maxTilesY - 1 || Main.tile[num3, num4].type != 59)
+-						{
++							while (Main.tile[num3, num4].wall != 64 && Main.tile[num3, num4].wall != 15)
++							{
++								num3 = WorldGen.genRand.Next(20, Main.maxTilesX - 20);
++								num4 = WorldGen.genRand.Next((int)worldSurface + 10, Main.maxTilesY - 200);
++							}
++							WorldGen.MudWallRunner(num3, num4);
++						}
++						num3 = num10;
++						num4 = num11;
++						int num16 = 0;
++						while ((float)num16 <= 20f * num)
++						{
++							progress.Set((60f + (float)num16 / num) * 0.01f);
++							num3 += WorldGen.genRand.Next((int)(-5f * num), (int)(6f * num));
++							num4 += WorldGen.genRand.Next((int)(-5f * num), (int)(6f * num));
++							WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(40, 100), WorldGen.genRand.Next(300, 500), 59, false, 0f, 0f, false, true);
++							num16++;
++						}
++						int num17 = 0;
++						while ((float)num17 <= 10f * num)
++						{
++							progress.Set((80f + (float)num17 / num * 2f) * 0.01f);
+ 							num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
+ 							num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
+-						}
+-						int num18 = 0;
+-						while ((float)num18 < 8f * num)
+-						{
+-							num3 += WorldGen.genRand.Next(-30, 31);
+-							num4 += WorldGen.genRand.Next(-30, 31);
+-							int type = -1;
+-							if (WorldGen.genRand.Next(7) == 0)
+-							{
+-								type = -2;
+-							}
+-							WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(10, 20), WorldGen.genRand.Next(30, 70), type, false, 0f, 0f, false, true);
+-							num18++;
+-						}
+-						num17++;
+-					}
+-					int num19 = 0;
+-					while ((float)num19 <= 300f * num)
+-					{
+-						num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
+-						num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
+-						while (num3 < 1 || num3 >= Main.maxTilesX - 1 || num4 < 1 || num4 >= Main.maxTilesY - 1 || Main.tile[num3, num4].type != 59)
++							while (num3 < 1 || num3 >= Main.maxTilesX - 1 || num4 < 1 || num4 >= Main.maxTilesY - 1 || Main.tile[num3, num4].type != 59)
++							{
++								num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
++								num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
++							}
++							int num18 = 0;
++							while ((float)num18 < 8f * num)
++							{
++								num3 += WorldGen.genRand.Next(-30, 31);
++								num4 += WorldGen.genRand.Next(-30, 31);
++								int type = -1;
++								if (WorldGen.genRand.Next(7) == 0)
++								{
++									type = -2;
++								}
++								WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(10, 20), WorldGen.genRand.Next(30, 70), type, false, 0f, 0f, false, true);
++								num18++;
++							}
++							num17++;
++						}
++						int num19 = 0;
++						while ((float)num19 <= 300f * num)
+ 						{
+ 							num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
+ 							num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
+-						}
+-						WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(4, 10), WorldGen.genRand.Next(5, 30), 1, false, 0f, 0f, false, true);
+-						if (WorldGen.genRand.Next(4) == 0)
+-						{
+-							int type2 = WorldGen.genRand.Next(63, 69);
+-							WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-1, 2), num4 + WorldGen.genRand.Next(-1, 2), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(4, 8), type2, false, 0f, 0f, false, true);
+-						}
+-						num19++;
+-					}
+-				});
++							while (num3 < 1 || num3 >= Main.maxTilesX - 1 || num4 < 1 || num4 >= Main.maxTilesY - 1 || Main.tile[num3, num4].type != 59)
++							{
++								num3 = num10 + WorldGen.genRand.Next((int)(-600f * num), (int)(600f * num));
++								num4 = num11 + WorldGen.genRand.Next((int)(-200f * num), (int)(200f * num));
++							}
++							WorldGen.TileRunner(num3, num4, (double)WorldGen.genRand.Next(4, 10), WorldGen.genRand.Next(5, 30), 1, false, 0f, 0f, false, true);
++							if (WorldGen.genRand.Next(4) == 0)
++							{
++								int type2 = WorldGen.genRand.Next(63, 69);
++								WorldGen.TileRunner(num3 + WorldGen.genRand.Next(-1, 2), num4 + WorldGen.genRand.Next(-1, 2), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(4, 8), type2, false, 0f, 0f, false, true);
++							}
++							num19++;
++						}
++					});
++			}
+ 			WorldGen.AddGenerationPass("Marble", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[80];
+ 					float num = (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f;
+-					int num2 = (int)((float)WorldGen.genRand.Next(10, 15) * num);
++					int num2 = (int)((float)WorldGen.genRand.Next(10, 15) * num * Main.setting.MarbleCaveMultiplier);
+ 					float num3 = (float)(Main.maxTilesX - 160) / (float)num2;
+ 					int k = 0;
+ 					while (k < num2)
+@@ -5200,7 +6151,7 @@
+ 				{
+ 					progress.Message = Lang.gen[81];
+ 					float num = (float)Main.maxTilesX / 4200f;
+-					int num2 = (int)((float)WorldGen.genRand.Next(8, 14) * num);
++					int num2 = (int)((float)WorldGen.genRand.Next(8, 14) * num * Main.setting.GraniteCaveMultiplier);
+ 					float num3 = (float)(Main.maxTilesX - 200) / (float)num2;
+ 					int k = 0;
+ 					while (k < num2)
+@@ -5246,46 +6197,50 @@
+ 						}
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Full Desert", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[78];
+-					int num = dungeonSide;
+-					int num2 = Main.maxTilesX / 2;
+-					int num3 = WorldGen.genRand.Next(num2) / 8;
+-					num3 += num2 / 8;
+-					int x = num2 + num3 * -num;
+-					int num4 = 0;
+-					while (!Biomes<DesertBiome>.Place(new Point(x, (int)worldSurface), structures))
+-					{
+-						num3 = WorldGen.genRand.Next(num2) / 2;
++			if (!Main.setting.NoAnthill)
++			{
++				WorldGen.AddGenerationPass("Full Desert", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[78];
++						int num = dungeonSide;
++						int num2 = Main.maxTilesX / 2;
++						int num3 = WorldGen.genRand.Next(num2) / 8;
+ 						num3 += num2 / 8;
+-						x = num2 + num3 * -num;
+-						if (++num4 > 1000)
+-						{
+-							num *= -1;
+-							num4 = 0;
+-						}
+-					}
+-				});
++						int x = num2 + num3 * -num;
++						int num4 = 0;
++						while (!Biomes<DesertBiome>.Place(new Point(x, (int)worldSurface), structures))
++						{
++							num3 = WorldGen.genRand.Next(num2) / 2;
++							num3 += num2 / 8;
++							x = num2 + num3 * -num;
++							if (++num4 > 1000)
++							{
++								num *= -1;
++								num4 = 0;
++							}
++						}
++					});
++			}
++			// TODO Floating Island
+ 			WorldGen.AddGenerationPass("Floating Islands", delegate(GenerationProgress progress)
+ 				{
+ 					WorldGen.numIslandHouses = 0;
+ 					WorldGen.houseCount = 0;
+ 					progress.Message = Lang.gen[12];
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.0008) + skyLakes; k++)
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.0008 * Main.setting.SkyIslandMultiplier) + skyLakes; k++)
+ 					{
+ 						int num = 1000;
+-						int num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.1), (int)((double)Main.maxTilesX * 0.9));
++						int cloudX = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.1), (int)((double)Main.maxTilesX * 0.9));
+ 						while (--num > 0)
+ 						{
+ 							bool flag2 = true;
+-							while (num2 > Main.maxTilesX / 2 - 80 && num2 < Main.maxTilesX / 2 + 80)
+-							{
+-								num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.1), (int)((double)Main.maxTilesX * 0.9));
++							while (cloudX > Main.maxTilesX / 2 - 80 && cloudX < Main.maxTilesX / 2 + 80)
++							{
++								cloudX = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.1), (int)((double)Main.maxTilesX * 0.9));
+ 							}
+ 							for (int l = 0; l < WorldGen.numIslandHouses; l++)
+ 							{
+-								if (num2 > WorldGen.fihX[l] - 180 && num2 < WorldGen.fihX[l] + 180)
++								if (cloudX > WorldGen.fihX[l] - 180 && cloudX < WorldGen.fihX[l] + 180)
+ 								{
+ 									flag2 = false;
+ 									break;
+@@ -5298,7 +6253,7 @@
+ 								int num4 = 200;
+ 								while ((double)num4 < Main.worldSurface)
+ 								{
+-									if (Main.tile[num2, num4].active())
++									if (Main.tile[cloudX, num4].active())
+ 									{
+ 										num3 = num4;
+ 										flag2 = true;
+@@ -5308,19 +6263,29 @@
+ 								}
+ 								if (flag2)
+ 								{
+-									int num5 = WorldGen.genRand.Next(90, num3 - 100);
+-									num5 = Math.Min(num5, (int)WorldGen.worldSurfaceLow - 50);
++									int cloudY = WorldGen.genRand.Next(90, num3 - 100);
++									cloudY = Math.Min(cloudY, (int)WorldGen.worldSurfaceLow - 50);
++									if (cloudY < 30)
++									{
++										continue;
++									}
+ 									if (k < skyLakes)
+ 									{
+ 										WorldGen.skyLake[WorldGen.numIslandHouses] = true;
+-										WorldGen.CloudLake(num2, num5);
++										WorldGen.CloudLake(cloudX, cloudY);
+ 									}
+ 									else
+ 									{
+-										WorldGen.CloudIsland(num2, num5);
+-									}
+-									WorldGen.fihX[WorldGen.numIslandHouses] = num2;
+-									WorldGen.fihY[WorldGen.numIslandHouses] = num5;
++										try
++										{
++											WorldGen.CloudIsland(cloudX, cloudY);
++										}
++										catch
++										{
++										}
++									}
++									WorldGen.fihX[WorldGen.numIslandHouses] = cloudX;
++									WorldGen.fihY[WorldGen.numIslandHouses] = cloudY;
+ 									WorldGen.numIslandHouses++;
+ 								}
+ 							}
+@@ -5466,61 +6431,185 @@
+ 			WorldGen.AddGenerationPass("Shinies", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[16];
+-					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 6E-05); k++)
+-					{
++					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 6E-05 * Main.setting.PercCopp); k++)
++					{
++						if (Main.setting.IsCopper == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								copper = 7;
++							}
++							else
++							{
++								copper = 166;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, (int)worldSurfaceHigh), (double)WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(2, 6), copper, false, 0f, 0f, false, true);
+ 					}
+-					for (int l = 0; l < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 8E-05); l++)
+-					{
++					for (int l = 0; l < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 8E-05 * Main.setting.PercCopp); l++)
++					{
++						if (Main.setting.IsCopper == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								copper = 7;
++							}
++							else
++							{
++								copper = 166;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)worldSurfaceHigh, (int)rockLayerHigh), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(3, 7), copper, false, 0f, 0f, false, true);
+ 					}
+-					for (int m = 0; m < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0002); m++)
+-					{
++					for (int m = 0; m < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0002 * Main.setting.PercCopp); m++)
++					{
++						if (Main.setting.IsCopper == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								copper = 7;
++							}
++							else
++							{
++								copper = 166;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), copper, false, 0f, 0f, false, true);
+ 					}
+-					for (int n = 0; n < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05); n++)
+-					{
++					for (int n = 0; n < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05 * Main.setting.PercIron); n++)
++					{
++						if (Main.setting.IsIron == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								iron = 6;
++							}
++							else
++							{
++								iron = 167;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)WorldGen.worldSurfaceLow, (int)worldSurfaceHigh), (double)WorldGen.genRand.Next(3, 7), WorldGen.genRand.Next(2, 5), iron, false, 0f, 0f, false, true);
+ 					}
+-					for (int num = 0; num < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 8E-05); num++)
+-					{
++					for (int num = 0; num < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 8E-05 * Main.setting.PercIron); num++)
++					{
++						if (Main.setting.IsIron == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								iron = 6;
++							}
++							else
++							{
++								iron = 167;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)worldSurfaceHigh, (int)rockLayerHigh), (double)WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(3, 6), iron, false, 0f, 0f, false, true);
+ 					}
+-					for (int num2 = 0; num2 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0002); num2++)
+-					{
++					for (int num2 = 0; num2 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0002 * Main.setting.PercIron); num2++)
++					{
++						if (Main.setting.IsIron == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								iron = 6;
++							}
++							else
++							{
++								iron = 167;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), iron, false, 0f, 0f, false, true);
+ 					}
+-					for (int num3 = 0; num3 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2.6E-05); num3++)
+-					{
++					for (int num3 = 0; num3 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2.6E-05 * Main.setting.PercSilv); num3++)
++					{
++						if (Main.setting.IsSilver == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								silver = 9;
++							}
++							else
++							{
++								silver = 168;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)worldSurfaceHigh, (int)rockLayerHigh), (double)WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(3, 6), silver, false, 0f, 0f, false, true);
+ 					}
+-					for (int num4 = 0; num4 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00015); num4++)
+-					{
++					for (int num4 = 0; num4 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00015 * Main.setting.PercSilv); num4++)
++					{
++						if (Main.setting.IsSilver == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								silver = 9;
++							}
++							else
++							{
++								silver = 168;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), silver, false, 0f, 0f, false, true);
+ 					}
+-					for (int num5 = 0; num5 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00017); num5++)
+-					{
++					for (int num5 = 0; num5 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00017 * Main.setting.PercSilv); num5++)
++					{
++						if (Main.setting.IsSilver == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								silver = 9;
++							}
++							else
++							{
++								silver = 168;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(0, (int)WorldGen.worldSurfaceLow), (double)WorldGen.genRand.Next(4, 9), WorldGen.genRand.Next(4, 8), silver, false, 0f, 0f, false, true);
+ 					}
+-					for (int num6 = 0; num6 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00012); num6++)
+-					{
++					for (int num6 = 0; num6 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00012 * Main.setting.PercGold); num6++)
++					{
++						if (Main.setting.IsGold == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								gold = 8;
++							}
++							else
++							{
++								gold = 169;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(4, 8), gold, false, 0f, 0f, false, true);
+ 					}
+-					for (int num7 = 0; num7 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00012); num7++)
+-					{
++					for (int num7 = 0; num7 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00012 * Main.setting.PercGold); num7++)
++					{
++						if (Main.setting.IsGold == 3)
++						{
++							if (WorldGen.genRand.Next(2) == 0)
++							{
++								gold = 8;
++							}
++							else
++							{
++								gold = 169;
++							}
++						}
+ 						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(0, (int)WorldGen.worldSurfaceLow - 20), (double)WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(4, 8), gold, false, 0f, 0f, false, true);
+ 					}
+-					if (WorldGen.crimson)
+-					{
+-						for (int num8 = 0; num8 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05); num8++)
+-						{
+-							WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 4), WorldGen.genRand.Next(3, 6), 204, false, 0f, 0f, false, true);
+-						}
+-						return;
+-					}
+-					for (int num9 = 0; num9 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05); num9++)
+-					{
+-						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 4), WorldGen.genRand.Next(3, 6), 22, false, 0f, 0f, false, true);
++					if ((WorldGen.crimson || Main.setting.IsCorruption == 3) && Main.setting.IsCorruption != 5)
++					{
++						for (int num8 = 0; num8 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 * Main.setting.PercDemonite); num8++)
++						{
++							WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 4), WorldGen.genRand.Next(3, 6), TileID.Crimtane /*204*/, false, 0f, 0f, false, true);
++						}
++						//	return;
++					}
++					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
++					{ 
++						for (int num9 = 0; num9 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 * Main.setting.PercDemonite); num9++)
++						{
++							WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next((int)rockLayerLow, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 4), WorldGen.genRand.Next(3, 6), TileID.Demonite /*22*/, false, 0f, 0f, false, true);
++						}
+ 					}
+ 				});
+ 			WorldGen.AddGenerationPass("Webs", delegate(GenerationProgress progress)
+@@ -5568,134 +6657,138 @@
+ 						;
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Underworld", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[18];
+-					progress.Set(0f);
+-					int num = Main.maxTilesY - WorldGen.genRand.Next(150, 190);
+-					for (int k = 0; k < Main.maxTilesX; k++)
+-					{
+-						num += WorldGen.genRand.Next(-3, 4);
+-						if (num < Main.maxTilesY - 190)
+-						{
+-							num = Main.maxTilesY - 190;
+-						}
+-						if (num > Main.maxTilesY - 160)
+-						{
+-							num = Main.maxTilesY - 160;
+-						}
+-						for (int l = num - 20 - WorldGen.genRand.Next(3); l < Main.maxTilesY; l++)
+-						{
+-							if (l >= num)
+-							{
+-								Main.tile[k, l].active(false);
+-								Main.tile[k, l].lava(false);
+-								Main.tile[k, l].liquid = 0;
+-							}
+-							else
+-							{
+-								Main.tile[k, l].type = 57;
+-							}
+-						}
+-					}
+-					int num2 = Main.maxTilesY - WorldGen.genRand.Next(40, 70);
+-					for (int m = 10; m < Main.maxTilesX - 10; m++)
+-					{
+-						num2 += WorldGen.genRand.Next(-10, 11);
+-						if (num2 > Main.maxTilesY - 60)
+-						{
+-							num2 = Main.maxTilesY - 60;
+-						}
+-						if (num2 < Main.maxTilesY - 100)
+-						{
+-							num2 = Main.maxTilesY - 120;
+-						}
+-						for (int n = num2; n < Main.maxTilesY - 10; n++)
+-						{
+-							if (!Main.tile[m, n].active())
+-							{
+-								Main.tile[m, n].lava(true);
+-								Main.tile[m, n].liquid = 255;
+-							}
+-						}
+-					}
+-					for (int num3 = 0; num3 < Main.maxTilesX; num3++)
+-					{
+-						if (WorldGen.genRand.Next(50) == 0)
+-						{
+-							int num4 = Main.maxTilesY - 65;
+-							while (!Main.tile[num3, num4].active() && num4 > Main.maxTilesY - 135)
+-							{
+-								num4--;
+-							}
+-							WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), num4 + WorldGen.genRand.Next(20, 50), (double)WorldGen.genRand.Next(15, 20), 1000, 57, true, 0f, (float)WorldGen.genRand.Next(1, 3), true, true);
+-						}
+-					}
+-					Liquid.QuickWater(-2, -1, -1);
+-					for (int num5 = 0; num5 < Main.maxTilesX; num5++)
+-					{
+-						float num6 = (float)num5 / (float)(Main.maxTilesX - 1);
+-						progress.Set(num6 / 2f + 0.5f);
+-						if (WorldGen.genRand.Next(13) == 0)
+-						{
+-							int num7 = Main.maxTilesY - 65;
+-							while ((Main.tile[num5, num7].liquid > 0 || Main.tile[num5, num7].active()) && num7 > Main.maxTilesY - 140)
+-							{
+-								num7--;
+-							}
+-							WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)WorldGen.genRand.Next(5, 30), 1000, 57, true, 0f, (float)WorldGen.genRand.Next(1, 3), true, true);
+-							float num8 = (float)WorldGen.genRand.Next(1, 3);
+-							if (WorldGen.genRand.Next(3) == 0)
+-							{
+-								num8 *= 0.5f;
+-							}
+-							if (WorldGen.genRand.Next(2) == 0)
+-							{
+-								WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)((int)((float)WorldGen.genRand.Next(5, 15) * num8)), (int)((float)WorldGen.genRand.Next(10, 15) * num8), 57, true, 1f, 0.3f, false, true);
+-							}
+-							if (WorldGen.genRand.Next(2) == 0)
+-							{
+-								num8 = (float)WorldGen.genRand.Next(1, 3);
+-								WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)((int)((float)WorldGen.genRand.Next(5, 15) * num8)), (int)((float)WorldGen.genRand.Next(10, 15) * num8), 57, true, -1f, 0.3f, false, true);
+-							}
+-							WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-10, 10), num7 + WorldGen.genRand.Next(-10, 10), (double)WorldGen.genRand.Next(5, 15), WorldGen.genRand.Next(5, 10), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
+-							if (WorldGen.genRand.Next(3) == 0)
+-							{
+-								WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-10, 10), num7 + WorldGen.genRand.Next(-10, 10), (double)WorldGen.genRand.Next(10, 30), WorldGen.genRand.Next(10, 20), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
+-							}
+-							if (WorldGen.genRand.Next(5) == 0)
+-							{
+-								WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-15, 15), num7 + WorldGen.genRand.Next(-15, 10), (double)WorldGen.genRand.Next(15, 30), WorldGen.genRand.Next(5, 20), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
+-							}
+-						}
+-					}
+-					for (int num9 = 0; num9 < Main.maxTilesX; num9++)
+-					{
+-						WorldGen.TileRunner(WorldGen.genRand.Next(20, Main.maxTilesX - 20), WorldGen.genRand.Next(Main.maxTilesY - 180, Main.maxTilesY - 10), (double)WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(2, 7), -2, false, 0f, 0f, false, true);
+-					}
+-					for (int num10 = 0; num10 < Main.maxTilesX; num10++)
+-					{
+-						if (!Main.tile[num10, Main.maxTilesY - 145].active())
+-						{
+-							Main.tile[num10, Main.maxTilesY - 145].liquid = 255;
+-							Main.tile[num10, Main.maxTilesY - 145].lava(true);
+-						}
+-						if (!Main.tile[num10, Main.maxTilesY - 144].active())
+-						{
+-							Main.tile[num10, Main.maxTilesY - 144].liquid = 255;
+-							Main.tile[num10, Main.maxTilesY - 144].lava(true);
+-						}
+-					}
+-					for (int num11 = 0; num11 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008); num11++)
+-					{
+-						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(Main.maxTilesY - 140, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(3, 7), 58, false, 0f, 0f, false, true);
+-					}
+-					WorldGen.AddHellHouses();
+-				});
++			if (!Main.setting.NoUnderworld)
++			{
++				WorldGen.AddGenerationPass("Underworld", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[18];
++						progress.Set(0f);
++						int num = Main.maxTilesY - WorldGen.genRand.Next(150, 190);
++						for (int k = 0; k < Main.maxTilesX; k++)
++						{
++							num += WorldGen.genRand.Next(-3, 4);
++							if (num < Main.maxTilesY - 190)
++							{
++								num = Main.maxTilesY - 190;
++							}
++							if (num > Main.maxTilesY - 160)
++							{
++								num = Main.maxTilesY - 160;
++							}
++							for (int l = num - 20 - WorldGen.genRand.Next(3); l < Main.maxTilesY; l++)
++							{
++								if (l >= num)
++								{
++									Main.tile[k, l].active(false);
++									Main.tile[k, l].lava(false);
++									Main.tile[k, l].liquid = 0;
++								}
++								else
++								{
++									Main.tile[k, l].type = 57;
++								}
++							}
++						}
++						int num2 = Main.maxTilesY - WorldGen.genRand.Next(40, 70);
++						for (int m = 10; m < Main.maxTilesX - 10; m++)
++						{
++							num2 += WorldGen.genRand.Next(-10, 11);
++							if (num2 > Main.maxTilesY - 60)
++							{
++								num2 = Main.maxTilesY - 60;
++							}
++							if (num2 < Main.maxTilesY - 100)
++							{
++								num2 = Main.maxTilesY - 120;
++							}
++							for (int n = num2; n < Main.maxTilesY - 10; n++)
++							{
++								if (!Main.tile[m, n].active())
++								{
++									Main.tile[m, n].lava(true);
++									Main.tile[m, n].liquid = 255;
++								}
++							}
++						}
++						for (int num3 = 0; num3 < Main.maxTilesX; num3++)
++						{
++							if (WorldGen.genRand.Next(50) == 0)
++							{
++								int num4 = Main.maxTilesY - 65;
++								while (!Main.tile[num3, num4].active() && num4 > Main.maxTilesY - 135)
++								{
++									num4--;
++								}
++								//TileID.Ash
++								WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), num4 + WorldGen.genRand.Next(20, 50), (double)WorldGen.genRand.Next(15, 20), 1000, 57, true, 0f, (float)WorldGen.genRand.Next(1, 3), true, true);
++							}
++						}
++						Liquid.QuickWater(-2, -1, -1);
++						for (int num5 = 0; num5 < Main.maxTilesX; num5++)
++						{
++							float num6 = (float)num5 / (float)(Main.maxTilesX - 1);
++							progress.Set(num6 / 2f + 0.5f);
++							if (WorldGen.genRand.Next(13) == 0)
++							{
++								int num7 = Main.maxTilesY - 65;
++								while ((Main.tile[num5, num7].liquid > 0 || Main.tile[num5, num7].active()) && num7 > Main.maxTilesY - 140)
++								{
++									num7--;
++								}
++								WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)WorldGen.genRand.Next(5, 30), 1000, 57, true, 0f, (float)WorldGen.genRand.Next(1, 3), true, true);
++								float num8 = (float)WorldGen.genRand.Next(1, 3);
++								if (WorldGen.genRand.Next(3) == 0)
++								{
++									num8 *= 0.5f;
++								}
++								if (WorldGen.genRand.Next(2) == 0)
++								{
++									WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)((int)((float)WorldGen.genRand.Next(5, 15) * num8)), (int)((float)WorldGen.genRand.Next(10, 15) * num8), 57, true, 1f, 0.3f, false, true);
++								}
++								if (WorldGen.genRand.Next(2) == 0)
++								{
++									num8 = (float)WorldGen.genRand.Next(1, 3);
++									WorldGen.TileRunner(num5, num7 - WorldGen.genRand.Next(2, 5), (double)((int)((float)WorldGen.genRand.Next(5, 15) * num8)), (int)((float)WorldGen.genRand.Next(10, 15) * num8), 57, true, -1f, 0.3f, false, true);
++								}
++								WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-10, 10), num7 + WorldGen.genRand.Next(-10, 10), (double)WorldGen.genRand.Next(5, 15), WorldGen.genRand.Next(5, 10), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
++								if (WorldGen.genRand.Next(3) == 0)
++								{
++									WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-10, 10), num7 + WorldGen.genRand.Next(-10, 10), (double)WorldGen.genRand.Next(10, 30), WorldGen.genRand.Next(10, 20), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
++								}
++								if (WorldGen.genRand.Next(5) == 0)
++								{
++									WorldGen.TileRunner(num5 + WorldGen.genRand.Next(-15, 15), num7 + WorldGen.genRand.Next(-15, 10), (double)WorldGen.genRand.Next(15, 30), WorldGen.genRand.Next(5, 20), -2, false, (float)WorldGen.genRand.Next(-1, 3), (float)WorldGen.genRand.Next(-1, 3), false, true);
++								}
++							}
++						}
++						for (int num9 = 0; num9 < Main.maxTilesX; num9++)
++						{
++							WorldGen.TileRunner(WorldGen.genRand.Next(20, Main.maxTilesX - 20), WorldGen.genRand.Next(Main.maxTilesY - 180, Main.maxTilesY - 10), (double)WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(2, 7), -2, false, 0f, 0f, false, true);
++						}
++						for (int num10 = 0; num10 < Main.maxTilesX; num10++)
++						{
++							if (!Main.tile[num10, Main.maxTilesY - 145].active())
++							{
++								Main.tile[num10, Main.maxTilesY - 145].liquid = 255;
++								Main.tile[num10, Main.maxTilesY - 145].lava(true);
++							}
++							if (!Main.tile[num10, Main.maxTilesY - 144].active())
++							{
++								Main.tile[num10, Main.maxTilesY - 144].liquid = 255;
++								Main.tile[num10, Main.maxTilesY - 144].lava(true);
++							}
++						}
++						for (int num11 = 0; num11 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PercHellstone); num11++)
++						{
++							WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(Main.maxTilesY - 140, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(3, 7), 58, false, 0f, 0f, false, true);
++						}
++						WorldGen.AddHellHouses();
++					});
++			}
+ 			WorldGen.AddGenerationPass("Lakes", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[19];
+-					int num = WorldGen.genRand.Next(2, (int)((double)Main.maxTilesX * 0.005));
++					int num = WorldGen.genRand.Next(2, (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier));
+ 					for (int k = 0; k < num; k++)
+ 					{
+ 						float value = (float)k / (float)num;
+@@ -5715,6 +6808,7 @@
+ 				});
+ 			WorldGen.AddGenerationPass("Dungeon", delegate(GenerationProgress progress)
+ 				{
++					progress.Message = Lang.gen[58];
+ 					int x;
+ 					if (dungeonSide == -1)
+ 					{
+@@ -5727,15 +6821,19 @@
+ 						dungeonSide = 1;
+ 					}
+ 					int y = (int)((Main.worldSurface + Main.rockLayer) / 2.0) + WorldGen.genRand.Next(-200, 200);
+-					WorldGen.MakeDungeon(x, y);
++					if (!Main.setting.NoDungeon)
++					{
++						//WorldGen.MakeDungeon(100, y, progress);
++						WorldGen.MakeDungeon(x, y, progress);
++					}
+ 				});
+ 			WorldGen.AddGenerationPass("Corruption", delegate(GenerationProgress progress)
+ 				{
+-					if (WorldGen.crimson)
++					if ((WorldGen.crimson || Main.setting.IsCorruption == 3) && Main.setting.IsCorruption != 5)
+ 					{
+ 						progress.Message = Lang.gen[72];
+ 						int num = 0;
+-						while ((double)num < (double)Main.maxTilesX * 0.00045)
++						while ((double)num < (double)Main.maxTilesX * 0.00045) // todo, add crimson multiplier?
+ 						{
+ 							float value = (float)((double)num / ((double)Main.maxTilesX * 0.00045));
+ 							progress.Set(value);
+@@ -5756,6 +6854,25 @@
+ 								else
+ 								{
+ 									num2 = WorldGen.genRand.Next(320, Main.maxTilesX - 600);
++								}
++								if (Main.setting.CrimsonCorruptionAvoidJungle)
++								{
++									if (dungeonSide == -1) // dungeon on left side, so place on left side
++									{
++										if (num2 > Main.maxTilesX / 2)
++										{
++											flag2 = false;
++											continue;
++										}
++									}
++									else
++									{
++										if (num2 < Main.maxTilesX / 2)
++										{
++											flag2 = false;
++											continue;
++										}
++									}
+ 								}
+ 								num3 = num2 - WorldGen.genRand.Next(200) - 100;
+ 								num4 = num2 + WorldGen.genRand.Next(200) + 100;
+@@ -5952,230 +7069,252 @@
+ 							}
+ 							num++;
+ 						}
+-						return;
+-					}
+-					progress.Message = Lang.gen[20];
+-					int num19 = 0;
+-					while ((double)num19 < (double)Main.maxTilesX * 0.00045)
+-					{
+-						float value2 = (float)((double)num19 / ((double)Main.maxTilesX * 0.00045));
+-						progress.Set(value2);
+-						bool flag5 = false;
+-						int num20 = 0;
+-						int num21 = 0;
+-						int num22 = 0;
+-						while (!flag5)
+-						{
+-							int num23 = 0;
+-							flag5 = true;
+-							int num24 = Main.maxTilesX / 2;
+-							int num25 = 200;
+-							num20 = WorldGen.genRand.Next(320, Main.maxTilesX - 320);
+-							num21 = num20 - WorldGen.genRand.Next(200) - 100;
+-							num22 = num20 + WorldGen.genRand.Next(200) + 100;
+-							if (num21 < 285)
+-							{
+-								num21 = 285;
+-							}
+-							if (num22 > Main.maxTilesX - 285)
+-							{
+-								num22 = Main.maxTilesX - 285;
+-							}
+-							if (num20 > num24 - num25 && num20 < num24 + num25)
+-							{
+-								flag5 = false;
+-							}
+-							if (num21 > num24 - num25 && num21 < num24 + num25)
+-							{
+-								flag5 = false;
+-							}
+-							if (num22 > num24 - num25 && num22 < num24 + num25)
+-							{
+-								flag5 = false;
+-							}
+-							if (num20 > WorldGen.UndergroundDesertLocation.X && num20 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
+-							{
+-								flag5 = false;
+-							}
+-							if (num21 > WorldGen.UndergroundDesertLocation.X && num21 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
+-							{
+-								flag5 = false;
+-							}
+-							if (num22 > WorldGen.UndergroundDesertLocation.X && num22 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
+-							{
+-								flag5 = false;
+-							}
+-							for (int num26 = num21; num26 < num22; num26++)
+-							{
+-								for (int num27 = 0; num27 < (int)Main.worldSurface; num27 += 5)
+-								{
+-									if (Main.tile[num26, num27].active() && Main.tileDungeon[(int)Main.tile[num26, num27].type])
+-									{
+-										flag5 = false;
+-										break;
+-									}
+-									if (!flag5)
+-									{
+-										break;
+-									}
+-								}
+-							}
+-							if (num23 < 200 && WorldGen.JungleX > num21 && WorldGen.JungleX < num22)
+-							{
+-								num23++;
+-								flag5 = false;
+-							}
+-						}
+-						int num28 = 0;
+-						for (int num29 = num21; num29 < num22; num29++)
+-						{
+-							if (num28 > 0)
+-							{
+-								num28--;
+-							}
+-							if (num29 == num20 || num28 == 0)
+-							{
+-								int num30 = (int)WorldGen.worldSurfaceLow;
+-								while ((double)num30 < Main.worldSurface - 1.0)
+-								{
+-									if (Main.tile[num29, num30].active() || Main.tile[num29, num30].wall > 0)
+-									{
+-										if (num29 == num20)
++						//return;
++					}
++					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
++					{
++						progress.Message = Lang.gen[20];
++						int num19 = 0;
++						while ((double)num19 < (double)Main.maxTilesX * 0.00045)
++						{
++							float value2 = (float)((double)num19 / ((double)Main.maxTilesX * 0.00045));
++							progress.Set(value2);
++							bool flag5 = false;
++							int num20 = 0;
++							int num21 = 0;
++							int num22 = 0;
++							while (!flag5)
++							{
++								int num23 = 0;
++								flag5 = true;
++								int num24 = Main.maxTilesX / 2;
++								int num25 = 200;
++								num20 = WorldGen.genRand.Next(320, Main.maxTilesX - 320);
++								num21 = num20 - WorldGen.genRand.Next(200) - 100;
++								num22 = num20 + WorldGen.genRand.Next(200) + 100;
++								if (Main.setting.CrimsonCorruptionAvoidJungle)
++								{
++									if (dungeonSide == -1) // dungeon on left side, so place on left side
++									{
++										if (num20 > Main.maxTilesX / 2)
+ 										{
+-											num28 = 20;
+-											WorldGen.ChasmRunner(num29, num30, WorldGen.genRand.Next(150) + 150, true);
++											flag5 = false;
++											continue;
++										}
++									}
++									else
++									{
++										if (num20 < Main.maxTilesX / 2)
++										{
++											flag5 = false;
++											continue;
++										}
++									}
++								}
++								if (num21 < 285)
++								{
++									num21 = 285;
++								}
++								if (num22 > Main.maxTilesX - 285)
++								{
++									num22 = Main.maxTilesX - 285;
++								}
++								if (num20 > num24 - num25 && num20 < num24 + num25)
++								{
++									flag5 = false;
++								}
++								if (num21 > num24 - num25 && num21 < num24 + num25)
++								{
++									flag5 = false;
++								}
++								if (num22 > num24 - num25 && num22 < num24 + num25)
++								{
++									flag5 = false;
++								}
++								if (num20 > WorldGen.UndergroundDesertLocation.X && num20 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
++								{
++									flag5 = false;
++								}
++								if (num21 > WorldGen.UndergroundDesertLocation.X && num21 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
++								{
++									flag5 = false;
++								}
++								if (num22 > WorldGen.UndergroundDesertLocation.X && num22 < WorldGen.UndergroundDesertLocation.X + WorldGen.UndergroundDesertLocation.Width)
++								{
++									flag5 = false;
++								}
++								for (int num26 = num21; num26 < num22; num26++)
++								{
++									for (int num27 = 0; num27 < (int)Main.worldSurface; num27 += 5)
++									{
++										if (Main.tile[num26, num27].active() && Main.tileDungeon[(int)Main.tile[num26, num27].type])
++										{
++											flag5 = false;
+ 											break;
+ 										}
+-										if (WorldGen.genRand.Next(35) == 0 && num28 == 0)
++										if (!flag5)
+ 										{
+-											num28 = 30;
+-											bool makeOrb = true;
+-											WorldGen.ChasmRunner(num29, num30, WorldGen.genRand.Next(50) + 50, makeOrb);
+ 											break;
+ 										}
++									}
++								}
++								if (num23 < 200 && WorldGen.JungleX > num21 && WorldGen.JungleX < num22)
++								{
++									num23++;
++									flag5 = false;
++								}
++							}
++							int num28 = 0;
++							for (int num29 = num21; num29 < num22; num29++)
++							{
++								if (num28 > 0)
++								{
++									num28--;
++								}
++								if (num29 == num20 || num28 == 0)
++								{
++									int num30 = (int)WorldGen.worldSurfaceLow;
++									while ((double)num30 < Main.worldSurface - 1.0)
++									{
++										if (Main.tile[num29, num30].active() || Main.tile[num29, num30].wall > 0)
++										{
++											if (num29 == num20)
++											{
++												num28 = 20;
++												WorldGen.ChasmRunner(num29, num30, WorldGen.genRand.Next(150) + 150, true);
++												break;
++											}
++											if (WorldGen.genRand.Next(35) == 0 && num28 == 0)
++											{
++												num28 = 30;
++												bool makeOrb = true;
++												WorldGen.ChasmRunner(num29, num30, WorldGen.genRand.Next(50) + 50, makeOrb);
++												break;
++											}
++											break;
++										}
++										else
++										{
++											num30++;
++										}
++									}
++								}
++								int num31 = (int)WorldGen.worldSurfaceLow;
++								while ((double)num31 < Main.worldSurface - 1.0)
++								{
++									if (Main.tile[num29, num31].active())
++									{
++										int num32 = num31 + WorldGen.genRand.Next(10, 14);
++										for (int num33 = num31; num33 < num32; num33++)
++										{
++											if ((Main.tile[num29, num33].type == 59 || Main.tile[num29, num33].type == 60) && num29 >= num21 + WorldGen.genRand.Next(5) && num29 < num22 - WorldGen.genRand.Next(5))
++											{
++												Main.tile[num29, num33].type = 0;
++											}
++										}
+ 										break;
+ 									}
+-									else
+-									{
+-										num30++;
+-									}
+-								}
+-							}
+-							int num31 = (int)WorldGen.worldSurfaceLow;
+-							while ((double)num31 < Main.worldSurface - 1.0)
+-							{
+-								if (Main.tile[num29, num31].active())
+-								{
+-									int num32 = num31 + WorldGen.genRand.Next(10, 14);
+-									for (int num33 = num31; num33 < num32; num33++)
+-									{
+-										if ((Main.tile[num29, num33].type == 59 || Main.tile[num29, num33].type == 60) && num29 >= num21 + WorldGen.genRand.Next(5) && num29 < num22 - WorldGen.genRand.Next(5))
++									num31++;
++								}
++							}
++							double num34 = Main.worldSurface + 40.0;
++							for (int num35 = num21; num35 < num22; num35++)
++							{
++								num34 += (double)WorldGen.genRand.Next(-2, 3);
++								if (num34 < Main.worldSurface + 30.0)
++								{
++									num34 = Main.worldSurface + 30.0;
++								}
++								if (num34 > Main.worldSurface + 50.0)
++								{
++									num34 = Main.worldSurface + 50.0;
++								}
++								i2 = num35;
++								bool flag6 = false;
++								int num36 = (int)WorldGen.worldSurfaceLow;
++								while ((double)num36 < num34)
++								{
++									if (Main.tile[i2, num36].active())
++									{
++										if (Main.tile[i2, num36].type == 53 && i2 >= num21 + WorldGen.genRand.Next(5) && i2 <= num22 - WorldGen.genRand.Next(5))
+ 										{
+-											Main.tile[num29, num33].type = 0;
++											Main.tile[i2, num36].type = 112;
+ 										}
+-									}
+-									break;
+-								}
+-								num31++;
+-							}
+-						}
+-						double num34 = Main.worldSurface + 40.0;
+-						for (int num35 = num21; num35 < num22; num35++)
+-						{
+-							num34 += (double)WorldGen.genRand.Next(-2, 3);
+-							if (num34 < Main.worldSurface + 30.0)
+-							{
+-								num34 = Main.worldSurface + 30.0;
+-							}
+-							if (num34 > Main.worldSurface + 50.0)
+-							{
+-								num34 = Main.worldSurface + 50.0;
+-							}
+-							i2 = num35;
+-							bool flag6 = false;
+-							int num36 = (int)WorldGen.worldSurfaceLow;
+-							while ((double)num36 < num34)
+-							{
+-								if (Main.tile[i2, num36].active())
+-								{
+-									if (Main.tile[i2, num36].type == 53 && i2 >= num21 + WorldGen.genRand.Next(5) && i2 <= num22 - WorldGen.genRand.Next(5))
+-									{
+-										Main.tile[i2, num36].type = 112;
+-									}
+-									if (Main.tile[i2, num36].type == 0 && (double)num36 < Main.worldSurface - 1.0 && !flag6)
+-									{
+-										WorldGen.grassSpread = 0;
+-										WorldGen.SpreadGrass(i2, num36, 0, 23, true, 0);
+-									}
+-									flag6 = true;
+-									if (Main.tile[i2, num36].type == 1 && i2 >= num21 + WorldGen.genRand.Next(5) && i2 <= num22 - WorldGen.genRand.Next(5))
+-									{
+-										Main.tile[i2, num36].type = 25;
+-									}
+-									if (Main.tile[i2, num36].wall == 216)
+-									{
+-										Main.tile[i2, num36].wall = 217;
+-									}
+-									else if (Main.tile[i2, num36].wall == 187)
+-									{
+-										Main.tile[i2, num36].wall = 220;
+-									}
+-									if (Main.tile[i2, num36].type == 2)
+-									{
+-										Main.tile[i2, num36].type = 23;
+-									}
+-									if (Main.tile[i2, num36].type == 161)
+-									{
+-										Main.tile[i2, num36].type = 163;
+-									}
+-									else if (Main.tile[i2, num36].type == 396)
+-									{
+-										Main.tile[i2, num36].type = 400;
+-									}
+-									else if (Main.tile[i2, num36].type == 397)
+-									{
+-										Main.tile[i2, num36].type = 398;
+-									}
+-								}
+-								num36++;
+-							}
+-						}
+-						for (int num37 = num21; num37 < num22; num37++)
+-						{
+-							for (int num38 = 0; num38 < Main.maxTilesY - 50; num38++)
+-							{
+-								if (Main.tile[num37, num38].active() && Main.tile[num37, num38].type == 31)
+-								{
+-									int num39 = num37 - 13;
+-									int num40 = num37 + 13;
+-									int num41 = num38 - 13;
+-									int num42 = num38 + 13;
+-									for (int num43 = num39; num43 < num40; num43++)
+-									{
+-										if (num43 > 10 && num43 < Main.maxTilesX - 10)
++										if (Main.tile[i2, num36].type == 0 && (double)num36 < Main.worldSurface - 1.0 && !flag6)
+ 										{
+-											for (int num44 = num41; num44 < num42; num44++)
++											WorldGen.grassSpread = 0;
++											WorldGen.SpreadGrass(i2, num36, 0, 23, true, 0);
++										}
++										flag6 = true;
++										if (Main.tile[i2, num36].type == 1 && i2 >= num21 + WorldGen.genRand.Next(5) && i2 <= num22 - WorldGen.genRand.Next(5))
++										{
++											Main.tile[i2, num36].type = 25;
++										}
++										if (Main.tile[i2, num36].wall == 216)
++										{
++											Main.tile[i2, num36].wall = 217;
++										}
++										else if (Main.tile[i2, num36].wall == 187)
++										{
++											Main.tile[i2, num36].wall = 220;
++										}
++										if (Main.tile[i2, num36].type == 2)
++										{
++											Main.tile[i2, num36].type = 23;
++										}
++										if (Main.tile[i2, num36].type == 161)
++										{
++											Main.tile[i2, num36].type = 163;
++										}
++										else if (Main.tile[i2, num36].type == 396)
++										{
++											Main.tile[i2, num36].type = 400;
++										}
++										else if (Main.tile[i2, num36].type == 397)
++										{
++											Main.tile[i2, num36].type = 398;
++										}
++									}
++									num36++;
++								}
++							}
++							for (int num37 = num21; num37 < num22; num37++)
++							{
++								for (int num38 = 0; num38 < Main.maxTilesY - 50; num38++)
++								{
++									if (Main.tile[num37, num38].active() && Main.tile[num37, num38].type == 31)
++									{
++										int num39 = num37 - 13;
++										int num40 = num37 + 13;
++										int num41 = num38 - 13;
++										int num42 = num38 + 13;
++										for (int num43 = num39; num43 < num40; num43++)
++										{
++											if (num43 > 10 && num43 < Main.maxTilesX - 10)
+ 											{
+-												if (Math.Abs(num43 - num37) + Math.Abs(num44 - num38) < 9 + WorldGen.genRand.Next(11) && WorldGen.genRand.Next(3) != 0 && Main.tile[num43, num44].type != 31)
++												for (int num44 = num41; num44 < num42; num44++)
+ 												{
+-													Main.tile[num43, num44].active(true);
+-													Main.tile[num43, num44].type = 25;
+-													if (Math.Abs(num43 - num37) <= 1 && Math.Abs(num44 - num38) <= 1)
++													if (Math.Abs(num43 - num37) + Math.Abs(num44 - num38) < 9 + WorldGen.genRand.Next(11) && WorldGen.genRand.Next(3) != 0 && Main.tile[num43, num44].type != 31)
++													{
++														Main.tile[num43, num44].active(true);
++														Main.tile[num43, num44].type = 25;
++														if (Math.Abs(num43 - num37) <= 1 && Math.Abs(num44 - num38) <= 1)
++														{
++															Main.tile[num43, num44].active(false);
++														}
++													}
++													if (Main.tile[num43, num44].type != 31 && Math.Abs(num43 - num37) <= 2 + WorldGen.genRand.Next(3) && Math.Abs(num44 - num38) <= 2 + WorldGen.genRand.Next(3))
+ 													{
+ 														Main.tile[num43, num44].active(false);
+ 													}
+ 												}
+-												if (Main.tile[num43, num44].type != 31 && Math.Abs(num43 - num37) <= 2 + WorldGen.genRand.Next(3) && Math.Abs(num44 - num38) <= 2 + WorldGen.genRand.Next(3))
+-												{
+-													Main.tile[num43, num44].active(false);
+-												}
+ 											}
+ 										}
+ 									}
+ 								}
+ 							}
+-						}
+-						num19++;
++							num19++;
++						}
+ 					}
+ 				});
+ 			WorldGen.AddGenerationPass("Slush", delegate(GenerationProgress progress)
+@@ -6227,261 +7366,265 @@
+ 						WorldGen.Cavinator(i2, j2, WorldGen.genRand.Next(40, 50));
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Beaches", delegate(GenerationProgress progress)
+-				{
+-					int num = 0;
+-					int num2 = 0;
+-					int num3 = 20;
+-					int num4 = Main.maxTilesX - 20;
+-					progress.Message = Lang.gen[22];
+-					for (int k = 0; k < 2; k++)
+-					{
+-						if (k == 0)
+-						{
+-							int num5 = 0;
+-							int num6 = WorldGen.genRand.Next(125, 200) + 50;
+-							if (dungeonSide == 1)
+-							{
+-								num6 = 275;
+-							}
+-							int num7 = 0;
+-							float num8 = 1f;
+-							int num9 = 0;
+-							while (!Main.tile[num6 - 1, num9].active())
+-							{
+-								num9++;
+-							}
+-							num = num9;
+-							num9 += WorldGen.genRand.Next(1, 5);
+-							for (int l = num6 - 1; l >= num5; l--)
+-							{
+-								num7++;
+-								if (num7 < 3)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.2f;
+-								}
+-								else if (num7 < 6)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.15f;
+-								}
+-								else if (num7 < 9)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
+-								}
+-								else if (num7 < 15)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.07f;
+-								}
+-								else if (num7 < 50)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num7 < 75)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.04f;
+-								}
+-								else if (num7 < 100)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.03f;
+-								}
+-								else if (num7 < 125)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.02f;
+-								}
+-								else if (num7 < 150)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								else if (num7 < 175)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.005f;
+-								}
+-								else if (num7 < 200)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.001f;
+-								}
+-								else if (num7 < 230)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								else if (num7 < 235)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num7 < 240)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
+-								}
+-								else if (num7 < 245)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num7 < 255)
+-								{
+-									num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								if (num7 == 235)
+-								{
+-									num4 = l;
+-								}
+-								if (num7 == 235)
+-								{
+-									num3 = l;
+-								}
+-								int num10 = WorldGen.genRand.Next(15, 20);
+-								int num11 = 0;
+-								while ((float)num11 < (float)num9 + num8 + (float)num10)
+-								{
+-									if ((float)num11 < (float)num9 + num8 * 0.75f - 3f)
+-									{
+-										Main.tile[l, num11].active(false);
+-										if (num11 > num9)
++			if (!Main.setting.NoBeach)
++			{
++				WorldGen.AddGenerationPass("Beaches", delegate (GenerationProgress progress)
++					{
++						int num = 0;
++						int num2 = 0;
++						int num3 = 20;
++						int num4 = Main.maxTilesX - 20;
++						progress.Message = Lang.gen[22];
++						for (int k = 0; k < 2; k++)
++						{
++							if (k == 0)
++							{
++								int num5 = 0;
++								int num6 = WorldGen.genRand.Next(125, 200) + 50;
++								if (dungeonSide == 1)
++								{
++									num6 = 275;
++								}
++								int num7 = 0;
++								float num8 = 1f;
++								int num9 = 0;
++								while (!Main.tile[num6 - 1, num9].active())
++								{
++									num9++;
++								}
++								num = num9;
++								num9 += WorldGen.genRand.Next(1, 5);
++								for (int l = num6 - 1; l >= num5; l--)
++								{
++									num7++;
++									if (num7 < 3)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.2f;
++									}
++									else if (num7 < 6)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.15f;
++									}
++									else if (num7 < 9)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
++									}
++									else if (num7 < 15)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.07f;
++									}
++									else if (num7 < 50)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num7 < 75)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.04f;
++									}
++									else if (num7 < 100)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.03f;
++									}
++									else if (num7 < 125)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.02f;
++									}
++									else if (num7 < 150)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									else if (num7 < 175)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.005f;
++									}
++									else if (num7 < 200)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.001f;
++									}
++									else if (num7 < 230)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									else if (num7 < 235)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num7 < 240)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
++									}
++									else if (num7 < 245)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num7 < 255)
++									{
++										num8 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									if (num7 == 235)
++									{
++										num4 = l;
++									}
++									if (num7 == 235)
++									{
++										num3 = l;
++									}
++									int num10 = WorldGen.genRand.Next(15, 20);
++									int num11 = 0;
++									while ((float)num11 < (float)num9 + num8 + (float)num10)
++									{
++										if ((float)num11 < (float)num9 + num8 * 0.75f - 3f)
+ 										{
+-											Main.tile[l, num11].liquid = 255;
++											Main.tile[l, num11].active(false);
++											if (num11 > num9)
++											{
++												Main.tile[l, num11].liquid = 255;
++											}
++											else if (num11 == num9)
++											{
++												Main.tile[l, num11].liquid = 127;
++											}
+ 										}
+-										else if (num11 == num9)
++										else if (num11 > num9)
+ 										{
+-											Main.tile[l, num11].liquid = 127;
++											Main.tile[l, num11].type = 53;
++											Main.tile[l, num11].active(true);
+ 										}
+-									}
+-									else if (num11 > num9)
+-									{
+-										Main.tile[l, num11].type = 53;
+-										Main.tile[l, num11].active(true);
+-									}
+-									Main.tile[l, num11].wall = 0;
+-									num11++;
+-								}
+-							}
+-						}
+-						else
+-						{
+-							int num5 = Main.maxTilesX - WorldGen.genRand.Next(125, 200) - 50;
+-							int num6 = Main.maxTilesX;
+-							if (dungeonSide == -1)
+-							{
+-								num5 = Main.maxTilesX - 275;
+-							}
+-							float num12 = 1f;
+-							int num13 = 0;
+-							int num14 = 0;
+-							while (!Main.tile[num5, num14].active())
+-							{
+-								num14++;
+-							}
+-							num2 = num14;
+-							num14 += WorldGen.genRand.Next(1, 5);
+-							for (int m = num5; m < num6; m++)
+-							{
+-								num13++;
+-								if (num13 < 3)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.2f;
+-								}
+-								else if (num13 < 6)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.15f;
+-								}
+-								else if (num13 < 9)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
+-								}
+-								else if (num13 < 15)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.07f;
+-								}
+-								else if (num13 < 50)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num13 < 75)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.04f;
+-								}
+-								else if (num13 < 100)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.03f;
+-								}
+-								else if (num13 < 125)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.02f;
+-								}
+-								else if (num13 < 150)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								else if (num13 < 175)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.005f;
+-								}
+-								else if (num13 < 200)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.001f;
+-								}
+-								else if (num13 < 230)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								else if (num13 < 235)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num13 < 240)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
+-								}
+-								else if (num13 < 245)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
+-								}
+-								else if (num13 < 255)
+-								{
+-									num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
+-								}
+-								if (num13 == 235)
+-								{
+-									num4 = m;
+-								}
+-								int num15 = WorldGen.genRand.Next(15, 20);
+-								int num16 = 0;
+-								while ((float)num16 < (float)num14 + num12 + (float)num15)
+-								{
+-									if ((float)num16 < (float)num14 + num12 * 0.75f - 3f && (double)num16 < Main.worldSurface - 2.0)
+-									{
+-										Main.tile[m, num16].active(false);
+-										if (num16 > num14)
++										Main.tile[l, num11].wall = 0;
++										num11++;
++									}
++								}
++							}
++							else
++							{
++								int num5 = Main.maxTilesX - WorldGen.genRand.Next(125, 200) - 50;
++								int num6 = Main.maxTilesX;
++								if (dungeonSide == -1)
++								{
++									num5 = Main.maxTilesX - 275;
++								}
++								float num12 = 1f;
++								int num13 = 0;
++								int num14 = 0;
++								while (!Main.tile[num5, num14].active())
++								{
++									num14++;
++								}
++								num2 = num14;
++								num14 += WorldGen.genRand.Next(1, 5);
++								for (int m = num5; m < num6; m++)
++								{
++									num13++;
++									if (num13 < 3)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.2f;
++									}
++									else if (num13 < 6)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.15f;
++									}
++									else if (num13 < 9)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
++									}
++									else if (num13 < 15)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.07f;
++									}
++									else if (num13 < 50)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num13 < 75)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.04f;
++									}
++									else if (num13 < 100)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.03f;
++									}
++									else if (num13 < 125)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.02f;
++									}
++									else if (num13 < 150)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									else if (num13 < 175)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.005f;
++									}
++									else if (num13 < 200)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.001f;
++									}
++									else if (num13 < 230)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									else if (num13 < 235)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num13 < 240)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.1f;
++									}
++									else if (num13 < 245)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.05f;
++									}
++									else if (num13 < 255)
++									{
++										num12 += (float)WorldGen.genRand.Next(10, 20) * 0.01f;
++									}
++									if (num13 == 235)
++									{
++										num4 = m;
++									}
++									int num15 = WorldGen.genRand.Next(15, 20);
++									int num16 = 0;
++									while ((float)num16 < (float)num14 + num12 + (float)num15)
++									{
++										if ((float)num16 < (float)num14 + num12 * 0.75f - 3f && (double)num16 < Main.worldSurface - 2.0)
+ 										{
+-											Main.tile[m, num16].liquid = 255;
++											Main.tile[m, num16].active(false);
++											if (num16 > num14)
++											{
++												Main.tile[m, num16].liquid = 255;
++											}
++											else if (num16 == num14)
++											{
++												Main.tile[m, num16].liquid = 127;
++											}
+ 										}
+-										else if (num16 == num14)
++										else if (num16 > num14)
+ 										{
+-											Main.tile[m, num16].liquid = 127;
++											Main.tile[m, num16].type = 53;
++											Main.tile[m, num16].active(true);
+ 										}
+-									}
+-									else if (num16 > num14)
+-									{
+-										Main.tile[m, num16].type = 53;
+-										Main.tile[m, num16].active(true);
+-									}
+-									Main.tile[m, num16].wall = 0;
+-									num16++;
+-								}
+-							}
+-						}
+-					}
+-					while (!Main.tile[num3, num].active())
+-					{
++										Main.tile[m, num16].wall = 0;
++										num16++;
++									}
++								}
++							}
++						}
++						while (!Main.tile[num3, num].active())
++						{
++							num++;
++						}
+ 						num++;
+-					}
+-					num++;
+-					while (!Main.tile[num4, num2].active())
+-					{
++						while (!Main.tile[num4, num2].active())
++						{
++							num2++;
++						}
+ 						num2++;
+-					}
+-					num2++;
+-				});
++					});
++			}
+ 			WorldGen.AddGenerationPass("Gems", delegate(GenerationProgress progress)
+ 				{
++					// TODO non-gemcave gems?
+ 					progress.Message = Lang.gen[23];
+ 					for (int k = 63; k <= 68; k++)
+ 					{
+@@ -6727,7 +7870,49 @@
+ 									if (num3 >= 250)
+ 									{
+ 										num2--;
+-										WorldGen.Pyramid(num, num2);
++										if (Main.setting.IsPyramid != 0)
++										{
++											WorldGen.Pyramid(num, num2);
++										}
++									}
++								}
++							}
++						}
++					}
++					if (Main.setting.IsPyramid == 1 && WorldGen.numPyramids <= 0)
++					{
++						for (int k = 0; k < numPyr; k++)
++						{
++							int num = PyrX[k];
++							int num2 = PyrY[k];
++							if (num > 300 && num < Main.maxTilesX - 300 && (dungeonSide >= 0 || (double)num >= (double)WorldGen.dungeonX + (double)Main.maxTilesX * 0.15))
++							{
++								if (dungeonSide <= 0 || (double)num <= (double)WorldGen.dungeonX - (double)Main.maxTilesX * 0.15)
++								{
++									while (!Main.tile[num, num2].active() && (double)num2 < Main.worldSurface)
++									{
++										num2++;
++									}
++									if ((double)num2 < Main.worldSurface && Main.tile[num, num2].type == 53)
++									{
++										int num3 = Main.maxTilesX;
++										for (int l = 0; l < k; l++)
++										{
++											int num4 = Math.Abs(num - PyrX[l]);
++											if (num4 < num3)
++											{
++												num3 = num4;
++											}
++										}
++										if (num3 >= 250)
++										{
++											num2--;
++											if (Main.setting.IsPyramid != 0)
++											{
++												WorldGen.Pyramid(num, num2);
++												break;
++											}
++										}
+ 									}
+ 								}
+ 							}
+@@ -6750,6 +7935,11 @@
+ 				{
+ 					float num = (float)(Main.maxTilesX / 4200);
+ 					int num2 = WorldGen.genRand.Next(0, (int)(3f * num));
++					if (Main.setting.IsGiantTree == 1)
++					{
++						// TODO, slider for Living Trees.
++						num2 = 1 + (int)(3f * num);
++					}
+ 					for (int k = 0; k < num2; k++)
+ 					{
+ 						bool flag2 = false;
+@@ -6789,7 +7979,7 @@
+ 												}
+ 											}
+ 										}
+-										if (flag3)
++										if (flag3 && Main.setting.IsGiantTree != 0)
+ 										{
+ 											flag2 = WorldGen.GrowLivingTree(num4, num5);
+ 										}
+@@ -6829,12 +8019,12 @@
+ 						}
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Alters", delegate(GenerationProgress progress)
++			WorldGen.AddGenerationPass("Alters", delegate (GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[26];
+-					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05); k++)
+-					{
+-						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05));
++					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 /** Main.setting.AltarMultiplier*/); k++)
++					{
++						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 /** Main.setting.AltarMultiplier*/));
+ 						progress.Set(value);
+ 						bool flag2 = false;
+ 						int num = 0;
+@@ -6847,18 +8037,29 @@
+ 							{
+ 								style = 1;
+ 							}
+-							WorldGen.Place3x2(num2, num3, 26, style);
+-							if (Main.tile[num2, num3].type == 26)
++							if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++							{
++								style = WorldGen.genRand.Next(2);
++							}
++							if (!Main.setting.NoAltar)
++							{
++								WorldGen.Place3x2(num2, num3, TileID.DemonAltar/*26*/, style);
++								if (Main.tile[num2, num3].type == 26)
++								{
++									flag2 = true;
++								}
++								else
++								{
++									num++;
++									if (num >= 10000)
++									{
++										flag2 = true;
++									}
++								}
++							}
++							else
+ 							{
+ 								flag2 = true;
+-							}
+-							else
+-							{
+-								num++;
+-								if (num >= 10000)
+-								{
+-									flag2 = true;
+-								}
+ 							}
+ 						}
+ 					}
+@@ -6919,200 +8120,238 @@
+ 					}
+ 					Main.tileSolid[192] = true;
+ 				});
+-			WorldGen.AddGenerationPass("Jungle Temple", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[70];
+-					bool flag2 = true;
+-					while (flag2)
+-					{
+-						int num = WorldGen.genRand.Next((int)Main.rockLayer, Main.maxTilesY - 500);
+-						int num2;
+-						if (dungeonSide < 0)
+-						{
+-							num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.6), (int)((double)Main.maxTilesX * 0.85));
+-						}
+-						else
+-						{
+-							num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.15), (int)((double)Main.maxTilesX * 0.4));
+-						}
+-						if (Main.tile[num2, num].active() && Main.tile[num2, num].type == 60)
+-						{
+-							flag2 = false;
+-							WorldGen.makeTemple(num2, num);
+-						}
+-					}
+-				});
+-			WorldGen.AddGenerationPass("Hives", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[71];
+-					float num = (float)(Main.maxTilesX / 4200);
+-					float num2 = (float)(1 + WorldGen.genRand.Next((int)(5f * num), (int)(8f * num)));
+-					int num3 = 10000;
+-					while (num2 > 0f && num3 > 0)
+-					{
+-						num3--;
+-						Point origin = WorldGen.RandomWorldPoint((int)(Main.worldSurface + Main.rockLayer) >> 1, 20, 300, 20);
+-						if (Biomes<HiveBiome>.Place(origin, structures))
+-						{
+-							num2 -= 1f;
+-							int num4 = WorldGen.genRand.Next(5);
+-							int num5 = 0;
+-							int num6 = 10000;
+-							while (num5 < num4 && num6 > 0)
+-							{
+-								float num7 = WorldGen.genRand.NextFloat() * 60f + 30f;
+-								float num8 = WorldGen.genRand.NextFloat() * 6.28318548f;
+-								int num9 = (int)(Math.Cos((double)num8) * (double)num7) + origin.X;
+-								int y = (int)(Math.Sin((double)num8) * (double)num7) + origin.Y;
+-								num6--;
+-								if (num9 > 50 && num9 < Main.maxTilesX - 50 && Biomes<HoneyPatchBiome>.Place(num9, y, structures))
+-								{
+-									num5++;
+-								}
+-							}
+-						}
+-					}
+-				});
+-			WorldGen.AddGenerationPass("Jungle Chests", delegate(GenerationProgress progress)
+-				{
+-					int num = WorldGen.genRand.Next(40, Main.maxTilesX - 40);
+-					int num2 = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 400);
+-					float num3 = (float)WorldGen.genRand.Next(7, 12);
+-					num3 *= (float)(Main.maxTilesX / 4200);
+-					int num4 = 0;
+-					while ((float)num4 < num3)
+-					{
++			if (!Main.setting.NoJungle)
++			{
++				WorldGen.AddGenerationPass("Jungle Temple", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[70];
+ 						bool flag2 = true;
+ 						while (flag2)
+ 						{
+-							num = WorldGen.genRand.Next(40, Main.maxTilesX / 2 - 40);
++							int num = WorldGen.genRand.Next((int)Main.rockLayer, Main.maxTilesY - 500);
++							int num2;
+ 							if (dungeonSide < 0)
+ 							{
+-								num += Main.maxTilesX / 2;
+-							}
+-							num2 = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 400);
+-							if (Main.tile[num, num2].type == 60)
+-							{
+-								int num5 = 30;
++								num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.6), (int)((double)Main.maxTilesX * 0.85));
++							}
++							else
++							{
++								num2 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.15), (int)((double)Main.maxTilesX * 0.4));
++							}
++							if (Main.tile[num2, num].active() && Main.tile[num2, num].type == 60) //jungleGrass
++							{
+ 								flag2 = false;
+-								for (int k = num - num5; k < num + num5; k += 3)
+-								{
+-									for (int l = num2 - num5; l < num2 + num5; l += 3)
+-									{
+-										if (Main.tile[k, l].active() && (Main.tile[k, l].type == 225 || Main.tile[k, l].type == 229 || Main.tile[k, l].type == 226 || Main.tile[k, l].type == 119 || Main.tile[k, l].type == 120))
++								if (!Main.setting.NoTemple)
++								{
++									WorldGen.makeTemple(num2, num);
++								}
++							}
++						}
++					});
++			}
++			if (!Main.setting.NoHive && !Main.setting.NoJungle)
++			{
++				WorldGen.AddGenerationPass("Hives", delegate (GenerationProgress progress)
++					{
++						// TODO Hives Ammount
++						progress.Message = Lang.gen[71];
++						float num = (float)(Main.maxTilesX / 4200);
++						float num2 = (float)(1 + WorldGen.genRand.Next((int)(5f * num), (int)(8f * num)));
++						int num3 = 10000;
++						while (num2 > 0f && num3 > 0)
++						{
++							num3--;
++							Point origin = WorldGen.RandomWorldPoint((int)(Main.worldSurface + Main.rockLayer) >> 1, 20, 300, 20);
++							if (Biomes<HiveBiome>.Place(origin, structures))
++							{
++								num2 -= 1f;
++								int num4 = WorldGen.genRand.Next(5);
++								int num5 = 0;
++								int num6 = 10000;
++								while (num5 < num4 && num6 > 0)
++								{
++									float num7 = WorldGen.genRand.NextFloat() * 60f + 30f;
++									float num8 = WorldGen.genRand.NextFloat() * 6.28318548f;
++									int num9 = (int)(Math.Cos((double)num8) * (double)num7) + origin.X;
++									int y = (int)(Math.Sin((double)num8) * (double)num7) + origin.Y;
++									num6--;
++									if (num9 > 50 && num9 < Main.maxTilesX - 50 && Biomes<HoneyPatchBiome>.Place(num9, y, structures))
++									{
++										num5++;
++									}
++								}
++							}
++						}
++					});
++			}
++			if (!Main.setting.NoJungle)
++			{
++				WorldGen.AddGenerationPass("Jungle Chests", delegate (GenerationProgress progress)
++					{
++						int num = WorldGen.genRand.Next(40, Main.maxTilesX - 40);
++						int num2 = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 400);
++						float num3 = (float)WorldGen.genRand.Next(7, 12);
++						num3 *= (float)(Main.maxTilesX / 4200);
++						num3 *= Main.setting.JungleShrineMultiplier;
++						int num4 = 0;
++						while ((float)num4 < num3)
++						{
++							bool flag2 = true;
++							while (flag2)
++							{
++								num = WorldGen.genRand.Next(40, Main.maxTilesX / 2 - 40);
++								if (dungeonSide < 0)
++								{
++									num += Main.maxTilesX / 2;
++								}
++								num2 = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 400);
++								if (Main.tile[num, num2].type == 60)
++								{
++									int num5 = 30;
++									flag2 = false;
++									for (int k = num - num5; k < num + num5; k += 3)
++									{
++										for (int l = num2 - num5; l < num2 + num5; l += 3)
+ 										{
+-											flag2 = false;
++											if (Main.tile[k, l].active() && (Main.tile[k, l].type == 225 || Main.tile[k, l].type == 229 || Main.tile[k, l].type == 226 || Main.tile[k, l].type == 119 || Main.tile[k, l].type == 120))
++											{
++												flag2 = false;
++											}
++											if (Main.tile[k, l].wall == 86 || Main.tile[k, l].wall == 87)
++											{
++												flag2 = false;
++											}
+ 										}
+-										if (Main.tile[k, l].wall == 86 || Main.tile[k, l].wall == 87)
++									}
++								}
++								if (!flag2)
++								{
++									int m = WorldGen.genRand.Next(2, 4);
++									int num6 = WorldGen.genRand.Next(2, 4);
++									int num7 = 0;
++									if (Main.setting.ShrineType == 6)
++									{
++										jungleHut = (ushort)WorldGen.genRand.Next(5);
++										if (jungleHut == 0)
+ 										{
+-											flag2 = false;
++											jungleHut = 119;
+ 										}
+-									}
+-								}
+-							}
+-							if (!flag2)
+-							{
+-								int m = WorldGen.genRand.Next(2, 4);
+-								int num6 = WorldGen.genRand.Next(2, 4);
+-								int num7 = 0;
+-								if (jungleHut == 119)
+-								{
+-									num7 = 23;
+-								}
+-								else if (jungleHut == 120)
+-								{
+-									num7 = 24;
+-								}
+-								else if (jungleHut == 158)
+-								{
+-									num7 = 42;
+-								}
+-								else if (jungleHut == 175)
+-								{
+-									num7 = 45;
+-								}
+-								else if (jungleHut == 45)
+-								{
+-									num7 = 10;
+-								}
+-								for (int n = num - m - 1; n <= num + m + 1; n++)
+-								{
+-									for (int num8 = num2 - num6 - 1; num8 <= num2 + num6 + 1; num8++)
+-									{
+-										Main.tile[n, num8].active(true);
+-										Main.tile[n, num8].type = jungleHut;
+-										Main.tile[n, num8].liquid = 0;
+-										Main.tile[n, num8].lava(false);
+-									}
+-								}
+-								for (int num9 = num - m; num9 <= num + m; num9++)
+-								{
+-									for (int num10 = num2 - num6; num10 <= num2 + num6; num10++)
+-									{
+-										Main.tile[num9, num10].active(false);
+-										Main.tile[num9, num10].wall = (byte)num7;
+-									}
+-								}
+-								bool flag3 = false;
+-								int num11 = 0;
+-								while (!flag3 && num11 < 100)
+-								{
+-									num11++;
+-									int num12 = WorldGen.genRand.Next(num - m, num + m + 1);
+-									int num13 = WorldGen.genRand.Next(num2 - num6, num2 + num6 - 2);
+-									WorldGen.PlaceTile(num12, num13, 4, true, false, -1, 3);
+-									if (Main.tile[num12, num13].type == 4)
+-									{
+-										flag3 = true;
+-									}
+-								}
+-								for (int num14 = num - m - 1; num14 <= num + m + 1; num14++)
+-								{
+-									for (int num15 = num2 + num6 - 2; num15 <= num2 + num6; num15++)
+-									{
+-										Main.tile[num14, num15].active(false);
+-									}
+-								}
+-								for (int num16 = num - m - 1; num16 <= num + m + 1; num16++)
+-								{
+-									for (int num17 = num2 + num6 - 2; num17 <= num2 + num6 - 1; num17++)
+-									{
+-										Main.tile[num16, num17].active(false);
+-									}
+-								}
+-								for (int num18 = num - m - 1; num18 <= num + m + 1; num18++)
+-								{
+-									int num19 = 4;
+-									int num20 = num2 + num6 + 2;
+-									while (!Main.tile[num18, num20].active() && num20 < Main.maxTilesY && num19 > 0)
+-									{
+-										Main.tile[num18, num20].active(true);
+-										Main.tile[num18, num20].type = 59;
+-										num20++;
+-										num19--;
+-									}
+-								}
+-								m -= WorldGen.genRand.Next(1, 3);
+-								int num21 = num2 - num6 - 2;
+-								while (m > -1)
+-								{
+-									for (int num22 = num - m - 1; num22 <= num + m + 1; num22++)
+-									{
+-										Main.tile[num22, num21].active(true);
+-										Main.tile[num22, num21].type = jungleHut;
++										else if (jungleHut == 1)
++										{
++											jungleHut = 120;
++										}
++										else if (jungleHut == 2)
++										{
++											jungleHut = 158;
++										}
++										else if (jungleHut == 3)
++										{
++											jungleHut = 175;
++										}
++										else if (jungleHut == 4)
++										{
++											jungleHut = 45;
++										}
++									}
++									if (jungleHut == 119)
++									{
++										num7 = 23;
++									}
++									else if (jungleHut == 120)
++									{
++										num7 = 24;
++									}
++									else if (jungleHut == 158)
++									{
++										num7 = 42;
++									}
++									else if (jungleHut == 175)
++									{
++										num7 = 45;
++									}
++									else if (jungleHut == 45)
++									{
++										num7 = 10;
++									}
++									for (int n = num - m - 1; n <= num + m + 1; n++)
++									{
++										for (int num8 = num2 - num6 - 1; num8 <= num2 + num6 + 1; num8++)
++										{
++											Main.tile[n, num8].active(true);
++											Main.tile[n, num8].type = jungleHut;
++											Main.tile[n, num8].liquid = 0;
++											Main.tile[n, num8].lava(false);
++										}
++									}
++									for (int num9 = num - m; num9 <= num + m; num9++)
++									{
++										for (int num10 = num2 - num6; num10 <= num2 + num6; num10++)
++										{
++											Main.tile[num9, num10].active(false);
++											Main.tile[num9, num10].wall = (byte)num7;
++										}
++									}
++									bool flag3 = false;
++									int num11 = 0;
++									while (!flag3 && num11 < 100)
++									{
++										num11++;
++										int num12 = WorldGen.genRand.Next(num - m, num + m + 1);
++										int num13 = WorldGen.genRand.Next(num2 - num6, num2 + num6 - 2);
++										WorldGen.PlaceTile(num12, num13, 4, true, false, -1, 3);
++										if (Main.tile[num12, num13].type == 4)
++										{
++											flag3 = true;
++										}
++									}
++									for (int num14 = num - m - 1; num14 <= num + m + 1; num14++)
++									{
++										for (int num15 = num2 + num6 - 2; num15 <= num2 + num6; num15++)
++										{
++											Main.tile[num14, num15].active(false);
++										}
++									}
++									for (int num16 = num - m - 1; num16 <= num + m + 1; num16++)
++									{
++										for (int num17 = num2 + num6 - 2; num17 <= num2 + num6 - 1; num17++)
++										{
++											Main.tile[num16, num17].active(false);
++										}
++									}
++									for (int num18 = num - m - 1; num18 <= num + m + 1; num18++)
++									{
++										int num19 = 4;
++										int num20 = num2 + num6 + 2;
++										while (!Main.tile[num18, num20].active() && num20 < Main.maxTilesY && num19 > 0)
++										{
++											Main.tile[num18, num20].active(true);
++											Main.tile[num18, num20].type = 59;
++											num20++;
++											num19--;
++										}
+ 									}
+ 									m -= WorldGen.genRand.Next(1, 3);
+-									num21--;
+-								}
+-								WorldGen.JChestX[WorldGen.numJChests] = num;
+-								WorldGen.JChestY[WorldGen.numJChests] = num2;
+-								WorldGen.numJChests++;
+-							}
+-						}
+-						num4++;
+-					}
+-					Main.tileSolid[137] = false;
+-				});
++									int num21 = num2 - num6 - 2;
++									while (m > -1)
++									{
++										for (int num22 = num - m - 1; num22 <= num + m + 1; num22++)
++										{
++											Main.tile[num22, num21].active(true);
++											Main.tile[num22, num21].type = jungleHut;
++										}
++										m -= WorldGen.genRand.Next(1, 3);
++										num21--;
++									}
++									WorldGen.JChestX[WorldGen.numJChests] = num;
++									WorldGen.JChestY[WorldGen.numJChests] = num2;
++									WorldGen.numJChests++;
++								}
++							}
++							num4++;
++						}
++						Main.tileSolid[137] = false;
++					});
++			}
+ 			WorldGen.AddGenerationPass("Smooth World", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[60];
+@@ -7460,9 +8699,9 @@
+ 			WorldGen.AddGenerationPass("Traps", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[34];
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.05); k++)
+-					{
+-						float value = (float)((double)k / ((double)Main.maxTilesX * 0.05));
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier));
+ 						progress.Set(value);
+ 						for (int l = 0; l < 1000; l++)
+ 						{
+@@ -7475,13 +8714,14 @@
+ 						}
+ 					}
+ 				});
++			// TODO, boulder, dart, explosive specific. Also, randomize colors or not....hmmm
+ 			WorldGen.AddGenerationPass("Life Crystals", delegate(GenerationProgress progress)
+ 				{
+ 					dub2 = (float)(Main.maxTilesX / 4200);
+ 					progress.Message = Lang.gen[28];
+-					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05); k++)
+-					{
+-						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05));
++					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 * Main.setting.CrystalHeartMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 2E-05 * Main.setting.CrystalHeartMultiplier));
+ 						progress.Set(value);
+ 						bool flag2 = false;
+ 						int num = 0;
+@@ -7556,15 +8796,16 @@
+ 					Main.tileSolid[226] = true;
+ 					Main.tileSolid[162] = true;
+ 					Main.tileSolid[225] = true;
+-					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05); k++)
+-					{
+-						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05));
++					// Remove shadow chests from here
++					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier));
+ 						progress.Set(value);
+ 						bool flag2 = false;
+ 						int num = 0;
+ 						while (!flag2)
+ 						{
+-							float num2 = (float)WorldGen.genRand.Next((int)(5f * dub2), (int)(8f * dub2 + 1f));
++							float num2 = (float)WorldGen.genRand.Next((int)(5f * dub2), (int)(8f * dub2 + 1f)); // number of shadow chests
+ 							int num3 = WorldGen.genRand.Next(20, Main.maxTilesX - 20);
+ 							int num4 = WorldGen.genRand.Next((int)(worldSurfaceHigh + 20.0), Main.maxTilesY - 230);
+ 							if ((float)k <= num2)
+@@ -7595,7 +8836,7 @@
+ 									}
+ 								}
+ 							}
+-							else if (WorldGen.AddBuriedChest(num3, num4, 0, false, -1))
++							else /*if (WorldGen.AddBuriedChest(num3, num4, 0, false, -1))*/
+ 							{
+ 								flag2 = true;
+ 							}
+@@ -7606,15 +8847,41 @@
+ 							}
+ 						}
+ 					}
+-					int num6 = (int)(2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f);
+-					int num7 = 1000;
+-					while (num7 >= 0 && num6 >= 0)
++					// Shadow only
++					float numberShadowChests = (float)WorldGen.genRand.Next((int)(5f * dub2 * Main.setting.ShadowChestMultiplier), (int)(8f * dub2 * Main.setting.ShadowChestMultiplier + 1f)); // number of shadow chests
++					for (int k = 0; k < numberShadowChests; k++)
++					{
++						bool flag2 = false;
++						int num = 0;
++						while (!flag2)
++						{
++							int num3 = WorldGen.genRand.Next(20, Main.maxTilesX - 20);
++							int num4 = WorldGen.genRand.Next(Main.maxTilesY - 200, Main.maxTilesY - 50);
++							while (Main.wallDungeon[(int)Main.tile[num3, num4].wall])
++							{
++								num3 = WorldGen.genRand.Next(1, Main.maxTilesX);
++								num4 = WorldGen.genRand.Next(Main.maxTilesY - 200, Main.maxTilesY - 50);
++							}
++							if (WorldGen.AddBuriedChest(num3, num4, 0, false, -1))
++							{
++								flag2 = true;
++							}
++							num++;
++							if (num >= 1000)
++							{
++								flag2 = true;
++							}
++						}
++					}
++					int num6 = (int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f);
++					int maxAttempts = 1000;
++					while (maxAttempts >= 0 && num6 >= 0)
+ 					{
+ 						if (Biomes<CaveHouseBiome>.Place(WorldGen.RandomRectanglePoint(WorldGen.UndergroundDesertLocation), structures))
+ 						{
+ 							num6--;
+ 						}
+-						num7--;
++						maxAttempts--;
+ 					}
+ 					Main.tileSolid[226] = false;
+ 					Main.tileSolid[162] = false;
+@@ -7623,9 +8890,9 @@
+ 			WorldGen.AddGenerationPass("Surface Chests", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[31];
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.005); k++)
+-					{
+-						float value = (float)((double)k / ((double)Main.maxTilesX * 0.005));
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier));
+ 						progress.Set(value);
+ 						bool flag2 = false;
+ 						int num = 0;
+@@ -7685,100 +8952,108 @@
+ 						}
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Water Chests", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[33];
+-					int num = 0;
+-					int num2 = 0;
+-					while ((float)num2 < 9f * dub2)
+-					{
+-						float value = (float)num2 / (9f * dub2);
+-						progress.Set(value);
+-						num++;
+-						int contain;
+-						if (WorldGen.genRand.Next(15) == 0)
+-						{
+-							contain = 863;
+-						}
+-						else if (num == 1)
+-						{
+-							contain = 186;
+-						}
+-						else if (num == 2)
+-						{
+-							contain = 277;
+-						}
+-						else
+-						{
+-							contain = 187;
+-							num = 0;
+-						}
+-						bool flag2 = false;
+-						while (!flag2)
+-						{
+-							int num3 = WorldGen.genRand.Next(1, Main.maxTilesX);
+-							int num4 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
+-							while (Main.tile[num3, num4].liquid < 200 || Main.tile[num3, num4].lava())
+-							{
+-								num3 = WorldGen.genRand.Next(1, Main.maxTilesX);
+-								num4 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
+-							}
+-							flag2 = WorldGen.AddBuriedChest(num3, num4, contain, false, 17);
+-						}
+-						flag2 = false;
+-						while (!flag2)
+-						{
+-							int num5 = WorldGen.genRand.Next(1, Main.maxTilesX);
+-							int num6 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 200);
+-							while (Main.tile[num5, num6].liquid < 200 || Main.tile[num5, num6].lava())
+-							{
+-								num5 = WorldGen.genRand.Next(1, Main.maxTilesX);
+-								num6 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
+-							}
+-							flag2 = WorldGen.AddBuriedChest(num5, num6, contain, false, 17);
+-						}
+-						num2++;
+-					}
+-				});
+-			WorldGen.AddGenerationPass("Spider Caves", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[64];
+-					WorldGen.maxTileCount = 3500;
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.005); k++)
+-					{
+-						float value = (float)((double)k / ((double)Main.maxTilesX * 0.005));
+-						progress.Set(value);
++			if (!Main.setting.NoChest)
++			{
++				WorldGen.AddGenerationPass("Water Chests", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[33];
+ 						int num = 0;
+-						int x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
+-						int y = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 230);
+-						int num2 = WorldGen.countTiles(x, y, false, true);
+-						while ((num2 >= 3500 || num2 < 500) && num < 500)
+-						{
++						int num2 = 0;
++						while ((float)num2 < 9f * dub2 * Main.setting.WaterChestMultiplier)
++						{
++							float value = (float)num2 / (9f * dub2 * Main.setting.WaterChestMultiplier);
++							progress.Set(value);
+ 							num++;
+-							x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
+-							y = WorldGen.genRand.Next((int)Main.rockLayer + 30, Main.maxTilesY - 230);
+-							num2 = WorldGen.countTiles(x, y, false, true);
+-						}
+-						if (num < 500)
+-						{
+-							WorldGen.Spread.Spider(x, y);
+-						}
+-					}
+-					Main.tileSolid[162] = true;
+-				});
++							int contain;
++							if (WorldGen.genRand.Next(15) == 0)
++							{
++								contain = 863;
++							}
++							else if (num == 1)
++							{
++								contain = 186;
++							}
++							else if (num == 2)
++							{
++								contain = 277;
++							}
++							else
++							{
++								contain = 187;
++								num = 0;
++							}
++							bool flag2 = false;
++							while (!flag2)
++							{
++								int num3 = WorldGen.genRand.Next(1, Main.maxTilesX);
++								int num4 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
++								while (Main.tile[num3, num4].liquid < 200 || Main.tile[num3, num4].lava())
++								{
++									num3 = WorldGen.genRand.Next(1, Main.maxTilesX);
++									num4 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
++								}
++								flag2 = WorldGen.AddBuriedChest(num3, num4, contain, false, 17);
++							}
++							flag2 = false;
++							while (!flag2)
++							{
++								int num5 = WorldGen.genRand.Next(1, Main.maxTilesX);
++								int num6 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 200);
++								while (Main.tile[num5, num6].liquid < 200 || Main.tile[num5, num6].lava())
++								{
++									num5 = WorldGen.genRand.Next(1, Main.maxTilesX);
++									num6 = WorldGen.genRand.Next(1, Main.maxTilesY - 200);
++								}
++								flag2 = WorldGen.AddBuriedChest(num5, num6, contain, false, 17);
++							}
++							num2++;
++						}
++					});
++			}
++			if (!Main.setting.NoSpiderCave)
++			{
++				WorldGen.AddGenerationPass("Spider Caves", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[64];
++						WorldGen.maxTileCount = 3500;
++						for (int k = 0; k < (int)((double)Main.maxTilesX * 0.005 * Main.setting.SpiderCaveMultiplier); k++)
++						{
++							float value = (float)((double)k / ((double)Main.maxTilesX * 0.005 * Main.setting.SpiderCaveMultiplier));
++							progress.Set(value);
++							int num = 0;
++							int x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
++							int y = WorldGen.genRand.Next((int)(Main.worldSurface + Main.rockLayer) / 2, Main.maxTilesY - 230);
++							int num2 = WorldGen.countTiles(x, y, false, true);
++							while ((num2 >= 3500 || num2 < 500) && num < 500)
++							{
++								num++;
++								x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
++								y = WorldGen.genRand.Next((int)Main.rockLayer + 30, Main.maxTilesY - 230);
++								num2 = WorldGen.countTiles(x, y, false, true);
++							}
++							if (num < 500)
++							{
++								WorldGen.Spread.Spider(x, y);
++							}
++						}
++						Main.tileSolid[162] = true;
++					});
++			}
+ 			WorldGen.AddGenerationPass("Gem Caves", delegate(GenerationProgress progress)
+ 				{
+-					progress.Message = Lang.gen[64];
+-					WorldGen.maxTileCount = 300;
+-					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.003); k++)
+-					{
+-						float value = (float)((double)k / ((double)Main.maxTilesX * 0.003));
++					progress.Message = Lang.gen[62];
++					WorldGen.maxTileCount = (int)(300 * Main.setting.GemCaveSizeMultiplier);
++					WorldGen.countX = new int[WorldGen.maxTileCount];
++					WorldGen.countY = new int[WorldGen.maxTileCount];
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.003 * Main.setting.GemCaveMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)Main.maxTilesX * 0.003 * Main.setting.GemCaveMultiplier));
+ 						progress.Set(value);
+ 						int num = 0;
+ 						int x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
+ 						int y = WorldGen.genRand.Next((int)Main.rockLayer + 30, Main.maxTilesY - 230);
+ 						int num2 = WorldGen.countTiles(x, y, false, false);
+-						while ((num2 >= 300 || num2 < 50 || WorldGen.lavaCount > 0 || WorldGen.iceCount > 0 || WorldGen.rockCount == 0) && num < 1000)
++						while ((num2 >= (int)(300 * Main.setting.GemCaveSizeMultiplier) || num2 < 50 || WorldGen.lavaCount > 0 || WorldGen.iceCount > 0 || WorldGen.rockCount == 0) && num < 1000)
+ 						{
+ 							num++;
+ 							x = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
+@@ -7790,6 +9065,8 @@
+ 							WorldGen.gemCave(x, y);
+ 						}
+ 					}
++					WorldGen.countX = new int[3500];
++					WorldGen.countY = new int[3500];
+ 				});
+ 			WorldGen.AddGenerationPass("Moss", delegate(GenerationProgress progress)
+ 				{
+@@ -8019,7 +9296,7 @@
+ 					{
+ 						for (int l = (int)Main.worldSurface - 1; l < Main.maxTilesY - 350; l++)
+ 						{
+-							if (WorldGen.genRand.Next(10) == 0)
++							if (WorldGen.genRand.Next(10) == 0 && !Main.setting.NoTree) // The trees in underground jungle
+ 							{
+ 								WorldGen.GrowUndergroundTree(k, l);
+ 							}
+@@ -8077,9 +9354,9 @@
+ 					Main.tileSolid[137] = true;
+ 					Main.tileSolid[130] = true;
+ 					progress.Message = Lang.gen[35];
+-					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008); k++)
+-					{
+-						float num = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008));
++					for (int k = 0; k < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier); k++)
++					{
++						float num = (float)((double)k / ((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier));
+ 						progress.Set(num);
+ 						bool flag2 = false;
+ 						int num2 = 0;
+@@ -8165,53 +9442,56 @@
+ 						}
+ 					}
+ 				});
+-			WorldGen.AddGenerationPass("Hellforge", delegate(GenerationProgress progress)
+-				{
+-					progress.Message = Lang.gen[36];
+-					for (int k = 0; k < Main.maxTilesX / 200; k++)
+-					{
+-						float value = (float)(k / (Main.maxTilesX / 200));
+-						progress.Set(value);
+-						bool flag2 = false;
+-						int num = 0;
+-						while (!flag2)
+-						{
+-							int num2 = WorldGen.genRand.Next(1, Main.maxTilesX);
+-							int num3 = WorldGen.genRand.Next(Main.maxTilesY - 250, Main.maxTilesY - 5);
+-							try
+-							{
+-								if (Main.tile[num2, num3].wall != 13)
+-								{
+-									if (Main.tile[num2, num3].wall != 14)
+-									{
+-										continue;
+-									}
+-								}
+-								while (!Main.tile[num2, num3].active())
+-								{
+-									num3++;
+-								}
+-								num3--;
+-								WorldGen.PlaceTile(num2, num3, 77, false, false, -1, 0);
+-								if (Main.tile[num2, num3].type == 77)
+-								{
+-									flag2 = true;
+-								}
+-								else
+-								{
+-									num++;
+-									if (num >= 10000)
++			if (!Main.setting.NoUnderworld)
++			{
++				WorldGen.AddGenerationPass("Hellforge", delegate (GenerationProgress progress)
++					{
++						progress.Message = Lang.gen[36];
++						for (int k = 0; k < Main.maxTilesX / 200; k++)
++						{
++							float value = (float)(k / (Main.maxTilesX / 200));
++							progress.Set(value);
++							bool flag2 = false;
++							int num = 0;
++							while (!flag2)
++							{
++								int num2 = WorldGen.genRand.Next(1, Main.maxTilesX);
++								int num3 = WorldGen.genRand.Next(Main.maxTilesY - 250, Main.maxTilesY - 5);
++								try
++								{
++									if (Main.tile[num2, num3].wall != 13)
++									{
++										if (Main.tile[num2, num3].wall != 14)
++										{
++											continue;
++										}
++									}
++									while (!Main.tile[num2, num3].active())
++									{
++										num3++;
++									}
++									num3--;
++									WorldGen.PlaceTile(num2, num3, 77, false, false, -1, 0);
++									if (Main.tile[num2, num3].type == 77)
+ 									{
+ 										flag2 = true;
+ 									}
+-								}
+-							}
+-							catch
+-							{
+-							}
+-						}
+-					}
+-				});
++									else
++									{
++										num++;
++										if (num >= 10000)
++										{
++											flag2 = true;
++										}
++									}
++								}
++								catch
++								{
++								}
++							}
++						}
++					});
++			}
+ 			WorldGen.AddGenerationPass("Spreading Grass", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[37];
+@@ -8846,6 +10126,7 @@
+ 						}
+ 					}
+ 				});
++			// TODO Random Spawn?
+ 			WorldGen.AddGenerationPass("Spawn Point", delegate(GenerationProgress progress)
+ 				{
+ 					int num = 5;
+@@ -9035,7 +10316,7 @@
+ 						for (int k = num2 - num3; k < num2 + num3; k++)
+ 						{
+ 							int num4 = 20;
+-							while ((double)num4 < Main.worldSurface)
++							while ((double)num4 < Main.worldSurface && !Main.setting.NoTree)
+ 							{
+ 								WorldGen.GrowEpicTree(k, num4);
+ 								num4++;
+@@ -9043,7 +10324,10 @@
+ 						}
+ 						num++;
+ 					}
+-					WorldGen.AddTrees();
++					if (!Main.setting.NoTree)
++					{ 
++						WorldGen.AddTrees();
++					}
+ 				});
+ 			WorldGen.AddGenerationPass("Herbs", delegate(GenerationProgress progress)
+ 				{
+@@ -9674,6 +10958,10 @@
+ 								int num8 = k;
+ 								num7 += num6 / 2;
+ 								num7 = (WorldGen.crimson ? 1 : 0);
++								if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++								{
++									num7 = WorldGen.genRand.Next(2);
++								}
+ 								num6 %= 2;
+ 								num8 -= num6;
+ 								int num9 = (int)(Main.tile[k, l].frameY / 18);
+@@ -9884,6 +11172,7 @@
+ 						Main.tile[k, num2 + 2].type = 226;
+ 					}
+ 				});
++			// TODO micro biomes worldgen
+ 			WorldGen.AddGenerationPass("Micro Biomes", delegate(GenerationProgress progress)
+ 				{
+ 					progress.Message = Lang.gen[76];
+@@ -9891,18 +11180,24 @@
+ 					float num2 = (float)Main.maxTilesX / 4200f;
+ 					int num3 = (int)((float)WorldGen.genRand.Next(3, 6) * num);
+ 					int k = 0;
+-					while (k < num3)
+-					{
+-						if (Biomes<ThinIceBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 20, 50, 200, 50), structures))
+-						{
+-							k++;
++					// todo Thinice
++					if (!Main.setting.NoSnow)
++					{
++						while (k < num3)
++						{
++							if (Biomes<ThinIceBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 20, 50, 200, 50), structures))
++							{
++								k++;
++							}
+ 						}
+ 					}
+ 					progress.Set(0.1f);
+-					int num4 = (int)Math.Ceiling((double)num);
++					int num4 = (int)Math.Ceiling((double)num * Main.setting.EnchantedSwordBiomeMultiplier);
+ 					int l = 0;
+-					while (l < num4)
+-					{
++					int attempts = 0;
++					while (l < num4  /*and number of attempts is low...*/)
++					{
++						attempts++;
+ 						Point origin;
+ 						origin.Y = (int)worldSurface + WorldGen.genRand.Next(50, 100);
+ 						if (WorldGen.genRand.Next(2) == 0)
+@@ -9919,6 +11214,7 @@
+ 						}
+ 					}
+ 					progress.Set(0.2f);
++					// TODO campsites
+ 					int num5 = (int)((float)WorldGen.genRand.Next(6, 12) * num);
+ 					int m = 0;
+ 					while (m < num5)
+@@ -9928,7 +11224,7 @@
+ 							m++;
+ 						}
+ 					}
+-					int num6 = (int)((float)WorldGen.genRand.Next(14, 30) * num);
++					int num6 = (int)((float)WorldGen.genRand.Next(14, 30) * num * Main.setting.MiningExplosiveMultiplier);
+ 					int n = 0;
+ 					while (n < num6)
+ 					{
+@@ -9938,10 +11234,10 @@
+ 						}
+ 					}
+ 					progress.Set(0.3f);
+-					int num7 = (int)((float)WorldGen.genRand.Next(6, 12) * num2);
++					int num7 = (int)((float)WorldGen.genRand.Next(6, 12) * num2 * Main.setting.MahoganyTreeMultiplier);
+ 					int num8 = 0;
+ 					int num9 = 0;
+-					while (num8 < num7 && num9 < 20000)
++					while (num8 < num7 && num9 < 20000 * Main.setting.MahoganyTreeMultiplier)
+ 					{
+ 						if (Biomes<MahoganyTreeBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 50, 50, 500, 50), structures))
+ 						{
+@@ -9950,19 +11246,42 @@
+ 						num9++;
+ 					}
+ 					progress.Set(0.4f);
+-					if (!WorldGen.crimson)
++					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
+ 					{
+ 						int num10 = (int)((float)WorldGen.genRand.Next(1, 3) * num);
+ 						int num11 = 0;
+ 						while (num11 < num10)
+ 						{
+-							if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, 50, 500, 50), structures))
+-							{
+-								num11++;
+-							}
+-						}
+-					}
+-					TrackGenerator.Run((int)(10f * num), (int)(num * 25f) + 250);
++							if (Main.setting.CrimsonCorruptionAvoidJungle)
++							{
++								if (dungeonSide == -1) // dungeon on left side, so place on left side
++								{
++									//	if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, 50, 500, Main.maxTilesX/2), structures))
++									if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, Main.maxTilesX / 2, 500, 50), structures))
++									{
++										num11++;
++									}
++								}
++								else
++								{
++									//	if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, Main.maxTilesX / 2, 500, 50), structures))
++									if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, 50, 500, Main.maxTilesX / 2), structures))
++									{
++										num11++;
++									}
++								}
++							}
++							else
++							{ 
++								if (Biomes<CorruptionPitBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface, 50, 500, 50), structures))
++								{
++									num11++;
++								}
++							}
++						}
++					}
++					progress.Set(0.5f);
++					TrackGenerator.Run((int)(10f * num * Main.setting.MineCartMultiplier), (int)(num * 25f) + 250);
+ 					progress.Set(1f);
+ 				});
+ 			WorldGen.AddGenerationPass("Final Cleanup", delegate(GenerationProgress progress)
+@@ -10009,10 +11328,33 @@
+ 							}
+ 						}
+ 					}
++					progress.Message = "Meteor Shower...";
++					for (int predropMeteors = 0; predropMeteors < Main.setting.PreDropMeteor; predropMeteors++)
++					{
++						WorldGen.dropMeteor();
++					}
++					if (Main.hardMode && Main.setting.HardmodeStripes)
++					{
++						progress.Message = "Generating hardmode stripes...";
++						smCallBack(null);
++					}
++					progress.Message = "Generating hardmode ores...";
++					int num731 = 0;
++					while ((float)num731 < Main.setting.PreSmashAltar * 50f)
++					{
++						WorldGen.SmashAltar();
++						num731++;
++					}
++					WorldGen.altarCount = 0;
+ 					WorldGen.noTileActions = false;
+ 					WorldGen.gen = false;
+ 					Main.AnglerQuestSwap();
+ 				});
++			//while (WorldGen._generator._passes.Count > Main.setting.NumberGenerationPassSteps)
++			//{
++			//	WorldGen._generator._passes.RemoveAt(Main.setting.NumberGenerationPassSteps);//.RemoveRange()
++			//         }
++			///Array.Resize<GenPass>(ref WorldGen._generator._passes, 1);
+ 			WorldGen._generator.GenerateWorld(customProgressObject);
+ 			Main.WorldFileMetadata = FileMetadata.FromCurrentSettings(FileType.World);
+ 		}
+@@ -10124,6 +11466,10 @@
+ 					bool flag = false;
+ 					bool flag2 = false;
+ 					int num3 = WorldGen.genRand.Next(20, 30);
++					if (Main.setting.TreeLowerBound != 5)
++					{
++						num3 = WorldGen.genRand.Next(Main.setting.TreeLowerBound, Main.setting.TreeUpperBound + 1);
++					}
+ 					int num4;
+ 					for (int j = num - num3; j < num; j++)
+ 					{
+@@ -10568,6 +11914,7 @@
+ 
+ 		public static bool Pyramid(int i, int j)
+ 		{
++			WorldGen.numPyramids++;
+ 			ushort num = 151;
+ 			int num2 = j - WorldGen.genRand.Next(0, 7);
+ 			int num3 = WorldGen.genRand.Next(9, 13);
+@@ -11517,8 +12864,9 @@
+ 			}
+ 			if (Main.tile[i, num].nactive() && !Main.tile[i, num].halfBrick() && Main.tile[i, num].slope() == 0 && (Main.tile[i, num].type == 2 || Main.tile[i, num].type == 23 || Main.tile[i, num].type == 60 || Main.tile[i, num].type == 109 || Main.tile[i, num].type == 147 || Main.tile[i, num].type == 199 || Main.tile[i, num].type == 70) && (Main.tile[i, num - 1].wall == 0 || Main.tile[i, num - 1].wall == 106 || Main.tile[i, num - 1].wall == 107 || (Main.tile[i, num - 1].wall >= 138 && Main.tile[i, num - 1].wall <= 141) || Main.tile[i, num - 1].wall == 145 || Main.tile[i, num - 1].wall == 150 || Main.tile[i, num - 1].wall == 152) && ((Main.tile[i - 1, num].active() && (Main.tile[i - 1, num].type == 2 || Main.tile[i - 1, num].type == 23 || Main.tile[i - 1, num].type == 60 || Main.tile[i - 1, num].type == 109 || Main.tile[i - 1, num].type == 147 || Main.tile[i - 1, num].type == 199 || Main.tile[i - 1, num].type == 70)) || (Main.tile[i + 1, num].active() && (Main.tile[i + 1, num].type == 2 || Main.tile[i + 1, num].type == 23 || Main.tile[i + 1, num].type == 60 || Main.tile[i + 1, num].type == 109 || Main.tile[i + 1, num].type == 147 || Main.tile[i + 1, num].type == 199 || Main.tile[i + 1, num].type == 70))))
+ 			{
++				// desert? near spawn? near ocean, near dungeon
+ 				int num2 = 2;
+-				int num3 = 16;
++				int num3 = Main.setting.TreeUpperBound;//16;
+ 				if (Main.tile[i, num].type == 60)
+ 				{
+ 					num3 += 5;
+@@ -11527,7 +12875,7 @@
+ 				{
+ 					bool flag = false;
+ 					bool flag2 = false;
+-					int num4 = WorldGen.genRand.Next(5, num3 + 1);
++					int num4 = WorldGen.genRand.Next(Main.setting.TreeLowerBound/*5*/, num3 + 1);
+ 					int num5;
+ 					for (int j = num - num4; j < num; j++)
+ 					{
+@@ -12762,7 +14110,7 @@
+ 			{
+ 				NetMessage.SendData(25, -1, -1, Lang.misc[15], 255, 50f, 255f, 130f, 0, 0, 0);
+ 			}
+-			AchievementsHelper.NotifyProgressionEvent(9);
++			//AchievementsHelper.NotifyProgressionEvent(9);
+ 			if (Main.netMode == 2)
+ 			{
+ 				Netplay.ResetSections();
+@@ -12990,6 +14338,10 @@
+ 			if (WorldGen.crimson)
+ 			{
+ 				num += 36;
++			}
++			if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++			{
++				num = (short)((genRand.Next(0, 2) == 0) ? 0 : 36);
+ 			}
+ 			Main.tile[x - 1, y - 1].active(true);
+ 			Main.tile[x - 1, y - 1].type = 31;
+@@ -13031,6 +14383,7 @@
+ 					{
+ 						wallType = 14;
+ 					}
++					//WallID.ObsidianBrickUnsafe == 14
+ 					WorldGen.HellFort(i, num2, num3, wallType);
+ 					i += WorldGen.genRand.Next(30, 130);
+ 					if (WorldGen.genRand.Next(10) == 0)
+@@ -13041,7 +14394,7 @@
+ 			}
+ 			float num4 = (float)(Main.maxTilesX / 4200);
+ 			int num5 = 0;
+-			while ((float)num5 < 200f * num4)
++			while ((float)num5 < /*100f **/ 200f * num4)
+ 			{
+ 				int num6 = 0;
+ 				bool flag = false;
+@@ -13077,6 +14430,7 @@
+ 							}
+ 							if (!flag2)
+ 							{
++								//TileID.Torches  == 4
+ 								WorldGen.PlaceTile(num7 + num9, num8, 4, true, true, -1, 7);
+ 								flag = true;
+ 							}
+@@ -14229,8 +15583,10 @@
+ 
+ 		public static void makeTemple(int x, int y)
+ 		{
+-			Rectangle[] array = new Rectangle[40];
++			// TODO Temple size
++			Rectangle[] array = new Rectangle[400]; // 40 to 400
+ 			float num = (float)(Main.maxTilesX / 4200);
++			num *= Main.setting.TempleSizeMultiplier;//4f;
+ 			int num2 = WorldGen.genRand.Next((int)(num * 10f), (int)(num * 16f));
+ 			int num3 = 1;
+ 			if (WorldGen.genRand.Next(2) == 0)
+@@ -14364,7 +15720,7 @@
+ 								for (int num23 = num18; num23 < num19; num23++)
+ 								{
+ 									Main.tile[num22, num23].active(true);
+-									Main.tile[num22, num23].type = 226;
++									Main.tile[num22, num23].type = 226;//lhizard brick
+ 									Main.tile[num22, num23].liquid = 0;
+ 									Main.tile[num22, num23].slope(0);
+ 									Main.tile[num22, num23].halfBrick(false);
+@@ -15000,6 +16356,7 @@
+ 			int num2 = WorldGen.tRooms;
+ 			float num3 = (float)num2 * 1.9f;
+ 			num3 *= 1f + (float)WorldGen.genRand.Next(-15, 16) * 0.01f;
++			num3 *= Main.setting.TempleTrapMultiplier;
+ 			int num4 = 0;
+ 			while (num3 > 0f)
+ 			{
+@@ -15028,7 +16385,7 @@
+ 				}
+ 			}
+ 			Main.tileSolid[232] = false;
+-			float num7 = (float)num2 * 0.35f;
++			float num7 = (float)num2 * 0.35f * Main.setting.TempleChestMultiplier;
+ 			num7 *= 1f + (float)WorldGen.genRand.Next(-15, 16) * 0.01f;
+ 			int contain = 1293;
+ 			num4 = 0;
+@@ -15182,13 +16539,18 @@
+ 			return false;
+ 		}
+ 
+-		public static void MakeDungeon(int x, int y)
++		public static void MakeDungeon(int x, int y, GenerationProgress progress)
+ 		{
+-			int num = WorldGen.genRand.Next(3);
++			Main.setting.DungeonStyle = Main.setting.SelectDungeon;
++			if (Main.setting.DungeonStyle == 3)
++			{
++				Main.setting.DungeonStyle = WorldGen.genRand.Next(3);
++			}
++			// int num = WorldGen.genRand.Next(3);
+ 			WorldGen.genRand.Next(3);
+ 			ushort num2;
+ 			int num3;
+-			switch (num)
++			switch (Main.setting.DungeonStyle)
+ 			{
+ 				case 0:
+ 					num2 = 41;
+@@ -15215,7 +16577,7 @@
+ 			WorldGen.dyStrength1 = (double)WorldGen.genRand.Next(20, 25);
+ 			WorldGen.dxStrength2 = (double)WorldGen.genRand.Next(35, 50);
+ 			WorldGen.dyStrength2 = (double)WorldGen.genRand.Next(10, 15);
+-			float num4 = (float)(Main.maxTilesX / 60);
++			float num4 = (float)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60);
+ 			num4 += (float)WorldGen.genRand.Next(0, (int)(num4 / 3f));
+ 			float num5 = num4;
+ 			int num6 = 5;
+@@ -15242,6 +16604,7 @@
+ 						(int)((num5 - num4) / num5 * 60f),
+ 						"%"
+ 					});
++				progress.Message = Main.statusText;
+ 				if (num6 > 0)
+ 				{
+ 					num6--;
+@@ -15784,46 +17147,65 @@
+ 					}
+ 				}
+ 			}
+-			for (int num78 = 0; num78 < 4; num78++)
+-			{
+-				bool flag5 = false;
+-				while (!flag5)
+-				{
+-					int num79 = WorldGen.genRand.Next(WorldGen.dMinX, WorldGen.dMaxX);
+-					int num80 = WorldGen.genRand.Next((int)Main.worldSurface, WorldGen.dMaxY);
+-					if (Main.wallDungeon[(int)Main.tile[num79, num80].wall] && !Main.tile[num79, num80].active())
+-					{
+-						int contain = 0;
+-						int style2 = 0;
+-						if (num78 == 0)
+-						{
+-							style2 = 23;
+-							contain = 1156;
+-						}
+-						else if (num78 == 1)
+-						{
+-							if (!WorldGen.crimson)
+-							{
+-								style2 = 24;
+-								contain = 1571;
+-							}
+-							else
+-							{
+-								style2 = 25;
+-								contain = 1569;
+-							}
+-						}
+-						else if (num78 == 2)
+-						{
+-							style2 = 26;
+-							contain = 1260;
+-						}
+-						else if (num78 == 3)
+-						{
+-							style2 = 27;
+-							contain = 1572;
+-						}
+-						flag5 = WorldGen.AddBuriedChest(num79, num80, contain, false, style2);
++			int numChests = 4;
++			if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++				numChests++;
++			for (int round = 0; round < Main.setting.BiomeChestSets; round++)
++			{
++				for (int num78 = 0; num78 < numChests; num78++)
++				{
++					bool flag5 = false;
++					while (!flag5)
++					{
++						int num79 = WorldGen.genRand.Next(WorldGen.dMinX, WorldGen.dMaxX);
++						int num80 = WorldGen.genRand.Next((int)Main.worldSurface, WorldGen.dMaxY);
++						if (Main.wallDungeon[(int)Main.tile[num79, num80].wall] && !Main.tile[num79, num80].active())
++						{
++							int contain = 0;
++							int style2 = 0;
++							if (num78 == 0)
++							{
++								style2 = 23;
++								contain = 1156;
++							}
++							else if (num78 == 1)
++							{
++								if (!WorldGen.crimson)
++								{
++									style2 = 24;
++									contain = 1571;
++								}
++								else
++								{
++									style2 = 25;
++									contain = 1569;
++								}
++							}
++							else if (num78 == 2)
++							{
++								style2 = 26;
++								contain = 1260;
++							}
++							else if (num78 == 3)
++							{
++								style2 = 27;
++								contain = 1572;
++							}
++							else if (num78 == 4)
++							{
++								if (WorldGen.crimson)
++								{
++									style2 = 24;
++									contain = 1571;
++								}
++								else
++								{
++									style2 = 25;
++									contain = 1569;
++								}
++							}
++							flag5 = WorldGen.AddBuriedChest(num79, num80, contain, false, style2);
++						}
+ 					}
+ 				}
+ 			}
+@@ -17253,7 +18635,7 @@
+ 				}
+ 				int num8 = (int)(value.X + (float)WorldGen.dxStrength1 * 0.6f * (float)num7 + (float)WorldGen.dxStrength2 * (float)num7);
+ 				int num9 = (int)(WorldGen.dyStrength2 * 0.5);
+-				if ((double)value.Y < Main.worldSurface - 5.0 && Main.tile[num8, (int)((double)value.Y - num - 6.0 + (double)num9)].wall == 0 && Main.tile[num8, (int)((double)value.Y - num - 7.0 + (double)num9)].wall == 0 && Main.tile[num8, (int)((double)value.Y - num - 8.0 + (double)num9)].wall == 0)
++				if ((double)value.Y < Main.worldSurface - 5.0 /*-300.0*/ && Main.tile[num8, (int)((double)value.Y - num - 6.0 + (double)num9)].wall == 0 && Main.tile[num8, (int)((double)value.Y - num - 7.0 + (double)num9)].wall == 0 && Main.tile[num8, (int)((double)value.Y - num - 8.0 + (double)num9)].wall == 0)
+ 				{
+ 					WorldGen.dSurface = true;
+ 					WorldGen.TileRunner(num8, (int)((double)value.Y - num - 6.0 + (double)num9), (double)WorldGen.genRand.Next(25, 35), WorldGen.genRand.Next(10, 20), -1, false, 0f, -1f, false, true);
+@@ -18726,10 +20108,32 @@
+ 									int stack = WorldGen.genRand.Next(8) + 3;
+ 									if (num7 == 0)
+ 									{
++										if (Main.setting.IsCopper == 3)
++										{
++											if (WorldGen.genRand.Next(2) == 0)
++											{
++												WorldGen.copperBar = 20;
++											}
++											else
++											{
++												WorldGen.copperBar = 703;
++											}
++										}
+ 										Main.chest[num4].item[num5].SetDefaults(WorldGen.copperBar, false);
+ 									}
+ 									if (num7 == 1)
+ 									{
++										if (Main.setting.IsIron == 3)
++										{
++											if (WorldGen.genRand.Next(2) == 0)
++											{
++												WorldGen.ironBar = 22;
++											}
++											else
++											{
++												WorldGen.ironBar = 704;
++											}
++										}
+ 										Main.chest[num4].item[num5].SetDefaults(WorldGen.ironBar, false);
+ 									}
+ 									Main.chest[num4].item[num5].stack = stack;
+@@ -19117,10 +20521,32 @@
+ 									int stack14 = WorldGen.genRand.Next(8) + 3;
+ 									if (num18 == 0)
+ 									{
++										if (Main.setting.IsGold == 3)
++										{
++											if (WorldGen.genRand.Next(2) == 0)
++											{
++												WorldGen.goldBar = 19;
++											}
++											else
++											{
++												WorldGen.goldBar = 706;
++											}
++										}
+ 										Main.chest[num4].item[num5].SetDefaults(WorldGen.goldBar, false);
+ 									}
+ 									if (num18 == 1)
+ 									{
++										if (Main.setting.IsSilver == 3)
++										{
++											if (WorldGen.genRand.Next(2) == 0)
++											{
++												WorldGen.silverBar = 21;
++											}
++											else
++											{
++												WorldGen.silverBar = 705;
++											}
++										}
+ 										Main.chest[num4].item[num5].SetDefaults(WorldGen.silverBar, false);
+ 									}
+ 									Main.chest[num4].item[num5].stack = stack14;
+@@ -19302,6 +20728,17 @@
+ 									}
+ 									if (num25 == 1)
+ 									{
++										if (Main.setting.IsGold == 3)
++										{
++											if (WorldGen.genRand.Next(2) == 0)
++											{
++												WorldGen.goldBar = 19;
++											}
++											else
++											{
++												WorldGen.goldBar = 706;
++											}
++										}
+ 										Main.chest[num4].item[num5].SetDefaults(WorldGen.goldBar, false);
+ 									}
+ 									Main.chest[num4].item[num5].stack = stack21;
+@@ -25318,24 +26755,24 @@
+ 			}
+ 		}
+ 
+-		public static void SmashAltar(int i, int j)
++		public static void SmashAltar(/*int i, int j*/)
+ 		{
+-			if (Main.netMode == 1)
+-			{
+-				return;
+-			}
+-			if (!Main.hardMode)
+-			{
+-				return;
+-			}
+-			if (WorldGen.noTileActions)
+-			{
+-				return;
+-			}
+-			if (WorldGen.gen)
+-			{
+-				return;
+-			}
++			//if (Main.netMode == 1)
++			//{
++			//	return;
++			//}
++			//if (!Main.hardMode)
++			//{
++			//	return;
++			//}
++			//if (WorldGen.noTileActions)
++			//{
++			//	return;
++			//}
++			//if (WorldGen.gen)
++			//{
++			//	return;
++			//}
+ 			int num = WorldGen.altarCount % 3;
+ 			int num2 = WorldGen.altarCount / 3 + 1;
+ 			float num3 = (float)(Main.maxTilesX / 4200);
+@@ -25368,6 +26805,11 @@
+ 					NetMessage.SendData(25, -1, -1, Lang.misc[num5], 255, 50f, 255f, 130f, 0, 0, 0);
+ 				}
+ 				num = WorldGen.oreTier1;
++				num = num == 107 ? 221 : 107;
++				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
++				{
++					num = num == 107 ? 221 : 107;
++				}
+ 				num3 *= 1.05f;
+ 			}
+ 			else if (num == 1)
+@@ -25395,6 +26837,11 @@
+ 					NetMessage.SendData(25, -1, -1, Lang.misc[num6], 255, 50f, 255f, 130f, 0, 0, 0);
+ 				}
+ 				num = WorldGen.oreTier2;
++				num = num == 108 ? 222 : 108;
++				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
++				{
++					num = num == 108 ? 222 : 108;
++				}
+ 			}
+ 			else
+ 			{
+@@ -25421,6 +26868,11 @@
+ 					NetMessage.SendData(25, -1, -1, Lang.misc[num7], 255, 50f, 255f, 130f, 0, 0, 0);
+ 				}
+ 				num = WorldGen.oreTier3;
++				num = num == 111 ? 223 : 111;
++				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
++				{
++					num = num == 111 ? 223 : 111;
++				}
+ 			}
+ 			int num8 = 0;
+ 			while ((float)num8 < num3)
+@@ -25441,6 +26893,7 @@
+ 			}
+ 			int num10 = WorldGen.genRand.Next(3);
+ 			int num11 = 0;
++			// TODO option to not spread crimson on presmashaltar
+ 			while (num10 != 2 && num11++ < 1000)
+ 			{
+ 				int num12 = WorldGen.genRand.Next(100, Main.maxTilesX - 100);
+@@ -25475,11 +26928,11 @@
+ 				int num14 = Main.rand.Next(2) + 1;
+ 				for (int k = 0; k < num14; k++)
+ 				{
+-					NPC.SpawnOnPlayer((int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16), 82);
++					//NPC.SpawnOnPlayer((int)Player.FindClosest(new Vector2((float)(i * 16), (float)(j * 16)), 16, 16), 82);
+ 				}
+ 			}
+ 			WorldGen.altarCount++;
+-			AchievementsHelper.NotifyProgressionEvent(6);
++			//AchievementsHelper.NotifyProgressionEvent(6);
+ 		}
+ 
+ 		public static void Check3x1(int i, int j, int type)
+@@ -25756,7 +27209,7 @@
+ 				{
+ 					if (!WorldGen.noTileActions && !WorldGen.IsGeneratingHardMode)
+ 					{
+-						WorldGen.SmashAltar(i, j);
++						WorldGen.SmashAltar();
+ 					}
+ 				}
+ 				else if (type == 298)
+@@ -29160,46 +30613,49 @@
+ 
+ 		public static bool PlacePot(int x, int y, ushort type = 28, int style = 0)
+ 		{
+-			bool flag = true;
+-			for (int i = x; i < x + 2; i++)
+-			{
+-				for (int j = y - 1; j < y + 1; j++)
+-				{
+-					if (Main.tile[i, j] == null)
+-					{
+-						Main.tile[i, j] = new Tile();
+-					}
+-					if (Main.tile[i, j].active())
++			if (!Main.setting.NoPot)
++			{
++				bool flag = true;
++				for (int i = x; i < x + 2; i++)
++				{
++					for (int j = y - 1; j < y + 1; j++)
++					{
++						if (Main.tile[i, j] == null)
++						{
++							Main.tile[i, j] = new Tile();
++						}
++						if (Main.tile[i, j].active())
++						{
++							flag = false;
++						}
++					}
++					if (Main.tile[i, y + 1] == null)
++					{
++						Main.tile[i, y + 1] = new Tile();
++					}
++					if (!Main.tile[i, y + 1].nactive() || Main.tile[i, y + 1].halfBrick() || Main.tile[i, y + 1].slope() != 0 || !Main.tileSolid[(int)Main.tile[i, y + 1].type])
+ 					{
+ 						flag = false;
+ 					}
+ 				}
+-				if (Main.tile[i, y + 1] == null)
+-				{
+-					Main.tile[i, y + 1] = new Tile();
+-				}
+-				if (!Main.tile[i, y + 1].nactive() || Main.tile[i, y + 1].halfBrick() || Main.tile[i, y + 1].slope() != 0 || !Main.tileSolid[(int)Main.tile[i, y + 1].type])
+-				{
+-					flag = false;
+-				}
+-			}
+-			if (flag)
+-			{
+-				int num = WorldGen.genRand.Next(3) * 36;
+-				for (int k = 0; k < 2; k++)
+-				{
+-					for (int l = -1; l < 1; l++)
+-					{
+-						int num2 = k * 18 + num;
+-						int num3 = (l + 1) * 18;
+-						Main.tile[x + k, y + l].active(true);
+-						Main.tile[x + k, y + l].frameX = (short)num2;
+-						Main.tile[x + k, y + l].frameY = (short)(num3 + style * 36);
+-						Main.tile[x + k, y + l].type = type;
+-						Main.tile[x + k, y + l].halfBrick(false);
+-					}
+-				}
+-				return true;
++				if (flag)
++				{
++					int num = WorldGen.genRand.Next(3) * 36;
++					for (int k = 0; k < 2; k++)
++					{
++						for (int l = -1; l < 1; l++)
++						{
++							int num2 = k * 18 + num;
++							int num3 = (l + 1) * 18;
++							Main.tile[x + k, y + l].active(true);
++							Main.tile[x + k, y + l].frameX = (short)num2;
++							Main.tile[x + k, y + l].frameY = (short)(num3 + style * 36);
++							Main.tile[x + k, y + l].type = type;
++							Main.tile[x + k, y + l].halfBrick(false);
++						}
++					}
++					return true;
++				}
+ 			}
+ 			return false;
+ 		}
+@@ -32082,7 +33538,12 @@
+ 						WorldGen.PlaceOnTable1x1(i, j, type, style);
+ 						WorldGen.SquareTileFrame(i, j, true);
+ 					}
+-					else if (type == 14 || type == 26 || type == 86 || type == 87 || type == 88 || type == 89 || type == 114 || type == 186 || type == 187 || type == 215 || type == 217 || type == 218 || type == 377)
++					else if (type == 14 /*|| type == 26*/ || type == 86 || type == 87 || type == 88 || type == 89 || type == 114 || type == 186 || type == 187 || type == 215 || type == 217 || type == 218 || type == 377)
++					{
++						WorldGen.Place3x2(i, j, (ushort)type, style);
++						WorldGen.SquareTileFrame(i, j, true);
++					}
++					else if (type == 26 && !Main.setting.NoAltar)
+ 					{
+ 						WorldGen.Place3x2(i, j, (ushort)type, style);
+ 						WorldGen.SquareTileFrame(i, j, true);
+@@ -39543,7 +41004,7 @@
+ 								NetMessage.SendTileSquare(-1, num7, num8, 3);
+ 							}
+ 						}
+-						else if (Main.tile[num7, num8].type == 20 && WorldGen.genRand.Next(20) == 0 && !WorldGen.PlayerLOS(num7, num8))
++						else if (Main.tile[num7, num8].type == 20 && WorldGen.genRand.Next(20) == 0 && !WorldGen.PlayerLOS(num7, num8) && !Main.setting.NoTree)
+ 						{
+ 							if (Main.tile[num7, num8].frameX >= 324 && Main.tile[num7, num8].frameX < 540)
+ 							{
+@@ -39829,7 +41290,7 @@
+ 									NetMessage.SendTileSquare(-1, num7, num11, 1);
+ 								}
+ 							}
+-							if (WorldGen.genRand.Next(100) == 0 && !WorldGen.PlayerLOS(num7, num8))
++							if (WorldGen.genRand.Next(100) == 0 && !WorldGen.PlayerLOS(num7, num8) && !Main.setting.NoTree)
+ 							{
+ 								WorldGen.GrowTree(num7, num8);
+ 							}
+@@ -39871,7 +41332,7 @@
+ 							}
+ 							else if (WorldGen.genRand.Next(500) == 0 && (!Main.tile[num7, num11].active() || Main.tile[num7, num11].type == 61 || Main.tile[num7, num11].type == 74 || Main.tile[num7, num11].type == 69))
+ 							{
+-								if (!WorldGen.PlayerLOS(num7, num8))
++								if (!WorldGen.PlayerLOS(num7, num8) && !Main.setting.NoTree)
+ 								{
+ 									WorldGen.GrowTree(num7, num8);
+ 								}
+@@ -41171,7 +42632,7 @@
+ 		{
+ 			int crimDir = 1;
+ 			WorldGen.heartCount = 0;
+-			WorldGen.crimson = true;
++			//	WorldGen.crimson = true;
+ 			int num = j;
+ 			if ((double)num > Main.worldSurface)
+ 			{
+@@ -41697,7 +43158,7 @@
+ 				}
+ 				if (num <= 0f)
+ 				{
+-					if (!flag2)
++					if (!flag2 && !Main.setting.NoOrbHeart)
+ 					{
+ 						flag2 = true;
+ 						WorldGen.AddShadowOrb((int)value.X, (int)value.Y);
+@@ -41729,18 +43190,25 @@
+ 							}
+ 							if ((double)num10 > Main.worldSurface)
+ 							{
+-								WorldGen.Place3x2(num9, num10, 26, 0);
+-								if (Main.tile[num9, num10].type == 26)
++								if (!Main.setting.NoAltar)
++								{
++									WorldGen.Place3x2(num9, num10, 26, 0);
++									if (Main.tile[num9, num10].type == 26)
++									{
++										flag4 = true;
++									}
++									else
++									{
++										num8++;
++										if (num8 >= 10000)
++										{
++											flag4 = true;
++										}
++									}
++								}
++								else
+ 								{
+ 									flag4 = true;
+-								}
+-								else
+-								{
+-									num8++;
+-									if (num8 >= 10000)
+-									{
+-										flag4 = true;
+-									}
+ 								}
+ 							}
+ 							else
+@@ -44909,29 +46377,27 @@
+ 			}
+ 			return num3;
+ 		}
+-
+-		public static bool UpdateMapTile(int i, int j, bool addToList = true)
+-		{
+-			bool result = false;
+-#if CLIENT
+-			if (Main.mapEnabled && !WorldGen.noMapUpdate && !WorldGen.gen && Main.Map[i, j].Light > 0 && Main.Map.UpdateType(i, j) && addToList)
+-			{
+-				result = true;
+-				if (MapHelper.numUpdateTile < MapHelper.maxUpdateTile - 1)
+-				{
+-					MapHelper.updateTileX[MapHelper.numUpdateTile] = (short)i;
+-					MapHelper.updateTileY[MapHelper.numUpdateTile] = (short)j;
+-					MapHelper.numUpdateTile++;
+-				}
+-				else
+-				{
+-					Main.refreshMap = true;
+-				}
+-			}
+-#endif
+-			return result;
+-		}
+-
++		//		public static bool UpdateMapTile(int i, int j, bool addToList = true)
++		//		{
++		//			bool result = false;
++		//#if CLIENT
++		//			if (Main.mapEnabled && !WorldGen.noMapUpdate && !WorldGen.gen && Main.Map[i, j].Light > 0 && Main.Map.UpdateType(i, j) && addToList)
++		//			{
++		//				result = true;
++		//				if (MapHelper.numUpdateTile < MapHelper.maxUpdateTile - 1)
++		//				{
++		//					MapHelper.updateTileX[MapHelper.numUpdateTile] = (short)i;
++		//					MapHelper.updateTileY[MapHelper.numUpdateTile] = (short)j;
++		//					MapHelper.numUpdateTile++;
++		//				}
++		//				else
++		//				{
++		//					Main.refreshMap = true;
++		//				}
++		//			}
++		//#endif
++		//			return result;
++		//		}
+ 		public static void TileMergeAttemptFrametest(int i, int j, int myType, int lookfor, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight)
+ 		{
+ 			if (up == lookfor)
+@@ -45207,7 +46673,7 @@
+ 			{
+ 				if (i > 5 && j > 5 && i < Main.maxTilesX - 5 && j < Main.maxTilesY - 5 && Main.tile[i, j] != null)
+ 				{
+-					addToList = WorldGen.UpdateMapTile(i, j, true);
++					//	addToList = WorldGen.UpdateMapTile(i, j, true);
+ 					Tile tile = Main.tile[i, j];
+ 					if (!tile.active())
+ 					{
+@@ -49647,7 +51113,7 @@
+ 			}
+ 			if (i > 0 && j > 0)
+ 			{
+-				WorldGen.UpdateMapTile(i, j, addToList);
++				//	WorldGen.UpdateMapTile(i, j, addToList);
+ 			}
+ 		}
+ 
+
