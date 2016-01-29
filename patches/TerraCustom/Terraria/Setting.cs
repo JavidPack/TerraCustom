@@ -25,7 +25,6 @@ namespace Terraria
 			5
 		};
 		private int selectDungeon = 3;
-
 		private int shrineType;
 
 		public int IsCopper { get; internal set; } = 2;
@@ -41,8 +40,6 @@ namespace Terraria
 		public int IsMythril { get; internal set; } = 2;
 
 		public int IsAdaman { get; internal set; } = 2;
-
-
 
 
 		public int IsCorruption { get; internal set; } = 0;
@@ -213,7 +210,6 @@ namespace Terraria
 
 		public bool NoBeach { get; internal set; }
 		//public bool NoAnthill { get; internal set; }
-
 		public bool downedSlimeKing { get; internal set; }
 
 		public bool downedQueenBee { get; internal set; }

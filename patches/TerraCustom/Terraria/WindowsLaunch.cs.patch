@@ -1,32 +1,15 @@
 --- src/Terraria\Terraria\WindowsLaunch.cs
 +++ src/TerraCustom\Terraria\WindowsLaunch.cs
-@@ -3,12 +3,14 @@
+@@ -3,7 +3,7 @@
  using System.IO;
  using System.Reflection;
  using System.Runtime.InteropServices;
 -using Terraria.Social;
 +//using Terraria.Social;
-+
  namespace Terraria
  {
  	internal static class WindowsLaunch
- 	{
- 		public delegate bool HandlerRoutine(WindowsLaunch.CtrlTypes CtrlType);
-+
- 		public enum CtrlTypes
- 		{
- 			CTRL_C_EVENT,
-@@ -17,7 +19,9 @@
- 			CTRL_LOGOFF_EVENT = 5,
- 			CTRL_SHUTDOWN_EVENT
- 		}
-+
- 		private static WindowsLaunch.HandlerRoutine _handleRoutine;
-+
- 		private static bool ConsoleCtrlCheck(WindowsLaunch.CtrlTypes ctrlType)
- 		{
- 			bool flag = false;
-@@ -39,12 +43,14 @@
+@@ -39,7 +39,7 @@
  			}
  			if (flag)
  			{
@@ -35,11 +18,4 @@
  			}
  			return true;
  		}
-+
- 		[DllImport("Kernel32")]
- 		public static extern bool SetConsoleCtrlHandler(WindowsLaunch.HandlerRoutine Handler, bool Add);
-+
- 		private static void Main(string[] args)
- 		{
- 			AppDomain.CurrentDomain.AssemblyResolve += delegate(object sender, ResolveEventArgs sargs)
 
