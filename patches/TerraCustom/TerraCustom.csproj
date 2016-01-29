@@ -96,8 +96,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FNA, Version=0.0.0.1, Culture=neutral, processorArchitecture=AMD64" Condition="!$(DefineConstants.Contains('WINDOWS'))">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FNA" Condition="!$(DefineConstants.Contains('WINDOWS'))">
       <HintPath>..\..\references\FNA.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip.CF, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
@@ -414,13 +413,13 @@
     <Compile Include="Terraria\IngameOptions.cs" />
     <Compile Include="Terraria\Item.cs" />
     <Compile Include="Terraria\ItemText.cs" />
-    <Compile Include="Terraria\keyBoardInput.cs" />
+    <Compile Include="Terraria\keyBoardInput.cs" Condition="$(DefineConstants.Contains('CLIENT'))" />
     <Compile Include="Terraria\Lang.cs" />
     <Compile Include="Terraria\Lighting.cs" />
-    <Compile Include="Terraria\LinuxLaunch.cs" />
+    <Compile Include="Terraria\LinuxLaunch.cs" Condition="$(DefineConstants.Contains('LINUX'))" />
     <Compile Include="Terraria\Liquid.cs" />
     <Compile Include="Terraria\LiquidBuffer.cs" />
-    <Compile Include="Terraria\MacLaunch.cs" />
+    <Compile Include="Terraria\MacLaunch.cs" Condition="$(DefineConstants.Contains('MAC'))" />
     <Compile Include="Terraria\Main.cs" />
     <Compile Include="Terraria\MessageBuffer.cs" />
     <Compile Include="Terraria\Minecart.cs" />
@@ -446,7 +445,7 @@
     <Compile Include="Terraria\TimeLogger.cs" />
     <Compile Include="Terraria\Utils.cs" />
     <Compile Include="Terraria\WaterfallManager.cs" />
-    <Compile Include="Terraria\WindowsLaunch.cs" />
+    <Compile Include="Terraria\WindowsLaunch.cs" Condition="$(DefineConstants.Contains('WINDOWS'))" />
     <Compile Include="Terraria\Wiring.cs" />
     <Compile Include="Terraria\WorldGen.cs" />
     <Compile Include="Terraria\WorldSections.cs" />

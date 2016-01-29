@@ -1,0 +1,12 @@
+--- src/Terraria\Terraria\Framing.cs
++++ src/TerraCustom\Terraria\Framing.cs
+@@ -358,7 +358,7 @@
+ 			{
+ 				return;
+ 			}
+-			WorldGen.UpdateMapTile(i, j, true);
++			//WorldGen.UpdateMapTile(i, j, true);
+ 			Tile tile = Main.tile[i, j];
+ 			if (tile.wall == 0)
+ 			{
+

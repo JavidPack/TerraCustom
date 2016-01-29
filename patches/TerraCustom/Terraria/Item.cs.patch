@@ -1,0 +1,54 @@
+--- src/Terraria\Terraria\Item.cs
++++ src/TerraCustom\Terraria\Item.cs
+@@ -3011,7 +3011,7 @@
+ 					if (Main.itemName[i] == ItemName)
+ 					{
+ 						this.SetDefaults(i, false);
+-						this.checkMat();
++						//this.checkMat();
+ 						return;
+ 					}
+ 				}
+@@ -3027,7 +3027,7 @@
+ 				}
+ 				else
+ 				{
+-					this.checkMat();
++					//this.checkMat();
+ 				}
+ 				this.name = ItemName;
+ 				this.name = Lang.itemName(this.netID, false);
+@@ -3047,6 +3047,7 @@
+ 				this.material = false;
+ 				return false;
+ 			}
++			/*
+ 			for (int i = 0; i < Recipe.numRecipes; i++)
+ 			{
+ 				int num = 0;
+@@ -3060,6 +3061,7 @@
+ 					num++;
+ 				}
+ 			}
++			*/
+ 			int num2 = this.type;
+ 			if (num2 <= 543)
+ 			{
+@@ -44754,6 +44756,7 @@
+ 
+ 		public void SetDefaults(int Type = 0, bool noMatCheck = false)
+ 		{
++			return;
+ 			if (Main.netMode == 1 || Main.netMode == 2)
+ 			{
+ 				this.owner = 255;
+@@ -44975,7 +44978,7 @@
+ 			this.netID = this.type;
+ 			if (!noMatCheck)
+ 			{
+-				this.checkMat();
++				//this.checkMat();
+ 			}
+ 			this.name = Lang.itemName(this.netID, false);
+ 			this.CheckTip();
+

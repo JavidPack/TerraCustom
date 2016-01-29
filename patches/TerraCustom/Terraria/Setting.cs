@@ -41,7 +41,6 @@ namespace Terraria
 
 		public int IsAdaman { get; internal set; } = 2;
 
-
 		public int IsCorruption { get; internal set; } = 0;
 
 		public int IsPyramid { get; internal set; } = 2;
