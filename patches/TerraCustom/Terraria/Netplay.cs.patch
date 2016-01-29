@@ -1,0 +1,12 @@
+--- src/Terraria\Terraria\Netplay.cs
++++ src/TerraCustom\Terraria\Netplay.cs
+@@ -310,7 +310,7 @@
+ 							WorldGen.clearWorld();
+ 							if (Main.mapEnabled)
+ 							{
+-								Main.Map.Load();
++								//	Main.Map.Load();
+ 							}
+ 						}
+ 						if (Netplay.Connection.State == 5 && Main.loadMapLock)
+
