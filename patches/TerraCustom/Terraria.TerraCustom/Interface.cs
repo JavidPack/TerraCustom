@@ -56,20 +56,20 @@ namespace Terraria.TerraCustom
 			{
 				string[][] optionStrings =
 				{
-							new string[] { "Downed Slime King: No", "Downed Slime King: Yes"},
-							new string[] { "Downed Queen Bee : No", "Downed Queen Bee : Yes"},
-							new string[] { "Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},
-							new string[] { "Downed Eater of Worlds / Brain of Cthulu: No", "Downed Eater of Worlds / Brain of Cthulu: Yes"},
-							new string[] { "Downed Skeletron : No", "Downed Skeletron : Yes"},
-							new string[] { "Downed Twins: No", "Downed Twins: Yes"},
-							new string[] { "Downed Destroyer: No", "Downed Destroyer: Yes"},
-							new string[] { "Downed Skeletron Prime: No", "Downed Skeletron Prime: Yes"},
-							new string[] { "Downed Plantera: No", "Downed Plantera: Yes"},
-							new string[] { "Downed Golem: No", "Downed Golem: Yes"},
-							new string[] { "Downed Fishron : No", "Downed Fishron : Yes"},
-							new string[] { "Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},
-							new string[] { "Downed Moonlord: No", "Downed Moonlord: Yes"},
-						};
+					new string[] { "Downed Slime King: No", "Downed Slime King: Yes"},
+					new string[] { "Downed Queen Bee : No", "Downed Queen Bee : Yes"},
+					new string[] { "Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},
+					new string[] { "Downed Eater of Worlds / Brain of Cthulu: No", "Downed Eater of Worlds / Brain of Cthulu: Yes"},
+					new string[] { "Downed Skeletron : No", "Downed Skeletron : Yes"},
+					new string[] { "Downed Twins: No", "Downed Twins: Yes"},
+					new string[] { "Downed Destroyer: No", "Downed Destroyer: Yes"},
+					new string[] { "Downed Skeletron Prime: No", "Downed Skeletron Prime: Yes"},
+					new string[] { "Downed Plantera: No", "Downed Plantera: Yes"},
+					new string[] { "Downed Golem: No", "Downed Golem: Yes"},
+					new string[] { "Downed Fishron : No", "Downed Fishron : Yes"},
+					new string[] { "Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},
+					new string[] { "Downed Moonlord: No", "Downed Moonlord: Yes"},
+				};
 
 				num = 200;
 				num3 = 30; // virtical spacing?
@@ -89,20 +89,20 @@ namespace Terraria.TerraCustom
 
 
 				Func<int>[] getters = {
-							() => Main.setting.downedSlimeKing ? 1 : 0,
-							() => Main.setting.downedQueenBee ? 1 : 0,
-							() => Main.setting.downedEyeOfCthulu ? 1 : 0,
-							() => Main.setting.downedEaterBrain ? 1 : 0,
-							() => Main.setting.downedSkeletron ? 1 : 0,
-							() => Main.setting.downedTwins ? 1 : 0,
-							() => Main.setting.downedDestroyer ? 1 : 0,
-							() => Main.setting.downedSkeletronPrime ? 1 : 0,
-							() => Main.setting.downedPlantera ? 1 : 0,
-							() => Main.setting.downedGolem ? 1 : 0,
-							() => Main.setting.downedFishron ? 1 : 0,
-							() => Main.setting.downedAncientCultist ? 1 : 0,
-							() => Main.setting.downedMoonlord ? 1 : 0
-						};
+					() => Main.setting.downedSlimeKing ? 1 : 0,
+					() => Main.setting.downedQueenBee ? 1 : 0,
+					() => Main.setting.downedEyeOfCthulu ? 1 : 0,
+					() => Main.setting.downedEaterBrain ? 1 : 0,
+					() => Main.setting.downedSkeletron ? 1 : 0,
+					() => Main.setting.downedTwins ? 1 : 0,
+					() => Main.setting.downedDestroyer ? 1 : 0,
+					() => Main.setting.downedSkeletronPrime ? 1 : 0,
+					() => Main.setting.downedPlantera ? 1 : 0,
+					() => Main.setting.downedGolem ? 1 : 0,
+					() => Main.setting.downedFishron ? 1 : 0,
+					() => Main.setting.downedAncientCultist ? 1 : 0,
+					() => Main.setting.downedMoonlord ? 1 : 0
+				};
 				Action<int>[] setters = {
 					x => Main.setting.downedSlimeKing = x > 0 ? true : false,
 					x =>  Main.setting.downedQueenBee = x > 0 ? true : false,
@@ -250,40 +250,40 @@ namespace Terraria.TerraCustom
 				string[] labels = { "Biome Chest Sets:", "Pots:", "Jungle Shrines:", "Living Mahogany Trees:", "Water Chests:", "Surface Chests:", "Temple Chests:", Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/ };
 				float[] ratios = { 10f, 2.5f, 5f, 2f, 5f, 5f, 5f, Main.setting.ShadowChestMultiplierDelegate.ratio/*5f*/};
 				Func<float>[] getters = {
-							() => Main.setting.BiomeChestSets,
-							() => Main.setting.PotsMultiplier,
-							() => Main.setting.JungleShrineMultiplier,
-							() => Main.setting.MahoganyTreeMultiplier,
-							() => Main.setting.WaterChestMultiplier,
-							() => Main.setting.SurfaceChestMultiplier,
-							() => Main.setting.TempleChestMultiplier,
-							Main.setting.ShadowChestMultiplierDelegate.getter,
-                            //() => Main.setting.ShadowChestMultiplier,
-						};
+					() => Main.setting.BiomeChestSets,
+					() => Main.setting.PotsMultiplier,
+					() => Main.setting.JungleShrineMultiplier,
+					() => Main.setting.MahoganyTreeMultiplier,
+					() => Main.setting.WaterChestMultiplier,
+					() => Main.setting.SurfaceChestMultiplier,
+					() => Main.setting.TempleChestMultiplier,
+					Main.setting.ShadowChestMultiplierDelegate.getter,
+                    //() => Main.setting.ShadowChestMultiplier,
+				};
 				// 
 				// % = get/ratio therfore, ratio must be range, get must return 0 to range
 				Action<float>[] setters = {
-							x => Main.setting.BiomeChestSets = (int) x,
-							x => Main.setting.PotsMultiplier = x,
-							x => Main.setting.JungleShrineMultiplier = x,
-							x => Main.setting.MahoganyTreeMultiplier = x,
-							x => Main.setting.WaterChestMultiplier = x,
-							x => Main.setting.SurfaceChestMultiplier = x,
-							x => Main.setting.TempleChestMultiplier = x,
-							Main.setting.ShadowChestMultiplierDelegate.setter,
-							//x => Main.setting.ShadowChestMultiplier = x,
-						};
+					x => Main.setting.BiomeChestSets = (int) x,
+					x => Main.setting.PotsMultiplier = x,
+					x => Main.setting.JungleShrineMultiplier = x,
+					x => Main.setting.MahoganyTreeMultiplier = x,
+					x => Main.setting.WaterChestMultiplier = x,
+					x => Main.setting.SurfaceChestMultiplier = x,
+					x => Main.setting.TempleChestMultiplier = x,
+					Main.setting.ShadowChestMultiplierDelegate.setter,
+					//x => Main.setting.ShadowChestMultiplier = x,
+				};
 				Func<float, string>[] estimationString = {
-							x => x + " sets",
-							x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots",
-							x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines",
-							x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees",
-							x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests",
-							x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests",
-							x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests",
-							//x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests",
-							Main.setting.ShadowChestMultiplierDelegate.estimationString,
-						};
+					x => x + " sets",
+					x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots",
+					x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines",
+					x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees",
+					x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests",
+					x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests",
+					x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests",
+					//x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests",
+					Main.setting.ShadowChestMultiplierDelegate.estimationString,
+				};
 
 				// TODO Sliders.
 				for (int i = 0; i < labels.Length; i++)
@@ -369,41 +369,41 @@ namespace Terraria.TerraCustom
 				string[] labels = { "Surface Height Variance:", "Surface Upper Limit:", "Surface Lower Limit:", "Dungeon Size", "Temple Size", "Surface Tunnels", "Lakes", "World Width" };
 				float[] ratios = { 10f, .35f, .35f,/*.07f, .15f, */10f, 4f, 50f, 20f, 16800f };
 				Func<float>[] getters = {
-							() => Main.setting.SurfaceTerrainHeightMultiplier,
-							//() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
-							//() => Main.setting.SurfaceTerrainHeightMin - .3f,  // .3 to .45?
-							() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
-							() => Main.setting.SurfaceTerrainHeightMin - .1f,  // .3 to .45?
-							() => Main.setting.DungeonSizeMultiplier- .01f, // 
-							() => Main.setting.TempleSizeMultiplier- .2f, // 
-							() => Main.setting.SurfaceHorizontalTunnelsMultiplier,
-							() => Main.setting.LakeMultiplier,
-							() => Main.maxTilesX
-						};
+					() => Main.setting.SurfaceTerrainHeightMultiplier,
+					//() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
+					//() => Main.setting.SurfaceTerrainHeightMin - .3f,  // .3 to .45?
+					() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
+					() => Main.setting.SurfaceTerrainHeightMin - .1f,  // .3 to .45?
+					() => Main.setting.DungeonSizeMultiplier- .01f, // 
+					() => Main.setting.TempleSizeMultiplier- .2f, // 
+					() => Main.setting.SurfaceHorizontalTunnelsMultiplier,
+					() => Main.setting.LakeMultiplier,
+					() => Main.maxTilesX
+				};
 				// 
 				// % = get/ratio therfore, ratio must be range, get must return 0 to range
 				Action<float>[] setters = {
-							x => Main.setting.SurfaceTerrainHeightMultiplier = x,
-							//x => Main.setting.SurfaceTerrainHeightMax = x+.1f,
-							//x => Main.setting.SurfaceTerrainHeightMin = x+.3f, // ration * % 
-							x => Main.setting.SurfaceTerrainHeightMax = x+.1f > Main.setting.SurfaceTerrainHeightMin? Main.setting.SurfaceTerrainHeightMin : x+.1f,
-							x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f,
-							x => Main.setting.DungeonSizeMultiplier = x + .05f,   // set called with 0 to 1.0f * ratio
-							x => Main.setting.TempleSizeMultiplier = x + .2f,
-							x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x,
-							x => Main.setting.LakeMultiplier = x,
-							x => Main.maxTilesX = (int)x,
-						};
+					x => Main.setting.SurfaceTerrainHeightMultiplier = x,
+					//x => Main.setting.SurfaceTerrainHeightMax = x+.1f,
+					//x => Main.setting.SurfaceTerrainHeightMin = x+.3f, // ration * % 
+					x => Main.setting.SurfaceTerrainHeightMax = x+.1f > Main.setting.SurfaceTerrainHeightMin? Main.setting.SurfaceTerrainHeightMin : x+.1f,
+					x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f,
+					x => Main.setting.DungeonSizeMultiplier = x + .05f,   // set called with 0 to 1.0f * ratio
+					x => Main.setting.TempleSizeMultiplier = x + .2f,
+					x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x,
+					x => Main.setting.LakeMultiplier = x,
+					x => Main.maxTilesX = (int)x,
+				};
 				Func<float, string>[] estimationString = {
-							x => Math.Round((double)(x * 100f)) + "%" + (x==0?" Flat":""),
-							x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":""),
-							x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":""),
-							x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways",
-							x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":""),
-							x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%",
-							x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1),
-							x => x +" tiles wide",
-						};
+					x => Math.Round((double)(x * 100f)) + "%" + (x==0?" Flat":""),
+					x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":""),
+					x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":""),
+					x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways",
+					x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":""),
+					x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%",
+					x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1),
+					x => x +" tiles wide",
+				};
 
 				// TODO Sliders.
 				for (int i = 0; i < labels.Length; i++)
@@ -488,32 +488,32 @@ namespace Terraria.TerraCustom
 				string[] labels = { "Crystal Hearts:", /*"Demon/Crimson Altars:"*/ "Pre-Drop Meteor", "Tree Lower Bound", "Tree Upper Bound"/*, "Debug: #Generation Pass Steps"*/ };
 				float[] ratios = { 10f, 100f, 150f, 150f/*, 95f*/};
 				Func<float>[] getters = {
-							() => Main.setting.CrystalHeartMultiplier,
-							//() => Main.setting.AltarMultiplier,
-							() => (float)Main.setting.PreDropMeteor,
-							() => (float)Main.setting.TreeLowerBound,
-							() => (float)Main.setting.TreeUpperBound,
-					//		() => (float)Main.setting.NumberGenerationPassSteps,
-						};
+					() => Main.setting.CrystalHeartMultiplier,
+					//() => Main.setting.AltarMultiplier,
+					() => (float)Main.setting.PreDropMeteor,
+					() => (float)Main.setting.TreeLowerBound,
+					() => (float)Main.setting.TreeUpperBound,
+			//		() => (float)Main.setting.NumberGenerationPassSteps,
+				};
 				Action<float>[] setters = {
-							x => Main.setting.CrystalHeartMultiplier = x,
-							x => Main.setting.PreDropMeteor = (int)x,
-							x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x), // ratio * %
-							x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x), // ratio * %
-						//	x => Main.setting.NumberGenerationPassSteps = (int) x,
+					x => Main.setting.CrystalHeartMultiplier = x,
+					x => Main.setting.PreDropMeteor = (int)x,
+					x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x), // ratio * %
+					x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x), // ratio * %
+				//	x => Main.setting.NumberGenerationPassSteps = (int) x,
 
-							//x => { Main.setting.TreeLowerBound = 1; Main.setting.TreeLowerBound = 2; },
-							//x => Main.setting.AltarMultiplier = x,
-						};
+					//x => { Main.setting.TreeLowerBound = 1; Main.setting.TreeLowerBound = 2; },
+					//x => Main.setting.AltarMultiplier = x,
+				};
 				Func<float, string>[] estimationString = {
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
-							x => "Drop " + (int)x + " meteors",
-							x => "Between " + (int)x ,
-							x => " and " + (int)x + " tiles tall",
-						//	x => (int)x + " steps (Don't change this)",
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
+					x => "Drop " + (int)x + " meteors",
+					x => "Between " + (int)x ,
+					x => " and " + (int)x + " tiles tall",
+				//	x => (int)x + " steps (Don't change this)",
 
-							//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
-						};
+					//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
+				};
 
 				// TODO Sliders.
 				DrawSliders(num40, num41, textColor3, labels, ratios, getters, setters, estimationString);
@@ -554,64 +554,7 @@ namespace Terraria.TerraCustom
 				}
 				int num41 = num40 + 30;
 				string text5 = "";
-				for (int num42 = 0; num42 < 8; num42++)
-				{
-					int num43 = num41;
-					int num44 = 390 + Main.screenWidth / 2 - 400 - 100;
-					switch (num42)
-					{
-						case 0:
-							text5 = "Enchanted Sword:";
-							break;
-						case 1:
-							text5 = "Mining Explosive (Detonator):";
-							num43 += 30;
-							break;
-						case 2:
-							text5 = "Traps (Dart, Explosive, Boulder):";
-							num43 += 60;
-							break;
-						case 3:
-							text5 = "Sky Islands:";
-							num43 += 90;
-							break;
-						case 4:
-							int numberEnchantedSwordBiomes = (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * Main.setting.EnchantedSwordBiomeMultiplier);
-							text5 = Math.Round((double)(Main.setting.EnchantedSwordBiomeMultiplier * 100f)) + "%" + " -> " + numberEnchantedSwordBiomes;  // .2 orignially, *500 = 100 
-							num44 += 270;
-							break;
-						case 5:
-							text5 = Math.Round((double)(Main.setting.MiningExplosiveMultiplier * 100f)) + "%";  // .2 orignially, *500 = 100 
-							num44 += 360;
-							num43 += 30;
-							break;
-						case 6:
-							text5 = Math.Round((double)(Main.setting.TrapMultiplier * 100f)) + "%";  // .2 orignially, *500 = 100 
-							num44 += 360;
-							num43 += 60;
-							break;
-						case 7:
-							//  int numberEnchantedSwordBiomes = (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * Main.setting.EnchantedSwordBiomeMultiplier);
-							text5 = "~" + Math.Round((double)(Main.setting.SkyIslandMultiplier * 100f)) + "%";// + " -> " + numberEnchantedSwordBiomes;  // .2 orignially, *500 = 100 
-							num44 += 270;
-							num43 += 90;
-							break;
 
-					}
-					num40 = num43;
-					Microsoft.Xna.Framework.Color textColor2 = color;
-					textColor2.R = (byte)((255 + textColor2.R) / 2);
-					textColor2.G = (byte)((255 + textColor2.R) / 2);
-					textColor2.B = (byte)((255 + textColor2.R) / 2);
-					int num45 = 255;
-					int num46 = (int)textColor2.R - (255 - num45);
-					if (num46 < 0)
-					{
-						num46 = 0;
-					}
-					textColor2 = new Microsoft.Xna.Framework.Color((int)((byte)num46), (int)((byte)num46), (int)((byte)num46), (int)((byte)num45));
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text5, (float)num44, (float)num43, textColor2, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
-				}
 				// text4 = "Option to generate alternate hardmode ores in the beginning";
 				num39 = Main.screenWidth / 2 - 300;
 				num40 += 70;
@@ -620,50 +563,6 @@ namespace Terraria.TerraCustom
 				if (!Main.mouseLeft)
 				{
 					IngameOptions.rightLock = -1;
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30));
-				float percEnchantedSwordBiomeMultiplier = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.EnchantedSwordBiomeMultiplier / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 2)
-				{
-					IngameOptions.rightHover = 2;
-					if (Main.mouseLeft && IngameOptions.rightLock == 2)
-					{
-						Main.setting.EnchantedSwordBiomeMultiplier = 5f * percEnchantedSwordBiomeMultiplier;
-					}
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 60));
-				float percMiningExplosiveMultiplier = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.MiningExplosiveMultiplier / 50f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 3)
-				{
-					IngameOptions.rightHover = 3;
-					if (Main.mouseLeft && IngameOptions.rightLock == 3)
-					{
-						Main.setting.MiningExplosiveMultiplier = 50f * percMiningExplosiveMultiplier;
-					}
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 90));
-				float percTrapMultiplier = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.TrapMultiplier / 100f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 4)
-				{
-					IngameOptions.rightHover = 4;
-					if (Main.mouseLeft && IngameOptions.rightLock == 4)
-					{
-						Main.setting.TrapMultiplier = 100f * percTrapMultiplier;
-					}
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 120));
-				float percSkyIslandMultiplier = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.SkyIslandMultiplier / 10f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 5)
-				{
-					IngameOptions.rightHover = 5;
-					if (Main.mouseLeft && IngameOptions.rightLock == 5)
-					{
-						Main.setting.SkyIslandMultiplier = 10f * percSkyIslandMultiplier;
-					}
 				}
 
 				Microsoft.Xna.Framework.Color textColor3 = color;
@@ -676,69 +575,58 @@ namespace Terraria.TerraCustom
 					numval = 0;
 				}
 				textColor3 = new Microsoft.Xna.Framework.Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
-
+				
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
-				string[] labels = { "Minecart Tracks:", "Gemstone Caves:", "Gemstone Cave Size:", "Spider Caves:", "Granite Caves:", "Marble Caves:", "Underground Cabins:", "Temple Traps:" };
-				float[] ratios = { 3f, 10f, 10f, 5f, 10f, 10f, 10f, 10f };
+				string[] labels = { "Enchanted Sword:", "Mining Explosive (Detonator):", "Traps (Dart, Explosive, Boulder):", "Sky Islands:","Minecart Tracks:", "Gemstone Caves:", "Gemstone Cave Size:", "Spider Caves:", "Granite Caves:", "Marble Caves:", "Underground Cabins:", "Temple Traps:" };
+				float[] ratios = { 5f,50f,100f,10f,3f, 10f, 10f, 5f, 10f, 10f, 10f, 10f };
 				Func<float>[] getters = {
-							() => Main.setting.MineCartMultiplier,
-							() => Main.setting.GemCaveMultiplier,
-							() => Main.setting.GemCaveSizeMultiplier,
-							() => Main.setting.SpiderCaveMultiplier,
-							() => Main.setting.GraniteCaveMultiplier,
-							() => Main.setting.MarbleCaveMultiplier,
-							() => Main.setting.UndergroundCabinMultiplier,
-							() => Main.setting.TempleTrapMultiplier,
-						};
+					() => Main.setting.EnchantedSwordBiomeMultiplier,
+					() => Main.setting.MiningExplosiveMultiplier,
+					() => Main.setting.TrapMultiplier,
+					() => Main.setting.SkyIslandMultiplier,
+					() => Main.setting.MineCartMultiplier,
+					() => Main.setting.GemCaveMultiplier,
+					() => Main.setting.GemCaveSizeMultiplier,
+					() => Main.setting.SpiderCaveMultiplier,
+					() => Main.setting.GraniteCaveMultiplier,
+					() => Main.setting.MarbleCaveMultiplier,
+					() => Main.setting.UndergroundCabinMultiplier,
+					() => Main.setting.TempleTrapMultiplier,
+				};
 				Action<float>[] setters = {
-							x => Main.setting.MineCartMultiplier = x,
-							x => Main.setting.GemCaveMultiplier = x,
-							x => Main.setting.GemCaveSizeMultiplier = x,
-							x => Main.setting.SpiderCaveMultiplier = x,
-							x => Main.setting.GraniteCaveMultiplier = x,
-							x => Main.setting.MarbleCaveMultiplier = x,
-							x => Main.setting.UndergroundCabinMultiplier = x,
-							x => Main.setting.TempleTrapMultiplier = x,
-						};
+					x => Main.setting.EnchantedSwordBiomeMultiplier = x,
+					x => Main.setting.MiningExplosiveMultiplier = x,
+					x => Main.setting.TrapMultiplier = x,
+					x => Main.setting.SkyIslandMultiplier = x,
+					x => Main.setting.MineCartMultiplier = x,
+					x => Main.setting.GemCaveMultiplier = x,
+					x => Main.setting.GemCaveSizeMultiplier = x,
+					x => Main.setting.SpiderCaveMultiplier = x,
+					x => Main.setting.GraniteCaveMultiplier = x,
+					x => Main.setting.MarbleCaveMultiplier = x,
+					x => Main.setting.UndergroundCabinMultiplier = x,
+					x => Main.setting.TempleTrapMultiplier = x,
+				};
+
+			// Todo, Test if this would this work?
+			//	int numberEnchantedSwordBiomes = (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * Main.setting.EnchantedSwordBiomeMultiplier);
+
 				Func<float, string>[] estimationString = {
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x),
-							x => Math.Round((double)(x * 100f)) + "%",
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles",
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x),
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x),
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x),
-							x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":""),
-							x => Math.Round((double)(x * 100f)) + "%",
-						};
+					x => Math.Round(x * 100f) + "%"+ " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x),
+					x => Math.Round(x * 100f) + "%",
+					x => Math.Round(x * 100f) + "%",
+					x => "~" + Math.Round(x * 100f) + "%",
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x),
+					x => Math.Round((double)(x * 100f)) + "%",
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles",
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x),
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x),
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x),
+					x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":""),
+					x => Math.Round((double)(x * 100f)) + "%",
+				};
 
-				// TODO Sliders.
 				DrawSliders(num40, num41, textColor3, labels, ratios, getters, setters, estimationString);
-				//for (int i = 0; i < labels.Length; i++)
-				//{
-				//	int yPos = num41;
-				//	int xPos = 390 + Main.screenWidth / 2 - 400 - 100;
-				//	// String 1
-				//	yPos += 120 + i * 30;
-				//	num40 = yPos;
-				//	Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
-
-				//	// String 2
-				//	xPos += 270;//180;
-				//	Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
-
-				//	// Slider
-				//	IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 150 + 30 * i));
-				//	float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getters[i]() / ratios[i]);
-				//	if (IngameOptions.inBar || IngameOptions.rightLock == 6 + i)
-				//	{
-				//		IngameOptions.rightHover = 6 + i;
-				//		if (Main.mouseLeft && IngameOptions.rightLock == 6 + i)
-				//		{
-				//			setters[i](ratios[i] * percent);
-				//		}
-				//	}
-				//}
-
 
 				if (IngameOptions.rightHover != -1)
 				{
@@ -807,7 +695,7 @@ namespace Terraria.TerraCustom
 				}
 			}
 			else if (Main.menuMode == (int)MenuModes.Ores)
-			{
+			{ 
 				string[][] optionStrings =
 				{
 					new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"},
