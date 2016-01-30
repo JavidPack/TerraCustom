@@ -808,272 +808,96 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Ores)
 			{
+				string[][] optionStrings =
+				{
+					new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"},
+					new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"},
+					new string[] { "Silver/Tungsten: Tungsten","Silver/Tungsten: Silver","Silver/Tungsten: Random","Silver/Tungsten: Both"},
+					new string[] { "Gold/Platinum: Platinum", "Gold/Platinum: Gold","Gold/Platinum: Random","Gold/Platinum: Both"},
+					new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"},
+					new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"},
+					new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"},
+				};
+
 				num = 200;
 				num3 = 35;
-				numberClickableLabels = 10;
+				numberClickableLabels = 2 + optionStrings.GetLength(0) + 1;
 				array4[numberClickableLabels - 1] = 18;
 				for (int num25 = 0; num25 < numberClickableLabels; num25++)
 				{
 					clickableLabelScale[num25] = 0.73f;
 				}
-				int num26 = 0;
-				clickableLabelText[num26] = "Reset Ore Settings";
-				if (main.selectedMenu == num26)
+				int buttonIndex = 0;
+				clickableLabelText[buttonIndex] = "Reset Ore Settings";
+				if (main.selectedMenu == buttonIndex)
 				{
 					WorldGen.initializeOres();
 				}
 				clickableLabelScale[0] = 0.53f;
 				array4[0] = -18;
-				num26++;
-				clickableLabelText[num26] = "Also check 'Ore Amount' option to get both hardmode ores";
-				clickableLabelScale[num26] = 0.6f;
-				array[num26] = true;
-				num26++;
-				if (Main.setting.IsIron == 1)
+
+				buttonIndex++;
+				clickableLabelText[buttonIndex] = "Also check 'Ore Amount' option to get both hardmode ores";
+				clickableLabelScale[buttonIndex] = 0.6f;
+				array[buttonIndex] = true;
+
+				Func<int>[] getters = {
+					() => Main.setting.IsCopper,
+					() => Main.setting.IsIron,
+					() => Main.setting.IsSilver,
+					() => Main.setting.IsGold,
+					() => Main.setting.IsCobalt,
+					() => Main.setting.IsMythril,
+					() => Main.setting.IsAdaman,
+				};
+				Action<int>[] setters = {
+					x => Main.setting.IsCopper = x,
+					x => Main.setting.IsIron = x,
+					x => Main.setting.IsSilver = x,
+					x => Main.setting.IsGold = x,
+					x => Main.setting.IsCobalt = x,
+					x => Main.setting.IsMythril = x,
+					x => Main.setting.IsAdaman = x,
+				};
+
+				for (int i = 0; i < getters.Length; i++)
 				{
-					clickableLabelText[num26] = "Iron/Lead: Iron";
-				}
-				else if (Main.setting.IsIron == 0)
-				{
-					clickableLabelText[num26] = "Iron/Lead: Lead";
-				}
-				else if (Main.setting.IsIron == 2)
-				{
-					clickableLabelText[num26] = "Iron/Lead: Random";
-				}
-				else if (Main.setting.IsIron == 3)
-				{
-					clickableLabelText[num26] = "Iron/Lead: Both";
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsIron == 1)
+					buttonIndex++;
+					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
+					if (main.selectedMenu == buttonIndex)
 					{
-						Main.setting.IsIron = 0;
-					}
-					else if (Main.setting.IsIron == 2)
-					{
-						Main.setting.IsIron = 1;
-					}
-					else if (Main.setting.IsIron == 0)
-					{
-						Main.setting.IsIron = 3;
-					}
-					else if (Main.setting.IsIron == 3)
-					{
-						Main.setting.IsIron = 2;
+						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
 					}
 				}
-				num26++;
-				if (Main.setting.IsCopper == 1)
-				{
-					clickableLabelText[num26] = "Copper/Tin: Copper";
-				}
-				else if (Main.setting.IsCopper == 0)
-				{
-					clickableLabelText[num26] = "Copper/Tin: Tin";
-				}
-				else if (Main.setting.IsCopper == 2)
-				{
-					clickableLabelText[num26] = "Copper/Tin: Random";
-				}
-				else if (Main.setting.IsCopper == 3)
-				{
-					clickableLabelText[num26] = "Copper/Tin: Both";
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsCopper == 1)
-					{
-						Main.setting.IsCopper = 0;
-					}
-					else if (Main.setting.IsCopper == 2)
-					{
-						Main.setting.IsCopper = 1;
-					}
-					else if (Main.setting.IsCopper == 0)
-					{
-						Main.setting.IsCopper = 3;
-					}
-					else if (Main.setting.IsCopper == 3)
-					{
-						Main.setting.IsCopper = 2;
-					}
-				}
-				num26++;
-				if (Main.setting.IsSilver == 1)
-				{
-					clickableLabelText[num26] = "Silver/Tungsten: Silver";
-				}
-				else if (Main.setting.IsSilver == 0)
-				{
-					clickableLabelText[num26] = "Silver/Tungsten: Tungsten";
-				}
-				else if (Main.setting.IsSilver == 2)
-				{
-					clickableLabelText[num26] = "Silver/Tungsten: Random";
-				}
-				else if (Main.setting.IsSilver == 3)
-				{
-					clickableLabelText[num26] = "Silver/Tungsten: Both";
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsSilver == 1)
-					{
-						Main.setting.IsSilver = 0;
-					}
-					else if (Main.setting.IsSilver == 2)
-					{
-						Main.setting.IsSilver = 1;
-					}
-					else if (Main.setting.IsSilver == 0)
-					{
-						Main.setting.IsSilver = 3;
-					}
-					else if (Main.setting.IsSilver == 3)
-					{
-						Main.setting.IsSilver = 2;
-					}
-				}
-				num26++;
-				if (Main.setting.IsGold == 1)
-				{
-					clickableLabelText[num26] = "Gold/Platinum: Gold";
-				}
-				else if (Main.setting.IsGold == 0)
-				{
-					clickableLabelText[num26] = "Gold/Platinum: Platinum";
-				}
-				else if (Main.setting.IsGold == 2)
-				{
-					clickableLabelText[num26] = "Gold/Platinum: Random";
-				}
-				else if (Main.setting.IsGold == 3)
-				{
-					clickableLabelText[num26] = "Gold/Platinum: Both";
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsGold == 1)
-					{
-						Main.setting.IsGold = 0;
-					}
-					else if (Main.setting.IsGold == 2)
-					{
-						Main.setting.IsGold = 1;
-					}
-					else if (Main.setting.IsGold == 0)
-					{
-						Main.setting.IsGold = 3;
-					}
-					else if (Main.setting.IsGold == 3)
-					{
-						Main.setting.IsGold = 2;
-					}
-				}
-				num26++;
-				if (Main.setting.IsCobalt == 1)
-				{
-					clickableLabelText[num26] = "Cobalt/Palladium: Cobalt";
-					WorldGen.oreTier1 = 107; //Terraria.ID.TileID.Cobalt
-				}
-				else if (Main.setting.IsCobalt == 0)
-				{
-					clickableLabelText[num26] = "Cobalt/Palladium: Palladium";
-					WorldGen.oreTier1 = 221;
-				}
-				else if (Main.setting.IsCobalt == 2)
-				{
-					clickableLabelText[num26] = "Cobalt/Palladium: Random";
-					WorldGen.oreTier1 = -1;
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsCobalt == 1)
-					{
-						Main.setting.IsCobalt = 0;
-					}
-					else if (Main.setting.IsCobalt == 2)
-					{
-						Main.setting.IsCobalt = 1;
-					}
-					else if (Main.setting.IsCobalt == 0)
-					{
-						Main.setting.IsCobalt = 2;
-					}
-				}
-				num26++;
-				if (Main.setting.IsMythril == 1)
-				{
-					clickableLabelText[num26] = "Mythril/Orichalcum: Mythril";
-					WorldGen.oreTier2 = 108;
-				}
-				else if (Main.setting.IsMythril == 0)
-				{
-					clickableLabelText[num26] = "Mythril/Orichalcum: Orichalcum";
-					WorldGen.oreTier2 = 222;
-				}
-				else if (Main.setting.IsMythril == 2)
-				{
-					clickableLabelText[num26] = "Mythril/Orichalcum: Random";
-					WorldGen.oreTier2 = -1;
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsMythril == 1)
-					{
-						Main.setting.IsMythril = 0;
-					}
-					else if (Main.setting.IsMythril == 2)
-					{
-						Main.setting.IsMythril = 1;
-					}
-					else if (Main.setting.IsMythril == 0)
-					{
-						Main.setting.IsMythril = 2;
-					}
-				}
-				num26++;
-				if (Main.setting.IsAdaman == 1)
-				{
-					clickableLabelText[num26] = "Adamantite/Titanium: Adamantite";
-					WorldGen.oreTier3 = 111;
-				}
-				else if (Main.setting.IsAdaman == 0)
-				{
-					clickableLabelText[num26] = "Adamantite/Titanium: Titanium";
-					WorldGen.oreTier3 = 223;
-				}
-				else if (Main.setting.IsAdaman == 2)
-				{
-					clickableLabelText[num26] = "Adamantite/Titanium: Random";
-					WorldGen.oreTier3 = -1;
-				}
-				if (main.selectedMenu == num26)
-				{
-					if (Main.setting.IsAdaman == 1)
-					{
-						Main.setting.IsAdaman = 0;
-					}
-					else if (Main.setting.IsAdaman == 2)
-					{
-						Main.setting.IsAdaman = 1;
-					}
-					else if (Main.setting.IsAdaman == 0)
-					{
-						Main.setting.IsAdaman = 2;
-					}
-				}
-				num26++;
-				clickableLabelText[num26] = Lang.menu[5];
-				if (main.selectedMenu == num26)
+
+				buttonIndex++;
+				array4[buttonIndex] = 30;
+				clickableLabelText[buttonIndex] = Lang.menu[5];
+				if (main.selectedMenu == buttonIndex)
 				{
 					Main.menuMode = (int)MenuModes.Settings;
 				}
 			}
-			else if (Main.menuMode == (int)MenuModes.ChallengeOption  /*113*/)
+			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
+				string[][] optionStrings =
+				{
+					new string[] {"No tree: Disabled","No tree: Enabled"},
+					new string[] {"No dungeon: Disabled","No dungeon: Enabled"},
+					new string[] {"No temple: Disabled","No temple: Enabled"},
+					new string[] {"No spider cave: Disabled","No spider cave: Enabled"},
+					new string[] {"No hive: Disabled","No hive: Enabled"},
+					new string[] {"No snow: Disabled","No snow: Enabled"},
+					new string[] {"No jungle: Disabled","No jungle: Enabled"},
+					new string[] {"No anthill: Disabled","No anthill: Enabled"},
+					new string[] {"No beaches: Disabled","No beaches: Enabled"},
+					new string[] {"No pot: Disabled","No pot: Enabled"},
+					new string[] {"No chest: Disabled","No chest: Enabled"},
+					new string[] {"No altar: Disabled","No altar: Enabled"},
+					new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"},
+					new string[] {"No underworld: Disabled","No underworld: Enabled"},
+				};
+
 				num = 200;
 				num3 = 30;
 				numberClickableLabels = 16; // change this!
@@ -1082,213 +906,62 @@ namespace Terraria.TerraCustom
 				{
 					clickableLabelScale[num27] = 0.73f;
 				}
-				int num28 = 0;
-				clickableLabelText[num28] = "Reset Challenge Settings";
-				if (main.selectedMenu == num28)
+				int buttonIndex = 0;
+				clickableLabelText[buttonIndex] = "Reset Challenge Settings";
+				if (main.selectedMenu == buttonIndex)
 				{
 					WorldGen.initializeChallenge();
 				}
 				clickableLabelScale[0] = 0.53f;
 				array4[0] = -18;
-				num28++;
-				if (!Main.setting.NoTree)
+
+				Func<int>[] getters = {
+					() => Main.setting.NoTree ? 1 : 0,
+					() => Main.setting.NoDungeon ? 1 : 0,
+					() => Main.setting.NoTemple ? 1 : 0,
+					() => Main.setting.NoSpiderCave ? 1 : 0,
+					() => Main.setting.NoHive ? 1 : 0,
+					() => Main.setting.NoSnow ? 1 : 0,
+					() => Main.setting.NoJungle ? 1 : 0,
+					() => Main.setting.NoAnthill ? 1 : 0,
+					() => Main.setting.NoBeach ? 1 : 0,
+					() => Main.setting.NoPot ? 1 : 0,
+					() => Main.setting.NoChest ? 1 : 0,
+					() => Main.setting.NoAltar ? 1 : 0,
+					() => Main.setting.NoOrbHeart ? 1 : 0,
+					() => Main.setting.NoUnderworld ? 1 : 0,
+				};
+				Action<int>[] setters = {
+					x => Main.setting.NoTree = x > 0 ? true : false,
+					x => Main.setting.NoDungeon = x > 0 ? true : false,
+					x => Main.setting.NoTemple= x > 0 ? true : false,
+					x => Main.setting.NoSpiderCave = x > 0 ? true : false,
+					x => Main.setting.NoHive = x > 0 ? true : false,
+					x => Main.setting.NoSnow  = x > 0 ? true : false,
+					x => Main.setting.NoJungle  = x > 0 ? true : false,
+					x => Main.setting.NoAnthill  = x > 0 ? true : false,
+					x => Main.setting.NoBeach  = x > 0 ? true : false,
+					x => Main.setting.NoPot  = x > 0 ? true : false,
+					x => Main.setting.NoChest  = x > 0 ? true : false,
+					x => Main.setting.NoAltar = x > 0 ? true : false,
+					x => Main.setting.NoOrbHeart = x > 0 ? true : false,
+					x => Main.setting.NoUnderworld = x > 0 ? true : false,
+				};
+
+				for (int i = 0; i < getters.Length; i++)
 				{
-					clickableLabelText[num28] = "No tree: Disabled";
+					buttonIndex++;
+					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
+					if (main.selectedMenu == buttonIndex)
+					{
+						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
+					}
 				}
-				else
-				{
-					clickableLabelText[num28] = "No tree: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoTree = !Main.setting.NoTree;
-				}
-				num28++;
-				if (!Main.setting.NoDungeon)
-				{
-					clickableLabelText[num28] = "No dungeon: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No dungeon: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoDungeon = !Main.setting.NoDungeon;
-				}
-				num28++;
-				if (!Main.setting.NoTemple)
-				{
-					clickableLabelText[num28] = "No temple: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No temple: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoTemple = !Main.setting.NoTemple;
-				}
-				num28++;
-				if (!Main.setting.NoSpiderCave)
-				{
-					clickableLabelText[num28] = "No spider cave: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No spider cave: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoSpiderCave = !Main.setting.NoSpiderCave;
-				}
-				num28++;
-				if (!Main.setting.NoHive)
-				{
-					clickableLabelText[num28] = "No hive: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No hive: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoHive = !Main.setting.NoHive;
-				}
-				num28++;
-				if (!Main.setting.NoSnow)
-				{
-					clickableLabelText[num28] = "No snow: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No snow: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoSnow = !Main.setting.NoSnow;
-				}
-				num28++;
-				if (!Main.setting.NoJungle)
-				{
-					clickableLabelText[num28] = "No jungle: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No jungle: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoJungle = !Main.setting.NoJungle;
-				}
-				num28++;
-				if (!Main.setting.NoAnthill)
-				{
-					clickableLabelText[num28] = "No anthill: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No anthill: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoAnthill = !Main.setting.NoAnthill;
-				}
-				num28++;
-				if (!Main.setting.NoBeach)
-				{
-					clickableLabelText[num28] = "No beaches: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No beaches: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoBeach = !Main.setting.NoBeach;
-				}
-				num28++;
-				//if (!Main.setting.NoAnthill)
-				//{
-				//	array9[num28] = "No anthill: Disabled";
-				//}
-				//else
-				//{
-				//	array9[num28] = "No anthill: Enabled";
-				//}
-				//if (this.selectedMenu == num28)
-				//{
-				//	Main.setting.NoAnthill = !Main.setting.NoAnthill;
-				//}
-				//num28++;
-				if (!Main.setting.NoPot)
-				{
-					clickableLabelText[num28] = "No pot: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No pot: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoPot = !Main.setting.NoPot;
-				}
-				num28++;
-				if (!Main.setting.NoChest)
-				{
-					clickableLabelText[num28] = "No chest: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No chest: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoChest = !Main.setting.NoChest;
-				}
-				num28++;
-				if (!Main.setting.NoAltar)
-				{
-					clickableLabelText[num28] = "No altar: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No altar: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoAltar = !Main.setting.NoAltar;
-				}
-				num28++;
-				if (!Main.setting.NoOrbHeart)
-				{
-					clickableLabelText[num28] = "No orb/heart: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No orb/heart: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoOrbHeart = !Main.setting.NoOrbHeart;
-				}
-				num28++;
-				if (!Main.setting.NoUnderworld)
-				{
-					clickableLabelText[num28] = "No underworld: Disabled";
-				}
-				else
-				{
-					clickableLabelText[num28] = "No underworld: Enabled";
-				}
-				if (main.selectedMenu == num28)
-				{
-					Main.setting.NoUnderworld = !Main.setting.NoUnderworld;
-				}
-				num28++;
-				array4[num28] = 20;
-				clickableLabelText[num28] = Lang.menu[5];
-				if (main.selectedMenu == num28)
+
+				buttonIndex++;
+				array4[buttonIndex] = 20;
+				clickableLabelText[buttonIndex] = Lang.menu[5];
+				if (main.selectedMenu == buttonIndex)
 				{
 					Main.menuMode = (int)MenuModes.Settings;
 				}
@@ -1302,33 +975,30 @@ namespace Terraria.TerraCustom
 					if (WorldGen.worldSize == 0)
 					{
 						optionStrings = new string[][]
-				{
+						{
 							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
 							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
 							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
 							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
 							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
-				};
+						};
 					}
 					if (WorldGen.worldSize == 1)
 					{
-						/*string[][]*/
 						optionStrings = new string[][]
-
- {
+						{
 							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
 							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
 							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
 							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
 							new string[] { "Cave Background Middle: Random", "Cave Background Middle: 1", "Cave Background Middle: 2", "Cave Background Middle: 3", "Cave Background Middle: 4", "Cave Background Middle: 5", "Cave Background Middle: 6", "Cave Background Middle: 7", "Cave Background Middle: 8" },
 							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
- };
+						};
 					}
 					if (WorldGen.worldSize == 2)
 					{
 						optionStrings = new string[][]
-
-			   {
+						{
 							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
 							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
 							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
@@ -1336,7 +1006,7 @@ namespace Terraria.TerraCustom
 							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
 							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
 							new string[] { "Cave Background Far Right: Random", "Cave Background Far Right: 1", "Cave Background Far Right: 2", "Cave Background Far Right: 3", "Cave Background Far Right: 4", "Cave Background Far Right: 5", "Cave Background Far Right: 6", "Cave Background Far Right: 7", "Cave Background Far Right: 8"},
-			   };
+						};
 					}
 
 					num = 200;
@@ -1453,17 +1123,28 @@ namespace Terraria.TerraCustom
 					}
 				}
 			}
-			else if (Main.menuMode == (int)MenuModes.Miscellaneous /*1111*/)
+			else if (Main.menuMode == (int)MenuModes.Miscellaneous)
 			{
+				string[][] optionStrings =
+				{
+					new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"},
+					new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"},
+					new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"},
+					new string[] { "Hardmode: No","Hardmode: Yes"},
+					new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"},
+					new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"},
+					new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" },
+				};
+
 				num = 200;
 				num3 = 44;
-				numberClickableLabels = 9;  // change here
+				numberClickableLabels = 2 + optionStrings.GetLength(0);
 				for (int num21 = 0; num21 < numberClickableLabels; num21++)
 				{
 					clickableLabelScale[num21] = 0.73f;
 				}
-				int num22 = 0;
-				clickableLabelText[num22] = "Reset Miscellaneous Settings";
+				int buttonIndex = 0;
+				clickableLabelText[buttonIndex] = "Reset Miscellaneous Settings";
 				if (main.selectedMenu == 0)
 				{
 					WorldGen.initializeMiscellaneous();
@@ -1471,158 +1152,39 @@ namespace Terraria.TerraCustom
 				clickableLabelScale[0] = 0.53f;
 				array4[0] = -17;
 
-				num22++;
-				if (Main.setting.IsCorruption == 0)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: Random";
-				}
-				else if (Main.setting.IsCorruption == 1)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: Corruption";
-				}
-				else if (Main.setting.IsCorruption == 2)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: Crimson";
-				}
-				else if (Main.setting.IsCorruption == 3)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: Corruption with Crimson chasms";
-				}
-				else if (Main.setting.IsCorruption == 4)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: Crimson with Corruption chasms";
-				}
-				else if (Main.setting.IsCorruption == 5)
-				{
-					clickableLabelText[num22] = "Corruption/Crimson: None";
-				}
-				if (main.selectedMenu == num22)
-				{
-					Main.setting.IsCorruption = (Main.setting.IsCorruption + 1) % 6;
-				}
+				Func<int>[] getters = {
+					() => Main.setting.IsCorruption,
+					() => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0,
+					() => Main.setting.DungeonSide,
+					() => Main.hardMode ? 1 : 0,
+					() => Main.setting.HardmodeStripes ? 1 : 0,
+					() => Main.setting.IsPyramid,
+					() => Main.setting.IsGiantTree,
+				};
+				Action<int>[] setters = {
+					x => Main.setting.IsCorruption = x,
+					x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false,
+                    x => Main.setting.DungeonSide = x,
+					x => Main.hardMode = x > 0 ? true : false,
+					x => Main.setting.HardmodeStripes = x > 0 ? true : false,
+					x => Main.setting.IsPyramid = x,
+					x => Main.setting.IsGiantTree = x,
+				};
 
-				num22++;
-				if (Main.setting.CrimsonCorruptionAvoidJungle)
+				for (int i = 0; i < getters.Length; i++)
 				{
-					clickableLabelText[num22] = "Force Corruption/Crimson Avoid Jungle Side: Yes";
-				}
-				else
-				{
-					clickableLabelText[num22] = "Force Corruption/Crimson Avoid Jungle Side: No";
-				}
-				if (main.selectedMenu == num22)
-				{
-					Main.setting.CrimsonCorruptionAvoidJungle = !Main.setting.CrimsonCorruptionAvoidJungle;
-				}
-
-				num22++;
-				if (Main.setting.DungeonSide == 0)
-				{
-					clickableLabelText[num22] = "Dungeon Side: Random";
-				}
-				else if (Main.setting.DungeonSide == 1)
-				{
-					clickableLabelText[num22] = "Dungeon Side: Left";
-				}
-				else if (Main.setting.DungeonSide == 2)
-				{
-					clickableLabelText[num22] = "Dungeon Side: Right";
-				}
-				if (main.selectedMenu == num22)
-				{
-					Main.setting.DungeonSide = (Main.setting.DungeonSide + 1) % 3;
-				}
-
-				num22++;
-				if (Main.hardMode)
-				{
-					clickableLabelText[num22] = "Hardmode: Yes";
-				}
-				else
-				{
-					clickableLabelText[num22] = "Hardmode: No";
-				}
-				if (main.selectedMenu == num22)
-				{
-					Main.hardMode = !Main.hardMode;
-				}
-
-				num22++;
-				if (Main.setting.HardmodeStripes)
-				{
-					clickableLabelText[num22] = "Spawn Hardmode stripes (if Hardmode is Yes): Yes";
-				}
-				else
-				{
-					clickableLabelText[num22] = "Spawn Hardmode stripes (if Hardmode is Yes): No";
-				}
-				if (main.selectedMenu == num22)
-				{
-					Main.setting.HardmodeStripes = !Main.setting.HardmodeStripes;
-				}
-
-				num22++;
-				if (Main.setting.IsPyramid == 1)
-				{
-					clickableLabelText[num22] = "Pyramids: Yes";
-				}
-				else if (Main.setting.IsPyramid == 0)
-				{
-					clickableLabelText[num22] = "Pyramids: No";
-				}
-				else if (Main.setting.IsPyramid == 2)
-				{
-					clickableLabelText[num22] = "Pyramids: Random";
-				}
-				if (main.selectedMenu == num22)
-				{
-					if (Main.setting.IsPyramid == 1)
+					buttonIndex++;
+					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
+					if (main.selectedMenu == buttonIndex)
 					{
-						Main.setting.IsPyramid = 0;
-					}
-					else if (Main.setting.IsPyramid == 2)
-					{
-						Main.setting.IsPyramid = 1;
-					}
-					else if (Main.setting.IsPyramid == 0)
-					{
-						Main.setting.IsPyramid = 2;
+						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
 					}
 				}
 
-				num22++;
-				if (Main.setting.IsGiantTree == 1)
-				{
-					clickableLabelText[num22] = "Giant Trees: Yes";
-				}
-				else if (Main.setting.IsGiantTree == 0)
-				{
-					clickableLabelText[num22] = "Giant Trees: No";
-				}
-				else if (Main.setting.IsGiantTree == 2)
-				{
-					clickableLabelText[num22] = "Giant Trees: Random";
-				}
-				if (main.selectedMenu == num22)
-				{
-					if (Main.setting.IsGiantTree == 1)
-					{
-						Main.setting.IsGiantTree = 0;
-					}
-					else if (Main.setting.IsGiantTree == 2)
-					{
-						Main.setting.IsGiantTree = 1;
-					}
-					else if (Main.setting.IsGiantTree == 0)
-					{
-						Main.setting.IsGiantTree = 2;
-					}
-				}
-
-				num22++;
-				array4[num22] = 30;
-				clickableLabelText[num22] = Lang.menu[5];
-				if (main.selectedMenu == num22)
+				buttonIndex++;
+				array4[buttonIndex] = 30;
+				clickableLabelText[buttonIndex] = Lang.menu[5];
+				if (main.selectedMenu == buttonIndex)
 				{
 					Main.menuMode = (int)MenuModes.Settings;
 				}
