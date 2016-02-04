@@ -453,18 +453,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Terraria.Libraries\DotNetZip\Ionic.Zip.CF.dll" />
-    <EmbeddedResource Include="Terraria\Logo.png" />
     <EmbeddedResource Include="Terraria.Libraries\JSON.NET\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Terraria.Libraries\Steamworks.NET\Steamworks.NET.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terraria\TreeTops.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terraria\MossColors.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Terraria\DungeonColors.png" />
+    <EmbeddedResource Include="Terraria.TerraCustom\DungeonColors.png" />
+    <EmbeddedResource Include="Terraria.TerraCustom\Logo.png" />
+    <EmbeddedResource Include="Terraria.TerraCustom\MossColors.png" />
+    <EmbeddedResource Include="Terraria.TerraCustom\TreeTops.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

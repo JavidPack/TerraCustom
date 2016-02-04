@@ -346,4 +346,67 @@ namespace Terraria
 			this.estimationString = estimationString;
 		}
 	}
+
+	public class TerraCustomMenuItem
+	{
+		public float labelScale = 1f;
+		public virtual void HandleMe(ref string label, bool clicked)
+		{
+
+		}
+	}
+
+	// Slider Item
+	public class SliderItem : TerraCustomMenuItem
+	{
+
+	}
+
+	// Slider Item
+	public class ActionLabel : TerraCustomMenuItem
+	{
+		private Action action;
+		private string label;
+
+		public ActionLabel(string label, Action action)
+		{
+			this.label = label;
+			this.action = action;
+			labelScale = 0.73f;
+		}
+
+		public override void HandleMe(ref string label, bool clicked)
+		{
+			label = this.label;
+			if (clicked)
+			{
+				action();
+			}
+		}
+	}
+
+	// Label Item
+	public class OptionLabel : TerraCustomMenuItem
+	{
+		private Func<int> getter;
+		private Action<int> setter;
+		private string[] optionStrings;
+
+		public OptionLabel(string[] v, Func<int> getter, Action<int> setter)
+		{
+			this.optionStrings = v;
+			this.getter = getter;
+			this.setter = setter;
+			labelScale = 0.73f;
+		}
+
+		public override void HandleMe(ref string label, bool clicked)
+		{
+			label = optionStrings[getter()];
+			if (clicked)
+			{
+				setter((getter() + 1) % optionStrings.Length);
+			}
+		}
+	}
 }

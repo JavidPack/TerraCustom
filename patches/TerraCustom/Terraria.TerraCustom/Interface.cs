@@ -9,14 +9,25 @@ namespace Terraria.TerraCustom
 {
 	class Interface
 	{
+		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f},
+			new OptionLabel(new string[] { "Found Stylist: No", "Found Stylist: Yes" }, () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Goblin : No", "Found Goblin : Yes" }, () => Main.setting.savedGoblin? 1 : 0, x => Main.setting.savedGoblin = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Wizard : No", "Found Wizard : Yes" }, () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Mechanic: No", "Found Mechanic: Yes" }, () => Main.setting.savedMechanic? 1 : 0, x => Main.setting.savedMechanic = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Angler : No", "Found Angler : Yes" }, () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes" }, () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }),
+		};
 
 		static Color color = Color.White;
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
 		{
+			num = 200;
 			if (Main.menuMode == (int)MenuModes.DownedFound)
 			{
-				num = 200;
+				
 				num3 = 35;
 				numberClickableLabels = 3;  // increment this.
 				array4[numberClickableLabels - 1] = 9;
@@ -71,7 +82,6 @@ namespace Terraria.TerraCustom
 					new string[] { "Downed Moonlord: No", "Downed Moonlord: Yes"},
 				};
 
-				num = 200;
 				num3 = 30; // virtical spacing?
 				numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
 				for (int num21 = 0; num21 < numberClickableLabels; num21++)
@@ -139,71 +149,70 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Found)
 			{
-				string[][] optionStrings =
-				{
-					new string[] { "Found Stylist: No", "Found Stylist: Yes"},
-					new string[] { "Found Goblin : No", "Found Goblin : Yes"},
-					new string[] { "Found Wizard : No", "Found Wizard : Yes"},
-					new string[] { "Found Mechanic: No", "Found Mechanic: Yes"},
-					new string[] { "Found Angler : No", "Found Angler : Yes"},
-					new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes"},
-				};
+				GenericMenu(main, FoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				//string[][] optionStrings =
+				//{
+				//	new string[] { "Found Stylist: No", "Found Stylist: Yes"},
+				//	new string[] { "Found Goblin : No", "Found Goblin : Yes"},
+				//	new string[] { "Found Wizard : No", "Found Wizard : Yes"},
+				//	new string[] { "Found Mechanic: No", "Found Mechanic: Yes"},
+				//	new string[] { "Found Angler : No", "Found Angler : Yes"},
+				//	new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes"},
+				//};
 
-				num = 200;
-				num3 = 30; // virtical spacing?
-				numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
-				for (int num21 = 0; num21 < numberClickableLabels; num21++)
-				{
-					clickableLabelScale[num21] = 0.73f;
-				}
-				int buttonIndex = 0;
-				clickableLabelText[buttonIndex] = "Reset Found NPC Settings";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeFound();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
+				//num3 = 30; // virtical spacing?
+				//numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
+				//for (int num21 = 0; num21 < numberClickableLabels; num21++)
+				//{
+				//	clickableLabelScale[num21] = 0.73f;
+				//}
+				//int buttonIndex = 0;
+				//clickableLabelText[buttonIndex] = "Reset Found NPC Settings";
+				//if (main.selectedMenu == 0)
+				//{
+				//	WorldGen.initializeFound();
+				//}
+				//clickableLabelScale[0] = 0.53f;
+				//array4[0] = -17;
 
 
-				Func<int>[] getters = {
-					() => Main.setting.savedStylist ? 1 : 0,
-					() => Main.setting.savedGoblin ? 1 : 0,
-					() => Main.setting.savedWizard ? 1 : 0,
-					() => Main.setting.savedMechanic ? 1 : 0,
-					() => Main.setting.savedAngler ? 1 : 0,
-					() => Main.setting.savedTaxCollector ? 1 : 0,
-				};
-				Action<int>[] setters = {
-					x => Main.setting.savedStylist = x > 0 ? true : false,
-					x =>  Main.setting.savedGoblin = x > 0 ? true : false,
-					x => Main.setting.savedWizard = x > 0 ? true : false,
-					x =>  Main.setting.savedMechanic = x > 0 ? true : false,
-					x => Main.setting.savedAngler  = x > 0 ? true : false,
-					x => Main.setting.savedTaxCollector = x > 0 ? true : false,
-				};
+				//Func<int>[] getters = {
+				//	() => Main.setting.savedStylist ? 1 : 0,
+				//	() => Main.setting.savedGoblin ? 1 : 0,
+				//	() => Main.setting.savedWizard ? 1 : 0,
+				//	() => Main.setting.savedMechanic ? 1 : 0,
+				//	() => Main.setting.savedAngler ? 1 : 0,
+				//	() => Main.setting.savedTaxCollector ? 1 : 0,
+				//};
+				//Action<int>[] setters = {
+				//	x => Main.setting.savedStylist = x > 0 ? true : false,
+				//	x =>  Main.setting.savedGoblin = x > 0 ? true : false,
+				//	x => Main.setting.savedWizard = x > 0 ? true : false,
+				//	x =>  Main.setting.savedMechanic = x > 0 ? true : false,
+				//	x => Main.setting.savedAngler  = x > 0 ? true : false,
+				//	x => Main.setting.savedTaxCollector = x > 0 ? true : false,
+				//};
 
-				for (int i = 0; i < getters.Length; i++)
-				{
-					buttonIndex++;
-					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-					if (main.selectedMenu == buttonIndex)
-					{
-						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-					}
-				}
+				//for (int i = 0; i < getters.Length; i++)
+				//{
+				//	buttonIndex++;
+				//	clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
+				//	if (main.selectedMenu == buttonIndex)
+				//	{
+				//		setters[i]((getters[i]() + 1) % optionStrings[i].Length);
+				//	}
+				//}
 
-				buttonIndex++;
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.DownedFound;
-				}
+				//buttonIndex++;
+				//array4[buttonIndex] = 30;
+				//clickableLabelText[buttonIndex] = Lang.menu[5];
+				//if (main.selectedMenu == buttonIndex)
+				//{
+				//	Main.menuMode = (int)MenuModes.DownedFound;
+				//}
 			}
 			else if (Main.menuMode == (int)MenuModes.Chests)
 			{
-				num = 200;
 				num3 = 30;
 				numberClickableLabels = 2;
 				for (int num38 = 0; num38 < numberClickableLabels; num38++)
@@ -320,7 +329,6 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Terrain)
 			{
-				num = 200;
 				num3 = 30;
 				numberClickableLabels = 2;
 				for (int num38 = 0; num38 < numberClickableLabels; num38++)
@@ -441,7 +449,6 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.VariousSpawns)
 			{
-				num = 200;
 				num3 = 30;
 				numberClickableLabels = 2;
 				for (int num38 = 0; num38 < numberClickableLabels; num38++)
@@ -515,7 +522,6 @@ namespace Terraria.TerraCustom
 					//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
 				};
 
-				// TODO Sliders.
 				DrawSliders(num40, num41, textColor3, labels, ratios, getters, setters, estimationString);
 
 				if (IngameOptions.rightHover != -1)
@@ -529,7 +535,6 @@ namespace Terraria.TerraCustom
 				//TODO micro biomes drawmenu
 
 
-				num = 200;
 				num3 = 30;
 				numberClickableLabels = 2;
 				for (int num38 = 0; num38 < numberClickableLabels; num38++)
@@ -553,7 +558,6 @@ namespace Terraria.TerraCustom
 					Main.menuMode = (int)MenuModes.Settings;
 				}
 				int num41 = num40 + 30;
-				string text5 = "";
 
 				// text4 = "Option to generate alternate hardmode ores in the beginning";
 				num39 = Main.screenWidth / 2 - 300;
@@ -636,7 +640,6 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Backgrounds)
 			{
-				num = 200;
 				num3 = 35;
 				numberClickableLabels = 3;  // increment this.
 				array4[numberClickableLabels - 1] = 9;
@@ -707,7 +710,6 @@ namespace Terraria.TerraCustom
 					new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"},
 				};
 
-				num = 200;
 				num3 = 35;
 				numberClickableLabels = 2 + optionStrings.GetLength(0) + 1;
 				array4[numberClickableLabels - 1] = 18;
@@ -786,9 +788,8 @@ namespace Terraria.TerraCustom
 					new string[] {"No underworld: Disabled","No underworld: Enabled"},
 				};
 
-				num = 200;
 				num3 = 30;
-				numberClickableLabels = 16; // change this!
+				numberClickableLabels = 2 + optionStrings.GetLength(0);
 				array4[numberClickableLabels - 1] = 27;
 				for (int num27 = 0; num27 < numberClickableLabels; num27++)
 				{
@@ -897,7 +898,6 @@ namespace Terraria.TerraCustom
 						};
 					}
 
-					num = 200;
 					num3 = 30; // virtical spacing?
 					numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
 					for (int num21 = 0; num21 < numberClickableLabels; num21++)
@@ -953,7 +953,6 @@ namespace Terraria.TerraCustom
 					clickableLabelText[buttonIndex] = Lang.menu[5];
 					if (main.selectedMenu == buttonIndex)
 					{
-						Main.TCDrawUnderground = false;
 						Main.menuMode = (int)MenuModes.Backgrounds;
 					}
 
@@ -1024,7 +1023,6 @@ namespace Terraria.TerraCustom
 					new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" },
 				};
 
-				num = 200;
 				num3 = 44;
 				numberClickableLabels = 2 + optionStrings.GetLength(0);
 				for (int num21 = 0; num21 < numberClickableLabels; num21++)
@@ -1079,7 +1077,6 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Settings)
 			{
-				num = 200;
 				num3 = 35;
 				numberClickableLabels = 15;  // increment this.
 				array4[numberClickableLabels - 1] = 9;
@@ -1110,21 +1107,21 @@ namespace Terraria.TerraCustom
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Ores /*112*/;
+					Main.menuMode = (int)MenuModes.Ores;
 				}
 				num24++;
 				clickableLabelText[num24] = "Ore Amount";
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.OreAmount /*14*/;
+					Main.menuMode = (int)MenuModes.OreAmount;
 				}
 				num24++;
 				clickableLabelText[num24] = "Graphic Styles";
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.GraphicStyles /*25*/;
+					Main.menuMode = (int)MenuModes.GraphicStyles;
 				}
 				num24++;
 				clickableLabelText[num24] = "Backgrounds";
@@ -1132,7 +1129,7 @@ namespace Terraria.TerraCustom
 				{
 					main.selectedMenu = -1;
 
-					Main.menuMode = (int)MenuModes.Backgrounds /*26*/;
+					Main.menuMode = (int)MenuModes.Backgrounds;
 					//Main.menuMode = (int)MenuModes.SurfaceBackgrounds /*26*/;
 				}
 				//num24++;
@@ -1214,7 +1211,6 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.GraphicStyles/*25*/)
 			{
 				Main.dayTime = false;
-				num = 200;
 				num3 = 30;
 				numberClickableLabels = 12;
 				for (int num47 = 0; num47 < numberClickableLabels; num47++)
@@ -1541,7 +1537,6 @@ namespace Terraria.TerraCustom
 			{
 				{
 					Main.dayTime = true;
-					num = 200;
 					num3 = 30;
 					numberClickableLabels = 10;
 					for (int num49 = 0; num49 < numberClickableLabels; num49++)
@@ -1908,7 +1903,7 @@ namespace Terraria.TerraCustom
 					clickableLabelText[num50] = Lang.menu[5];
 					if (main.selectedMenu == num50)
 					{
-						Main.menuMode = (int)MenuModes.Backgrounds /*11*/;
+						Main.menuMode = (int)MenuModes.Backgrounds;
 					}
 				}
 
@@ -1931,7 +1926,6 @@ namespace Terraria.TerraCustom
 
 			else if (Main.menuMode == (int)MenuModes.OreAmount)
 			{
-				num = 200;
 				num3 = Main.rand.Next(0, 100);//  30;
 				numberClickableLabels = 3;
 				for (int num38 = 0; num38 < numberClickableLabels; num38++)
@@ -2158,9 +2152,24 @@ namespace Terraria.TerraCustom
 				array4[1] = 360;
 				array4[2] = 390;
 			}
+		}
 
+		private static void GenericMenu(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
+		{
+			num3 = 30; // virtical spacing?
+			for (int i = 0; i < foundMenuItems.Length; i++)
+			{
+				clickableLabelScale[i] = foundMenuItems[i].labelScale; //0.73f;
+			}
+			array4[0] = -17;
+			array4[foundMenuItems.Length-1] = 30;
 
-
+			int buttonIndex = 0;
+			for (int i = 0; i < foundMenuItems.Length; i++)
+			{
+				foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex);
+				buttonIndex++;
+			}
 		}
 
 		private static int DrawSliders(int num40, int num41, Microsoft.Xna.Framework.Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
