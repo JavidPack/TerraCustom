@@ -9,6 +9,18 @@ namespace Terraria.TerraCustom
 {
 	class Interface
 	{
+		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
+			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f},
+		};
+
+		static TerraCustomMenuItem[] BackgroundsMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Surface Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SurfaceBackgrounds; }),
+			new ActionLabel("Underground Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.UndergroundBackgrounds; }),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f},
+		};
+
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f},
 			new OptionLabel(new string[] { "Found Stylist: No", "Found Stylist: Yes" }, () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
@@ -20,196 +32,41 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }),
 		};
 
+		static TerraCustomMenuItem[] DownedMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeDowned) { labelScale = 0.53f},
+			new OptionLabel(new string[] {"Downed Slime King: No", "Downed Slime King: Yes"},() => Main.setting.downedSlimeKing ? 1 : 0, x => Main.setting.downedSlimeKing = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Queen Bee : No", "Downed Queen Bee : Yes"},() => Main.setting.downedQueenBee? 1 : 0,x =>  Main.setting.downedQueenBee = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},() => Main.setting.downedEyeOfCthulu? 1 : 0,x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Eater of Worlds / Brain of Cthulu: No", "Downed Eater of Worlds / Brain of Cthulu: Yes"},() => Main.setting.downedEaterBrain? 1 : 0,x =>  Main.setting.downedEaterBrain = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Skeletron : No", "Downed Skeletron : Yes"},() => Main.setting.downedSkeletron? 1 : 0,x => Main.setting.downedSkeletron  = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Twins: No", "Downed Twins: Yes"},() => Main.setting.downedTwins? 1 : 0,x => Main.setting.downedTwins = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Destroyer: No", "Downed Destroyer: Yes"},() => Main.setting.downedDestroyer? 1 : 0,x => Main.setting.downedDestroyer = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Skeletron Prime: No", "Downed Skeletron Prime: Yes"},() => Main.setting.downedSkeletronPrime? 1 : 0,x => Main.setting.downedSkeletronPrime = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Plantera: No", "Downed Plantera: Yes"},() => Main.setting.downedPlantera? 1 : 0,x => Main.setting.downedPlantera = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Golem: No", "Downed Golem: Yes"},() => Main.setting.downedGolem? 1 : 0,x => Main.setting.downedGolem = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Fishron : No", "Downed Fishron : Yes"},() => Main.setting.downedFishron? 1 : 0,x => Main.setting.downedFishron = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},() => Main.setting.downedAncientCultist? 1 : 0,x => Main.setting.downedAncientCultist = x > 0 ? true : false),
+			new OptionLabel(new string[] {"Downed Moonlord: No", "Downed Moonlord: Yes"},() => Main.setting.downedMoonlord? 1 : 0,x => Main.setting.downedMoonlord = x > 0 ? true : false),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.DownedFound; }),
+		};
+
 		static Color color = Color.White;
+
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
 		{
 			num = 200;
 			if (Main.menuMode == (int)MenuModes.DownedFound)
 			{
-				
-				num3 = 35;
-				numberClickableLabels = 3;  // increment this.
-				array4[numberClickableLabels - 1] = 9;
-				for (int num23 = 0; num23 < numberClickableLabels; num23++)
-				{
-					clickableLabelScale[num23] = 0.73f;
-				}
-				clickableLabelScale[numberClickableLabels - 1] = 0.93f;
-				int buttonIndex = 0;
-
-
-				clickableLabelText[buttonIndex] = "Downed Bosses";
-				if (main.selectedMenu == buttonIndex)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Downed;
-				}
-				buttonIndex++;
-
-				clickableLabelText[buttonIndex] = "Found NPCs";
-				if (main.selectedMenu == buttonIndex)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Found;
-				}
-				buttonIndex++;
-
-
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+				GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Downed)
 			{
-				string[][] optionStrings =
-				{
-					new string[] { "Downed Slime King: No", "Downed Slime King: Yes"},
-					new string[] { "Downed Queen Bee : No", "Downed Queen Bee : Yes"},
-					new string[] { "Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},
-					new string[] { "Downed Eater of Worlds / Brain of Cthulu: No", "Downed Eater of Worlds / Brain of Cthulu: Yes"},
-					new string[] { "Downed Skeletron : No", "Downed Skeletron : Yes"},
-					new string[] { "Downed Twins: No", "Downed Twins: Yes"},
-					new string[] { "Downed Destroyer: No", "Downed Destroyer: Yes"},
-					new string[] { "Downed Skeletron Prime: No", "Downed Skeletron Prime: Yes"},
-					new string[] { "Downed Plantera: No", "Downed Plantera: Yes"},
-					new string[] { "Downed Golem: No", "Downed Golem: Yes"},
-					new string[] { "Downed Fishron : No", "Downed Fishron : Yes"},
-					new string[] { "Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},
-					new string[] { "Downed Moonlord: No", "Downed Moonlord: Yes"},
-				};
-
-				num3 = 30; // virtical spacing?
-				numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
-				for (int num21 = 0; num21 < numberClickableLabels; num21++)
-				{
-					clickableLabelScale[num21] = 0.73f;
-				}
-				int buttonIndex = 0;
-				clickableLabelText[buttonIndex] = "Reset Downed Boss Settings";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeDowned();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-
-
-				Func<int>[] getters = {
-					() => Main.setting.downedSlimeKing ? 1 : 0,
-					() => Main.setting.downedQueenBee ? 1 : 0,
-					() => Main.setting.downedEyeOfCthulu ? 1 : 0,
-					() => Main.setting.downedEaterBrain ? 1 : 0,
-					() => Main.setting.downedSkeletron ? 1 : 0,
-					() => Main.setting.downedTwins ? 1 : 0,
-					() => Main.setting.downedDestroyer ? 1 : 0,
-					() => Main.setting.downedSkeletronPrime ? 1 : 0,
-					() => Main.setting.downedPlantera ? 1 : 0,
-					() => Main.setting.downedGolem ? 1 : 0,
-					() => Main.setting.downedFishron ? 1 : 0,
-					() => Main.setting.downedAncientCultist ? 1 : 0,
-					() => Main.setting.downedMoonlord ? 1 : 0
-				};
-				Action<int>[] setters = {
-					x => Main.setting.downedSlimeKing = x > 0 ? true : false,
-					x =>  Main.setting.downedQueenBee = x > 0 ? true : false,
-					x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false,
-					x =>  Main.setting.downedEaterBrain = x > 0 ? true : false,
-					x => Main.setting.downedSkeletron  = x > 0 ? true : false,
-					x => Main.setting.downedTwins = x > 0 ? true : false,
-					x => Main.setting.downedDestroyer = x > 0 ? true : false,
-					x => Main.setting.downedSkeletronPrime = x > 0 ? true : false,
-					x => Main.setting.downedPlantera = x > 0 ? true : false,
-					x => Main.setting.downedGolem = x > 0 ? true : false,
-					x => Main.setting.downedFishron = x > 0 ? true : false,
-					x => Main.setting.downedAncientCultist = x > 0 ? true : false,
-					x => Main.setting.downedMoonlord = x > 0 ? true : false
-				};
-
-				for (int i = 0; i < getters.Length; i++)
-				{
-					buttonIndex++;
-					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-					if (main.selectedMenu == buttonIndex)
-					{
-						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-					}
-				}
-
-				buttonIndex++;
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.DownedFound;
-				}
+				GenericMenu(main, DownedMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Found)
 			{
 				GenericMenu(main, FoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
-				//string[][] optionStrings =
-				//{
-				//	new string[] { "Found Stylist: No", "Found Stylist: Yes"},
-				//	new string[] { "Found Goblin : No", "Found Goblin : Yes"},
-				//	new string[] { "Found Wizard : No", "Found Wizard : Yes"},
-				//	new string[] { "Found Mechanic: No", "Found Mechanic: Yes"},
-				//	new string[] { "Found Angler : No", "Found Angler : Yes"},
-				//	new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes"},
-				//};
-
-				//num3 = 30; // virtical spacing?
-				//numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
-				//for (int num21 = 0; num21 < numberClickableLabels; num21++)
-				//{
-				//	clickableLabelScale[num21] = 0.73f;
-				//}
-				//int buttonIndex = 0;
-				//clickableLabelText[buttonIndex] = "Reset Found NPC Settings";
-				//if (main.selectedMenu == 0)
-				//{
-				//	WorldGen.initializeFound();
-				//}
-				//clickableLabelScale[0] = 0.53f;
-				//array4[0] = -17;
-
-
-				//Func<int>[] getters = {
-				//	() => Main.setting.savedStylist ? 1 : 0,
-				//	() => Main.setting.savedGoblin ? 1 : 0,
-				//	() => Main.setting.savedWizard ? 1 : 0,
-				//	() => Main.setting.savedMechanic ? 1 : 0,
-				//	() => Main.setting.savedAngler ? 1 : 0,
-				//	() => Main.setting.savedTaxCollector ? 1 : 0,
-				//};
-				//Action<int>[] setters = {
-				//	x => Main.setting.savedStylist = x > 0 ? true : false,
-				//	x =>  Main.setting.savedGoblin = x > 0 ? true : false,
-				//	x => Main.setting.savedWizard = x > 0 ? true : false,
-				//	x =>  Main.setting.savedMechanic = x > 0 ? true : false,
-				//	x => Main.setting.savedAngler  = x > 0 ? true : false,
-				//	x => Main.setting.savedTaxCollector = x > 0 ? true : false,
-				//};
-
-				//for (int i = 0; i < getters.Length; i++)
-				//{
-				//	buttonIndex++;
-				//	clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-				//	if (main.selectedMenu == buttonIndex)
-				//	{
-				//		setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-				//	}
-				//}
-
-				//buttonIndex++;
-				//array4[buttonIndex] = 30;
-				//clickableLabelText[buttonIndex] = Lang.menu[5];
-				//if (main.selectedMenu == buttonIndex)
-				//{
-				//	Main.menuMode = (int)MenuModes.DownedFound;
-				//}
 			}
 			else if (Main.menuMode == (int)MenuModes.Chests)
 			{
@@ -640,43 +497,9 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Backgrounds)
 			{
-				num3 = 35;
-				numberClickableLabels = 3;  // increment this.
-				array4[numberClickableLabels - 1] = 9;
-				for (int num23 = 0; num23 < numberClickableLabels; num23++)
-				{
-					clickableLabelScale[num23] = 0.73f;
-				}
-				clickableLabelScale[numberClickableLabels - 1] = 0.93f;
-				int buttonIndex = 0;
-
-
-				clickableLabelText[buttonIndex] = "Surface Backgrounds";
-				if (main.selectedMenu == buttonIndex)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.SurfaceBackgrounds;
-				}
-				buttonIndex++;
-
-				clickableLabelText[buttonIndex] = "Underground Backgrounds";
-				if (main.selectedMenu == buttonIndex)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.UndergroundBackgrounds;
-				}
-				buttonIndex++;
-
-
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+				GenericMenu(main, BackgroundsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
-
-			else if (Main.menuMode == (int)MenuModes.ResetAllSettings /*114*/)
+			else if (Main.menuMode == (int)MenuModes.ResetAllSettings)
 			{
 				clickableLabelText[0] = "Are you sure you will reset all the settings?";
 				array[0] = true;
@@ -858,8 +681,6 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.UndergroundBackgrounds /*26*/)
 			{
 				{
-					//	TCDrawUnderground = true;
-
 					string[][] optionStrings = { };
 					if (WorldGen.worldSize == 0)
 					{
@@ -2170,7 +1991,8 @@ namespace Terraria.TerraCustom
 				foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex);
 				buttonIndex++;
 			}
-		}
+			numberClickableLabels = foundMenuItems.Length;
+        }
 
 		private static int DrawSliders(int num40, int num41, Microsoft.Xna.Framework.Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
 		{
