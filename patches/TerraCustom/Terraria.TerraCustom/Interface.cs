@@ -9,6 +9,16 @@ namespace Terraria.TerraCustom
 {
 	class Interface
 	{
+		/*
+		GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+		
+		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f},
+			new OptionLabel(),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+		};
+		*/
+
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
 			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
@@ -50,6 +60,51 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.DownedFound; }),
 		};
 
+
+		static TerraCustomMenuItem[] ChallengeOptionMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Challenge Settings", WorldGen.initializeChallenge) { labelScale = 0.53f},
+			new OptionLabel(new string[] {"No tree: Disabled","No tree: Enabled"}, () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No dungeon: Disabled","No dungeon: Enabled"}, () => Main.setting.NoDungeon ? 1 : 0, x => Main.setting.NoDungeon = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No temple: Disabled","No temple: Enabled"}, () => Main.setting.NoTemple ? 1 : 0, x => Main.setting.NoTemple= x > 0 ? true :false),
+			new OptionLabel(new string[] {"No spider cave: Disabled","No spider cave: Enabled"}, () => Main.setting.NoSpiderCave ? 1 : 0, x => Main.setting.NoSpiderCave = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No hive: Disabled","No hive: Enabled"}, () => Main.setting.NoHive ? 1 : 0, x => Main.setting.NoHive = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No snow: Disabled","No snow: Enabled"}, () => Main.setting.NoSnow ? 1 : 0, x => Main.setting.NoSnow = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No jungle: Disabled","No jungle: Enabled"}, () => Main.setting.NoJungle ? 1 : 0, x => Main.setting.NoJungle = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No anthill: Disabled","No anthill: Enabled"}, () => Main.setting.NoAnthill ? 1 : 0, x => Main.setting.NoAnthill = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No beaches: Disabled","No beaches: Enabled"}, () => Main.setting.NoBeach ? 1 : 0, x => Main.setting.NoBeach = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No pot: Disabled","No pot: Enabled"}, () => Main.setting.NoPot ? 1 : 0, x => Main.setting.NoPot = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No chest: Disabled","No chest: Enabled"}, () => Main.setting.NoChest ? 1 : 0, x => Main.setting.NoChest = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No altar: Disabled","No altar: Enabled"}, () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"}, () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
+			new OptionLabel(new string[] {"No underworld: Disabled","No underworld: Enabled"}, () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+		};
+
+		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Ore Settings", WorldGen.initializeOres) { labelScale = 0.53f},
+			new PlainLabel("Also check 'Ore Amount' option to get both hardmode ores") {labelScale = 0.6f},
+			new OptionLabel(new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"}, () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
+			new OptionLabel(new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"}, () => Main.setting.IsIron, x => Main.setting.IsIron = x),
+			new OptionLabel(new string[] { "Silver/Tungsten: Tungsten","Silver/Tungsten: Silver","Silver/Tungsten: Random","Silver/Tungsten: Both"}, () => Main.setting.IsSilver, x => Main.setting.IsSilver = x),
+			new OptionLabel(new string[] { "Gold/Platinum: Platinum", "Gold/Platinum: Gold","Gold/Platinum: Random","Gold/Platinum: Both"}, () => Main.setting.IsGold, x => Main.setting.IsGold = x),
+			new OptionLabel(new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"}, () => Main.setting.IsCobalt, x => Main.setting.IsCobalt = x),
+			new OptionLabel(new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"}, () => Main.setting.IsMythril, x => Main.setting.IsMythril = x),
+			new OptionLabel(new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"}, () => Main.setting.IsAdaman, x => Main.setting.IsAdaman = x),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+		};
+
+		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Miscellaneous Settings", WorldGen.initializeMiscellaneous) { labelScale = 0.53f},
+			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
+			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"}, () => Main.setting.DungeonSide, x => Main.setting.DungeonSide = x),
+			new OptionLabel(new string[] { "Hardmode: No","Hardmode: Yes"}, () => Main.hardMode ? 1 : 0, x => Main.hardMode = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"}, () => Main.setting.HardmodeStripes ? 1 : 0, x => Main.setting.HardmodeStripes = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"}, () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
+			new OptionLabel(new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" }, () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+		};
+
 		static Color color = Color.White;
 
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
@@ -86,9 +141,9 @@ namespace Terraria.TerraCustom
 				string text4 = "set to 100% for default behavior";
 				int num39 = Main.screenWidth / 2 - 220;
 				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				num40 += 30;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, ChestEstimateString(), (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, ChestEstimateString(), (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				clickableLabelText[1] = Lang.menu[5];
 				if (main.selectedMenu == 1)
 				{
@@ -101,7 +156,7 @@ namespace Terraria.TerraCustom
 					IngameOptions.rightLock = -1;
 				}
 
-				Microsoft.Xna.Framework.Color textColor3 = color;
+				Color textColor3 = color;
 				textColor3.R = (byte)((255 + textColor3.R) / 2);
 				textColor3.G = (byte)((255 + textColor3.R) / 2);
 				textColor3.B = (byte)((255 + textColor3.R) / 2);
@@ -110,7 +165,7 @@ namespace Terraria.TerraCustom
 				{
 					numval = 0;
 				}
-				textColor3 = new Microsoft.Xna.Framework.Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
+				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
 
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
 				string[] labels = { "Biome Chest Sets:", "Pots:", "Jungle Shrines:", "Living Mahogany Trees:", "Water Chests:", "Surface Chests:", "Temple Chests:", Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/ };
@@ -159,11 +214,11 @@ namespace Terraria.TerraCustom
 					// String 1
 					yPos += 0 + i * 30;
 					num40 = yPos;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 					// String 2
 					xPos += 270;//180;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 					// Slider
 					IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30 + 30 * i));
@@ -202,7 +257,7 @@ namespace Terraria.TerraCustom
 				string text4 = "set to 100% for default behavior";
 				int num39 = Main.screenWidth / 2 - 220;
 				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				clickableLabelText[1] = Lang.menu[5];
 				if (main.selectedMenu == 1)
 				{
@@ -215,7 +270,7 @@ namespace Terraria.TerraCustom
 					IngameOptions.rightLock = -1;
 				}
 
-				Microsoft.Xna.Framework.Color textColor3 = color;
+				Color textColor3 = color;
 				textColor3.R = (byte)((255 + textColor3.R) / 2);
 				textColor3.G = (byte)((255 + textColor3.R) / 2);
 				textColor3.B = (byte)((255 + textColor3.R) / 2);
@@ -224,7 +279,7 @@ namespace Terraria.TerraCustom
 				{
 					numval = 0;
 				}
-				textColor3 = new Microsoft.Xna.Framework.Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
+				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
 
 
 				// 0 to 10f : R: 10
@@ -278,11 +333,11 @@ namespace Terraria.TerraCustom
 					// String 1
 					yPos += 0 + i * 30;
 					num40 = yPos;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 					// String 2
 					xPos += 270;//180;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 					// Slider
 					IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30 + 30 * i));
@@ -322,22 +377,21 @@ namespace Terraria.TerraCustom
 				string text4 = "setting 100% will generate default amount";
 				int num39 = Main.screenWidth / 2 - 220;
 				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				clickableLabelText[1] = Lang.menu[5];
 				if (main.selectedMenu == 1)
 				{
 					Main.menuMode = (int)MenuModes.Settings;
 				}
 				int num41 = num40 + 30;
-				//num39 = Main.screenWidth / 2 - 300;
-				//	num40 += 70;
+
 				IngameOptions.rightHover = -1;
 				if (!Main.mouseLeft)
 				{
 					IngameOptions.rightLock = -1;
 				}
 
-				Microsoft.Xna.Framework.Color textColor3 = color;
+				Color textColor3 = color;
 				textColor3.R = (byte)((255 + textColor3.R) / 2);
 				textColor3.G = (byte)((255 + textColor3.R) / 2);
 				textColor3.B = (byte)((255 + textColor3.R) / 2);
@@ -346,7 +400,7 @@ namespace Terraria.TerraCustom
 				{
 					numval = 0;
 				}
-				textColor3 = new Microsoft.Xna.Framework.Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
+				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
 
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
 				string[] labels = { "Crystal Hearts:", /*"Demon/Crimson Altars:"*/ "Pre-Drop Meteor", "Tree Lower Bound", "Tree Upper Bound"/*, "Debug: #Generation Pass Steps"*/ };
@@ -408,7 +462,7 @@ namespace Terraria.TerraCustom
 				string text4 = "setting 100% will generate default amount of biomes";
 				int num39 = Main.screenWidth / 2 - 220;
 				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				clickableLabelText[1] = Lang.menu[5];
 				if (main.selectedMenu == 1)
 				{
@@ -419,14 +473,14 @@ namespace Terraria.TerraCustom
 				// text4 = "Option to generate alternate hardmode ores in the beginning";
 				num39 = Main.screenWidth / 2 - 300;
 				num40 += 70;
-				//Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				//Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				IngameOptions.rightHover = -1;
 				if (!Main.mouseLeft)
 				{
 					IngameOptions.rightLock = -1;
 				}
 
-				Microsoft.Xna.Framework.Color textColor3 = color;
+				Color textColor3 = color;
 				textColor3.R = (byte)((255 + textColor3.R) / 2);
 				textColor3.G = (byte)((255 + textColor3.R) / 2);
 				textColor3.B = (byte)((255 + textColor3.R) / 2);
@@ -435,7 +489,7 @@ namespace Terraria.TerraCustom
 				{
 					numval = 0;
 				}
-				textColor3 = new Microsoft.Xna.Framework.Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
+				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
 				
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
 				string[] labels = { "Enchanted Sword:", "Mining Explosive (Detonator):", "Traps (Dart, Explosive, Boulder):", "Sky Islands:","Minecart Tracks:", "Gemstone Caves:", "Gemstone Cave Size:", "Spider Caves:", "Granite Caves:", "Marble Caves:", "Underground Cabins:", "Temple Traps:" };
@@ -521,164 +575,14 @@ namespace Terraria.TerraCustom
 				}
 			}
 			else if (Main.menuMode == (int)MenuModes.Ores)
-			{ 
-				string[][] optionStrings =
-				{
-					new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"},
-					new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"},
-					new string[] { "Silver/Tungsten: Tungsten","Silver/Tungsten: Silver","Silver/Tungsten: Random","Silver/Tungsten: Both"},
-					new string[] { "Gold/Platinum: Platinum", "Gold/Platinum: Gold","Gold/Platinum: Random","Gold/Platinum: Both"},
-					new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"},
-					new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"},
-					new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"},
-				};
-
-				num3 = 35;
-				numberClickableLabels = 2 + optionStrings.GetLength(0) + 1;
-				array4[numberClickableLabels - 1] = 18;
-				for (int num25 = 0; num25 < numberClickableLabels; num25++)
-				{
-					clickableLabelScale[num25] = 0.73f;
-				}
-				int buttonIndex = 0;
-				clickableLabelText[buttonIndex] = "Reset Ore Settings";
-				if (main.selectedMenu == buttonIndex)
-				{
-					WorldGen.initializeOres();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -18;
-
-				buttonIndex++;
-				clickableLabelText[buttonIndex] = "Also check 'Ore Amount' option to get both hardmode ores";
-				clickableLabelScale[buttonIndex] = 0.6f;
-				array[buttonIndex] = true;
-
-				Func<int>[] getters = {
-					() => Main.setting.IsCopper,
-					() => Main.setting.IsIron,
-					() => Main.setting.IsSilver,
-					() => Main.setting.IsGold,
-					() => Main.setting.IsCobalt,
-					() => Main.setting.IsMythril,
-					() => Main.setting.IsAdaman,
-				};
-				Action<int>[] setters = {
-					x => Main.setting.IsCopper = x,
-					x => Main.setting.IsIron = x,
-					x => Main.setting.IsSilver = x,
-					x => Main.setting.IsGold = x,
-					x => Main.setting.IsCobalt = x,
-					x => Main.setting.IsMythril = x,
-					x => Main.setting.IsAdaman = x,
-				};
-
-				for (int i = 0; i < getters.Length; i++)
-				{
-					buttonIndex++;
-					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-					if (main.selectedMenu == buttonIndex)
-					{
-						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-					}
-				}
-
-				buttonIndex++;
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+			{
+				GenericMenu(main, OresMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
-				string[][] optionStrings =
-				{
-					new string[] {"No tree: Disabled","No tree: Enabled"},
-					new string[] {"No dungeon: Disabled","No dungeon: Enabled"},
-					new string[] {"No temple: Disabled","No temple: Enabled"},
-					new string[] {"No spider cave: Disabled","No spider cave: Enabled"},
-					new string[] {"No hive: Disabled","No hive: Enabled"},
-					new string[] {"No snow: Disabled","No snow: Enabled"},
-					new string[] {"No jungle: Disabled","No jungle: Enabled"},
-					new string[] {"No anthill: Disabled","No anthill: Enabled"},
-					new string[] {"No beaches: Disabled","No beaches: Enabled"},
-					new string[] {"No pot: Disabled","No pot: Enabled"},
-					new string[] {"No chest: Disabled","No chest: Enabled"},
-					new string[] {"No altar: Disabled","No altar: Enabled"},
-					new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"},
-					new string[] {"No underworld: Disabled","No underworld: Enabled"},
-				};
-
-				num3 = 30;
-				numberClickableLabels = 2 + optionStrings.GetLength(0);
-				array4[numberClickableLabels - 1] = 27;
-				for (int num27 = 0; num27 < numberClickableLabels; num27++)
-				{
-					clickableLabelScale[num27] = 0.73f;
-				}
-				int buttonIndex = 0;
-				clickableLabelText[buttonIndex] = "Reset Challenge Settings";
-				if (main.selectedMenu == buttonIndex)
-				{
-					WorldGen.initializeChallenge();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -18;
-
-				Func<int>[] getters = {
-					() => Main.setting.NoTree ? 1 : 0,
-					() => Main.setting.NoDungeon ? 1 : 0,
-					() => Main.setting.NoTemple ? 1 : 0,
-					() => Main.setting.NoSpiderCave ? 1 : 0,
-					() => Main.setting.NoHive ? 1 : 0,
-					() => Main.setting.NoSnow ? 1 : 0,
-					() => Main.setting.NoJungle ? 1 : 0,
-					() => Main.setting.NoAnthill ? 1 : 0,
-					() => Main.setting.NoBeach ? 1 : 0,
-					() => Main.setting.NoPot ? 1 : 0,
-					() => Main.setting.NoChest ? 1 : 0,
-					() => Main.setting.NoAltar ? 1 : 0,
-					() => Main.setting.NoOrbHeart ? 1 : 0,
-					() => Main.setting.NoUnderworld ? 1 : 0,
-				};
-				Action<int>[] setters = {
-					x => Main.setting.NoTree = x > 0 ? true : false,
-					x => Main.setting.NoDungeon = x > 0 ? true : false,
-					x => Main.setting.NoTemple= x > 0 ? true : false,
-					x => Main.setting.NoSpiderCave = x > 0 ? true : false,
-					x => Main.setting.NoHive = x > 0 ? true : false,
-					x => Main.setting.NoSnow  = x > 0 ? true : false,
-					x => Main.setting.NoJungle  = x > 0 ? true : false,
-					x => Main.setting.NoAnthill  = x > 0 ? true : false,
-					x => Main.setting.NoBeach  = x > 0 ? true : false,
-					x => Main.setting.NoPot  = x > 0 ? true : false,
-					x => Main.setting.NoChest  = x > 0 ? true : false,
-					x => Main.setting.NoAltar = x > 0 ? true : false,
-					x => Main.setting.NoOrbHeart = x > 0 ? true : false,
-					x => Main.setting.NoUnderworld = x > 0 ? true : false,
-				};
-
-				for (int i = 0; i < getters.Length; i++)
-				{
-					buttonIndex++;
-					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-					if (main.selectedMenu == buttonIndex)
-					{
-						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-					}
-				}
-
-				buttonIndex++;
-				array4[buttonIndex] = 20;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
-			else if (Main.menuMode == (int)MenuModes.UndergroundBackgrounds /*26*/)
+			else if (Main.menuMode == (int)MenuModes.UndergroundBackgrounds)
 			{
 				{
 					string[][] optionStrings = { };
@@ -833,68 +737,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Miscellaneous)
 			{
-				string[][] optionStrings =
-				{
-					new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"},
-					new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"},
-					new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"},
-					new string[] { "Hardmode: No","Hardmode: Yes"},
-					new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"},
-					new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"},
-					new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" },
-				};
-
-				num3 = 44;
-				numberClickableLabels = 2 + optionStrings.GetLength(0);
-				for (int num21 = 0; num21 < numberClickableLabels; num21++)
-				{
-					clickableLabelScale[num21] = 0.73f;
-				}
-				int buttonIndex = 0;
-				clickableLabelText[buttonIndex] = "Reset Miscellaneous Settings";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeMiscellaneous();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-
-				Func<int>[] getters = {
-					() => Main.setting.IsCorruption,
-					() => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0,
-					() => Main.setting.DungeonSide,
-					() => Main.hardMode ? 1 : 0,
-					() => Main.setting.HardmodeStripes ? 1 : 0,
-					() => Main.setting.IsPyramid,
-					() => Main.setting.IsGiantTree,
-				};
-				Action<int>[] setters = {
-					x => Main.setting.IsCorruption = x,
-					x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false,
-                    x => Main.setting.DungeonSide = x,
-					x => Main.hardMode = x > 0 ? true : false,
-					x => Main.setting.HardmodeStripes = x > 0 ? true : false,
-					x => Main.setting.IsPyramid = x,
-					x => Main.setting.IsGiantTree = x,
-				};
-
-				for (int i = 0; i < getters.Length; i++)
-				{
-					buttonIndex++;
-					clickableLabelText[buttonIndex] = optionStrings[i][getters[i]()];
-					if (main.selectedMenu == buttonIndex)
-					{
-						setters[i]((getters[i]() + 1) % optionStrings[i].Length);
-					}
-				}
-
-				buttonIndex++;
-				array4[buttonIndex] = 30;
-				clickableLabelText[buttonIndex] = Lang.menu[5];
-				if (main.selectedMenu == buttonIndex)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+				GenericMenu(main, MiscellaneousMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Settings)
 			{
@@ -910,7 +753,7 @@ namespace Terraria.TerraCustom
 				clickableLabelText[num24] = "Reset All";
 				if (main.selectedMenu == num24)
 				{
-					Main.menuMode = (int)MenuModes.ResetAllSettings /*114*/;
+					Main.menuMode = (int)MenuModes.ResetAllSettings;
 				}
 				clickableLabelScale[0] = 0.53f;
 				array4[0] = -18;
@@ -949,31 +792,21 @@ namespace Terraria.TerraCustom
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-
 					Main.menuMode = (int)MenuModes.Backgrounds;
-					//Main.menuMode = (int)MenuModes.SurfaceBackgrounds /*26*/;
 				}
-				//num24++;
-				//array9[num24] = "Underground Backgrounds";
-				//if (main.selectedMenu == num24)
-				//{
-				//	main.selectedMenu = -1;
-
-				//	Main.menuMode = (int)MenuModes.UndergroundBackgrounds;
-				//}
 				num24++;
 				clickableLabelText[num24] = "Miscellaneous";
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Miscellaneous /*1111*/;
+					Main.menuMode = (int)MenuModes.Miscellaneous;
 				}
 				num24++;
 				clickableLabelText[num24] = "Challenge option";
 				if (main.selectedMenu == num24)
 				{
 					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.ChallengeOption /*113*/;
+					Main.menuMode = (int)MenuModes.ChallengeOption;
 				}
 				num24++;
 
@@ -1012,7 +845,7 @@ namespace Terraria.TerraCustom
 				clickableLabelText[num24] = Lang.menu[5];
 				if (main.selectedMenu == num24)
 				{
-					Main.menuMode = (int)MenuModes.ChooseWorldSize /*0*/;
+					Main.menuMode = (int)MenuModes.ChooseWorldSize;
 				}
 				num24++;
 				clickableLabelText[num24] = Lang.menu[28];
@@ -1022,14 +855,9 @@ namespace Terraria.TerraCustom
 					Main.worldName = Main.newWorldName;
 					Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
 					WorldGen.CreateNewWorld(null);
-
-
-					//   Main.worldName = Main.newWorldName;
-					//  Main.worldPathName = Main.getWorldPathName(Main.worldName);
-					//   WorldGen.CreateNewWorld();
 				}
 			}
-			else if (Main.menuMode == (int)MenuModes.GraphicStyles/*25*/)
+			else if (Main.menuMode == (int)MenuModes.GraphicStyles)
 			{
 				Main.dayTime = false;
 				num3 = 30;
@@ -1315,18 +1143,18 @@ namespace Terraria.TerraCustom
 
 				if (main.lastSelectedMenu == 1)
 				{
-					Main.spriteBatch.Draw(Main.moonTexture[Main.moonType], new Vector2(0, Main.screenHeight - Main.moonTexture[Main.moonType].Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(Main.moonTexture[Main.moonType], new Vector2(0, Main.screenHeight - Main.moonTexture[Main.moonType].Height), Color.White);
 				}
 
 				if (main.lastSelectedMenu == 2 || main.lastSelectedMenu == 3 || (WorldGen.worldSize > 0 && main.lastSelectedMenu == 4) || (WorldGen.worldSize > 1 && main.lastSelectedMenu == 5))
 				{
-					Main.spriteBatch.Draw(Main.TCTreeTops, new Vector2(0, Main.screenHeight - Main.TCTreeTops.Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(Main.TCTreeTops, new Vector2(0, Main.screenHeight - Main.TCTreeTops.Height), Color.White);
 				}
 				if (WorldGen.worldSize == 0)
 				{
 					if (main.lastSelectedMenu == 5 || main.lastSelectedMenu == 6 || main.lastSelectedMenu == 7)
 					{
-						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Microsoft.Xna.Framework.Color.White);
+						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Color.White);
 
 					}
 				}
@@ -1334,7 +1162,7 @@ namespace Terraria.TerraCustom
 				{
 					if (main.lastSelectedMenu == 6 || main.lastSelectedMenu == 7 || main.lastSelectedMenu == 8)
 					{
-						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Microsoft.Xna.Framework.Color.White);
+						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Color.White);
 
 					}
 				}
@@ -1342,14 +1170,14 @@ namespace Terraria.TerraCustom
 				{
 					if (main.lastSelectedMenu == 7 || main.lastSelectedMenu == 8 || main.lastSelectedMenu == 9)
 					{
-						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Microsoft.Xna.Framework.Color.White);
+						Main.spriteBatch.Draw(Main.TCMossColors, new Vector2(0, Main.screenHeight - Main.TCMossColors.Height), Color.White);
 
 					}
 				}
 
 				if (main.lastSelectedMenu == 4 + WorldGen.worldSize)
 				{
-					Main.spriteBatch.Draw(Main.TCDungeonColors, new Vector2(0, Main.screenHeight - Main.TCDungeonColors.Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(Main.TCDungeonColors, new Vector2(0, Main.screenHeight - Main.TCDungeonColors.Height), Color.White);
 				}
 
 			}
@@ -1763,7 +1591,7 @@ namespace Terraria.TerraCustom
 				string text4 = "setting 100% will generate default amount of ores";
 				int num39 = Main.screenWidth / 2 - 220;
 				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 
 				if (!Main.setting.PreSmashAltarOreAlternates)
 				{
@@ -1871,7 +1699,7 @@ namespace Terraria.TerraCustom
 							break;
 					}
 					num40 = num43;
-					Microsoft.Xna.Framework.Color textColor2 = color;
+					Color textColor2 = color;
 					textColor2.R = (byte)((255 + textColor2.R) / 2);
 					textColor2.G = (byte)((255 + textColor2.R) / 2);
 					textColor2.B = (byte)((255 + textColor2.R) / 2);
@@ -1881,13 +1709,13 @@ namespace Terraria.TerraCustom
 					{
 						num46 = 0;
 					}
-					textColor2 = new Microsoft.Xna.Framework.Color((int)((byte)num46), (int)((byte)num46), (int)((byte)num46), (int)((byte)num45));
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text5, (float)num44, (float)num43, textColor2, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+					textColor2 = new Color((int)((byte)num46), (int)((byte)num46), (int)((byte)num46), (int)((byte)num45));
+					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text5, (float)num44, (float)num43, textColor2, Color.Black, Vector2.Zero, 0.5f);
 				}
 				text4 = "Option to generate alternate hardmode ores in the beginning";
 				num39 = Main.screenWidth / 2 - 300;
 				num40 += 70;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
 				IngameOptions.rightHover = -1;
 				if (!Main.mouseLeft)
 				{
@@ -1989,12 +1817,13 @@ namespace Terraria.TerraCustom
 			for (int i = 0; i < foundMenuItems.Length; i++)
 			{
 				foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex);
+				foundMenuItems[i].HandleMeAdditional(ref array[buttonIndex]);
 				buttonIndex++;
 			}
-			numberClickableLabels = foundMenuItems.Length;
+			numberClickableLabels = foundMenuItems.Length; // todo, count all except sliders
         }
 
-		private static int DrawSliders(int num40, int num41, Microsoft.Xna.Framework.Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
+		private static int DrawSliders(int num40, int num41, Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
 		{
 			for (int i = 0; i < labels.Length; i++)
 			{
@@ -2003,11 +1832,11 @@ namespace Terraria.TerraCustom
 				// String 1
 				yPos += 0 + i * 30;
 				num40 = yPos;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 				// String 2
 				xPos += 270;//180;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Microsoft.Xna.Framework.Color.Black, Vector2.Zero, 0.5f);
+				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
 
 				// Slider
 				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30 + 30 * i));
@@ -2030,25 +1859,25 @@ namespace Terraria.TerraCustom
 			switch (position)
 			{
 				case 0:
-					Main.spriteBatch.Draw(texture2D, new Vector2(0, 0), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(0, 0), Color.White);
 					break;
 				case 1:
-					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, 0), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, 0), Color.White);
 					break;
 				case 2:
-					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight - texture2D.Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight - texture2D.Height), Color.White);
 					break;
 				case 3:
-					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, Main.screenHeight - texture2D.Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, Main.screenHeight - texture2D.Height), Color.White);
 					break;
 				case 4:
-					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight / 2 - texture2D.Height / 2), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight / 2 - texture2D.Height / 2), Color.White);
 					break;
 				case 5:
-					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, Main.screenHeight / 2 - texture2D.Height / 2), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(Main.screenWidth - texture2D.Width, Main.screenHeight / 2 - texture2D.Height / 2), Color.White);
 					break;
 				default:
-					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight - texture2D.Height), Microsoft.Xna.Framework.Color.White);
+					Main.spriteBatch.Draw(texture2D, new Vector2(0, Main.screenHeight - texture2D.Height), Color.White);
 					break;
 			}
 

@@ -47,7 +47,7 @@ namespace Terraria
 
 		public int IsGiantTree { get; internal set; } = 2;
 
-		public int MoonStyle { get; internal set; } = 2;
+		public int MoonStyle { get; internal set; } = 3;
 
 		public int DungeonStyle { get; internal set; } = 2;
 
@@ -354,15 +354,53 @@ namespace Terraria
 		{
 
 		}
+
+		public virtual void HandleMeAdditional(ref bool isPlainWhiteLabel)
+		{
+		}
 	}
 
 	// Slider Item
 	public class SliderItem : TerraCustomMenuItem
 	{
+        public string label;
+		public float ratio;
+		public Func<float> getter;
+		public Action<float> setter;
+		public Func<float, string> estimationString;
 
+		public SliderItem(string label, float ratio, Func<float> getter, Action<float> setter, Func<float, string> estimationString)
+		{
+			this.label = label;
+			this.ratio = ratio;
+			this.getter = getter;
+			this.setter = setter;
+			this.estimationString = estimationString;
+		}
+		public override void HandleMe(ref string label, bool clicked)
+		{
+			base.HandleMe(ref label, clicked);
+		}
 	}
 
-	// Slider Item
+	public class PlainLabel : TerraCustomMenuItem
+	{
+		string label;
+		public PlainLabel(string label)
+		{
+			this.label = label;
+		}
+		public override void HandleMe(ref string label, bool clicked)
+		{
+			label = this.label;
+        }
+		public override void HandleMeAdditional(ref bool isPlainWhiteLabel)
+		{
+			isPlainWhiteLabel = true;
+		}
+	}
+
+	// Button Item
 	public class ActionLabel : TerraCustomMenuItem
 	{
 		private Action action;
