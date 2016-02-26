@@ -1,4 +1,6 @@
+using Microsoft.Xna.Framework;
 using System;
+using Terraria.TerraCustom;
 
 namespace Terraria
 {
@@ -350,14 +352,41 @@ namespace Terraria
 	public class TerraCustomMenuItem
 	{
 		public float labelScale = 1f;
-		public virtual void HandleMe(ref string label, bool clicked)
-		{
 
+		public bool isLabel = true;
+
+		private int height = 30;
+		internal int additionalHorizontalSpacingPre = 0;
+		internal int additionalHorizontalSpacingPost = 0;
+
+		public int Height
+		{
+			get
+			{
+				if (isLabel)
+				{
+					Vector2 origin = Main.fontDeathText.MeasureString("Test");
+					origin.X *= 0.5f;
+					origin.Y *= 0.5f;
+					return (int)(origin.Y * labelScale);
+                }
+				return this.height;
+			}
+			set
+			{
+				this.height = value;
+			}
+		}
+
+		public virtual void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
+		{
+			yPosition += Height;
 		}
 
 		public virtual void HandleMeAdditional(ref bool isPlainWhiteLabel)
 		{
 		}
+		
 	}
 
 	// Slider Item
@@ -371,15 +400,37 @@ namespace Terraria
 
 		public SliderItem(string label, float ratio, Func<float> getter, Action<float> setter, Func<float, string> estimationString)
 		{
+			isLabel = false;
 			this.label = label;
 			this.ratio = ratio;
 			this.getter = getter;
 			this.setter = setter;
 			this.estimationString = estimationString;
 		}
-		public override void HandleMe(ref string label, bool clicked)
+		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
-			base.HandleMe(ref label, clicked);
+			int yPos = yPosition - 15;
+			base.HandleMe(ref label, clicked, ref yPosition, index);
+
+			int xPos = 390 + Main.screenWidth / 2 - 400 - 100;
+			// String 1
+			Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, this.label, (float)xPos, (float)yPos, Interface.color, Color.Black, Vector2.Zero, 0.5f);
+
+			// String 2
+			xPos += 270;//180;
+			Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString(getter()), (float)xPos, (float)yPos, Interface.color, Color.Black, Vector2.Zero, 0.5f);
+
+			// Slider
+			IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(yPos + 12)); // line up correctly
+			float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getter() / ratio);
+			if (IngameOptions.inBar || IngameOptions.rightLock == index)
+			{
+				IngameOptions.rightHover = index;
+				if (Main.mouseLeft && IngameOptions.rightLock == index)
+				{
+					setter(ratio * percent);
+				}
+			}
 		}
 	}
 
@@ -390,8 +441,9 @@ namespace Terraria
 		{
 			this.label = label;
 		}
-		public override void HandleMe(ref string label, bool clicked)
+		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
+			base.HandleMe(ref label, clicked, ref yPosition, index);
 			label = this.label;
         }
 		public override void HandleMeAdditional(ref bool isPlainWhiteLabel)
@@ -413,8 +465,9 @@ namespace Terraria
 			labelScale = 0.73f;
 		}
 
-		public override void HandleMe(ref string label, bool clicked)
+		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
+			base.HandleMe(ref label, clicked, ref yPosition, index);
 			label = this.label;
 			if (clicked)
 			{
@@ -438,8 +491,9 @@ namespace Terraria
 			labelScale = 0.73f;
 		}
 
-		public override void HandleMe(ref string label, bool clicked)
+		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
+			base.HandleMe(ref label, clicked, ref yPosition, index);
 			label = optionStrings[getter()];
 			if (clicked)
 			{

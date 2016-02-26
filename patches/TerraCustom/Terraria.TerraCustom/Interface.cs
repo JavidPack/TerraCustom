@@ -13,37 +13,37 @@ namespace Terraria.TerraCustom
 		GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f},
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 		*/
 
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
-			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f},
+			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
+			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] BackgroundsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Surface Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SurfaceBackgrounds; }),
 			new ActionLabel("Underground Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.UndergroundBackgrounds; }),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f},
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f},
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Found Stylist: No", "Found Stylist: Yes" }, () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Goblin : No", "Found Goblin : Yes" }, () => Main.setting.savedGoblin? 1 : 0, x => Main.setting.savedGoblin = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Wizard : No", "Found Wizard : Yes" }, () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Mechanic: No", "Found Mechanic: Yes" }, () => Main.setting.savedMechanic? 1 : 0, x => Main.setting.savedMechanic = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Angler : No", "Found Angler : Yes" }, () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes" }, () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] DownedMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeDowned) { labelScale = 0.53f},
+			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeDowned) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"Downed Slime King: No", "Downed Slime King: Yes"},() => Main.setting.downedSlimeKing ? 1 : 0, x => Main.setting.downedSlimeKing = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Queen Bee : No", "Downed Queen Bee : Yes"},() => Main.setting.downedQueenBee? 1 : 0,x =>  Main.setting.downedQueenBee = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},() => Main.setting.downedEyeOfCthulu? 1 : 0,x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false),
@@ -57,12 +57,12 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] {"Downed Fishron : No", "Downed Fishron : Yes"},() => Main.setting.downedFishron? 1 : 0,x => Main.setting.downedFishron = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},() => Main.setting.downedAncientCultist? 1 : 0,x => Main.setting.downedAncientCultist = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Moonlord: No", "Downed Moonlord: Yes"},() => Main.setting.downedMoonlord? 1 : 0,x => Main.setting.downedMoonlord = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.DownedFound; }),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 
 		static TerraCustomMenuItem[] ChallengeOptionMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Challenge Settings", WorldGen.initializeChallenge) { labelScale = 0.53f},
+			new ActionLabel("Reset Challenge Settings", WorldGen.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"No tree: Disabled","No tree: Enabled"}, () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No dungeon: Disabled","No dungeon: Enabled"}, () => Main.setting.NoDungeon ? 1 : 0, x => Main.setting.NoDungeon = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No temple: Disabled","No temple: Enabled"}, () => Main.setting.NoTemple ? 1 : 0, x => Main.setting.NoTemple= x > 0 ? true :false),
@@ -77,11 +77,11 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] {"No altar: Disabled","No altar: Enabled"}, () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"}, () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No underworld: Disabled","No underworld: Enabled"}, () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Ore Settings", WorldGen.initializeOres) { labelScale = 0.53f},
+			new ActionLabel("Reset Ore Settings", WorldGen.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("Also check 'Ore Amount' option to get both hardmode ores") {labelScale = 0.6f},
 			new OptionLabel(new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"}, () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
 			new OptionLabel(new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"}, () => Main.setting.IsIron, x => Main.setting.IsIron = x),
@@ -90,11 +90,11 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"}, () => Main.setting.IsCobalt, x => Main.setting.IsCobalt = x),
 			new OptionLabel(new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"}, () => Main.setting.IsMythril, x => Main.setting.IsMythril = x),
 			new OptionLabel(new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"}, () => Main.setting.IsAdaman, x => Main.setting.IsAdaman = x),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Miscellaneous Settings", WorldGen.initializeMiscellaneous) { labelScale = 0.53f},
+			new ActionLabel("Reset Miscellaneous Settings", WorldGen.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"}, () => Main.setting.DungeonSide, x => Main.setting.DungeonSide = x),
@@ -102,10 +102,52 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"}, () => Main.setting.HardmodeStripes ? 1 : 0, x => Main.setting.HardmodeStripes = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"}, () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
 			new OptionLabel(new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" }, () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
-		static Color color = Color.White;
+		static TerraCustomMenuItem[] VariousSpawnsMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Various Spawns Amounts", WorldGen.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel("setting 100% will generate default amount") {labelScale = 0.6f},
+			new SliderItem("Crystal Hearts:",10f,() => Main.setting.CrystalHeartMultiplier, x => Main.setting.CrystalHeartMultiplier = x,x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x)),
+			new SliderItem("Pre-Drop Meteor",100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
+			new SliderItem("Tree Lower Bound",150f,() => (float)Main.setting.TreeLowerBound,x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x),x => "Between " + (int)x ), // ratio * %
+			new SliderItem("Tree Upper Bound",150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] MicroBiomesMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
+			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
+			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => Math.Round(x * 100f) + "%"),
+			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => Math.Round(x * 100f) + "%"),
+			new SliderItem("Sky Islands:", 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
+			new SliderItem("Minecart Tracks:", 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
+			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem("Gemstone Cave Size:", 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
+			new SliderItem("Spider Caves:", 5f, () => Main.setting.SpiderCaveMultiplier, x => Main.setting.SpiderCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x)),
+			new SliderItem("Granite Caves:", 10f, () => Main.setting.GraniteCaveMultiplier, x => Main.setting.GraniteCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x)),
+			new SliderItem("Marble Caves:", 10f, () => Main.setting.MarbleCaveMultiplier, x => Main.setting.MarbleCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x)),
+			new SliderItem("Underground Cabins:", 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
+			new SliderItem("Temple Traps:", 10f, () => Main.setting.TempleTrapMultiplier, x => Main.setting.TempleTrapMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] TerrainMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Terrain", WorldGen.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
+			new SliderItem("Surface Height Variance:", 10f,() => Main.setting.SurfaceTerrainHeightMultiplier,x => Main.setting.SurfaceTerrainHeightMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + (x == 0 ? " Flat" : "")),
+			new SliderItem("Surface Upper Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMax - .1f /*.1 to .17*/, x => Main.setting.SurfaceTerrainHeightMax = x + .1f > Main.setting.SurfaceTerrainHeightMin ? Main.setting.SurfaceTerrainHeightMin : x + .1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":"")),
+			new SliderItem("Surface Lower Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMin - .1f /*.3 to .45?*/, x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":"")),
+			new SliderItem("Dungeon Size",10f,() => Main.setting.DungeonSizeMultiplier- .01f, x => Main.setting.DungeonSizeMultiplier = x + .05f /*set called with 0 to 1.0f * ratio*/, x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways"),
+			new SliderItem("Temple Size",4f,() => Main.setting.TempleSizeMultiplier- .2f, x => Main.setting.TempleSizeMultiplier = x + .2f, x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":"")),
+			new SliderItem("Surface Tunnels", 50f,() => Main.setting.SurfaceHorizontalTunnelsMultiplier, x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x, x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%"),
+			new SliderItem("Lakes",20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
+			new SliderItem("World Width", 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)x, x => x +" tiles wide"),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		internal static Color color = Color.White;
 
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
@@ -241,313 +283,33 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Terrain)
 			{
-				num3 = 30;
-				numberClickableLabels = 2;
-				for (int num38 = 0; num38 < numberClickableLabels; num38++)
-				{
-					clickableLabelScale[num38] = 0.73f;
-				}
-				clickableLabelText[0] = "Reset Terrain";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeTerrain();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = 0;// -17;
-				string text4 = "set to 100% for default behavior";
-				int num39 = Main.screenWidth / 2 - 220;
-				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				clickableLabelText[1] = Lang.menu[5];
-				if (main.selectedMenu == 1)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
-				int num41 = num40 + 30;
-				IngameOptions.rightHover = -1;
-				if (!Main.mouseLeft)
-				{
-					IngameOptions.rightLock = -1;
-				}
-
-				Color textColor3 = color;
-				textColor3.R = (byte)((255 + textColor3.R) / 2);
-				textColor3.G = (byte)((255 + textColor3.R) / 2);
-				textColor3.B = (byte)((255 + textColor3.R) / 2);
-				int numval = (int)textColor3.R;
-				if (numval < 0)
-				{
-					numval = 0;
-				}
-				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
-
-
+				GenericMenu(main, TerrainMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 				// 0 to 10f : R: 10
 				// .1 to .17: R: .07 +- .1
-
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
-				string[] labels = { "Surface Height Variance:", "Surface Upper Limit:", "Surface Lower Limit:", "Dungeon Size", "Temple Size", "Surface Tunnels", "Lakes", "World Width" };
-				float[] ratios = { 10f, .35f, .35f,/*.07f, .15f, */10f, 4f, 50f, 20f, 16800f };
-				Func<float>[] getters = {
-					() => Main.setting.SurfaceTerrainHeightMultiplier,
-					//() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
-					//() => Main.setting.SurfaceTerrainHeightMin - .3f,  // .3 to .45?
-					() => Main.setting.SurfaceTerrainHeightMax - .1f,  // .1 to .17
-					() => Main.setting.SurfaceTerrainHeightMin - .1f,  // .3 to .45?
-					() => Main.setting.DungeonSizeMultiplier- .01f, // 
-					() => Main.setting.TempleSizeMultiplier- .2f, // 
-					() => Main.setting.SurfaceHorizontalTunnelsMultiplier,
-					() => Main.setting.LakeMultiplier,
-					() => Main.maxTilesX
-				};
-				// 
+				//.07f,.15f,
+				//() => Main.setting.SurfaceTerrainHeightMax - .1f,
+				// .1 to .17
+				//() => Main.setting.SurfaceTerrainHeightMin - .3f,  // .3 to .45?
 				// % = get/ratio therfore, ratio must be range, get must return 0 to range
-				Action<float>[] setters = {
-					x => Main.setting.SurfaceTerrainHeightMultiplier = x,
-					//x => Main.setting.SurfaceTerrainHeightMax = x+.1f,
-					//x => Main.setting.SurfaceTerrainHeightMin = x+.3f, // ration * % 
-					x => Main.setting.SurfaceTerrainHeightMax = x+.1f > Main.setting.SurfaceTerrainHeightMin? Main.setting.SurfaceTerrainHeightMin : x+.1f,
-					x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f,
-					x => Main.setting.DungeonSizeMultiplier = x + .05f,   // set called with 0 to 1.0f * ratio
-					x => Main.setting.TempleSizeMultiplier = x + .2f,
-					x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x,
-					x => Main.setting.LakeMultiplier = x,
-					x => Main.maxTilesX = (int)x,
-				};
-				Func<float, string>[] estimationString = {
-					x => Math.Round((double)(x * 100f)) + "%" + (x==0?" Flat":""),
-					x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":""),
-					x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":""),
-					x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways",
-					x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":""),
-					x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%",
-					x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1),
-					x => x +" tiles wide",
-				};
-
-				// TODO Sliders.
-				for (int i = 0; i < labels.Length; i++)
-				{
-					int yPos = num41;
-					int xPos = 390 + Main.screenWidth / 2 - 400 - 100;
-					// String 1
-					yPos += 0 + i * 30;
-					num40 = yPos;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
-
-					// String 2
-					xPos += 270;//180;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
-
-					// Slider
-					IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30 + 30 * i));
-					float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getters[i]() / ratios[i]);
-					if (IngameOptions.inBar || IngameOptions.rightLock == 6 + i)
-					{
-						IngameOptions.rightHover = 6 + i;
-						if (Main.mouseLeft && IngameOptions.rightLock == 6 + i)
-						{
-							setters[i](ratios[i] * percent);
-						}
-					}
-				}
-
-				if (IngameOptions.rightHover != -1)
-				{
-					IngameOptions.rightLock = IngameOptions.rightHover;
-				}
-				array4[1] = labels.Length * 30 + 30;
-				array4[1] = 0;//+ Main.rand.Next(0, 30)
+				//x => Main.setting.SurfaceTerrainHeightMax = x+.1f,
+				//x => Main.setting.SurfaceTerrainHeightMin = x+.3f, // ration * % 
 			}
 			else if (Main.menuMode == (int)MenuModes.VariousSpawns)
 			{
-				num3 = 30;
-				numberClickableLabels = 2;
-				for (int num38 = 0; num38 < numberClickableLabels; num38++)
-				{
-					clickableLabelScale[num38] = 0.73f;
-				}
-				clickableLabelText[0] = "Reset Various Spawns Amounts";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeVariousSpawnsAmount();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-				string text4 = "setting 100% will generate default amount";
-				int num39 = Main.screenWidth / 2 - 220;
-				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				clickableLabelText[1] = Lang.menu[5];
-				if (main.selectedMenu == 1)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
-				int num41 = num40 + 30;
-
-				IngameOptions.rightHover = -1;
-				if (!Main.mouseLeft)
-				{
-					IngameOptions.rightLock = -1;
-				}
-
-				Color textColor3 = color;
-				textColor3.R = (byte)((255 + textColor3.R) / 2);
-				textColor3.G = (byte)((255 + textColor3.R) / 2);
-				textColor3.B = (byte)((255 + textColor3.R) / 2);
-				int numval = (int)textColor3.R;
-				if (numval < 0)
-				{
-					numval = 0;
-				}
-				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
-
-				// Each needs: Label, Ratio, property(get/set), method for string generation?
-				string[] labels = { "Crystal Hearts:", /*"Demon/Crimson Altars:"*/ "Pre-Drop Meteor", "Tree Lower Bound", "Tree Upper Bound"/*, "Debug: #Generation Pass Steps"*/ };
-				float[] ratios = { 10f, 100f, 150f, 150f/*, 95f*/};
-				Func<float>[] getters = {
-					() => Main.setting.CrystalHeartMultiplier,
-					//() => Main.setting.AltarMultiplier,
-					() => (float)Main.setting.PreDropMeteor,
-					() => (float)Main.setting.TreeLowerBound,
-					() => (float)Main.setting.TreeUpperBound,
-			//		() => (float)Main.setting.NumberGenerationPassSteps,
-				};
-				Action<float>[] setters = {
-					x => Main.setting.CrystalHeartMultiplier = x,
-					x => Main.setting.PreDropMeteor = (int)x,
-					x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x), // ratio * %
-					x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x), // ratio * %
+				GenericMenu(main, VariousSpawnsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				/*	"Demon/Crimson Altars:", 95f
+				//		() => (float)Main.setting.NumberGenerationPassSteps,
 				//	x => Main.setting.NumberGenerationPassSteps = (int) x,
-
-					//x => { Main.setting.TreeLowerBound = 1; Main.setting.TreeLowerBound = 2; },
-					//x => Main.setting.AltarMultiplier = x,
-				};
-				Func<float, string>[] estimationString = {
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
-					x => "Drop " + (int)x + " meteors",
-					x => "Between " + (int)x ,
-					x => " and " + (int)x + " tiles tall",
+				//x => { Main.setting.TreeLowerBound = 1; Main.setting.TreeLowerBound = 2; },
+				//x => Main.setting.AltarMultiplier = x,
 				//	x => (int)x + " steps (Don't change this)",
-
-					//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
-				};
-
-				DrawSliders(num40, num41, textColor3, labels, ratios, getters, setters, estimationString);
-
-				if (IngameOptions.rightHover != -1)
-				{
-					IngameOptions.rightLock = IngameOptions.rightHover;
-				}
-				array4[1] = labels.Length * 30 + 30;
-			}
+				//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
+				*/
+            }
 			else if (Main.menuMode == (int)MenuModes.MicroBiomes)
 			{
-				//TODO micro biomes drawmenu
-
-
-				num3 = 30;
-				numberClickableLabels = 2;
-				for (int num38 = 0; num38 < numberClickableLabels; num38++)
-				{
-					clickableLabelScale[num38] = 0.73f;
-				}
-				clickableLabelText[0] = "Reset Micro Biomes Amounts";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeMicroBiomesAmount();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-				string text4 = "setting 100% will generate default amount of biomes";
-				int num39 = Main.screenWidth / 2 - 220;
-				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				clickableLabelText[1] = Lang.menu[5];
-				if (main.selectedMenu == 1)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
-				int num41 = num40 + 30;
-
-				// text4 = "Option to generate alternate hardmode ores in the beginning";
-				num39 = Main.screenWidth / 2 - 300;
-				num40 += 70;
-				//Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				IngameOptions.rightHover = -1;
-				if (!Main.mouseLeft)
-				{
-					IngameOptions.rightLock = -1;
-				}
-
-				Color textColor3 = color;
-				textColor3.R = (byte)((255 + textColor3.R) / 2);
-				textColor3.G = (byte)((255 + textColor3.R) / 2);
-				textColor3.B = (byte)((255 + textColor3.R) / 2);
-				int numval = (int)textColor3.R;
-				if (numval < 0)
-				{
-					numval = 0;
-				}
-				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
-				
-				// Each needs: Label, Ratio, property(get/set), method for string generation?
-				string[] labels = { "Enchanted Sword:", "Mining Explosive (Detonator):", "Traps (Dart, Explosive, Boulder):", "Sky Islands:","Minecart Tracks:", "Gemstone Caves:", "Gemstone Cave Size:", "Spider Caves:", "Granite Caves:", "Marble Caves:", "Underground Cabins:", "Temple Traps:" };
-				float[] ratios = { 5f,50f,100f,10f,3f, 10f, 10f, 5f, 10f, 10f, 10f, 10f };
-				Func<float>[] getters = {
-					() => Main.setting.EnchantedSwordBiomeMultiplier,
-					() => Main.setting.MiningExplosiveMultiplier,
-					() => Main.setting.TrapMultiplier,
-					() => Main.setting.SkyIslandMultiplier,
-					() => Main.setting.MineCartMultiplier,
-					() => Main.setting.GemCaveMultiplier,
-					() => Main.setting.GemCaveSizeMultiplier,
-					() => Main.setting.SpiderCaveMultiplier,
-					() => Main.setting.GraniteCaveMultiplier,
-					() => Main.setting.MarbleCaveMultiplier,
-					() => Main.setting.UndergroundCabinMultiplier,
-					() => Main.setting.TempleTrapMultiplier,
-				};
-				Action<float>[] setters = {
-					x => Main.setting.EnchantedSwordBiomeMultiplier = x,
-					x => Main.setting.MiningExplosiveMultiplier = x,
-					x => Main.setting.TrapMultiplier = x,
-					x => Main.setting.SkyIslandMultiplier = x,
-					x => Main.setting.MineCartMultiplier = x,
-					x => Main.setting.GemCaveMultiplier = x,
-					x => Main.setting.GemCaveSizeMultiplier = x,
-					x => Main.setting.SpiderCaveMultiplier = x,
-					x => Main.setting.GraniteCaveMultiplier = x,
-					x => Main.setting.MarbleCaveMultiplier = x,
-					x => Main.setting.UndergroundCabinMultiplier = x,
-					x => Main.setting.TempleTrapMultiplier = x,
-				};
-
-			// Todo, Test if this would this work?
-			//	int numberEnchantedSwordBiomes = (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * Main.setting.EnchantedSwordBiomeMultiplier);
-
-				Func<float, string>[] estimationString = {
-					x => Math.Round(x * 100f) + "%"+ " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x),
-					x => Math.Round(x * 100f) + "%",
-					x => Math.Round(x * 100f) + "%",
-					x => "~" + Math.Round(x * 100f) + "%",
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x),
-					x => Math.Round((double)(x * 100f)) + "%",
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles",
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x),
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x),
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x),
-					x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":""),
-					x => Math.Round((double)(x * 100f)) + "%",
-				};
-
-				DrawSliders(num40, num41, textColor3, labels, ratios, getters, setters, estimationString);
-
-				if (IngameOptions.rightHover != -1)
-				{
-					IngameOptions.rightLock = IngameOptions.rightHover;
-				}
-				array4[1] = labels.Length * 30 + (30 * 4) + 30;
+				GenericMenu(main, MicroBiomesMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Backgrounds)
 			{
@@ -1803,25 +1565,80 @@ namespace Terraria.TerraCustom
 			}
 		}
 
-		private static void GenericMenu(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
-		{
-			num3 = 30; // virtical spacing?
-			for (int i = 0; i < foundMenuItems.Length; i++)
+		/*	private static void GenericMenu2(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
 			{
-				clickableLabelScale[i] = foundMenuItems[i].labelScale; //0.73f;
-			}
-			array4[0] = -17;
-			array4[foundMenuItems.Length-1] = 30;
+				num3 = 30; // virtical spacing?
+				for (int i = 0; i < foundMenuItems.Length; i++)
+				{
+					clickableLabelScale[i] = foundMenuItems[i].labelScale; //0.73f;
+				}
+				array4[0] = -17;
+				array4[foundMenuItems.Length - 1] = 30;
+				int test = 0;
+				int buttonIndex = 0;
+				for (int i = 0; i < foundMenuItems.Length; i++)
+				{
+					foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex, ref test, i);
+					foundMenuItems[i].HandleMeAdditional(ref array[buttonIndex]);
+					buttonIndex++;
+				}
+				numberClickableLabels = foundMenuItems.Length; // todo, count all except sliders
+			}*/
 
+		private static void GenericMenu(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int defaultLabelSpacing, ref int numberClickableLabels)
+		{
+			int yPosition = 240;
+			defaultLabelSpacing = 30; // virtical spacing?
+
+			int labelNumber = 0;
+			for (int menuItemIndex = 0; menuItemIndex < foundMenuItems.Length; menuItemIndex++) // TODO skip sliders = 2
+			{
+				if (foundMenuItems[menuItemIndex].isLabel)
+				{
+					clickableLabelScale[labelNumber] = foundMenuItems[menuItemIndex].labelScale; //0.73f;
+					labelNumber++;
+				}
+			}
+			//	array4[0] = -17;
+			//	array4[labelNumber - 1] = 200; // offset?
+
+			IngameOptions.rightHover = -1;
+			if (!Main.mouseLeft)
+			{
+				IngameOptions.rightLock = -1;
+			}
+
+			//	array4[1] = labels.Length * 30 + 30;
+
+			int offset = 0;
 			int buttonIndex = 0;
 			for (int i = 0; i < foundMenuItems.Length; i++)
 			{
-				foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex);
+				foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex, ref yPosition, i);
 				foundMenuItems[i].HandleMeAdditional(ref array[buttonIndex]);
-				buttonIndex++;
+				if (foundMenuItems[i].isLabel)
+				{
+					array4[buttonIndex] = offset + foundMenuItems[i].additionalHorizontalSpacingPre;
+					//	offset += foundMenuItems[i].additionalHorizontalSpacingPost;
+					//if (i > 0)
+					//{
+					//	array4[buttonIndex] += foundMenuItems[i].additionalHorizontalSpacing
+					//               }
+					//	offset = 0;
+					buttonIndex++;
+				}
+				else
+				{
+					offset += foundMenuItems[i].Height + 5/* - defaultLabelSpacing*/;
+				}
 			}
-			numberClickableLabels = foundMenuItems.Length; // todo, count all except sliders
-        }
+			numberClickableLabels = labelNumber;
+
+			if (IngameOptions.rightHover != -1)
+			{
+				IngameOptions.rightLock = IngameOptions.rightHover;
+			}
+		}
 
 		private static int DrawSliders(int num40, int num41, Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
 		{
