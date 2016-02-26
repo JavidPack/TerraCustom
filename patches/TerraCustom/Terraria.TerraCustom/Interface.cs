@@ -19,6 +19,28 @@ namespace Terraria.TerraCustom
 		};
 		*/
 
+		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset All", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -18 },
+			new ActionLabel("Terrain", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
+			new ActionLabel("Ores", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
+			new ActionLabel("Ore Amount", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.OreAmount; }),
+			new ActionLabel("Graphic Styles", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.GraphicStyles; }),
+			new ActionLabel("Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Backgrounds; }),
+			new ActionLabel("Miscellaneous", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Miscellaneous; }),
+			new ActionLabel("Challenge options", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ChallengeOption; }),
+			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes; }),
+			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
+			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
+			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
+			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
+			new ActionLabel(Lang.menu[28], () => {
+				Main.menuMode = 10;
+				Main.worldName = Main.newWorldName;
+				Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
+				WorldGen.CreateNewWorld(null);
+			}) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
+		};
+
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
 			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
@@ -119,8 +141,8 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
-			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => Math.Round(x * 100f) + "%"),
-			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => Math.Round(x * 100f) + "%"),
+			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "       "+Math.Round(x * 100f) + "%"),
+			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "       "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Sky Islands:", 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
 			new SliderItem("Minecart Tracks:", 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
 			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
@@ -147,143 +169,78 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Chests", WorldGen.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
+			new SliderItem("Biome Chest Sets:",10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
+			new SliderItem("Pots:", 2.5f, () => Main.setting.PotsMultiplier, x => Main.setting.PotsMultiplier = x, x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots"),
+			new SliderItem("Jungle Shrines:", 5f, () => Main.setting.JungleShrineMultiplier, x => Main.setting.JungleShrineMultiplier = x, x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines"),
+			new SliderItem("Living Mahogany Trees:", 2f, () => Main.setting.MahoganyTreeMultiplier, x => Main.setting.MahoganyTreeMultiplier = x, x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees"),
+			new SliderItem("Water Chests:", 5f, () => Main.setting.WaterChestMultiplier, x => Main.setting.WaterChestMultiplier = x, x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests"),
+			new SliderItem("Surface Chests:", 5f, () => Main.setting.SurfaceChestMultiplier, x => Main.setting.SurfaceChestMultiplier = x, x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests"),
+			new SliderItem("Temple Chests:", 5f, () => Main.setting.TempleChestMultiplier, x => Main.setting.TempleChestMultiplier = x, x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests"),
+			new SliderItem(Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/, Main.setting.ShadowChestMultiplierDelegate.ratio/*5f*/, Main.setting.ShadowChestMultiplierDelegate.getter, Main.setting.ShadowChestMultiplierDelegate.setter, Main.setting.ShadowChestMultiplierDelegate.estimationString),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] OreAmountMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Ore Amount", WorldGen.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
+			new PlainLabel("setting 100% will generate default amount of ores") {labelScale = 0.6f},
+			new SliderItem("Copper/Tin:",5f,() => Main.setting.PercCopp, x => Main.setting.PercCopp = x, x => Math.Round((double)(Main.setting.PercCopp * 100f)) + "%"),
+			new SliderItem("Iron/Lead:",5f,() => Main.setting.PercIron, x => Main.setting.PercIron = x, x => Math.Round((double)(Main.setting.PercIron * 100f)) + "%"),
+			new SliderItem("Silver/Tungsten:",5f,() => Main.setting.PercSilv, x => Main.setting.PercSilv = x, x => Math.Round((double)(Main.setting.PercSilv * 100f)) + "%"),
+			new SliderItem("Gold/Platinum:",5f,() => Main.setting.PercGold, x => Main.setting.PercGold = x, x => Math.Round((double)(Main.setting.PercGold * 100f)) + "%"),
+			new SliderItem("Demonite/Crimtane:",5f,() => Main.setting.PercDemonite, x => Main.setting.PercDemonite = x, x => Math.Round((double)(Main.setting.PercDemonite * 100f)) + "%"),
+			new SliderItem("Hellstone:",5f,() => Main.setting.PercHellstone, x => Main.setting.PercHellstone= x, x => Math.Round((double)(Main.setting.PercHellstone * 100f)) + "%"),
+			new PlainLabel("Option to generate alternate hardmode ores in the beginning") {labelScale = 0.6f, additionalHorizontalSpacingPre = 10},
+			new SliderItem("",1f,() => Main.setting.PreSmashAltar, x => Main.setting.PreSmashAltar= x, x => {
+				if (Main.setting.PreSmashAltar > 0f && (double)Main.setting.PreSmashAltar < 0.3)
+				{
+					return "Generate a little";
+				}
+				else if ((double)Main.setting.PreSmashAltar >= 0.3 && (double)Main.setting.PreSmashAltar < 0.7)
+				{
+					return "Generate medium amount";
+				}
+				else if ((double)Main.setting.PreSmashAltar >= 0.7)
+				{
+					return "Generate a lot";
+				}
+				else
+				{
+					return "Generate none";
+				}
+			}) { secondStringOnly = true},
+			new SliderItem("",0,() => 0f, x=> { }, x => "(Same amount as smashing " + Math.Round((double)(Main.setting.PreSmashAltar * 50f)) + " altars)") { secondStringOnly = true, noSlider = true},
+			new OptionLabel(new string[] { "PreSmash Altars generates both sets of ores : Disabled", "PreSmash Altars generates both sets of ores : Enabled" }, () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
 		internal static Color color = Color.White;
 
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
-		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
+		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int defaultLabelSpacing, ref int numberClickableLabels)
 		{
 			num = 200;
 			if (Main.menuMode == (int)MenuModes.DownedFound)
 			{
-				GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Downed)
 			{
-				GenericMenu(main, DownedMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, DownedMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Found)
 			{
-				GenericMenu(main, FoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, FoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Chests)
 			{
-				num3 = 30;
-				numberClickableLabels = 2;
-				for (int num38 = 0; num38 < numberClickableLabels; num38++)
-				{
-					clickableLabelScale[num38] = 0.73f;
-				}
-				clickableLabelText[0] = "Reset Chests";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeChests();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-				string text4 = "set to 100% for default behavior";
-				int num39 = Main.screenWidth / 2 - 220;
-				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				num40 += 30;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, ChestEstimateString(), (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				clickableLabelText[1] = Lang.menu[5];
-				if (main.selectedMenu == 1)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
-				int num41 = num40 + 30;
-				IngameOptions.rightHover = -1;
-				if (!Main.mouseLeft)
-				{
-					IngameOptions.rightLock = -1;
-				}
-
-				Color textColor3 = color;
-				textColor3.R = (byte)((255 + textColor3.R) / 2);
-				textColor3.G = (byte)((255 + textColor3.R) / 2);
-				textColor3.B = (byte)((255 + textColor3.R) / 2);
-				int numval = (int)textColor3.R;
-				if (numval < 0)
-				{
-					numval = 0;
-				}
-				textColor3 = new Color((int)((byte)numval), (int)((byte)numval), (int)((byte)numval), (int)((byte)255));
-
-				// Each needs: Label, Ratio, property(get/set), method for string generation?
-				string[] labels = { "Biome Chest Sets:", "Pots:", "Jungle Shrines:", "Living Mahogany Trees:", "Water Chests:", "Surface Chests:", "Temple Chests:", Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/ };
-				float[] ratios = { 10f, 2.5f, 5f, 2f, 5f, 5f, 5f, Main.setting.ShadowChestMultiplierDelegate.ratio/*5f*/};
-				Func<float>[] getters = {
-					() => Main.setting.BiomeChestSets,
-					() => Main.setting.PotsMultiplier,
-					() => Main.setting.JungleShrineMultiplier,
-					() => Main.setting.MahoganyTreeMultiplier,
-					() => Main.setting.WaterChestMultiplier,
-					() => Main.setting.SurfaceChestMultiplier,
-					() => Main.setting.TempleChestMultiplier,
-					Main.setting.ShadowChestMultiplierDelegate.getter,
-                    //() => Main.setting.ShadowChestMultiplier,
-				};
-				// 
-				// % = get/ratio therfore, ratio must be range, get must return 0 to range
-				Action<float>[] setters = {
-					x => Main.setting.BiomeChestSets = (int) x,
-					x => Main.setting.PotsMultiplier = x,
-					x => Main.setting.JungleShrineMultiplier = x,
-					x => Main.setting.MahoganyTreeMultiplier = x,
-					x => Main.setting.WaterChestMultiplier = x,
-					x => Main.setting.SurfaceChestMultiplier = x,
-					x => Main.setting.TempleChestMultiplier = x,
-					Main.setting.ShadowChestMultiplierDelegate.setter,
-					//x => Main.setting.ShadowChestMultiplier = x,
-				};
-				Func<float, string>[] estimationString = {
-					x => x + " sets",
-					x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots",
-					x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines",
-					x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees",
-					x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests",
-					x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests",
-					x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests",
-					//x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests",
-					Main.setting.ShadowChestMultiplierDelegate.estimationString,
-				};
-
-				// TODO Sliders.
-				for (int i = 0; i < labels.Length; i++)
-				{
-					int yPos = num41;
-					int xPos = 390 + Main.screenWidth / 2 - 400 - 100;
-					// String 1
-					yPos += 0 + i * 30;
-					num40 = yPos;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, labels[i], (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
-
-					// String 2
-					xPos += 270;//180;
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString[i](getters[i]()), (float)xPos, (float)yPos, textColor3, Color.Black, Vector2.Zero, 0.5f);
-
-					// Slider
-					IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(num41 - 18 + 30 + 30 * i));
-					float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getters[i]() / ratios[i]);
-					if (IngameOptions.inBar || IngameOptions.rightLock == 6 + i)
-					{
-						IngameOptions.rightHover = 6 + i;
-						if (Main.mouseLeft && IngameOptions.rightLock == 6 + i)
-						{
-							setters[i](ratios[i] * percent);
-						}
-					}
-				}
-
-				if (IngameOptions.rightHover != -1)
-				{
-					IngameOptions.rightLock = IngameOptions.rightHover;
-				}
-				array4[1] = labels.Length * 30 + 30 + 30;
+				GenericMenu(main, ChestsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Terrain)
 			{
-				GenericMenu(main, TerrainMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, TerrainMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 				// 0 to 10f : R: 10
 				// .1 to .17: R: .07 +- .1
 				// Each needs: Label, Ratio, property(get/set), method for string generation?
@@ -297,7 +254,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.VariousSpawns)
 			{
-				GenericMenu(main, VariousSpawnsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, VariousSpawnsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 				/*	"Demon/Crimson Altars:", 95f
 				//		() => (float)Main.setting.NumberGenerationPassSteps,
 				//	x => Main.setting.NumberGenerationPassSteps = (int) x,
@@ -309,40 +266,19 @@ namespace Terraria.TerraCustom
             }
 			else if (Main.menuMode == (int)MenuModes.MicroBiomes)
 			{
-				GenericMenu(main, MicroBiomesMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, MicroBiomesMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Backgrounds)
 			{
-				GenericMenu(main, BackgroundsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
-			}
-			else if (Main.menuMode == (int)MenuModes.ResetAllSettings)
-			{
-				clickableLabelText[0] = "Are you sure you will reset all the settings?";
-				array[0] = true;
-				array4[1] = 20;
-				array4[2] = 20;
-				clickableLabelText[1] = Lang.menu[4];
-				clickableLabelText[2] = Lang.menu[6];
-				numberClickableLabels = 4;
-				// click accept
-				if (main.selectedMenu == 1)
-				{
-					WorldGen.initializeAll();
-					Main.menuMode = (int)MenuModes.Settings;
-				}
-				// click cancel
-				if (main.selectedMenu == 2)
-				{
-					Main.menuMode = (int)MenuModes.Settings;
-				}
+				GenericMenu(main, BackgroundsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Ores)
 			{
-				GenericMenu(main, OresMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, OresMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
-				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.UndergroundBackgrounds)
 			{
@@ -385,7 +321,7 @@ namespace Terraria.TerraCustom
 						};
 					}
 
-					num3 = 30; // virtical spacing?
+					defaultLabelSpacing = 30; // virtical spacing?
 					numberClickableLabels = 2 + optionStrings.GetLength(0); // = to reset + back + # options
 					for (int num21 = 0; num21 < numberClickableLabels; num21++)
 					{
@@ -499,130 +435,38 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Miscellaneous)
 			{
-				GenericMenu(main, MiscellaneousMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
+				GenericMenu(main, MiscellaneousMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Settings)
 			{
-				num3 = 35;
-				numberClickableLabels = 15;  // increment this.
-				array4[numberClickableLabels - 1] = 9;
-				for (int num23 = 0; num23 < numberClickableLabels; num23++)
+				GenericMenu(main, SettingsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+				//num3 = 35;
+			}
+			else if (Main.menuMode == (int)MenuModes.ResetAllSettings)
+			{
+				clickableLabelText[0] = "Are you sure you will reset all the settings?";
+				array[0] = true;
+				array4[1] = 20;
+				array4[2] = 20;
+				clickableLabelText[1] = Lang.menu[4];
+				clickableLabelText[2] = Lang.menu[6];
+				numberClickableLabels = 4;
+				// click accept
+				if (main.selectedMenu == 1)
 				{
-					clickableLabelScale[num23] = 0.73f;
+					WorldGen.initializeAll();
+					Main.menuMode = (int)MenuModes.Settings;
 				}
-				clickableLabelScale[numberClickableLabels - 1] = 0.93f;
-				int num24 = 0;
-				clickableLabelText[num24] = "Reset All";
-				if (main.selectedMenu == num24)
+				// click cancel
+				if (main.selectedMenu == 2)
 				{
-					Main.menuMode = (int)MenuModes.ResetAllSettings;
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -18;
-				num24++;
-
-				clickableLabelText[num24] = "Terrain";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Terrain;
-				}
-				num24++;
-
-				clickableLabelText[num24] = "Ores";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Ores;
-				}
-				num24++;
-				clickableLabelText[num24] = "Ore Amount";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.OreAmount;
-				}
-				num24++;
-				clickableLabelText[num24] = "Graphic Styles";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.GraphicStyles;
-				}
-				num24++;
-				clickableLabelText[num24] = "Backgrounds";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Backgrounds;
-				}
-				num24++;
-				clickableLabelText[num24] = "Miscellaneous";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Miscellaneous;
-				}
-				num24++;
-				clickableLabelText[num24] = "Challenge option";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.ChallengeOption;
-				}
-				num24++;
-
-				clickableLabelText[num24] = "Micro Biomes";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.MicroBiomes;
-				}
-				num24++;
-
-				clickableLabelText[num24] = "Various Spawns";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.VariousSpawns;
-				}
-				num24++;
-
-				clickableLabelText[num24] = "Downed Bosses/Found NPCs";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.DownedFound;
-				}
-				num24++;
-
-				clickableLabelText[num24] = "Chests";
-				if (main.selectedMenu == num24)
-				{
-					main.selectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Chests;
-				}
-				num24++;
-
-				clickableLabelText[num24] = Lang.menu[5];
-				if (main.selectedMenu == num24)
-				{
-					Main.menuMode = (int)MenuModes.ChooseWorldSize;
-				}
-				num24++;
-				clickableLabelText[num24] = Lang.menu[28];
-				if (main.selectedMenu == num24)
-				{
-					Main.menuMode = 10;
-					Main.worldName = Main.newWorldName;
-					Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
-					WorldGen.CreateNewWorld(null);
+					Main.menuMode = (int)MenuModes.Settings;
 				}
 			}
 			else if (Main.menuMode == (int)MenuModes.GraphicStyles)
 			{
 				Main.dayTime = false;
-				num3 = 30;
+				defaultLabelSpacing = 30;
 				numberClickableLabels = 12;
 				for (int num47 = 0; num47 < numberClickableLabels; num47++)
 				{
@@ -941,14 +785,12 @@ namespace Terraria.TerraCustom
 				{
 					Main.spriteBatch.Draw(Main.TCDungeonColors, new Vector2(0, Main.screenHeight - Main.TCDungeonColors.Height), Color.White);
 				}
-
 			}
-
 			else if (Main.menuMode == (int)MenuModes.SurfaceBackgrounds /*26*/)
 			{
 				{
 					Main.dayTime = true;
-					num3 = 30;
+					defaultLabelSpacing = 30;
 					numberClickableLabels = 10;
 					for (int num49 = 0; num49 < numberClickableLabels; num49++)
 					{
@@ -1334,256 +1176,11 @@ namespace Terraria.TerraCustom
 				//    Main.PlaySound(11, -1, -1, 1);
 				//}
 			}
-
 			else if (Main.menuMode == (int)MenuModes.OreAmount)
 			{
-				num3 = Main.rand.Next(0, 100);//  30;
-				numberClickableLabels = 3;
-				for (int num38 = 0; num38 < numberClickableLabels; num38++)
-				{
-					clickableLabelScale[num38] = 0.73f;
-				}
-				clickableLabelText[0] = "Reset Ore Amount";
-				if (main.selectedMenu == 0)
-				{
-					WorldGen.initializeOreAmount();
-				}
-				clickableLabelScale[0] = 0.53f;
-				array4[0] = -17;
-				string text4 = "setting 100% will generate default amount of ores";
-				int num39 = Main.screenWidth / 2 - 220;
-				int num40 = 240;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-
-				if (!Main.setting.PreSmashAltarOreAlternates)
-				{
-					clickableLabelText[1] = "PreSmash Altars generates both sets of ores : Disabled";
-				}
-				else
-				{
-					clickableLabelText[1] = "PreSmash Altars generates both sets of ores : Enabled";
-				}
-				if (main.selectedMenu == 1)
-				{
-					Main.setting.PreSmashAltarOreAlternates = !Main.setting.PreSmashAltarOreAlternates;
-				}
-
-				clickableLabelText[2] = Lang.menu[5];
-				if (main.selectedMenu == 2)
-				{
-					Main.menuMode = (int)MenuModes.Settings  /*11*/;
-				}
-
-
-
-				int num41 = num40 + 30;
-				string text5 = "";
-				for (int num42 = 0; num42 < 14; num42++)
-				{
-					int num43 = num41;
-					int num44 = 390 + Main.screenWidth / 2 - 400;
-					switch (num42)
-					{
-						case 0:
-							text5 = "Copper/Tin:";
-							break;
-						case 1:
-							text5 = "Iron/Lead:";
-							num43 += 30;
-							break;
-						case 2:
-							text5 = "Silver/Tungsten:";
-							num43 += 60;
-							break;
-						case 3:
-							text5 = "Gold/Platinum:";
-							num43 += 90;
-							break;
-						case 4:
-							text5 = "Demonite/Crimtane:";
-							num43 += 120;
-							break;
-						case 5:
-							text5 = "Hellstone:";
-							num43 += 150;
-							break;
-						case 6:
-							if (Main.setting.PreSmashAltar > 0f && (double)Main.setting.PreSmashAltar < 0.3)
-							{
-								text5 = "Generate a little";
-							}
-							else if ((double)Main.setting.PreSmashAltar >= 0.3 && (double)Main.setting.PreSmashAltar < 0.7)
-							{
-								text5 = "Generate medium amount";
-							}
-							else if ((double)Main.setting.PreSmashAltar >= 0.7)
-							{
-								text5 = "Generate a lot";
-							}
-							else if (Main.setting.PreSmashAltar == 0f)
-							{
-								text5 = "Generate none";
-							}
-							num43 += 250;
-							break;
-						case 7:
-							text5 = "(Same amount as smashing " + Math.Round((double)(Main.setting.PreSmashAltar * 50f)) + " altars)";
-							num43 += 280;
-							break;
-						case 8:
-							text5 = Math.Round((double)(Main.setting.PercCopp * 100f)) + "%";
-							num44 += 220;
-							break;
-						case 9:
-							text5 = Math.Round((double)(Main.setting.PercIron * 100f)) + "%";
-							num44 += 220;
-							num43 += 30;
-							break;
-						case 10:
-							text5 = Math.Round((double)(Main.setting.PercSilv * 100f)) + "%";
-							num44 += 220;
-							num43 += 60;
-							break;
-						case 11:
-							text5 = Math.Round((double)(Main.setting.PercGold * 100f)) + "%";
-							num44 += 220;
-							num43 += 90;
-							break;
-						case 12:
-							text5 = Math.Round((double)(Main.setting.PercDemonite * 100f)) + "%";
-							num44 += 220;
-							num43 += 120;
-							break;
-						case 13:
-							text5 = Math.Round((double)(Main.setting.PercHellstone * 100f)) + "%";
-							num44 += 220;
-							num43 += 150;
-							break;
-					}
-					num40 = num43;
-					Color textColor2 = color;
-					textColor2.R = (byte)((255 + textColor2.R) / 2);
-					textColor2.G = (byte)((255 + textColor2.R) / 2);
-					textColor2.B = (byte)((255 + textColor2.R) / 2);
-					int num45 = 255;
-					int num46 = (int)textColor2.R - (255 - num45);
-					if (num46 < 0)
-					{
-						num46 = 0;
-					}
-					textColor2 = new Color((int)((byte)num46), (int)((byte)num46), (int)((byte)num46), (int)((byte)num45));
-					Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text5, (float)num44, (float)num43, textColor2, Color.Black, Vector2.Zero, 0.5f);
-				}
-				text4 = "Option to generate alternate hardmode ores in the beginning";
-				num39 = Main.screenWidth / 2 - 300;
-				num40 += 70;
-				Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, text4, (float)num39, (float)num40, Color.White, Color.Black, Vector2.Zero, 0.5f);
-				IngameOptions.rightHover = -1;
-				if (!Main.mouseLeft)
-				{
-					IngameOptions.rightLock = -1;
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 30));
-				float percCopp = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercCopp / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 2)
-				{
-					IngameOptions.rightHover = 2;
-					if (Main.mouseLeft && IngameOptions.rightLock == 2)
-					{
-						Main.setting.PercCopp = percCopp * 5f;
-					}
-				}
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 60));
-				float percIron = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercIron / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 3)
-				{
-					IngameOptions.rightHover = 3;
-					if (Main.mouseLeft && IngameOptions.rightLock == 3)
-					{
-						Main.setting.PercIron = percIron * 5f;
-					}
-				}
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 90));
-				float percSilv = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercSilv / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 4)
-				{
-					IngameOptions.rightHover = 4;
-					if (Main.mouseLeft && IngameOptions.rightLock == 4)
-					{
-						Main.setting.PercSilv = percSilv * 5f;
-					}
-				}
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 120));
-				float percGold = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercGold / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 5)
-				{
-					IngameOptions.rightHover = 5;
-					if (Main.mouseLeft && IngameOptions.rightLock == 5)
-					{
-						Main.setting.PercGold = percGold * 5f;
-					}
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 150));
-				float percDemonite = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercDemonite / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 6)
-				{
-					IngameOptions.rightHover = 6;
-					if (Main.mouseLeft && IngameOptions.rightLock == 6)
-					{
-						Main.setting.PercDemonite = percDemonite * 5f;
-					}
-				}
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 180));
-				float percHellstone = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PercHellstone / 5f);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 7)
-				{
-					IngameOptions.rightHover = 7;
-					if (Main.mouseLeft && IngameOptions.rightLock == 7)
-					{
-						Main.setting.PercHellstone = percHellstone * 5f;
-					}
-				}
-
-				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 40), (float)(num41 - 18 + 280));
-				float preSmashAltar = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, Main.setting.PreSmashAltar);
-				if (IngameOptions.inBar || IngameOptions.rightLock == 8)
-				{
-					IngameOptions.rightHover = 8;
-					if (Main.mouseLeft && IngameOptions.rightLock == 8)
-					{
-						Main.setting.PreSmashAltar = preSmashAltar;
-					}
-				}
-				if (IngameOptions.rightHover != -1)
-				{
-					IngameOptions.rightLock = IngameOptions.rightHover;
-				}
-				array4[1] = 360;
-				array4[2] = 390;
+				GenericMenu(main, OreAmountMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 		}
-
-		/*	private static void GenericMenu2(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int num3, ref int numberClickableLabels)
-			{
-				num3 = 30; // virtical spacing?
-				for (int i = 0; i < foundMenuItems.Length; i++)
-				{
-					clickableLabelScale[i] = foundMenuItems[i].labelScale; //0.73f;
-				}
-				array4[0] = -17;
-				array4[foundMenuItems.Length - 1] = 30;
-				int test = 0;
-				int buttonIndex = 0;
-				for (int i = 0; i < foundMenuItems.Length; i++)
-				{
-					foundMenuItems[i].HandleMe(ref clickableLabelText[buttonIndex], main.selectedMenu == buttonIndex, ref test, i);
-					foundMenuItems[i].HandleMeAdditional(ref array[buttonIndex]);
-					buttonIndex++;
-				}
-				numberClickableLabels = foundMenuItems.Length; // todo, count all except sliders
-			}*/
 
 		private static void GenericMenu(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int defaultLabelSpacing, ref int numberClickableLabels)
 		{
@@ -1599,16 +1196,12 @@ namespace Terraria.TerraCustom
 					labelNumber++;
 				}
 			}
-			//	array4[0] = -17;
-			//	array4[labelNumber - 1] = 200; // offset?
 
 			IngameOptions.rightHover = -1;
 			if (!Main.mouseLeft)
 			{
 				IngameOptions.rightLock = -1;
 			}
-
-			//	array4[1] = labels.Length * 30 + 30;
 
 			int offset = 0;
 			int buttonIndex = 0;
@@ -1619,17 +1212,15 @@ namespace Terraria.TerraCustom
 				if (foundMenuItems[i].isLabel)
 				{
 					array4[buttonIndex] = offset + foundMenuItems[i].additionalHorizontalSpacingPre;
-					//	offset += foundMenuItems[i].additionalHorizontalSpacingPost;
-					//if (i > 0)
-					//{
-					//	array4[buttonIndex] += foundMenuItems[i].additionalHorizontalSpacing
-					//               }
-					//	offset = 0;
+					if (foundMenuItems[i].additionalHorizontalSpacingPre > 0)
+					{
+						offset += foundMenuItems[i].additionalHorizontalSpacingPre; // negative?
+					}
 					buttonIndex++;
 				}
 				else
 				{
-					offset += foundMenuItems[i].Height + 5/* - defaultLabelSpacing*/;
+					offset += foundMenuItems[i].Height /* - defaultLabelSpacing*/;
 				}
 			}
 			numberClickableLabels = labelNumber;
@@ -1640,6 +1231,7 @@ namespace Terraria.TerraCustom
 			}
 		}
 
+		/*
 		private static int DrawSliders(int num40, int num41, Color textColor3, string[] labels, float[] ratios, Func<float>[] getters, Action<float>[] setters, Func<float, string>[] estimationString)
 		{
 			for (int i = 0; i < labels.Length; i++)
@@ -1667,9 +1259,9 @@ namespace Terraria.TerraCustom
 					}
 				}
 			}
-
 			return num40;
 		}
+		*/
 
 		private static void PreviewDraw(Texture2D texture2D, int position)
 		{

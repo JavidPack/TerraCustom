@@ -357,7 +357,7 @@ namespace Terraria
 
 		private int height = 30;
 		internal int additionalHorizontalSpacingPre = 0;
-		internal int additionalHorizontalSpacingPost = 0;
+		//internal int additionalHorizontalSpacingPost = 0;
 
 		public int Height
 		{
@@ -380,7 +380,7 @@ namespace Terraria
 
 		public virtual void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
-			yPosition += Height;
+			yPosition += Height + (additionalHorizontalSpacingPre >0 ? additionalHorizontalSpacingPre : 0);
 		}
 
 		public virtual void HandleMeAdditional(ref bool isPlainWhiteLabel)
@@ -397,6 +397,8 @@ namespace Terraria
 		public Func<float> getter;
 		public Action<float> setter;
 		public Func<float, string> estimationString;
+		internal bool secondStringOnly = false;
+		internal bool noSlider = false;
 
 		public SliderItem(string label, float ratio, Func<float> getter, Action<float> setter, Func<float, string> estimationString)
 		{
@@ -409,7 +411,7 @@ namespace Terraria
 		}
 		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
-			int yPos = yPosition - 15;
+			int yPos = yPosition;
 			base.HandleMe(ref label, clicked, ref yPosition, index);
 
 			int xPos = 390 + Main.screenWidth / 2 - 400 - 100;
@@ -418,17 +420,24 @@ namespace Terraria
 
 			// String 2
 			xPos += 270;//180;
+			if (secondStringOnly)
+			{
+				xPos -= 270;
+			}
 			Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontDeathText, estimationString(getter()), (float)xPos, (float)yPos, Interface.color, Color.Black, Vector2.Zero, 0.5f);
 
 			// Slider
-			IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(yPos + 12)); // line up correctly
-			float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getter() / ratio);
-			if (IngameOptions.inBar || IngameOptions.rightLock == index)
+			if (!noSlider)
 			{
-				IngameOptions.rightHover = index;
-				if (Main.mouseLeft && IngameOptions.rightLock == index)
+				IngameOptions.valuePosition = new Vector2((float)(Main.screenWidth / 2 - 140), (float)(yPos + 12)); // line up correctly
+				float percent = IngameOptions.DrawValueBar(Main.spriteBatch, 1.3f, getter() / ratio);
+				if (IngameOptions.inBar || IngameOptions.rightLock == index)
 				{
-					setter(ratio * percent);
+					IngameOptions.rightHover = index;
+					if (Main.mouseLeft && IngameOptions.rightLock == index)
+					{
+						setter(ratio * percent);
+					}
 				}
 			}
 		}
