@@ -198,6 +198,12 @@ namespace Terraria
 		public float MiningExplosiveMultiplier { get; internal set; } = 1f;
 
 		public float TrapMultiplier { get; internal set; } = 1f;
+		
+		public float AdditionalDartTrapMultiplier { get; internal set; } = 0f;
+
+		public float AdditionalBoulderTrapMultiplier { get; internal set; } = 0f;
+
+		public float AdditionalExplosiveTrapMultiplier { get; internal set; } = 0f;
 
 		public bool NoUnderworld { get; internal set; } = false;
 
@@ -250,6 +256,8 @@ namespace Terraria
 		public bool savedTaxCollector { get; internal set; }
 
 		public float MineCartMultiplier { get; internal set; } = 1f;
+
+		public float GemMultiplier { get; internal set; } = 1f;
 
 		public float GemCaveMultiplier { get; internal set; } = 1f;
 
