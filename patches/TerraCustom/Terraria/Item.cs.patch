@@ -38,7 +38,7 @@
  
  		public void SetDefaults(int Type = 0, bool noMatCheck = false)
  		{
-+			return;
++			//return;
  			if (Main.netMode == 1 || Main.netMode == 2)
  			{
  				this.owner = 255;
