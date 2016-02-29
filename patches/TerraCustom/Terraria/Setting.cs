@@ -10,6 +10,8 @@ namespace Terraria
 
 		public bool PreSmashAltarOreAlternates { get; internal set; } = false;
 
+		public bool PreSmashAltarPreventPatches { get; internal set; } = true;
+
 		private float percSnow = 0.2f;
 		private float percJungle = 0.2f;
 		private float multiGemCave = 0.05f;
@@ -194,6 +196,10 @@ namespace Terraria
 		}
 
 		public float EnchantedSwordBiomeMultiplier { get; internal set; } = 1f;
+
+		public float ThinIceBiomeMultiplier { get; internal set; } = 1f;
+
+		public float CampsiteBiomeMultiplier { get; internal set; } = 1f;
 
 		public float MiningExplosiveMultiplier { get; internal set; } = 1f;
 
@@ -446,6 +452,12 @@ namespace Terraria
 					{
 						setter(ratio * percent);
 					}
+				}
+				if(IngameOptions.inBar && Interface.keyboardSliderAdjustment != 0)
+				{
+					float newPercent = (getter() / ratio + (.001f * Interface.keyboardSliderAdjustment));
+					newPercent = Math.Min(Math.Max(0f, newPercent), 1f);
+                    setter(ratio * newPercent);
 				}
 			}
 		}

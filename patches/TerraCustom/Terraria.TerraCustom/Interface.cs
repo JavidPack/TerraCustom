@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 using Terraria;
@@ -141,6 +142,8 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
+			new SliderItem("Campsite:", 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
+			new SliderItem("ThinIce:", 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
 			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Additional Dart Traps:", 10f, () => Main.setting.AdditionalDartTrapMultiplier, x => Main.setting.AdditionalDartTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier))),
@@ -217,14 +220,44 @@ namespace Terraria.TerraCustom
 			}) { secondStringOnly = true},
 			new SliderItem("",0,() => 0f, x=> { }, x => "(Same amount as smashing " + Math.Round((double)(Main.setting.PreSmashAltar * 50f)) + " altars)") { secondStringOnly = true, noSlider = true},
 			new OptionLabel(new string[] { "PreSmash Altars generates both sets of ores : Disabled", "PreSmash Altars generates both sets of ores : Enabled" }, () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
+			new OptionLabel(new string[] { "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Disabled",  "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Enabled"}, () => Main.setting.PreSmashAltarPreventPatches? 1 : 0, x => Main.setting.PreSmashAltarPreventPatches = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		internal static Color color = Color.White;
+		private static KeyboardState keyState;
+		private static KeyboardState oldkeystate;
+		public static int keyboardSliderAdjustment = 0;
 
 		//TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		internal static void TerraCustomMenu(Main main, int selectedMenu, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int defaultLabelSpacing, ref int numberClickableLabels)
 		{
+			keyboardSliderAdjustment = 0;
+			oldkeystate = keyState;
+			keyState = Keyboard.GetState();
+			if ((keyState.IsKeyDown(Keys.Left) && oldkeystate.IsKeyUp(Keys.Left)) || (keyState.IsKeyDown(Keys.A) && oldkeystate.IsKeyUp(Keys.A))) 
+			{
+				if (keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
+				{
+					keyboardSliderAdjustment--;
+				}
+				else
+				{
+					keyboardSliderAdjustment -= 10;
+				}
+			}
+			if ((keyState.IsKeyDown(Keys.Right) && oldkeystate.IsKeyUp(Keys.Right)) || (keyState.IsKeyDown(Keys.D) && oldkeystate.IsKeyUp(Keys.D)))
+			{
+				if (keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
+				{
+					keyboardSliderAdjustment++;
+				}
+				else
+				{
+					keyboardSliderAdjustment += 10;
+				}
+			}
+
 			num = 200;
 			if (Main.menuMode == (int)MenuModes.DownedFound)
 			{
