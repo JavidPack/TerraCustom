@@ -970,12 +970,11 @@
  		public static float leftWorld = 0f;
 -		public static float rightWorld = 134400f;
 +
-+		public static float rightWorld = 134400f * 2; // TODO changes here? *2
++		public static float rightWorld = 134400f; // TODO changes here? *2   == 8400 * 16
 +
  		public static float topWorld = 0f;
--		public static float bottomWorld = 38400f;
 +
-+		public static float bottomWorld = 38400f * 2;
+ 		public static float bottomWorld = 38400f;
 +
  		public static int maxTilesX = (int)Main.rightWorld / 16 + 1;
 +
@@ -2023,11 +2022,11 @@
  		public static int[] backgroundHeight = new int[207];
 +
  		public static bool tilesLoaded = false;
--		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
 +
-+//		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
+ 		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
+-		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
 +
- 		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
++		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY]; // Adjust
 +
  		public static Dust[] dust = new Dust[6001];
 +
@@ -2891,24 +2890,6 @@
  		}
  
  		public void autoCreate(string worldSize)
-@@ -2848,7 +4110,7 @@
- 			}
- 			if (worldSize == "1")
- 			{
--				Main.maxTilesX = 4200;
-+				Main.maxTilesX = 8400;// 4200;
- 				Main.maxTilesY = 1200;
- 				Main.autoGen = true;
- 				return;
-@@ -3003,7 +4265,7 @@
- 								}
- 								else if (a2 == "1")
- 								{
--									Main.maxTilesX = 4200;
-+									Main.maxTilesX = 8400;// 4200;
- 									Main.maxTilesY = 1200;
- 									Main.autoGen = true;
- 								}
 @@ -3111,306 +4373,94 @@
  
  		public void DedServ()

@@ -173,7 +173,8 @@ namespace Terraria.TerraCustom
 			new SliderItem("Temple Size",4f,() => Main.setting.TempleSizeMultiplier- .2f, x => Main.setting.TempleSizeMultiplier = x + .2f, x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":"")),
 			new SliderItem("Surface Tunnels", 50f,() => Main.setting.SurfaceHorizontalTunnelsMultiplier, x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x, x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%"),
 			new SliderItem("Lakes",20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
-			new SliderItem("World Width", 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)x, x => x +" tiles wide"),
+			new SliderItem("World Width", 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)(x/200) * 200, x => x +" tiles wide" +  (x>8400?" Warning: Will not Load in Vanilla":"")),
+			new SliderItem("World Height", 4800f ,() => Main.maxTilesY, x => Main.maxTilesY = (int)(x/150) *150, x => x +" tiles tall" + (x>2400?" Warning: Will not Load in Vanilla":"")),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -242,7 +243,7 @@ namespace Terraria.TerraCustom
 			keyboardSliderAdjustment = 0;
 			oldkeystate = keyState;
 			keyState = Keyboard.GetState();
-			if ((keyState.IsKeyDown(Keys.Left) && oldkeystate.IsKeyUp(Keys.Left)) || (keyState.IsKeyDown(Keys.A) && oldkeystate.IsKeyUp(Keys.A))) 
+			if ((keyState.IsKeyDown(Keys.Left) && oldkeystate.IsKeyUp(Keys.Left)) || (keyState.IsKeyDown(Keys.A) && oldkeystate.IsKeyUp(Keys.A)))
 			{
 				if (keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
 				{
@@ -307,7 +308,7 @@ namespace Terraria.TerraCustom
 				//	x => (int)x + " steps (Don't change this)",
 				//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
 				*/
-            }
+			}
 			else if (Main.menuMode == (int)MenuModes.MicroBiomes)
 			{
 				GenericMenu(main, MicroBiomesMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);

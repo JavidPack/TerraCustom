@@ -9,14 +9,14 @@
  		public override bool Place(Point origin, StructureMap structures)
  		{
  			float num = (float)Main.maxTilesX / 4200f;
-+			num = 1f;// TODO TODO TODO
++			//num = 1f;// TODO TODO TODO
  			int num2 = (int)(80f * num);
  			int num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
 +			// 4200 1200 expect 80, how can I get 80 when I assume 1200
-+			//num = (float)((Main.maxTilesY - 106.798)/.0262085f)/ 4200f;
-+			//num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
++			num = (float)((Main.maxTilesY * 3.5)/ 4200f);
++			num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
  			Vector2 scale = new Vector2(4f, 2f);
-+			scale = new Vector2(4f, .5f);
++			//scale = new Vector2(4f, .5f);
  			Point start;
  			if (!this.FindStart(origin, scale, num2, num3, out start))
  			{

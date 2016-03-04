@@ -222,7 +222,7 @@ namespace Terraria
 		public bool NoAnthill { get; internal set; }
 
 		public bool NoBeach { get; internal set; }
-		//public bool NoAnthill { get; internal set; }
+
 		public bool downedSlimeKing { get; internal set; }
 
 		public bool downedQueenBee { get; internal set; }
