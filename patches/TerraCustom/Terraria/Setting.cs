@@ -341,7 +341,7 @@ namespace Terraria
 			                                                       x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests"
 		                                                       );
 		//public int NumberGenerationPassSteps { get; internal set; } = 95;
-		public bool GenerateWldEachStep { get; internal set; }
+		public bool GenerateWldEachStep { get; internal set; } = false;
 		//public float AltarMultiplier { get; internal set; } = 1f;
 	}
 

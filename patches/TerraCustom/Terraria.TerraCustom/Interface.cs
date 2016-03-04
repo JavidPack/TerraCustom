@@ -33,6 +33,7 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
 			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
 			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
+			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28], () => {
 				Main.menuMode = 10;
@@ -224,6 +225,12 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Debug Settings", WorldGen.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
 		internal static Color color = Color.White;
 		private static KeyboardState keyState;
 		private static KeyboardState oldkeystate;
@@ -316,6 +323,10 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
 				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.Debug)
+			{
+				GenericMenu(main, DebugMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.UndergroundBackgrounds)
 			{

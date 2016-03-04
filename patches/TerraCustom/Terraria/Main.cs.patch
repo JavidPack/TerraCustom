@@ -13871,7 +13871,7 @@
  				return;
  			}
  			Main.LoadPlayers();
-@@ -53560,5 +57851,39 @@
+@@ -53560,5 +57851,40 @@
  				Main._hasPendingNetmodeChange = true;
  			}
  		}
@@ -13909,6 +13909,7 @@
 +		Miscellaneous,
 +		Terrain,
 +		Chests,
++		Debug,
  	}
  }
 
