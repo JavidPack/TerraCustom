@@ -344,6 +344,8 @@ namespace Terraria
 		                                                       );
 		//public int NumberGenerationPassSteps { get; internal set; } = 95;
 		public bool GenerateWldEachStep { get; internal set; } = false;
+
+		public bool SaveInTModFolder { get; internal set; } = false;
 		//public float AltarMultiplier { get; internal set; } = 1f;
 	}
 
