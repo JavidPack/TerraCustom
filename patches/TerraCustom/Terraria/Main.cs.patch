@@ -4116,6 +4116,22 @@
  				Main.soundMech[0] = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Mech_0");
  				Main.soundInstanceMech[0] = Main.soundMech[0].CreateInstance();
  				Main.soundGrab = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Grab");
+@@ -6557,13 +7834,13 @@
+ 				Main.soundDoorOpen = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Door_Opened");
+ 				Main.soundInstanceDoorOpen = Main.soundDoorOpen.CreateInstance();
+ 				Main.soundDoorClosed = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Door_Closed");
+-				Main.soundInstanceDoorClosed = Main.soundDoorClosed.CreateInstance();
++				Main.soundInstanceDoorClosed = Main.soundDoorClosed.CreateInstance();*/
+ 				Main.soundMenuTick = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Tick");
+ 				Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
+ 				Main.soundMenuOpen = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Open");
+ 				Main.soundInstanceMenuOpen = Main.soundMenuOpen.CreateInstance();
+ 				Main.soundMenuClose = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Close");
+-				Main.soundInstanceMenuClose = Main.soundMenuClose.CreateInstance();
++				Main.soundInstanceMenuClose = Main.soundMenuClose.CreateInstance();/*
+ 				Main.soundShatter = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Shatter");
+ 				Main.soundInstanceShatter = Main.soundShatter.CreateInstance();
+ 				Main.soundCamera = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Camera");
 @@ -6571,56 +7848,56 @@
  				for (int j = 0; j < Main.soundCoin.Length; j++)
  				{
@@ -4167,7 +4183,8 @@
 +						l
 +					}));
  					Main.soundInstanceZombie[l] = Main.soundZombie[l].CreateInstance();
- 				}
+-				}
++				}*/
  				for (int m = 0; m < Main.soundLiquid.Length; m++)
  				{
  					Main.soundLiquid[m] = base.Content.Load<SoundEffect>(string.Concat(new object[]
@@ -4184,7 +4201,8 @@
 +						m
 +					}));
  					Main.soundInstanceLiquid[m] = Main.soundLiquid[m].CreateInstance();
- 				}
+-				}
++				}/*
  				for (int n = 0; n < Main.soundRoar.Length; n++)
  				{
  					Main.soundRoar[n] = base.Content.Load<SoundEffect>(string.Concat(new object[]

@@ -285,6 +285,8 @@ namespace Terraria
 
 		public float DungeonSizeMultiplier { get; internal set; } = 1f;
 
+		public float BeachSizeMultiplier { get; internal set; } = 1f;
+
 		public int PreDropMeteor { get; internal set; } = 0;
 
 		public float UndergroundCabinMultiplier { get; internal set; } = 1f;
