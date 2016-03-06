@@ -188,9 +188,9 @@
 -		public static string versionNumber = "v1.3.0.8";
 -		public static string versionNumber2 = "v1.3.0.8";
 +
-+		public static string versionNumber = "jopojelly's Unofficial TerraCustom v0.1.9";
++		public static string versionNumber = "jopojelly's TerraCustom v0.2.0";
 +
-+		public static string versionNumber2 = "jopojelly's Unofficial TerraCustom v0.1.9";
++		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.0";
 +
 +		//
 +		public static bool firstLoad = true;
@@ -7075,12 +7075,12 @@
  				{
  					Main.eclipse = false;
  					Main.pumpkinMoon = false;
-@@ -37340,44 +38563,93 @@
+@@ -37340,44 +38563,104 @@
  						SkyManager.Instance["Slime"].Deactivate(new object[0]);
  					}
  					int num9 = 0;
 -					num4 = 5;
-+					numberClickableLabels = 5;
++					numberClickableLabels = 6;
  					num3 = 60;
 +					/*
  					array9[num9] = Lang.menu[12];
@@ -7133,15 +7133,17 @@
 +					array4[2] = 20;
 +					array4[3] = 20;
 +					array4[4] = 20;
-+					array4[5] = 60;
++					array4[5] = 20;
++					array4[6] = 60;
 +					clickableLabelText[1] = Lang.menu[91];
 +					array[1] = true;
 +					clickableLabelText[2] = Lang.menu[92];
 +					clickableLabelText[3] = Lang.menu[93];
 +					clickableLabelText[4] = Lang.menu[94];
-+					clickableLabelText[5] = Lang.menu[15];
-+					numberClickableLabels = 6;
-+					if (this.selectedMenu == 5)
++					clickableLabelText[5] = "Custom";
++					clickableLabelText[6] = Lang.menu[15];
++					numberClickableLabels = 7;
++					if (this.selectedMenu == 6)
 +					{
  						this.QuitGame();
  					}
@@ -7171,6 +7173,15 @@
 +							Main.maxTilesY = 2400;
 +							WorldGen.worldSize = 2;
 +						}
++						else if (this.selectedMenu == 5)
++						{
++							if (Main.maxTilesX == 8401)
++							{
++								Main.maxTilesX = 4200;
++								Main.maxTilesY = 1200;
++								WorldGen.worldSize = 0;
++							}
++						}
 +						Main.clrInput();
 +						Main.menuMode = (int)MenuModes.SelectDifficulty/*-7*/;
 +						WorldGen.setWorldSize();
@@ -7181,7 +7192,7 @@
  				else if (Main.menuMode == 1)
  				{
  					Main.MenuUI.SetState(Main._characterSelectMenu);
-@@ -37385,340 +38657,340 @@
+@@ -37385,340 +38668,340 @@
  				}
  				else if (Main.menuMode == 2)
  				{
@@ -7841,7 +7852,7 @@
  				}
  				else if (Main.menuMode == 21)
  				{
-@@ -37814,82 +39086,84 @@
+@@ -37814,82 +39097,84 @@
  				}
  				else if (Main.menuMode == 3)
  				{
@@ -7998,7 +8009,7 @@
  						array9[0] = Lang.menu[46] + " " + Main.PlayerList[Main.selectedPlayer].Player.name + "?";
  						array[0] = true;
  						array9[1] = Lang.menu[104];
-@@ -37897,22 +39171,118 @@
+@@ -37897,22 +39182,118 @@
  						num4 = 3;
  						if (this.selectedMenu == 1)
  						{
@@ -8125,7 +8136,7 @@
  					{
  						num = 200;
  						num3 = 60;
-@@ -37922,44 +39292,44 @@
+@@ -37922,44 +39303,44 @@
  						array4[4] = 70;
  						if (this.focusMenu == 2)
  						{
@@ -8183,7 +8194,7 @@
  					{
  						string a = Main.newWorldName;
  						Main.newWorldName = Main.GetInputText(Main.newWorldName);
-@@ -37971,7 +39341,7 @@
+@@ -37971,7 +39352,7 @@
  						{
  							Main.PlaySound(12, -1, -1, 1);
  						}
@@ -8192,7 +8203,7 @@
  						array2[2] = true;
  						if (Main.newWorldName != "")
  						{
-@@ -38000,76 +39370,81 @@
+@@ -38000,76 +39381,81 @@
  							}
  							this.textBlinkerCount = 0;
  						}
@@ -8308,7 +8319,7 @@
  							array4[0] += 8;
  							this.menuWide[0] = true;
  						}
-@@ -38103,6 +39478,7 @@
+@@ -38103,6 +39489,7 @@
  							Main.menuMode = 9;
  						}
  					}
@@ -8316,7 +8327,7 @@
  					else if (Main.menuMode == 9)
  					{
  						array9[0] = Lang.menu[46] + " " + Main.WorldList[Main.selectedWorld].Name + "?";
-@@ -38122,368 +39498,14 @@
+@@ -38122,368 +39509,14 @@
  							Main.menuMode = 6;
  						}
  					}
@@ -8691,7 +8702,7 @@
  						num = 240;
  						num3 = 60;
  						num4 = 4;
-@@ -38497,586 +39519,670 @@
+@@ -38497,586 +39530,670 @@
  						array4[3] = 140;
  						if (this.selectedMenu == 1)
  						{
@@ -9924,7 +9935,7 @@
  			if (Main.menuMode == 888)
  			{
  				Main.MenuUI.Draw(Main.spriteBatch, gameTime);
-@@ -39085,7 +40191,7 @@
+@@ -39085,7 +40202,7 @@
  			{
  				Main.blockMouse = true;
  				Main.menuSkip = 0;
@@ -9933,7 +9944,7 @@
  				for (int num33 = 0; num33 < Main.maxMenuItems; num33++)
  				{
  					this.menuItemScale[num33] = 0.8f;
-@@ -39099,9 +40205,9 @@
+@@ -39099,9 +40216,9 @@
  			this.selectedMenu = -1;
  			this.selectedMenu2 = -1;
  			this.focusMenu = -1;
@@ -9946,7 +9957,7 @@
  				{
  					if (!flag)
  					{
-@@ -39651,7 +40757,7 @@
+@@ -39651,7 +40768,7 @@
  						{
  							num89 = 2;
  						}
@@ -9955,7 +9966,7 @@
  						origin.X *= 0.5f;
  						origin.Y *= 0.5f;
  						float num90 = this.menuItemScale[num35];
-@@ -39663,14 +40769,14 @@
+@@ -39663,14 +40780,14 @@
  						{
  							num90 *= 0.5f;
  						}
@@ -9973,7 +9984,7 @@
  						}
  					}
  					if (!array8[num35])
-@@ -39681,7 +40787,7 @@
+@@ -39681,7 +40798,7 @@
  							num91 = 14;
  						}
  						this.menuWide[num35] = false;
@@ -9982,7 +9993,7 @@
  						{
  							this.focusMenu = num35;
  							if (array[num35] || array2[num35])
-@@ -39705,7 +40811,7 @@
+@@ -39705,7 +40822,7 @@
  							}
  						}
  					}
@@ -9991,7 +10002,7 @@
  					{
  						this.focusMenu = num35;
  						if (array[num35] || array2[num35])
-@@ -39857,6 +40963,3187 @@
+@@ -39857,6 +40974,3187 @@
  			}
  			Main.mouseRightRelease = true;
  		}
@@ -13179,7 +13190,7 @@
  
  		public static void ResetKeyBindings()
  		{
-@@ -39933,6 +44220,7 @@
+@@ -39933,6 +44231,7 @@
  
  		protected void DrawUnderworldBackground(bool flat)
  		{
@@ -13187,7 +13198,7 @@
  			if (Main.screenPosition.Y + (float)Main.screenHeight < (float)(Main.maxTilesY - 220) * 16f)
  			{
  				return;
-@@ -40590,8 +44878,7 @@
+@@ -40590,8 +44889,7 @@
  									color3.B = (byte)((float)color3.B * z);
  									Main.spriteBatch.Draw(Main.backgroundTexture[array2[1]], new Vector2((float)(this.bgStart + num5 * n + 16 * num18 + num16), (float)(this.bgStartY + Main.backgroundHeight[array2[1]] * num17 + 16 * num19)) + value, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(16 * num18 + num16 + 16, 16 * num19, 16, 16)), color3);
  								}
@@ -13197,7 +13208,7 @@
  							}
  						}
  					}
-@@ -41762,8 +46049,7 @@
+@@ -41762,8 +46060,7 @@
  									color3.B = (byte)((float)color3.B * num7);
  									Main.spriteBatch.Draw(Main.backgroundTexture[array2[1]], new Vector2((float)(this.bgStart + num3 * n + 16 * num24 + num22), (float)(this.bgStartY + Main.backgroundHeight[array2[1]] * num23 + 16 * num25)) + zero, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(16 * num24 + num22 + 16, 16 * num25, 16, 16)), color3);
  								}
@@ -13207,7 +13218,7 @@
  							}
  						}
  					}
-@@ -42368,7 +46654,7 @@
+@@ -42368,7 +46665,7 @@
  				}
  			}
  			this.DrawBackground();
@@ -13216,7 +13227,7 @@
  			TimeLogger.DetailedDrawReset();
  			Main.spriteBatch.End();
  			Main.tileBatch.End();
-@@ -42376,6 +46662,7 @@
+@@ -42376,6 +46673,7 @@
  			base.GraphicsDevice.SetRenderTarget(null);
  		}
  
@@ -13224,7 +13235,7 @@
  		protected void DrawToMap()
  		{
  			if (!Main.mapEnabled)
-@@ -42543,6 +46830,7 @@
+@@ -42543,6 +46841,7 @@
  			Main.loadMap = false;
  			Main.loadMapLock = false;
  		}
@@ -13232,7 +13243,7 @@
  
  		protected void DrawToMap_Section(int secX, int secY)
  		{
-@@ -42562,15 +46850,15 @@
+@@ -42562,15 +46861,15 @@
  			}
  			int num9 = 0;
  			Microsoft.Xna.Framework.Color arg_6A_0 = Microsoft.Xna.Framework.Color.Transparent;
@@ -13257,7 +13268,7 @@
  			base.GraphicsDevice.SetRenderTarget(this.mapTarget[num5, num6]);
  			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
  			double totalMilliseconds = stopwatch.Elapsed.TotalMilliseconds;
-@@ -42630,6 +46918,7 @@
+@@ -42630,6 +46929,7 @@
  			return text;
  		}
  
@@ -13265,7 +13276,7 @@
  		protected void DrawMap()
  		{
  			string text = "";
-@@ -43689,6 +47978,7 @@
+@@ -43689,6 +47989,7 @@
  			}
  			TimeLogger.DetailedDrawTime(9);
  		}
@@ -13273,7 +13284,7 @@
  
  		public void DrawItems()
  		{
-@@ -44202,7 +48492,7 @@
+@@ -44202,7 +48503,7 @@
  			Main.renderCount = 99;
  			for (int k = 0; k < 3; k++)
  			{
@@ -13282,7 +13293,7 @@
  			}
  			if ((float)(settings.Area.X * 16) <= vector.X - 16f || (float)(settings.Area.Y * 16) <= vector.Y - 16f || (float)((settings.Area.X + settings.Area.Width) * 16) >= vector.X + (float)num3 + 16f || (float)((settings.Area.Y + settings.Area.Height) * 16) >= vector.Y + (float)num4 + 16f)
  			{
-@@ -44424,16 +48714,16 @@
+@@ -44424,16 +48725,16 @@
  			if (Main.mapEnabled)
  			{
  				Main.spriteBatch.Begin();
@@ -13309,7 +13320,7 @@
  				Main.spriteBatch.End();
  			}
  			Main.renderCount = 99;
-@@ -44484,7 +48774,7 @@
+@@ -44484,7 +48785,7 @@
  				}
  			}
  			this.DrawTiles(true, -1);
@@ -13318,7 +13329,7 @@
  			TimeLogger.DetailedDrawReset();
  			Main.spriteBatch.End();
  			TimeLogger.DetailedDrawTime(28);
-@@ -44514,7 +48804,7 @@
+@@ -44514,7 +48815,7 @@
  				}
  			}
  			this.DrawTiles(false, -1);
@@ -13327,7 +13338,7 @@
  			TimeLogger.DetailedDrawReset();
  			Main.spriteBatch.End();
  			TimeLogger.DetailedDrawTime(29);
-@@ -45719,8 +50009,7 @@
+@@ -45719,8 +50020,7 @@
  							}
  						}
  					}
@@ -13337,7 +13348,7 @@
  				}
  			}
  			if (!Main.drewLava)
-@@ -45786,7 +50075,7 @@
+@@ -45786,7 +50086,7 @@
  					}
  				}
  				return false;
@@ -13346,7 +13357,7 @@
  				if (Main.tileSolid[(int)tile.type] && !Main.tileSolidTop[(int)tile.type])
  				{
  					int frameX = (int)tile.frameX;
-@@ -46104,7 +50393,7 @@
+@@ -46104,7 +50404,7 @@
  				}
  			}
  			this.DrawWalls();
@@ -13355,7 +13366,7 @@
  			TimeLogger.DetailedDrawReset();
  			Main.tileBatch.End();
  			Main.spriteBatch.End();
-@@ -47083,12 +51372,12 @@
+@@ -47083,12 +51383,12 @@
  			if (i >= 0 && !Main.backgroundLoaded[i])
  			{
  				Main.backgroundTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13374,7 +13385,7 @@
  				Main.backgroundWidth[i] = Main.backgroundTexture[i].Width;
  				Main.backgroundHeight[i] = Main.backgroundTexture[i].Height;
  				Main.backgroundLoaded[i] = true;
-@@ -47100,12 +51389,12 @@
+@@ -47100,12 +51400,12 @@
  			if (!Main.NPCLoaded[i] || Main.npcTexture[i] == null)
  			{
  				Main.npcTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13393,7 +13404,7 @@
  				Main.NPCLoaded[i] = true;
  			}
  		}
-@@ -47115,12 +51404,12 @@
+@@ -47115,12 +51415,12 @@
  			if (!Main.projectileLoaded[i])
  			{
  				Main.projectileTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13412,7 +13423,7 @@
  				Main.projectileLoaded[i] = true;
  			}
  		}
-@@ -47130,12 +51419,12 @@
+@@ -47130,12 +51430,12 @@
  			if (!Main.goreLoaded[i])
  			{
  				Main.goreTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13431,7 +13442,7 @@
  				Main.goreLoaded[i] = true;
  			}
  		}
-@@ -47145,12 +51434,12 @@
+@@ -47145,12 +51445,12 @@
  			if (!Main.wallLoaded[i])
  			{
  				Main.wallTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13450,7 +13461,7 @@
  				Main.wallLoaded[i] = true;
  			}
  		}
-@@ -47160,12 +51449,12 @@
+@@ -47160,12 +51460,12 @@
  			if (!Main.tileSetsLoaded[i])
  			{
  				Main.tileTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13469,7 +13480,7 @@
  				Main.tileSetsLoaded[i] = true;
  			}
  		}
-@@ -47177,12 +51466,12 @@
+@@ -47177,12 +51477,12 @@
  				try
  				{
  					Main.itemFlameTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13488,7 +13499,7 @@
  				}
  				catch
  				{
-@@ -47196,12 +51485,12 @@
+@@ -47196,12 +51496,12 @@
  			if (!Main.wingsLoaded[i])
  			{
  				Main.wingsTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13507,7 +13518,7 @@
  				Main.wingsLoaded[i] = true;
  			}
  		}
-@@ -47211,19 +51500,19 @@
+@@ -47211,19 +51511,19 @@
  			if (!Main.hairLoaded[i])
  			{
  				Main.playerHairTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13539,7 +13550,7 @@
  				Main.hairLoaded[i] = true;
  			}
  		}
-@@ -47233,12 +51522,12 @@
+@@ -47233,12 +51533,12 @@
  			if (!Main.armorHeadLoaded[i])
  			{
  				Main.armorHeadTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13558,7 +13569,7 @@
  				Main.armorHeadLoaded[i] = true;
  			}
  		}
-@@ -47248,26 +51537,26 @@
+@@ -47248,26 +51548,26 @@
  			if (!Main.armorBodyLoaded[i])
  			{
  				Main.femaleBodyTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13603,7 +13614,7 @@
  				Main.armorBodyLoaded[i] = true;
  			}
  		}
-@@ -47277,12 +51566,12 @@
+@@ -47277,12 +51577,12 @@
  			if (!Main.armorLegsLoaded[i])
  			{
  				Main.armorLegTexture[i] = base.Content.Load<Texture2D>(string.Concat(new object[]
@@ -13622,7 +13633,7 @@
  				Main.armorLegsLoaded[i] = true;
  			}
  		}
-@@ -48874,7 +53163,7 @@
+@@ -48874,7 +53174,7 @@
  			if (Main.loadMap)
  			{
  				Main.refreshMap = false;
@@ -13631,7 +13642,7 @@
  				TimeLogger.DetailedDrawTime(1);
  			}
  			if (Lighting.lightMode >= 2)
-@@ -49142,13 +53431,13 @@
+@@ -49142,13 +53442,13 @@
  				}
  			}
  			Main.CheckMonoliths();
@@ -13652,7 +13663,7 @@
  			Main.sunCircle += 0.01f;
  			if ((double)Main.sunCircle > 6.285)
  			{
-@@ -49165,8 +53454,8 @@
+@@ -49165,8 +53465,8 @@
  					Main.renderNow = false;
  					Main.renderCount = 99;
  					this.Draw(gameTime);
@@ -13663,7 +13674,7 @@
  					this.RenderTiles();
  					Main.sceneTilePos.X = Main.screenPosition.X - (float)Main.offScreenRange;
  					Main.sceneTilePos.Y = Main.screenPosition.Y - (float)Main.offScreenRange;
-@@ -49277,12 +53566,12 @@
+@@ -49277,12 +53577,12 @@
  							Main.refreshMap = false;
  							Main.sectionManager.ClearMapDraw();
  						}
@@ -13678,7 +13689,7 @@
  					}
  					TimeLogger.DetailedDrawTime(4);
  				}
-@@ -50224,8 +54513,12 @@
+@@ -50224,8 +54524,12 @@
  			if (Main.gameMenu)
  			{
  				Main.tranSpeed = 0.02f;
@@ -13691,7 +13702,7 @@
  					Main.bgStyle = 1;
  				}
  				else
-@@ -50528,7 +54821,7 @@
+@@ -50528,7 +54832,7 @@
  			{
  				this.DrawUnderworldBackground(false);
  			}
@@ -13700,7 +13711,7 @@
  			TimeLogger.DetailedDrawTime(8);
  			if (Main.gameMenu || Main.netMode == 2)
  			{
-@@ -50578,7 +54871,7 @@
+@@ -50578,7 +54882,7 @@
  			}
  			if (!Main.drawSkip)
  			{
@@ -13709,7 +13720,7 @@
  			}
  			TimeLogger.DetailedDrawReset();
  			if (!Main.mapFullscreen)
-@@ -50654,7 +54947,7 @@
+@@ -50654,7 +54958,7 @@
  						}
  						this.DrawGoreBehind();
  					}
@@ -13718,7 +13729,7 @@
  					MoonlordDeathDrama.DrawPieces(Main.spriteBatch);
  					MoonlordDeathDrama.DrawExplosions(Main.spriteBatch);
  					if (Main.player[Main.myPlayer].detectCreature)
-@@ -50737,7 +55030,7 @@
+@@ -50737,7 +55041,7 @@
  					{
  						try
  						{
@@ -13727,7 +13738,7 @@
  							goto IL_4D8B;
  						}
  						catch (Exception e4)
-@@ -50746,9 +55039,9 @@
+@@ -50746,9 +55050,9 @@
  							goto IL_4D8B;
  						}
  					}
@@ -13740,7 +13751,7 @@
  				TimeLogger.DetailedDrawReset();
  				Main.spriteBatch.End();
  				TimeLogger.DetailedDrawTime(35);
-@@ -50789,7 +55082,7 @@
+@@ -50789,7 +55093,7 @@
  					}
  				}
  				this.DrawGore();
@@ -13749,7 +13760,7 @@
  				Main.spriteBatch.End();
  				this.DrawDust();
  				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, this.Rasterizer, null, this.Transform);
-@@ -50918,12 +55211,12 @@
+@@ -50918,12 +55222,12 @@
  							if (Main.itemText[num80].stack > 1)
  							{
  								text = string.Concat(new object[]
@@ -13768,7 +13779,7 @@
  							}
  							Vector2 vector3 = Main.fontMouseText.MeasureString(text);
  							Vector2 origin2 = new Vector2(vector3.X * 0.5f, vector3.Y * 0.5f);
-@@ -50982,12 +55275,12 @@
+@@ -50982,12 +55286,12 @@
  					if (Main.netMode == 1 && Netplay.Connection.StatusText != "" && Netplay.Connection.StatusText != null)
  					{
  						string text2 = string.Concat(new object[]
@@ -13787,7 +13798,7 @@
  						Main.spriteBatch.DrawString(Main.fontMouseText, text2, new Vector2(628f - Main.fontMouseText.MeasureString(text2).X * 0.5f + (float)(Main.screenWidth - 800), 84f), new Microsoft.Xna.Framework.Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
  					}
  					if (Main.BlackFadeIn > 0)
-@@ -51022,7 +55315,7 @@
+@@ -51022,7 +55326,7 @@
  						}
  						this.DrawInterface(gameTime);
  					}
@@ -13796,7 +13807,7 @@
  					TimeLogger.DetailedDrawTime(27);
  				}
  				else
-@@ -51063,7 +55356,7 @@
+@@ -51063,7 +55367,7 @@
  			{
  				Main.player[Main.myPlayer].ToggleInv();
  			}
@@ -13805,7 +13816,7 @@
  			this.DrawFPS();
  			this.DrawPlayerChat();
  			TimeLogger.MapDrawTime(stopwatch.Elapsed.TotalMilliseconds);
-@@ -53418,7 +57711,7 @@
+@@ -53418,7 +57722,7 @@
  			Main.screenMaximized = (((Form)Control.FromHandle(Main.instance.Window.Handle)).WindowState == FormWindowState.Maximized);
  			Form form = (Form)Control.FromHandle(Main.instance.Window.Handle);
  #else
@@ -13814,7 +13825,7 @@
  #endif
  			if (!Main.instance.IsActive && (Main.screenMaximized || Main.graphics.IsFullScreen))
  			{
-@@ -53473,9 +57766,9 @@
+@@ -53473,9 +57777,9 @@
  				}
  			}
  #else
@@ -13827,7 +13838,7 @@
  #endif
  			width &= 2147483646;
  			height &= 2147483646;
-@@ -53509,13 +57802,13 @@
+@@ -53509,13 +57813,13 @@
  				}
  				UserInterface.ActiveInstance.Recalculate();
  				Console.WriteLine(string.Concat(new object[]
@@ -13848,7 +13859,7 @@
  			}
  			if (!Main.graphics.SynchronizeWithVerticalRetrace)
  			{
-@@ -53531,19 +57824,19 @@
+@@ -53531,19 +57835,19 @@
  
  		public static void OpenPlayerSelect(Main.OnPlayerSelected method)
  		{
@@ -13875,7 +13886,7 @@
  				return;
  			}
  			Main.LoadPlayers();
-@@ -53560,5 +57853,41 @@
+@@ -53560,5 +57864,41 @@
  				Main._hasPendingNetmodeChange = true;
  			}
  		}

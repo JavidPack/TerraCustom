@@ -188,6 +188,7 @@ namespace Terraria.TerraCustom
 		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Chests", WorldGen.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
+			new PlainLabel(ChestEstimateString),
 			new SliderItem("Biome Chest Sets:",10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
 			new SliderItem("Pots:", 2.5f, () => Main.setting.PotsMultiplier, x => Main.setting.PotsMultiplier = x, x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots"),
 			new SliderItem("Jungle Shrines:", 5f, () => Main.setting.JungleShrineMultiplier, x => Main.setting.JungleShrineMultiplier = x, x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines"),

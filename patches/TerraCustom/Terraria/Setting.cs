@@ -469,7 +469,13 @@ namespace Terraria
 
 	public class PlainLabel : TerraCustomMenuItem
 	{
+		private Func<string> stringFunction;
 		string label;
+
+		public PlainLabel(Func<string> stringFunction)
+		{
+			this.stringFunction = stringFunction;
+		}
 		public PlainLabel(string label)
 		{
 			this.label = label;
@@ -477,8 +483,15 @@ namespace Terraria
 		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
 			base.HandleMe(ref label, clicked, ref yPosition, index);
-			label = this.label;
-        }
+			if(stringFunction == null)
+			{
+				label = this.label;
+			}
+			else
+			{
+				label = stringFunction();
+			}
+		}
 		public override void HandleMeAdditional(ref bool isPlainWhiteLabel)
 		{
 			isPlainWhiteLabel = true;
