@@ -25,3 +25,5 @@ When that's all done, you should have the TerraCustom source in the src folder. 
 ### Committing changes
 
 So you've made some changes to TerraCustom and want to commit them. Run setup.bat again, then *(Important) click on Format Code*. Select the src/TerraCustom folder, then wait a bit for it to format. When that's done, click on Diff TerraCustom. This will create patch files with the changes you've made. Finally, all you'll need to do is commit the patches folder.
+
+**Huge thanks to [ChickenBones](https://github.com/Chicken-Bones) for creating the code patcher!**
