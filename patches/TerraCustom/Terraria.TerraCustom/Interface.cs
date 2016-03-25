@@ -137,6 +137,8 @@ namespace Terraria.TerraCustom
 			new SliderItem("Pre-Drop Meteor",100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
 			new SliderItem("Tree Lower Bound",150f,() => (float)Main.setting.TreeLowerBound,x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x),x => "Between " + (int)x ), // ratio * %
 			new SliderItem("Tree Upper Bound",150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
+			new SliderItem("Mushroom Biomes:",10f,() => Main.setting.MushroomBiomeMultiplier, x => Main.setting.MushroomBiomeMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((Main.maxTilesX / 500) * x)),
+			new SliderItem("Statues:",10f,() => Main.setting.StatueMultiplier, x => Main.setting.StatueMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((WorldGen.statueList.Length * 2 * (float)Main.maxTilesX / 4200) * x)),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -308,6 +310,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.VariousSpawns)
 			{
+				WorldGen.SetupStatueList();
 				GenericMenu(main, VariousSpawnsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 				/*	"Demon/Crimson Altars:", 95f
 				//		() => (float)Main.setting.NumberGenerationPassSteps,

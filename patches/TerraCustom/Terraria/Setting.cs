@@ -201,6 +201,8 @@ namespace Terraria
 
 		public float CampsiteBiomeMultiplier { get; internal set; } = 1f;
 
+		public float MushroomBiomeMultiplier { get; internal set; } = 1f;
+
 		public float MiningExplosiveMultiplier { get; internal set; } = 1f;
 
 		public float TrapMultiplier { get; internal set; } = 1f;
@@ -276,6 +278,8 @@ namespace Terraria
 		public float MarbleCaveMultiplier { get; internal set; } = 1f;
 
 		public float CrystalHeartMultiplier { get; internal set; } = 1f;
+
+		public float StatueMultiplier { get; internal set; } = 1f;
 
 		public float SurfaceTerrainHeightMultiplier { get; internal set; } = 1f;
 

@@ -188,9 +188,9 @@
 -		public static string versionNumber = "v1.3.0.8";
 -		public static string versionNumber2 = "v1.3.0.8";
 +
-+		public static string versionNumber = "jopojelly's TerraCustom v0.2.0";
++		public static string versionNumber = "jopojelly's TerraCustom v0.2.1";
 +
-+		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.0";
++		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.1";
 +
 +		//
 +		public static bool firstLoad = true;
@@ -7140,7 +7140,7 @@
 +					clickableLabelText[2] = Lang.menu[92];
 +					clickableLabelText[3] = Lang.menu[93];
 +					clickableLabelText[4] = Lang.menu[94];
-+					clickableLabelText[5] = "Custom";
++					clickableLabelText[5] = "Keep Previous Custom Size";
 +					clickableLabelText[6] = Lang.menu[15];
 +					numberClickableLabels = 7;
 +					if (this.selectedMenu == 6)
@@ -8890,7 +8890,7 @@
 +						clickableLabelText[0] = "Reset Biome Amount";
 +						if (this.selectedMenu == 0)
 +						{
-+							WorldGen.initializeBiomeAmount();
++						//	WorldGen.initializeBiomeAmount();
 +						}
 +						clickableLabelScale[0] = 0.53f;
 +						array4[0] = -17;
