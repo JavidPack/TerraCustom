@@ -32,8 +32,9 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes; }),
 			new ActionLabel("Traps", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
 			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
-			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
+	//		new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
 			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
+			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SavedSettings; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28], () => {
@@ -336,6 +337,20 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.Ores)
 			{
 				GenericMenu(main, OresMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.SavedSettings)
+			{
+			//	SettingSaver settingSaver = new SettingSaver();
+				Main.settingSaver.getSettings();
+
+				TerraCustomMenuItem[] SavedSettingItems = new TerraCustomMenuItem[] {
+					new ActionLabel("Load", Main.settingSaver.loadSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+					new ActionLabel("Save", Main.settingSaver.saveSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+					new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+				};
+
+
+				GenericMenu(main, SavedSettingItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
