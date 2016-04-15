@@ -16,6 +16,9 @@ namespace Terraria
 			WorldGen.initializeAll();
 		}
 
+        [DataMember]
+        public bool generateLeveledRPGSave { get; internal set; } = false;
+
 		[DataMember]
 		public float PreSmashAltar { get; internal set; }
 
