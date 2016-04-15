@@ -17,6 +17,12 @@ namespace Terraria
 		}
 
 		[DataMember]
+		public bool generateLeveledRPGSave { get; internal set; } = false;
+
+		[DataMember]
+		public bool LeveledRPGCriticalMode { get; internal set; } = false;
+
+		[DataMember]
 		public float PreSmashAltar { get; internal set; }
 
 		[DataMember]

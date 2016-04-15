@@ -1,0 +1,14 @@
+--- src/Terraria\Terraria.IO\WorldFile.cs
++++ src/TerraCustom\Terraria.IO\WorldFile.cs
+@@ -303,6 +303,10 @@
+ 					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
+ 				}
+ 				WorldGen.saveLock = false;
++			}
++			if (Main.setting.generateLeveledRPGSave)
++			{
++				LeveledRPGMod.LeveledRPGModUtilities.saveEXP(useCloudSaving, Main.worldPathName);
+ 			}
+ 			Main.serverGenLock = false;
+ 		}
+

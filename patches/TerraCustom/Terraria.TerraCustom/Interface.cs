@@ -241,6 +241,8 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Reset Debug Settings", WorldGen.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => Main.setting.SaveInTModFolder = x > 0 ? true :false),
+			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => Main.setting.generateLeveledRPGSave = x > 0 ? true :false),
+			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = x > 0 ? true :false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -340,7 +342,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.SavedSettings)
 			{
-			//	SettingSaver settingSaver = new SettingSaver();
+				//	SettingSaver settingSaver = new SettingSaver();
 				Main.settingSaver.getSettings();
 
 				TerraCustomMenuItem[] SavedSettingItems = new TerraCustomMenuItem[] {

@@ -303,6 +303,7 @@
     <Compile Include="Terraria.IO\Preferences.cs" />
     <Compile Include="Terraria.IO\WorldFile.cs" />
     <Compile Include="Terraria.IO\WorldFileData.cs" />
+    <Compile Include="Terraria.LeveledRPGMod\LeveledRPGModUtilities.cs" />
     <Compile Include="Terraria.Map\MapHelper.cs" />
     <Compile Include="Terraria.Map\MapTile.cs" />
     <Compile Include="Terraria.Map\WorldMap.cs" />
