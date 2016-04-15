@@ -1,0 +1,81 @@
+--- src/Terraria\Terraria.IO\WorldFile.cs
++++ src/TerraCustom\Terraria.IO\WorldFile.cs
+@@ -186,7 +186,63 @@
+ 			}
+ 		}
+ 
+-		public static void saveWorld()
++        public static void saveEXP(bool useCloudSaving, string path)
++        {
++            if (useCloudSaving && SocialAPI.Cloud == null)
++            {
++                return;
++            }
++            string text = path.Substring(0, path.Length - 4);
++            string str = string.Concat(new object[]
++            {
++                text,
++                ".lvl"
++            });
++
++            byte[] array = null;
++            int num = 0;
++            using (MemoryStream memoryStream = new MemoryStream(2000000))
++            {
++                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
++                {
++                    BitsByte bb = 0;
++                    binaryWriter.Write(Main.CriticalMode);
++                    binaryWriter.Write(Main.worldID);
++                    binaryWriter.Write(50);
++                    for (int i = 0; i < Main.maxTilesX; i++)
++                    {
++                        for (int j = 0; j < Main.maxTilesY; j += 8)
++                        {
++                            bb[0] = Main.tile[i, j].Worldspawned;
++                            if ((j + 1) <= Main.maxTilesY)
++                                bb[1] = Main.tile[i, j + 1].Worldspawned;
++                            if ((j + 2) <= Main.maxTilesY)
++                                bb[2] = Main.tile[i, j + 2].Worldspawned;
++                            if ((j + 3) <= Main.maxTilesY)
++                                bb[3] = Main.tile[i, j + 3].Worldspawned;
++                            if ((j + 4) <= Main.maxTilesY)
++                                bb[4] = Main.tile[i, j + 4].Worldspawned;
++                            if ((j + 5) <= Main.maxTilesY)
++                                bb[5] = Main.tile[i, j + 5].Worldspawned;
++                            if ((j + 6) <= Main.maxTilesY)
++                                bb[6] = Main.tile[i, j + 6].Worldspawned;
++                            if ((j + 7) <= Main.maxTilesY)
++                                bb[7] = Main.tile[i, j + 7].Worldspawned;
++                            binaryWriter.Write(bb);
++                        }
++                    }
++                }
++                array = memoryStream.ToArray();
++                num = array.Length;
++            }
++            if (array == null)
++            {
++                return;
++            }
++            FileUtilities.Write(str, array, num, useCloudSaving);
++        }
++
++        public static void saveWorld()
+ 		{
+ 			WorldFile.saveWorld(WorldFile.IsWorldOnCloud, false);
+ 		}
+@@ -303,8 +359,10 @@
+ 					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
+ 				}
+ 				WorldGen.saveLock = false;
+-			}
+-			Main.serverGenLock = false;
++            }
++            if (Main.setting.generateLeveledRPGSave)
++                saveEXP(useCloudSaving, Main.worldPathName);
++            Main.serverGenLock = false;
+ 		}
+ 
+ 		public static int LoadWorld_Version1(BinaryReader fileIO)
+
