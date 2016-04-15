@@ -2478,7 +2478,7 @@
  		private float logoScaleSpeed = 1f;
 -		private static int maxMenuItems = 16;
 +
-+		public static int maxMenuItems = 16;
++		public static int maxMenuItems = 24;//16;
 +
  		private float[] menuItemScale = new float[Main.maxMenuItems];
 +
@@ -13891,7 +13891,7 @@
  				return;
  			}
  			Main.LoadPlayers();
-@@ -53560,5 +57869,42 @@
+@@ -53560,5 +57869,43 @@
  				Main._hasPendingNetmodeChange = true;
  			}
  		}
@@ -13915,11 +13915,12 @@
 +		ChallengeOption = 113,
 +
 +		ResetAllSettings,
-+		MicroBiomes = 1000,
-+		DownedFound = 1001,
-+		Downed = 1002,
-+		Found = 1003,
-+		VariousSpawns = 1004,
++		MicroBiomes1 = 1000,
++		MicroBiomes2,
++		DownedFound,
++		Downed,
++		Found,
++		VariousSpawns,
 +		Ores,
 +		OreAmount,
 +		GraphicStyles,

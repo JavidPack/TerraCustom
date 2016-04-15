@@ -29,10 +29,10 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Backgrounds; }),
 			new ActionLabel("Miscellaneous", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Miscellaneous; }),
 			new ActionLabel("Challenge options", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ChallengeOption; }),
-			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes; }),
+			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes1; }),
 			new ActionLabel("Traps", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
 			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
-	//		new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
+			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
 			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
 			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SavedSettings; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
@@ -143,21 +143,30 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
-		static TerraCustomMenuItem[] MicroBiomesMenuItems = new TerraCustomMenuItem[] {
+		static TerraCustomMenuItem[] MicroBiomesMenuItems1 = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
 			new SliderItem("Campsite:", 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
-			new SliderItem("ThinIce:", 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
+			new SliderItem("Thin Ice:", 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
 			new SliderItem("Sky Islands:", 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
 			new SliderItem("Minecart Tracks:", 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
-			new SliderItem("Gemstones (non-cave):", 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
-			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
-			new SliderItem("Gemstone Cave Size:", 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
 			new SliderItem("Spider Caves:", 5f, () => Main.setting.SpiderCaveMultiplier, x => Main.setting.SpiderCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x)),
 			new SliderItem("Granite Caves:", 10f, () => Main.setting.GraniteCaveMultiplier, x => Main.setting.GraniteCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x)),
 			new SliderItem("Marble Caves:", 10f, () => Main.setting.MarbleCaveMultiplier, x => Main.setting.MarbleCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x)),
 			new SliderItem("Underground Cabins:", 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
+			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
+			new SliderItem("Gemstones (non-cave):", 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem("Gemstone Cave Size:", 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
+			new SliderItem("Hives:", 10f, () => Main.setting.HiveMultiplier, x => Main.setting.HiveMultiplier = x, x => Math.Round((double)(x * 100f)) + "% -> " + (int)(x*(1 + (int)(5f * Main.maxTilesX / 4200f))) + "-" + (int)(x*(1 + (int)(8f * Main.maxTilesX / 4200f))) +" hives"),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes1; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -240,8 +249,8 @@ namespace Terraria.TerraCustom
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Debug Settings", WorldGen.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
-			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => Main.setting.SaveInTModFolder = x > 0 ? true :false),
-			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => Main.setting.generateLeveledRPGSave = x > 0 ? true :false),
+			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
+			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
 			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = x > 0 ? true :false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
@@ -324,9 +333,13 @@ namespace Terraria.TerraCustom
 				//x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x),
 				*/
 			}
-			else if (Main.menuMode == (int)MenuModes.MicroBiomes)
+			else if (Main.menuMode == (int)MenuModes.MicroBiomes1)
 			{
-				GenericMenu(main, MicroBiomesMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+				GenericMenu(main, MicroBiomesMenuItems1, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.MicroBiomes2)
+			{
+				GenericMenu(main, MicroBiomesMenuItems2, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Traps)
 			{

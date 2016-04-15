@@ -299,6 +299,8 @@ namespace Terraria
 		[DataMember]
 		public float GemCaveSizeMultiplier { get; internal set; } = 1f;
 		[DataMember]
+		public float HiveMultiplier { get; internal set; } = 1f;
+		[DataMember]
 		public float SpiderCaveMultiplier { get; internal set; } = 1f;
 		[DataMember]
 		public float GraniteCaveMultiplier { get; internal set; } = 1f;
