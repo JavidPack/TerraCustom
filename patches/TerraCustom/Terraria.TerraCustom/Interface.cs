@@ -40,6 +40,7 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[28], () => {
 				Main.menuMode = 10;
 				Main.worldName = Main.newWorldName;
+				if(Main.setting.LeveledRPGCriticalMode) Main.expertMode = true;
 				Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
 				WorldGen.CreateNewWorld(null);
 			}) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
@@ -251,7 +252,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
-			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = x > 0 ? true :false),
+			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = (x > 0) ? true : false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -534,6 +535,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.Settings)
 			{
+				num = 100;
 				GenericMenu(main, SettingsMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 				//num3 = 35;
 			}
@@ -1279,7 +1281,8 @@ namespace Terraria.TerraCustom
 
 		private static void GenericMenu(Main main, TerraCustomMenuItem[] foundMenuItems, bool[] array, string[] clickableLabelText, float[] clickableLabelScale, int[] array4, ref int num, ref int defaultLabelSpacing, ref int numberClickableLabels)
 		{
-			int yPosition = 240;
+			int yPosition = num + 40;
+			//int yPosition = 240;
 			defaultLabelSpacing = 30; // virtical spacing?
 
 			int labelNumber = 0;

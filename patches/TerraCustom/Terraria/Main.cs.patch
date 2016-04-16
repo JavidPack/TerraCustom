@@ -188,9 +188,9 @@
 -		public static string versionNumber = "v1.3.0.8";
 -		public static string versionNumber2 = "v1.3.0.8";
 +
-+		public static string versionNumber = "jopojelly's TerraCustom v0.2.1";
++		public static string versionNumber = "jopojelly's TerraCustom v0.2.1.1";
 +
-+		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.1";
++		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.1.1";
 +
 +		//
 +		public static bool firstLoad = true;

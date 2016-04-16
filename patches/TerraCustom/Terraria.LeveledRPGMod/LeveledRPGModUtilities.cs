@@ -69,7 +69,7 @@ namespace Terraria.LeveledRPGMod
 		public static bool WorldSpawned(Tile tile)
 		{
 			int type = tile.type;
-			if (TileID.Sets.Ore[type] || (type == TileID.Obsidian) || (type == TileID.Sapphire) || (type == TileID.Ruby) || (type == TileID.Emerald) || (type == TileID.Topaz) || (type == TileID.Amethyst) || (type == TileID.Diamond))
+			if (TileID.Sets.Ore[type] || (type == TileID.Obsidian) || (type == TileID.ExposedGems) || (type == TileID.Sapphire) || (type == TileID.Ruby) || (type == TileID.Emerald) || (type == TileID.Topaz) || (type == TileID.Amethyst) || (type == TileID.Diamond))
 			{
 				return true;
 			}
