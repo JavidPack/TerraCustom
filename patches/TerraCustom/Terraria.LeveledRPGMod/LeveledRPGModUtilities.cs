@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,11 +18,10 @@ namespace Terraria.LeveledRPGMod
 			//}
 			string text = path.Substring(0, path.Length - 4);
 			string str = string.Concat(new object[]
-			{
-				text,
-				".lvl" 
-			});
-
+				{
+					text,
+					".lvl" 
+				});
 			byte[] array = null;
 			int num = 0;
 			using (MemoryStream memoryStream = new MemoryStream(2000000))

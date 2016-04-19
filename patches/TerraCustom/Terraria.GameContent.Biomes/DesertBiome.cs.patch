@@ -13,7 +13,7 @@
  			int num2 = (int)(80f * num);
  			int num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
 +			// 4200 1200 expect 80, how can I get 80 when I assume 1200
-+			num = (float)((Main.maxTilesY * 3.5)/ 4200f);
++			num = (float)((Main.maxTilesY * 3.5) / 4200f);
 +			num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
  			Vector2 scale = new Vector2(4f, 2f);
 +			//scale = new Vector2(4f, .5f);

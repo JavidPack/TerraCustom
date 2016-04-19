@@ -17,7 +17,7 @@ namespace Terraria.TerraCustom
 		public void saveSetting2()
 		{
 			saveSetting("setting1");
-        }
+		}
 
 		public void loadSetting2()
 		{
@@ -38,7 +38,6 @@ namespace Terraria.TerraCustom
 			//FileStream fileStream = new FileStream(path, FileMode.Create);
 			//xmlSerializer.Serialize(fileStream, Main.setting);
 			//fileStream.Close();
-
 			DataContractSerializer serializer = new DataContractSerializer(typeof(Setting));
 			string path = string.Concat(new object[]
 				{
@@ -67,8 +66,8 @@ namespace Terraria.TerraCustom
 			XmlReader reader = XmlReader.Create(path);
 			Main.setting = (Setting)serializer.ReadObject(reader);
 			//FileStream fileStream = new FileStream(path, FileMode.Open);
-		//	Main.setting = (Setting)xmlSerializer.Deserialize(fileStream);
-		//	fileStream.Close();
+			//	Main.setting = (Setting)xmlSerializer.Deserialize(fileStream);
+			//	fileStream.Close();
 		}
 
 		public int getSettings()

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 
 namespace Terraria.TerraCustom
@@ -220,7 +220,6 @@ namespace Terraria.TerraCustom
 					Main.snowBG[2] = 39;
 					return;
 				}
-
 				if (style == 7)
 				{
 					Main.snowMntBG[0] = 98;
@@ -239,7 +238,6 @@ namespace Terraria.TerraCustom
 					Main.snowBG[2] = 39;
 					return;
 				}
-
 				if (style == 9)
 				{
 					Main.snowMntBG[0] = 98;
