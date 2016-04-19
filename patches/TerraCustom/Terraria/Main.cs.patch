@@ -4003,12 +4003,12 @@
 +			// Terraria.app/Contents/MacOS/Terraria.exe
 +			// Terraria.app/Contents/MacOS/Content/
 +#if MAC
-+			//base.Content.RootDirectory = ".."+ Path.DirectorySeparatorChar + 
++			//base.Content.RootDirectory = ".."+ Path.DirectorySeparatorChar +
 +			//	".." + Path.DirectorySeparatorChar +
 +			//	".." + Path.DirectorySeparatorChar +
 +			//	"Terraria.app" +Path.DirectorySeparatorChar +
 +			//	"Contents" + Path.DirectorySeparatorChar +
-+			//	"MacOS" +Path.DirectorySeparatorChar + 
++			//	"MacOS" +Path.DirectorySeparatorChar +
 +			//	"Content";
 +#endif
  		}
@@ -5445,8 +5445,8 @@
  							int num315 = num293;
  							while (num315 < num293 + 100)
  							{
-+								// 19 total: 6 grass, 1 mush, 1 crim, 1 corrup, 
-+								//TileID.Grass -- 0, 6,7,8,9,10, 
++								// 19 total: 6 grass, 1 mush, 1 crim, 1 corrup,
++								//TileID.Grass -- 0, 6,7,8,9,10,
  								if (Main.tile[num292, num315].type == 2)
  								{
  									num310 = Main.GetTreeStyle(num292);
@@ -8684,10 +8684,10 @@
 -						}
 -					}
 +					*/
-+					
 +
-+					
-+					
++
++
++
  					else if (Main.menuMode == 111)
  					{
 +						/*
@@ -8983,9 +8983,9 @@
 +						}
 +						array4[1] = 300;
 +					}
-+					
 +
-+					
++
++
 +				else if (Main.menuMode == 28)
 +				{
 +					Main.caveParallax = 1f - (float)Main.bgScroll / 500f;
@@ -9999,7 +9999,7 @@
  			Main.mouseRightRelease = true;
  		}
 +
-+		
++
 +
 +
 +		/*
@@ -13186,7 +13186,7 @@
  
  		protected void DrawUnderworldBackground(bool flat)
  		{
-+			
++
  			if (Main.screenPosition.Y + (float)Main.screenHeight < (float)(Main.maxTilesY - 220) * 16f)
  			{
  				return;
@@ -13891,7 +13891,7 @@
 +		//	return Texture2D.FromStream(base.GraphicsDevice, stream);
 +		//}
 +
-+		
++
  	}
 +	//public enum MenuModes
 +	//{
