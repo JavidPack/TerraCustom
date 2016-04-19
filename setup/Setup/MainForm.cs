@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using static Terraria.TerraCustom.Setup.Settings;
 
 namespace Terraria.TerraCustom.Setup
 {
@@ -19,19 +20,25 @@ namespace Terraria.TerraCustom.Setup
 			InitializeComponent();
 
 			taskButtons[buttonDecompile] = () => new DecompileTask(this, "src/decompiled");
-			taskButtons[buttonDiffMerged] = () => new DiffTask(this, "src/decompiled", "src/merged", "patches/merged", 0);
-			taskButtons[buttonPatchMerged] = () => new PatchTask(this, "src/decompiled", "src/merged", "patches/merged", 0);
-			taskButtons[buttonDiffTerraria] = () => new DiffTask(this, "src/merged", "src/Terraria", "patches/Terraria", 1);
-			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/merged", "src/Terraria", "patches/Terraria", 1);
-			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.TerraCustomFormat);
-			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", 2, FormatTask.TerraCustomFormat);
+			taskButtons[buttonDiffMerged] = () => new DiffTask(this, "src/decompiled", "src/merged", "patches/merged", MergedDiffCutoff);
+			taskButtons[buttonPatchMerged] = () => new PatchTask(this, "src/decompiled", "src/merged", "patches/merged", MergedDiffCutoff);
+			taskButtons[buttonDiffTerraria] = () => new DiffTask(this, "src/merged", "src/Terraria", "patches/Terraria", TerrariaDiffCutoff);
+			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/merged", "src/Terraria", "patches/Terraria", TerrariaDiffCutoff);
+			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", TerraCustomDiffCutoff, FormatTask.TerraCustomFormat);
+			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", TerraCustomDiffCutoff, FormatTask.TerraCustomFormat);
+			//taskButtons[buttonSetupDebugging] = () => new SetupDebugTask(this);
 			taskButtons[buttonFormat] = () => new FormatTask(this, FormatTask.TerraCustomFormat);
+
+			taskButtons[buttonRegenSource] = () =>
+				new RegenSourceTask(this, new[] { buttonPatchMerged, buttonPatchTerraria, buttonPatchTerraCustom/*, buttonSetupDebugging*/ }
+					.Select(b => taskButtons[b]()).ToArray());
+
 			taskButtons[buttonSetup] = () =>
-				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchTerraCustom }
+				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchTerraCustom/*, buttonSetupDebugging*/ }
 					.Select(b => taskButtons[b]()).ToArray());
 
 			menuItemWarnings.Checked = Program.SuppressWarnings.Get();
-			menuItemSingleDecompileThread.Checked = DecompileTask.SingleDecompileThread.Get();
+			menuItemSingleDecompileThread.Checked = SingleDecompileThread.Get();
 
 			Closing += (sender, args) =>
 			{
@@ -80,7 +87,7 @@ namespace Terraria.TerraCustom.Setup
 
 		private void menuItemTerraria_Click(object sender, EventArgs e)
 		{
-			DecompileTask.SelectTerrariaDialog();
+			SelectTerrariaDialog();
 		}
 
 		private void menuItemWarnings_Click(object sender, EventArgs e)
@@ -90,14 +97,14 @@ namespace Terraria.TerraCustom.Setup
 
 		private void menuItemSingleDecompileThread_Click(object sender, EventArgs e)
 		{
-			DecompileTask.SingleDecompileThread.Set(menuItemSingleDecompileThread.Checked);
+			SingleDecompileThread.Set(menuItemSingleDecompileThread.Checked);
 		}
 
 		private void menuItemResetTimeStampOptmizations_Click(object sender, EventArgs e)
 		{
-			DiffTask.MergedDiffCutoff.Set(new DateTime(2015, 1, 1));
-			DiffTask.TerrariaDiffCutoff.Set(new DateTime(2015, 1, 1));
-			DiffTask.TerraCustomDiffCutoff.Set(new DateTime(2015, 1, 1));
+			MergedDiffCutoff.Set(new DateTime(2015, 1, 1));
+			TerrariaDiffCutoff.Set(new DateTime(2015, 1, 1));
+			TerraCustomDiffCutoff.Set(new DateTime(2015, 1, 1));
 		}
 
 		private void buttonTask_Click(object sender, EventArgs e)

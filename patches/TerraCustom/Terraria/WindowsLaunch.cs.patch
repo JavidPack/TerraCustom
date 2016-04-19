@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\WindowsLaunch.cs
 +++ src/TerraCustom\Terraria\WindowsLaunch.cs
-@@ -3,7 +3,7 @@
+@@ -3,7 +_,7 @@
  using System.IO;
  using System.Reflection;
  using System.Runtime.InteropServices;
@@ -9,7 +9,7 @@
  namespace Terraria
  {
  	internal static class WindowsLaunch
-@@ -39,7 +39,7 @@
+@@ -39,7 +_,7 @@
  			}
  			if (flag)
  			{

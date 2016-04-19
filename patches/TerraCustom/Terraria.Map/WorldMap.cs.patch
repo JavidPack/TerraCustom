@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria.Map\WorldMap.cs
 +++ src/TerraCustom\Terraria.Map\WorldMap.cs
-@@ -34,7 +34,7 @@
+@@ -34,7 +_,7 @@
  
  		public void Update(int x, int y, byte light)
  		{
@@ -9,7 +9,7 @@
  		}
  
  		public void SetTile(int x, int y, ref MapTile tile)
-@@ -49,24 +49,24 @@
+@@ -49,24 +_,24 @@
  
  		public bool UpdateLighting(int x, int y, byte light)
  		{
@@ -47,7 +47,7 @@
  			return true;
  		}
  
-@@ -109,11 +109,11 @@
+@@ -109,11 +_,11 @@
  						{
  							if (num <= 91)
  							{
@@ -61,7 +61,7 @@
  							}
  							Main.clearMap = true;
  							Main.loadMap = true;
-@@ -141,7 +141,7 @@
+@@ -141,7 +_,7 @@
  
  		public void Save()
  		{

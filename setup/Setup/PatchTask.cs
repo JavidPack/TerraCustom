@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ICSharpCode.NRefactory.CSharp;
 
@@ -13,25 +14,24 @@ namespace Terraria.TerraCustom.Setup
 		public readonly string baseDir;
 		public readonly string srcDir;
 		public readonly string patchDir;
+        public readonly ProgramSetting<DateTime> cutoff;
 		public readonly CSharpFormattingOptions format;
 		private int warnings;
 		private int failures;
 		private StreamWriter logFile;
 
-		public string FullBaseDir { get { return Path.Combine(Program.baseDir, baseDir); } }
-		public string FullSrcDir { get { return Path.Combine(Program.baseDir, srcDir); } }
-		public string FullPatchDir { get { return Path.Combine(Program.baseDir, patchDir); } }
+		public string FullBaseDir => Path.Combine(Program.baseDir, baseDir);
+	    public string FullSrcDir => Path.Combine(Program.baseDir, srcDir);
+	    public string FullPatchDir => Path.Combine(Program.baseDir, patchDir);
 
-		public int stepNumber;
-
-		public PatchTask(ITaskInterface taskInterface, string baseDir, string srcDir, string patchDir, int stepNumber,
-				CSharpFormattingOptions format = null) : base(taskInterface)
+	    public PatchTask(ITaskInterface taskInterface, string baseDir, string srcDir, string patchDir,
+            ProgramSetting<DateTime> cutoff, CSharpFormattingOptions format = null) : base(taskInterface)
 		{
 			this.baseDir = baseDir;
 			this.srcDir = srcDir;
 			this.patchDir = patchDir;
 			this.format = format;
-			this.stepNumber = stepNumber;
+            this.cutoff = cutoff;
 		}
 
 		public override bool StartupWarning()
@@ -52,6 +52,9 @@ namespace Terraria.TerraCustom.Setup
 			var baseFiles = Directory.EnumerateFiles(FullBaseDir, "*", SearchOption.AllDirectories);
 			var patchFiles = Directory.EnumerateFiles(FullPatchDir, "*", SearchOption.AllDirectories);
 
+		    var removedFileList = Path.Combine(FullPatchDir, DiffTask.RemovedFileList);
+            var removedFiles = File.Exists(removedFileList) ? new HashSet<string>(File.ReadAllLines(removedFileList)) : new HashSet<string>();
+
 			var copyItems = new List<WorkItem>();
 			var patchItems = new List<WorkItem>();
 			var formatItems = new List<WorkItem>();
@@ -59,7 +62,7 @@ namespace Terraria.TerraCustom.Setup
 			foreach (var file in baseFiles)
 			{
 				var relPath = RelPath(FullBaseDir, file);
-				if (DiffTask.excluded.Any(relPath.StartsWith))
+				if (DiffTask.excluded.Any(relPath.StartsWith) || removedFiles.Contains(relPath))
 					continue;
 
 				var srcPath = Path.Combine(FullSrcDir, relPath);
@@ -75,7 +78,7 @@ namespace Terraria.TerraCustom.Setup
 				var relPath = RelPath(FullPatchDir, file);
 				if (relPath.EndsWith(".patch"))
 					patchItems.Add(new WorkItem("Patching: " + relPath, () => Patch(relPath)));
-				else
+				else if (relPath != DiffTask.RemovedFileList)
 					copyItems.Add(new WorkItem("Copying: " + relPath, () => Copy(file, Path.Combine(FullSrcDir, relPath))));
 			}
 
@@ -89,24 +92,11 @@ namespace Terraria.TerraCustom.Setup
 				logFile = new StreamWriter(Path.Combine(Program.LogDir, "patch.log"));
 				ExecuteParallel(patchItems, false);
 			}
-			finally
-			{
-				if (logFile != null)
-					logFile.Close();
+			finally {
+			    logFile?.Close();
 			}
 
-			switch (stepNumber)
-			{
-				case 0:
-					DiffTask.MergedDiffCutoff.Set(DateTime.Now);
-					break;
-				case 1:
-					DiffTask.TerrariaDiffCutoff.Set(DateTime.Now);
-					break;
-				case 2:
-					DiffTask.TerraCustomDiffCutoff.Set(DateTime.Now);
-					break;
-			}
+		    cutoff.Set(DateTime.Now);
 		}
 
 		public override bool Failed()
@@ -122,7 +112,7 @@ namespace Terraria.TerraCustom.Setup
 		public override void FinishedDialog()
 		{
 			MessageBox.Show(
-				string.Format("Patches applied with {0} failures and {1} warnings.\nSee /logs/patch.log for details", failures, warnings),
+			    $"Patches applied with {failures} failures and {warnings} warnings.\nSee /logs/patch.log for details",
 				"Patch Results", MessageBoxButtons.OK, Failed() ? MessageBoxIcon.Error : MessageBoxIcon.Warning);
 		}
 
@@ -136,7 +126,10 @@ namespace Terraria.TerraCustom.Setup
 				return;
 			}
 
-			CallPatch(Path.Combine(patchDir, relPath), Path.Combine(srcDir, patchFullName));
+		    var patchText = File.ReadAllText(Path.Combine(FullPatchDir, relPath));
+		    patchText = PreparePatch(patchText);
+
+			CallPatch(patchText, Path.Combine(srcDir, patchFullName));
 
 			//just a copy of the original if the patch wasn't perfect, delete it, we still have it
 			var fileName = Path.GetFileName(patchFullName);
@@ -146,6 +139,23 @@ namespace Terraria.TerraCustom.Setup
 				File.Delete(fuzzFile);
 		}
 
+        //generates destination hunk offsets and enforces windows line endings
+	    private static string PreparePatch(string patchText) {
+            var r = new Regex(DiffTask.HunkOffsetRegex);
+            var lines = patchText.Split('\n');
+	        int delta = 0;
+	        for (int i = 0; i < lines.Length; i++) {
+	            lines[i] = lines[i].TrimEnd();
+	            if (lines[i].StartsWith("@@")) {
+	                var m = r.Match(lines[i]);
+	                var hunkOffset = int.Parse(m.Groups[1].Value) + delta;
+	                delta += int.Parse(m.Groups[4].Value) - int.Parse(m.Groups[2].Value);
+	                lines[i] = m.Result($"@@ -$1,$2 +{hunkOffset},$4 @@");
+	            }
+	        }
+	        return string.Join(Environment.NewLine, lines);
+	    }
+
 		private void Log(string text)
 		{
 			lock (logFile)
@@ -154,15 +164,16 @@ namespace Terraria.TerraCustom.Setup
 			}
 		}
 
-		private void CallPatch(string patchFile, string srcFile)
+		private void CallPatch(string patchText, string srcFile)
 		{
 			var output = new StringBuilder();
 			var error = new StringBuilder();
 			var log = new StringBuilder();
 			Program.RunCmd(Program.toolsDir, Path.Combine(Program.toolsDir, "applydiff.exe"),
-				string.Format("-u -N -p0 -d {0} -i {1} {2}", Program.baseDir, patchFile, srcFile),
-				s => { output.Append(s); log.Append(s); },
-				s => { error.Append(s); log.Append(s); }
+			    $"-u -N -p0 -d {Program.baseDir} {srcFile}",
+				s => { output.Append(s); lock(log) log.Append(s); },
+				s => { error.Append(s); lock(log) log.Append(s); },
+                patchText
 			);
 
 			Log(log.ToString());

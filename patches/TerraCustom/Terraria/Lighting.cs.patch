@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Lighting.cs
 +++ src/TerraCustom\Terraria\Lighting.cs
-@@ -185,7 +185,7 @@
+@@ -185,7 +_,7 @@
  				}
  			}
  		}
@@ -9,7 +9,7 @@
  		public static void LightTiles(int firstX, int lastX, int firstY, int lastY)
  		{
  			Main.render = true;
-@@ -502,7 +502,7 @@
+@@ -502,7 +_,7 @@
  				Lighting.PreRenderPhase();
  			}
  		}

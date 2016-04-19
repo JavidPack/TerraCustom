@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Framing.cs
 +++ src/TerraCustom\Terraria\Framing.cs
-@@ -358,7 +358,7 @@
+@@ -358,7 +_,7 @@
  			{
  				return;
  			}

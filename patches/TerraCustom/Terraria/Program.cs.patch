@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Program.cs
 +++ src/TerraCustom\Terraria\Program.cs
-@@ -9,8 +9,8 @@
+@@ -9,8 +_,8 @@
  using System.Windows.Forms;
  #endif
  using Terraria.Initializers;
@@ -10,7 +10,7 @@
  namespace Terraria
  {
  	public static class Program
-@@ -102,7 +102,7 @@
+@@ -102,7 +_,7 @@
  			{
  				try
  				{

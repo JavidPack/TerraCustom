@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria.Initializers\DyeInitializer.cs
 +++ src/TerraCustom\Terraria.Initializers\DyeInitializer.cs
-@@ -460,11 +460,13 @@
+@@ -460,11 +_,13 @@
  
  		private static void FixRecipes()
  		{

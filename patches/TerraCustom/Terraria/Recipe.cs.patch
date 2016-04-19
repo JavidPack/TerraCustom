@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Recipe.cs
 +++ src/TerraCustom\Terraria\Recipe.cs
-@@ -286,7 +286,7 @@
+@@ -286,7 +_,7 @@
  		}
  
  		public static void FindRecipes()
@@ -9,7 +9,7 @@
  			int num = Main.availableRecipe[Main.focusRecipe];
  			float num2 = Main.availableRecipeY[Main.focusRecipe];
  			for (int i = 0; i < Recipe.maxRecipes; i++)
-@@ -456,10 +456,11 @@
+@@ -456,10 +_,11 @@
  			{
  				Main.availableRecipeY[num8] -= num7;
  			}
@@ -22,7 +22,7 @@
  			int stack = 5;
  			int stack2 = 2;
  			Recipe.newRecipe.createItem.SetDefaults(8, false);
-@@ -10139,10 +10140,11 @@
+@@ -10139,10 +_,11 @@
  				Main.recipe[m].createItem.checkMat();
  			}
  			int arg_27EA8_0 = Recipe.numRecipes;
@@ -35,7 +35,7 @@
  			int num = Recipe.numRecipes;
  			for (int i = 0; i < num; i++)
  			{
-@@ -10165,10 +10167,11 @@
+@@ -10165,10 +_,11 @@
  					Main.recipe[i + 1] = recipe;
  				}
  			}
@@ -48,7 +48,7 @@
  			int num = Recipe.numRecipes;
  			for (int i = 0; i < num; i++)
  			{
-@@ -10191,10 +10194,11 @@
+@@ -10191,10 +_,11 @@
  					Main.recipe[i + 1] = recipe;
  				}
  			}
@@ -61,7 +61,7 @@
  			if (Recipe.newRecipe.requiredTile[0] == 13)
  			{
  				Recipe.newRecipe.alchemy = true;
-@@ -10202,6 +10206,7 @@
+@@ -10202,6 +_,7 @@
  			Main.recipe[Recipe.numRecipes] = Recipe.newRecipe;
  			Recipe.newRecipe = new Recipe();
  			Recipe.numRecipes++;

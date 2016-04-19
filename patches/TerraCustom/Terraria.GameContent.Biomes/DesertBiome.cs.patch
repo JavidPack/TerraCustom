@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria.GameContent.Biomes\DesertBiome.cs
 +++ src/TerraCustom\Terraria.GameContent.Biomes\DesertBiome.cs
-@@ -461,13 +461,18 @@
+@@ -461,13 +_,18 @@
  			start = new Point(origin.X, num2);
  			return true;
  		}

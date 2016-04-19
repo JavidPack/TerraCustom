@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Lang.cs
 +++ src/TerraCustom\Terraria\Lang.cs
-@@ -35599,6 +35599,7 @@
+@@ -35599,6 +_,7 @@
  					Lang.prefix[k] = string.Empty;
  				}
  			}
@@ -8,7 +8,7 @@
  			for (int l = 0; l < Main.recipe.Length; l++)
  			{
  				if (Main.recipe[l].createItem.name != null && Main.recipe[l].createItem.name != "" && Main.recipe[l].createItem.netID != 0)
-@@ -35612,6 +35613,7 @@
+@@ -35612,6 +_,7 @@
  					}
  				}
  			}

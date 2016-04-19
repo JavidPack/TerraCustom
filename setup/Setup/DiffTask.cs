@@ -3,69 +3,64 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ICSharpCode.NRefactory.CSharp;
 
 namespace Terraria.TerraCustom.Setup
 {
 	public class DiffTask : Task
 	{
-		public static string[] extensions = { ".cs", ".csproj", ".ico", ".resx", ".png" };
+		public static string[] extensions = { ".cs", ".csproj", ".ico", ".resx", ".png", "App.config" };
 		public static string[] excluded = { "bin" + Path.DirectorySeparatorChar, "obj" + Path.DirectorySeparatorChar };
+	    public static readonly string RemovedFileList = "removed_files.list";
+	    public static readonly string HunkOffsetRegex = @"@@ -(\d+),(\d+) \+([_\d]+),(\d+) @@";
+
 
 		public readonly string baseDir;
 		public readonly string srcDir;
 		public readonly string patchDir;
+        public readonly ProgramSetting<DateTime> cutoff;
 		public readonly CSharpFormattingOptions format;
 
-		public string FullBaseDir { get { return Path.Combine(Program.baseDir, baseDir); } }
-		public string FullSrcDir { get { return Path.Combine(Program.baseDir, srcDir); } }
-		public string FullPatchDir { get { return Path.Combine(Program.baseDir, patchDir); } }
+		public string FullBaseDir => Path.Combine(Program.baseDir, baseDir);
+	    public string FullSrcDir => Path.Combine(Program.baseDir, srcDir);
+	    public string FullPatchDir => Path.Combine(Program.baseDir, patchDir);
 
-		public static ProgramSetting<DateTime> MergedDiffCutoff = new ProgramSetting<DateTime>("MergedDiffCutoff");
-		public static ProgramSetting<DateTime> TerrariaDiffCutoff = new ProgramSetting<DateTime>("TerrariaDiffCutoff");
-		public static ProgramSetting<DateTime> TerraCustomDiffCutoff = new ProgramSetting<DateTime>("TerraCustomDiffCutoff");
-		public int stepNumber;
-
-		public DiffTask(ITaskInterface taskInterface, string baseDir, string srcDir, string patchDir, int stepNumber,
-			CSharpFormattingOptions format = null)
-			: base(taskInterface)
+	    public DiffTask(ITaskInterface taskInterface, string baseDir, string srcDir, string patchDir, 
+            ProgramSetting<DateTime> cutoff, CSharpFormattingOptions format = null) : base(taskInterface)
 		{
 			this.baseDir = baseDir;
 			this.srcDir = srcDir;
 			this.patchDir = patchDir;
 			this.format = format;
-			this.stepNumber = stepNumber;
+			this.cutoff = cutoff;
 		}
 
 		public override void Run()
 		{
-			List<string> patchesFiles = new List<string>();// (Directory.EnumerateFiles(FullPatchDir, "*", SearchOption.AllDirectories));
-			foreach (var file in Directory.EnumerateFiles(FullPatchDir, "*", SearchOption.AllDirectories))
-			{
-				patchesFiles.Add(RelPath(FullPatchDir, file));
-			}
-			//if (Directory.Exists(FullPatchDir))
-			//	Directory.Delete(FullPatchDir, true);
+			var patchFiles = new HashSet<string>(
+                Directory.EnumerateFiles(FullPatchDir, "*", SearchOption.AllDirectories)
+                .Select(file => RelPath(FullPatchDir, file)));
+            var oldFiles = new HashSet<string>(
+                Directory.EnumerateFiles(FullBaseDir, "*", SearchOption.AllDirectories)
+                .Select(file => RelPath(FullBaseDir, file))
+                .Where(relPath => !relPath.EndsWith(".patch") && !excluded.Any(relPath.StartsWith)));
 
-			var files = Directory.EnumerateFiles(FullSrcDir, "*", SearchOption.AllDirectories).Where(f => extensions.Any(f.EndsWith));
 			var items = new List<WorkItem>();
 
-			foreach (var file in files)
+			foreach (var file in Directory.EnumerateFiles(FullSrcDir, "*", SearchOption.AllDirectories))
 			{
 				var relPath = RelPath(FullSrcDir, file);
-				patchesFiles.Remove(relPath);
-				patchesFiles.Remove(relPath + ".patch");
-				if (excluded.Any(relPath.StartsWith))
+                oldFiles.Remove(relPath);
+			    if (!extensions.Any(relPath.EndsWith))
 					continue;
 
-				//bool skip = false;
-				if ((stepNumber == 0 && (File.GetLastWriteTime(file) < MergedDiffCutoff.Get())) ||
-					(stepNumber == 1 && (File.GetLastWriteTime(file) < TerrariaDiffCutoff.Get())) ||
-					(stepNumber == 2 && (File.GetLastWriteTime(file) < TerraCustomDiffCutoff.Get())))
-					continue;
-				//skip = true;
+                patchFiles.Remove(relPath);
+                patchFiles.Remove(relPath + ".patch");
 
-				//if (!skip)
+                if (excluded.Any(relPath.StartsWith) || File.GetLastWriteTime(file) < cutoff.Get())
+					continue;
+
 				items.Add(File.Exists(Path.Combine(FullBaseDir, relPath))
 					? new WorkItem("Creating Diff: " + relPath, () => Diff(relPath))
 					: new WorkItem("Copying: " + relPath, () => Copy(file, Path.Combine(FullPatchDir, relPath))));
@@ -74,24 +69,17 @@ namespace Terraria.TerraCustom.Setup
 			ExecuteParallel(items);
 
 			taskInterface.SetStatus("Deleting Unnessesary Patches");
+            foreach (var file in patchFiles)
+                File.Delete(Path.Combine(FullPatchDir, file));
 
-			foreach (string file in patchesFiles)
-			{
-				File.Delete(file);
-			}
+            taskInterface.SetStatus("Noting Removed Files");
+		    var removedFileList = Path.Combine(FullPatchDir, RemovedFileList);
+            if (oldFiles.Count > 0)
+                File.WriteAllText(removedFileList, string.Join("\r\n", oldFiles));
+            else if (File.Exists(removedFileList))
+                File.Delete(removedFileList);
 
-			switch (stepNumber)
-			{
-				case 0:
-					MergedDiffCutoff.Set(DateTime.Now);
-					break;
-				case 1:
-					TerrariaDiffCutoff.Set(DateTime.Now);
-					break;
-				case 2:
-					TerraCustomDiffCutoff.Set(DateTime.Now);
-					break;
-			}
+            cutoff.Set(DateTime.Now);
 		}
 
 		private void Diff(string relPath)
@@ -112,20 +100,32 @@ namespace Terraria.TerraCustom.Setup
 			if (temp != null)
 				File.Delete(temp);
 
-			if (patch == "\r\n")
-				return;
-
 			var patchFile = Path.Combine(FullPatchDir, relPath + ".patch");
+		    if (patch.Trim() != "") {
 			CreateParentDirectory(patchFile);
-			File.WriteAllText(patchFile, patch);
+                File.WriteAllText(patchFile, StripDestHunkOffsets(patch));
+		    }
+            else if (File.Exists(patchFile))
+                File.Delete(patchFile);
+
+		}
+
+	    private static string StripDestHunkOffsets(string patchText) {
+	        var r = new Regex(HunkOffsetRegex);
+	        var lines = patchText.Split(new [] { Environment.NewLine }, StringSplitOptions.None);
+	        for (int i = 0; i < lines.Length; i++)
+	            if (lines[i].StartsWith("@@"))
+                    lines[i] = r.Replace(lines[i], "@@ -$1,$2 +_,$4 @@");
+
+	        return string.Join(Environment.NewLine, lines);
 		}
 
 		private string CallDiff(string baseFile, string srcFile, string baseName, string srcName)
 		{
 			var output = new StringBuilder();
 			Program.RunCmd(Program.toolsDir, Path.Combine(Program.toolsDir, "py.exe"),
-				string.Format("diff.py {0} {1} {2} {3}", baseFile, srcFile, baseName, srcName),
-				s => output.Append(s), _ => { });
+			    $"diff.py {baseFile} {srcFile} {baseName} {srcName}",
+				s => output.Append(s));
 
 			return output.ToString();
 		}

@@ -48,6 +48,8 @@ namespace Terraria.TerraCustom.Setup
 			this.menuItemWarnings = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemSingleDecompileThread = new System.Windows.Forms.ToolStripMenuItem();
 			this.resetTimeStampOptimizationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonRegenSource = new System.Windows.Forms.Button();
+            //this.buttonSetupDebugging = new System.Windows.Forms.Button();
 			this.mainMenuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -177,7 +179,7 @@ namespace Terraria.TerraCustom.Setup
 			// 
 			this.buttonFormat.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.buttonFormat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonFormat.Location = new System.Drawing.Point(112, 158);
+            this.buttonFormat.Location = new System.Drawing.Point(112, 188);
 			this.buttonFormat.Name = "buttonFormat";
 			this.buttonFormat.Size = new System.Drawing.Size(129, 23);
 			this.buttonFormat.TabIndex = 8;
@@ -265,6 +267,32 @@ namespace Terraria.TerraCustom.Setup
 			this.resetTimeStampOptimizationsToolStripMenuItem.Text = "Reset TimeStamp Optimizations";
 			this.resetTimeStampOptimizationsToolStripMenuItem.Click += new System.EventHandler(this.menuItemResetTimeStampOptmizations_Click);
 			// 
+            // buttonRegenSource
+            // 
+            this.buttonRegenSource.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonRegenSource.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonRegenSource.Location = new System.Drawing.Point(180, 158);
+            this.buttonRegenSource.Name = "buttonRegenSource";
+            this.buttonRegenSource.Size = new System.Drawing.Size(129, 23);
+            this.buttonRegenSource.TabIndex = 3;
+            this.buttonRegenSource.Text = "Regenerate Source";
+            this.toolTipButtons.SetToolTip(this.buttonRegenSource, "Regenerates all the source files\r\nUse this after pulling from the repo\r\nEquivalen" +
+        "t to Setup without Decompile");
+            this.buttonRegenSource.UseVisualStyleBackColor = true;
+            this.buttonRegenSource.Click += new System.EventHandler(this.buttonTask_Click);
+            // 
+            // buttonSetupDebugging
+            // 
+            //this.buttonSetupDebugging.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            //this.buttonSetupDebugging.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            //this.buttonSetupDebugging.Location = new System.Drawing.Point(45, 158);
+            //this.buttonSetupDebugging.Name = "buttonSetupDebugging";
+            //this.buttonSetupDebugging.Size = new System.Drawing.Size(129, 23);
+            //this.buttonSetupDebugging.TabIndex = 3;
+            //this.buttonSetupDebugging.Text = "Setup Debugging";
+            //this.buttonSetupDebugging.UseVisualStyleBackColor = true;
+            //this.buttonSetupDebugging.Click += new System.EventHandler(this.buttonTask_Click);
+            // 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -276,7 +304,9 @@ namespace Terraria.TerraCustom.Setup
 			this.Controls.Add(this.buttonDiffTerraCustom);
 			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.buttonDiffTerraria);
-			this.Controls.Add(this.buttonPatchTerraCustom);
+            //this.Controls.Add(this.buttonSetupDebugging);
+            this.Controls.Add(this.buttonRegenSource);
+            this.Controls.Add(this.buttonPatchTerraCustom);
 			this.Controls.Add(this.buttonPatchTerraria);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.buttonCancel);
@@ -314,6 +344,8 @@ namespace Terraria.TerraCustom.Setup
         private System.Windows.Forms.Button buttonPatchMerged;
         private System.Windows.Forms.ToolStripMenuItem menuItemSingleDecompileThread;
 		private System.Windows.Forms.ToolStripMenuItem resetTimeStampOptimizationsToolStripMenuItem;
+        private System.Windows.Forms.Button buttonRegenSource;
+        //private System.Windows.Forms.Button buttonSetupDebugging;
 	}
 }
 

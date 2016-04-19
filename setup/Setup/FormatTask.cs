@@ -9,7 +9,7 @@ using ICSharpCode.NRefactory.Editor;
 
 namespace Terraria.TerraCustom.Setup
 {
-    class FormatTask : Task
+    public class FormatTask : Task
     {
         public static CSharpFormattingOptions TerraCustomFormat = FormattingOptionsFactory.CreateAllman();
 

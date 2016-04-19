@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Terraria.TerraCustom.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SuppressWarnings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="SteamDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SingleDecompileThread" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MergedDiffCutoff" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2015-01-01</Value>
+    </Setting>
+    <Setting Name="TerrariaDiffCutoff" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2015-01-01</Value>
+    </Setting>
+    <Setting Name="TerraCustomDiffCutoff" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2015-01-01</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

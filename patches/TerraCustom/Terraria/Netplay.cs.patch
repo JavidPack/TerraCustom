@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\Netplay.cs
 +++ src/TerraCustom\Terraria\Netplay.cs
-@@ -310,7 +310,7 @@
+@@ -310,7 +_,7 @@
  							WorldGen.clearWorld();
  							if (Main.mapEnabled)
  							{
