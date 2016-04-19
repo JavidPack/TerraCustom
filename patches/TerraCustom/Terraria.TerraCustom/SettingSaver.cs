@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace Terraria
+namespace Terraria.TerraCustom
 {
 	public class SettingSaver
 	{

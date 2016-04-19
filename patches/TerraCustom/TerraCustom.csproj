@@ -354,6 +354,7 @@
     <Compile Include="Terraria.Social\SocialAPI.cs" />
     <Compile Include="Terraria.Social\SocialMode.cs" />
     <Compile Include="Terraria.TerraCustom\Interface.cs" />
+    <Compile Include="Terraria.TerraCustom\TerraCustomUtils.cs" />
     <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
     <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
     <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
@@ -406,7 +407,6 @@
     <Compile Include="Terraria\Cloud.cs" />
     <Compile Include="Terraria\Collision.cs" />
     <Compile Include="Terraria\CombatText.cs" />
-    <Compile Include="Terraria\CustomScreen.cs" />
     <Compile Include="Terraria\DelegateMethods.cs" />
     <Compile Include="Terraria\Dust.cs" />
     <Compile Include="Terraria\Entity.cs" />
@@ -438,8 +438,8 @@
     <Compile Include="Terraria\Ref.cs" />
     <Compile Include="Terraria\RemoteClient.cs" />
     <Compile Include="Terraria\RemoteServer.cs" />
-    <Compile Include="Terraria\Setting.cs" />
-    <Compile Include="Terraria\SettingSaver.cs" />
+    <Compile Include="Terraria.TerraCustom\Setting.cs" />
+    <Compile Include="Terraria.TerraCustom\SettingSaver.cs" />
     <Compile Include="Terraria\Sign.cs" />
     <Compile Include="Terraria\Star.cs" />
     <Compile Include="Terraria\TargetDummy.cs" />

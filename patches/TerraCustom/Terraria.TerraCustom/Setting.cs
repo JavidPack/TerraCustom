@@ -4,16 +4,246 @@ using System.Xml.Serialization;
 using Terraria.TerraCustom;
 using System.Runtime.Serialization;
 
-namespace Terraria
+namespace Terraria.TerraCustom
 {
 	[DataContract]
 	public class Setting
 	{
+		public static void initializeAll()
+		{
+			initializeTerrain();
+			initializeOres();
+			initializeOreAmount();
+			initializeGraphic();
+			initializeBGs();
+			initializeUGBGs();
+			initializeMiscellaneous();
+			initializeChallenge();
+			//initializeBiomeAmount();
+			initializeVariousSpawnsAmount();
+			initializeMicroBiomesAmount();
+			initializeTrapsAmount();
+			initializeDowned();
+			initializeFound();
+			initializeChests();
+			initializeDebug();
+		}
+
+		public static void initializeTerrain()
+		{
+			Main.setting.SurfaceTerrainHeightMultiplier = 1f;
+			Main.setting.SurfaceTerrainHeightMax = .17f;
+			Main.setting.SurfaceTerrainHeightMin = .3f;
+			Main.setting.BeachSizeMultiplier = 1f;
+			Main.setting.DungeonSizeMultiplier = 1f;
+			Main.setting.TempleSizeMultiplier = 1f;
+			Main.setting.SurfaceHorizontalTunnelsMultiplier = 1f;
+			Main.setting.LakeMultiplier = 1f;
+
+			// Reset tile width/height
+			if (WorldGen.worldSize == 0)
+			{
+				Main.maxTilesX = 4200;
+				Main.maxTilesY = 1200;
+			}
+			else if (WorldGen.worldSize == 1)
+			{
+				Main.maxTilesX = 6400;
+				Main.maxTilesY = 1800;
+			}
+			else if (WorldGen.worldSize == 2)
+			{
+				Main.maxTilesX = 8400;
+				Main.maxTilesY = 2400;
+			}
+		}
+
+		public static void initializeOres()
+		{
+			Main.setting.IsCopper = 2;
+			Main.setting.IsIron = 2;
+			Main.setting.IsSilver = 2;
+			Main.setting.IsGold = 2;
+			Main.setting.IsCobalt = 2;
+			Main.setting.IsMythril = 2;
+			Main.setting.IsAdaman = 2;
+		}
+
+		public static void initializeOreAmount()
+		{
+			Main.setting.PercIron = 1f;
+			Main.setting.PercCopp = 1f;
+			Main.setting.PercSilv = 1f;
+			Main.setting.PercGold = 1f;
+			Main.setting.PercDemonite = 1f;
+			Main.setting.PercHellstone = 1f;
+			Main.setting.PreSmashAltar = 0f;
+			Main.setting.PreSmashAltarOreAlternates = false;
+			Main.setting.PreSmashAltarPreventPatches = true;
+		}
+
+		public static void initializeMicroBiomesAmount()
+		{
+			Main.setting.EnchantedSwordBiomeMultiplier = 1f;
+			Main.setting.ThinIceBiomeMultiplier = 1f;
+			Main.setting.CampsiteBiomeMultiplier = 1f;
+			Main.setting.SkyIslandMultiplier = 1f;
+			Main.setting.MineCartMultiplier = 1f;
+			Main.setting.GemMultiplier = 1f;
+			Main.setting.GemCaveMultiplier = 1f;
+			Main.setting.GemCaveSizeMultiplier = 1f;
+			Main.setting.HiveMultiplier = 1f;
+			Main.setting.SpiderCaveMultiplier = 1f;
+			Main.setting.GraniteCaveMultiplier = 1f;
+			Main.setting.MarbleCaveMultiplier = 1f;
+			Main.setting.UndergroundCabinMultiplier = 1f;
+		}
+
+		public static void initializeTrapsAmount()
+		{
+			Main.setting.MiningExplosiveMultiplier = 1f;
+			Main.setting.TrapMultiplier = 1f;
+			Main.setting.AdditionalDartTrapMultiplier = 0f;
+			Main.setting.AdditionalBoulderTrapMultiplier = 0f;
+			Main.setting.AdditionalExplosiveTrapMultiplier = 0f;
+			Main.setting.TempleTrapMultiplier = 1f;
+		}
+
+		public static void initializeVariousSpawnsAmount()
+		{
+			Main.setting.CrystalHeartMultiplier = 1f;
+			Main.setting.StatueMultiplier = 1f;
+			//Main.setting.AltarMultiplier = 1f;
+			Main.setting.PreDropMeteor = 0;
+			Main.setting.TreeLowerBound = 5;
+			Main.setting.TreeUpperBound = 16;
+			Main.setting.MushroomBiomeMultiplier = 1f;
+        }
+
+		public static void initializeChallenge()
+		{
+			Main.setting.NoTree = false;
+			Main.setting.NoDungeon = false;
+			Main.setting.NoTemple = false;
+			Main.setting.NoSpiderCave = false;
+			Main.setting.NoHive = false;
+			Main.setting.NoSnow = false;
+			Main.setting.NoJungle = false;
+			Main.setting.NoAnthill = false;
+			Main.setting.NoBeach = false;
+			Main.setting.NoChest = false;
+			Main.setting.NoPot = false;
+			Main.setting.NoAltar = false;
+			Main.setting.NoOrbHeart = false;
+		}
+
+		public static void initializeGraphic()
+		{
+			Main.setting.MoonStyle = 3;
+			Main.setting.SelectDungeon = 3;
+			Main.setting.SelectMossType = new int[]
+			{
+				5,
+				5,
+				5
+			};
+			Main.setting.SelectTreeStyle = new int[]
+			{
+				6,
+				6,
+				6,
+				6
+			};
+			Main.setting.ShrineType = 0;
+		}
+
+		public static void initializeMiscellaneous()
+		{
+			Main.setting.IsCorruption = 0;
+			Main.setting.CrimsonCorruptionAvoidJungle = false;
+			Main.setting.DungeonSide = 0;
+			Main.setting.IsPyramid = 2;
+			Main.setting.IsGiantTree = 2;
+			Main.hardMode = false;
+			Main.setting.HardmodeStripes = true;
+		}
+
+		public static void initializeBGs()
+		{
+			Main.setting.ForestStyle = 14;
+			Main.setting.CorruptStyle = 2;
+			Main.setting.JungleStyle = 2;
+			Main.setting.SnowStyle = 11;
+			Main.setting.HallowStyle = 2;
+			Main.setting.CrimsonStyle = 3;
+			Main.setting.DesertStyle = 2;
+			Main.setting.OceanStyle = 3;
+		}
+
+		public static void initializeChests()
+		{
+			Main.setting.BiomeChestSets = 1;
+			Main.setting.PotsMultiplier = 1f;
+			Main.setting.JungleShrineMultiplier = 1f;
+			Main.setting.MahoganyTreeMultiplier = 1f;
+			Main.setting.WaterChestMultiplier = 1f;
+			Main.setting.SurfaceChestMultiplier = 1f;
+			Main.setting.TempleChestMultiplier = 1f;
+			Main.setting.ShadowChestMultiplier = 1f;
+		}
+
+		public static void initializeUGBGs()
+		{
+			Main.setting.IceBackStyle = 0;
+			Main.setting.HellBackStyle = 0;
+			Main.setting.JungleBackStyle = 0;
+			Main.setting.CaveBackStyle1 = 0;
+			Main.setting.CaveBackStyle2 = 0;
+			Main.setting.CaveBackStyle3 = 0;
+			Main.setting.CaveBackStyle4 = 0;
+		}
+
+		public static void initializeDowned()
+		{
+			Main.setting.downedPlantera = false;
+			Main.setting.downedEyeOfCthulu = false;
+			Main.setting.downedEaterBrain = false;
+			Main.setting.downedSkeletron = false;
+			Main.setting.downedQueenBee = false;
+			Main.setting.downedSlimeKing = false;
+			Main.setting.downedTwins = false;
+			Main.setting.downedDestroyer = false;
+			Main.setting.downedSkeletronPrime = false;
+			Main.setting.downedFishron = false;
+			Main.setting.downedGolem = false;
+			Main.setting.downedAncientCultist = false;
+			Main.setting.downedMoonlord = false;
+		}
+
+		public static void initializeFound()
+		{
+			Main.setting.savedStylist = false;
+			Main.setting.savedGoblin = false;
+			Main.setting.savedWizard = false;
+			Main.setting.savedMechanic = false;
+			Main.setting.savedAngler = false;
+			Main.setting.savedTaxCollector = false;
+		}
+
+		public static void initializeDebug()
+		{
+			Main.setting.GenerateWldEachStep = false;
+			Main.setting.SaveInTModFolder = false;
+			Main.setting.generateLeveledRPGSave = false;
+			Main.setting.LeveledRPGCriticalMode = false;
+		}
+
+
 		[OnDeserializing]
 		public void Hi(StreamingContext context)
 		{
 			Main.setting = this;
-			WorldGen.initializeAll();
+			initializeAll();
 		}
 
 		[DataMember]

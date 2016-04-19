@@ -8,6 +8,34 @@ using Terraria.IO;
 
 namespace Terraria.TerraCustom
 {
+	public enum MenuModes
+	{
+		SelectDifficulty = -7,
+		ChooseWorldSize = 0,
+		EnterWorldName = 7,
+		Settings = 11,
+		ChallengeOption = 113,
+
+		ResetAllSettings,
+		MicroBiomes1 = 1000,
+		MicroBiomes2,
+		DownedFound,
+		Downed,
+		Found,
+		VariousSpawns,
+		Ores,
+		OreAmount,
+		GraphicStyles,
+		Backgrounds,
+		SurfaceBackgrounds,
+		UndergroundBackgrounds,
+		Miscellaneous,
+		Terrain,
+		Chests,
+		Debug,
+		Traps,
+		SavedSettings,
+	}
 	class Interface
 	{
 		/*
@@ -59,7 +87,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Found NPC Settings", Setting.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Found Stylist: No", "Found Stylist: Yes" }, () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Goblin : No", "Found Goblin : Yes" }, () => Main.setting.savedGoblin? 1 : 0, x => Main.setting.savedGoblin = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Wizard : No", "Found Wizard : Yes" }, () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
@@ -70,7 +98,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] DownedMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", WorldGen.initializeDowned) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Found NPC Settings", Setting.initializeDowned) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"Downed Slime King: No", "Downed Slime King: Yes"},() => Main.setting.downedSlimeKing ? 1 : 0, x => Main.setting.downedSlimeKing = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Queen Bee : No", "Downed Queen Bee : Yes"},() => Main.setting.downedQueenBee? 1 : 0,x =>  Main.setting.downedQueenBee = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},() => Main.setting.downedEyeOfCthulu? 1 : 0,x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false),
@@ -89,7 +117,7 @@ namespace Terraria.TerraCustom
 
 
 		static TerraCustomMenuItem[] ChallengeOptionMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Challenge Settings", WorldGen.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Challenge Settings", Setting.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"No tree: Disabled","No tree: Enabled"}, () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No dungeon: Disabled","No dungeon: Enabled"}, () => Main.setting.NoDungeon ? 1 : 0, x => Main.setting.NoDungeon = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No temple: Disabled","No temple: Enabled"}, () => Main.setting.NoTemple ? 1 : 0, x => Main.setting.NoTemple= x > 0 ? true :false),
@@ -108,7 +136,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Ore Settings", WorldGen.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Ore Settings", Setting.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("Also check 'Ore Amount' option to get both hardmode ores") {labelScale = 0.6f},
 			new OptionLabel(new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"}, () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
 			new OptionLabel(new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"}, () => Main.setting.IsIron, x => Main.setting.IsIron = x),
@@ -121,7 +149,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Miscellaneous Settings", WorldGen.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Miscellaneous Settings", Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"}, () => Main.setting.DungeonSide, x => Main.setting.DungeonSide = x),
@@ -133,7 +161,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] VariousSpawnsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Various Spawns Amounts", WorldGen.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Various Spawns Amounts", Setting.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount") {labelScale = 0.6f},
 			new SliderItem("Crystal Hearts:",10f,() => Main.setting.CrystalHeartMultiplier, x => Main.setting.CrystalHeartMultiplier = x,x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x)),
 			new SliderItem("Pre-Drop Meteor",100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
@@ -145,7 +173,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems1 = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Micro Biomes Amounts", Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
 			new SliderItem("Campsite:", 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
@@ -161,7 +189,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Micro Biomes Amounts", WorldGen.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Micro Biomes Amounts", Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Gemstones (non-cave):", 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
 			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
@@ -172,7 +200,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] TrapsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Traps Amounts", WorldGen.initializeTrapsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Traps Amounts", Setting.initializeTrapsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Additional Dart Traps:", 10f, () => Main.setting.AdditionalDartTrapMultiplier, x => Main.setting.AdditionalDartTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier))),
@@ -183,7 +211,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] TerrainMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Terrain", WorldGen.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Terrain", Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
 			new SliderItem("Surface Height Variance:", 10f,() => Main.setting.SurfaceTerrainHeightMultiplier,x => Main.setting.SurfaceTerrainHeightMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + (x == 0 ? " Flat" : "")),
 			new SliderItem("Surface Upper Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMax - .1f /*.1 to .17*/, x => Main.setting.SurfaceTerrainHeightMax = x + .1f > Main.setting.SurfaceTerrainHeightMin ? Main.setting.SurfaceTerrainHeightMin : x + .1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":"")),
@@ -199,7 +227,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Chests", WorldGen.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Chests", Setting.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
 			new PlainLabel(ChestEstimateString),
 			new SliderItem("Biome Chest Sets:",10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
@@ -214,7 +242,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] OreAmountMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Ore Amount", WorldGen.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
+			new ActionLabel("Reset Ore Amount", Setting.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
 			new PlainLabel("setting 100% will generate default amount of ores") {labelScale = 0.6f},
 			new SliderItem("Copper/Tin:",5f,() => Main.setting.PercCopp, x => Main.setting.PercCopp = x, x => Math.Round((double)(Main.setting.PercCopp * 100f)) + "%"),
 			new SliderItem("Iron/Lead:",5f,() => Main.setting.PercIron, x => Main.setting.PercIron = x, x => Math.Round((double)(Main.setting.PercIron * 100f)) + "%"),
@@ -248,7 +276,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Debug Settings", WorldGen.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel("Reset Debug Settings", Setting.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
@@ -427,7 +455,7 @@ namespace Terraria.TerraCustom
 					clickableLabelText[buttonIndex] = "Reset Underground Background Settings";
 					if (main.selectedMenu == 0)
 					{
-						WorldGen.initializeUGBGs();
+						Setting.initializeUGBGs();
 					}
 					clickableLabelScale[0] = 0.53f;
 					array4[0] = -17;
@@ -551,7 +579,7 @@ namespace Terraria.TerraCustom
 				// click accept
 				if (main.selectedMenu == 1)
 				{
-					WorldGen.initializeAll();
+					Setting.initializeAll();
 					Main.menuMode = (int)MenuModes.Settings;
 				}
 				// click cancel
@@ -573,7 +601,7 @@ namespace Terraria.TerraCustom
 				clickableLabelText[num48] = "Reset Graphic Styles";
 				if (main.selectedMenu == 0)
 				{
-					WorldGen.initializeGraphic();
+					Setting.initializeGraphic();
 				}
 				clickableLabelScale[0] = 0.53f;
 				array4[0] = -17;
@@ -897,7 +925,7 @@ namespace Terraria.TerraCustom
 					clickableLabelText[num50] = "Reset Background Settings";
 					if (main.selectedMenu == 0)
 					{
-						WorldGen.initializeBGs();
+						Setting.initializeBGs();
 					}
 					clickableLabelScale[0] = 0.53f;
 					array4[0] = -17;
