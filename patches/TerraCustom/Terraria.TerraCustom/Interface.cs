@@ -949,7 +949,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.ForestStyle++;
 						}
-						WorldGen.findBackgrounds(0, Main.setting.ForestStyle);
+						TerraCustomUtils.findBackgrounds(0, Main.setting.ForestStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0]);
@@ -966,7 +966,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.ForestStyle--;
 						}
-						WorldGen.findBackgrounds(0, Main.setting.ForestStyle);
+						TerraCustomUtils.findBackgrounds(0, Main.setting.ForestStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0]);
@@ -992,7 +992,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.CorruptStyle++;
 						}
-						WorldGen.findBackgrounds(1, Main.setting.CorruptStyle);
+						TerraCustomUtils.findBackgrounds(1, Main.setting.CorruptStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.corruptBG[0]);
@@ -1009,7 +1009,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.CorruptStyle--;
 						}
-						WorldGen.findBackgrounds(1, Main.setting.CorruptStyle);
+						TerraCustomUtils.findBackgrounds(1, Main.setting.CorruptStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.corruptBG[0]);
@@ -1035,7 +1035,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.JungleStyle++;
 						}
-						WorldGen.findBackgrounds(2, Main.setting.JungleStyle);
+						TerraCustomUtils.findBackgrounds(2, Main.setting.JungleStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.jungleBG[0]);
@@ -1052,7 +1052,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.JungleStyle--;
 						}
-						WorldGen.findBackgrounds(2, Main.setting.JungleStyle);
+						TerraCustomUtils.findBackgrounds(2, Main.setting.JungleStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.jungleBG[0]);
@@ -1078,7 +1078,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.SnowStyle++;
 						}
-						WorldGen.findBackgrounds(3, Main.setting.SnowStyle);
+						TerraCustomUtils.findBackgrounds(3, Main.setting.SnowStyle);
 						main.LoadBackground(Main.treeMntBG[0] = Main.snowMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1] = Main.snowMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.snowBG[0]);
@@ -1095,7 +1095,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.SnowStyle--;
 						}
-						WorldGen.findBackgrounds(3, Main.setting.SnowStyle);
+						TerraCustomUtils.findBackgrounds(3, Main.setting.SnowStyle);
 						main.LoadBackground(Main.treeMntBG[0] = Main.snowMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1] = Main.snowMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.snowBG[0]);
@@ -1121,7 +1121,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.HallowStyle++;
 						}
-						WorldGen.findBackgrounds(4, Main.setting.HallowStyle);
+						TerraCustomUtils.findBackgrounds(4, Main.setting.HallowStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.hallowBG[0]);
@@ -1138,7 +1138,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.HallowStyle--;
 						}
-						WorldGen.findBackgrounds(4, Main.setting.HallowStyle);
+						TerraCustomUtils.findBackgrounds(4, Main.setting.HallowStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.hallowBG[0]);
@@ -1164,7 +1164,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.CrimsonStyle++;
 						}
-						WorldGen.findBackgrounds(5, Main.setting.CrimsonStyle);
+						TerraCustomUtils.findBackgrounds(5, Main.setting.CrimsonStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.crimsonBG[0]);
@@ -1181,7 +1181,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.CrimsonStyle--;
 						}
-						WorldGen.findBackgrounds(5, Main.setting.CrimsonStyle);
+						TerraCustomUtils.findBackgrounds(5, Main.setting.CrimsonStyle);
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
 						main.LoadBackground(Main.treeBG[0] = Main.crimsonBG[0]);
@@ -1207,7 +1207,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.DesertStyle++;
 						}
-						WorldGen.findBackgrounds(6, Main.setting.DesertStyle);
+						TerraCustomUtils.findBackgrounds(6, Main.setting.DesertStyle);
 
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
@@ -1225,7 +1225,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.DesertStyle--;
 						}
-						WorldGen.findBackgrounds(6, Main.setting.DesertStyle);
+						TerraCustomUtils.findBackgrounds(6, Main.setting.DesertStyle);
 
 						main.LoadBackground(Main.treeMntBG[0]);
 						main.LoadBackground(Main.treeMntBG[1]);
@@ -1252,7 +1252,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.OceanStyle++;
 						}
-						WorldGen.findBackgrounds(7, Main.setting.OceanStyle);
+						TerraCustomUtils.findBackgrounds(7, Main.setting.OceanStyle);
 						main.LoadBackground(Main.treeMntBG[0] = Main.oceanBG);
 						main.LoadBackground(Main.treeMntBG[1] = -1);
 						main.LoadBackground(Main.treeBG[0] = -1);
@@ -1269,7 +1269,7 @@ namespace Terraria.TerraCustom
 						{
 							Main.setting.OceanStyle--;
 						}
-						WorldGen.findBackgrounds(7, Main.setting.OceanStyle);
+						TerraCustomUtils.findBackgrounds(7, Main.setting.OceanStyle);
 						main.LoadBackground(Main.treeMntBG[0] = Main.oceanBG);
 						main.LoadBackground(Main.treeMntBG[1] = -1);
 						main.LoadBackground(Main.treeBG[0] = -1);

@@ -187,9 +187,9 @@
 -		public static string versionNumber = "v1.3.0.8";
 -		public static string versionNumber2 = "v1.3.0.8";
 +
-+		public static string versionNumber = "jopojelly's TerraCustom v0.2.1.1";
++		public static string versionNumber = "jopojelly's TerraCustom v0.2.2";
 +
-+		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.1.1";
++		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.2";
 +
 +		// TerraCustom Start
 +
@@ -8080,13 +8080,13 @@
 +								Main.menuSkip = 0;
 +							}
 +						}
-+						else if (this.selectedMenu == 6 && Main.menuSkip < Main.worldCount - 7)
++						else if (this.selectedMenu == 6/* && Main.menuSkip < Main.worldCount - 7*/)
 +						{
 +							Main.menuSkip += 5;
-+							if (Main.menuSkip >= Main.worldCount - 7)
-+							{
-+								Main.menuSkip = Main.worldCount - 7;
-+							}
++						//	if (Main.menuSkip >= Main.worldCount - 7)
++						//	{
++						//		Main.menuSkip = Main.worldCount - 7;
++						//	}
 +						}
 +						else if (this.selectedMenu == 9)
 +						{
@@ -8095,7 +8095,7 @@
 +						else if (this.selectedMenu == 7)
 +						{
 +							Main.menuMode = 16;
-+							Main.newWorldName = Lang.gen[57] + " " + (Main.worldCount + 1);
++						//	Main.newWorldName = Lang.gen[57] + " " + (Main.worldCount + 1);
 +						}
 +						else if (this.selectedMenu == 8)
 +						{
