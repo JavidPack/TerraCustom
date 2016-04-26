@@ -1,20 +1,11 @@
---- src/Terraria\Terraria\Main.cs
+--- src/tModLoader\Terraria\Main.cs
 +++ src/TerraCustom\Terraria\Main.cs
-@@ -15,6 +_,7 @@
- using System.Drawing;
- #endif
- using System.IO;
-+using System.Reflection;
- 
- #if !WINDOWS
- using System.Runtime.CompilerServices;
-@@ -44,11 +_,13 @@
- using Terraria.Map;
+@@ -46,11 +_,13 @@
+ using Terraria.ModLoader.IO;
  using Terraria.Net;
  using Terraria.ObjectData;
--using Terraria.Social;
 +
-+//using Terraria.Social;
+ using Terraria.Social;
  using Terraria.UI;
  using Terraria.UI.Chat;
  using Terraria.Utilities;
@@ -23,23 +14,32 @@
  
  #if SERVER
  using Terraria.Server;
-@@ -132,8 +_,13 @@
+@@ -134,12 +_,21 @@
  		public bool unityMouseOver;
  		public static Main instance;
  		public static int curRelease = 156;
 -		public static string versionNumber = "v1.3.0.8";
 -		public static string versionNumber2 = "v1.3.0.8";
-+		public static string versionNumber = "jopojelly's TerraCustom v0.2.2";
-+		public static string versionNumber2 = "jopojelly's TerraCustom v0.2.2";
++		public static string versionNumber = "jopojelly's TerraCustom v0.3.1";
++		public static string versionNumber2 = "jopojelly's TerraCustom v0.3.1";
 +		// TerraCustom Start
 +		public static Setting setting = new Setting();
 +		public static SettingSaver settingSaver = new SettingSaver();
 +		public static int bgStylePreview = 1;
++		public static bool tModLoaderModsLoaded = false;
++		public static bool firstModLoad = true;
 +		// TerraCustom End
  		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath();
++		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
++		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
  		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
-@@ -340,7 +_,7 @@
+-		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
++		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
+ 		public static FileMetadata WorldFileMetadata;
+ 		public static FileMetadata MapFileMetadata;
+ 		private AchievementManager _achievements;
+@@ -344,7 +_,7 @@
  		public static int[] desertBG = new int[2];
  		public static int oceanBG;
  		public static int[] treeX = new int[4];
@@ -48,7 +48,16 @@
  		public static int[] caveBackX = new int[4];
  		public static int[] caveBackStyle = new int[4];
  		public static int iceBackStyle;
-@@ -580,6 +_,7 @@
+@@ -458,7 +_,7 @@
+ 		private static bool flameRingLoaded;
+ 		private Texture2D flameRingTexture;
+ 		private Texture2D mapDeathTexture;
+-		public RenderTarget2D[,] mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
++		private RenderTarget2D[,] mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
+ 		private RenderTarget2D mapSectionTexture;
+ 		public static bool[,] initMap = new bool[Main.mapTargetX, Main.mapTargetY];
+ 		public static bool[,] mapWasContentLost = new bool[Main.mapTargetX, Main.mapTargetY];
+@@ -584,6 +_,7 @@
  		public static bool serverStarting = false;
  		public static float leftWorld = 0f;
  		public static float rightWorld = 134400f;
@@ -56,7 +65,7 @@
  		public static float topWorld = 0f;
  		public static float bottomWorld = 38400f;
  		public static int maxTilesX = (int)Main.rightWorld / 16 + 1;
-@@ -1108,6 +_,7 @@
+@@ -1113,6 +_,7 @@
  		public static bool tilesLoaded = false;
  		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
  		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
@@ -64,30 +73,23 @@
  		public static Dust[] dust = new Dust[6001];
  		public static Star[] star = new Star[130];
  		public static Item[] item = new Item[401];
-@@ -1170,7 +_,7 @@
- 		public static bool recFastScroll = false;
- 		public static bool recBigList = false;
- 		public static int recStart = 0;
--		public static Recipe[] recipe = new Recipe[Recipe.maxRecipes];
-+		//		public static Recipe[] recipe = new Recipe[Recipe.maxRecipes];
- 		public static int[] availableRecipe = new int[Recipe.maxRecipes];
- 		public static float[] availableRecipeY = new float[Recipe.maxRecipes];
- 		public static int numAvailableRecipes;
-@@ -1260,10 +_,13 @@
+@@ -1265,10 +_,13 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
  		public static string WorldPath = Main.SavePath + Path.DirectorySeparatorChar + "Worlds";
-+		public static string TModLoaderWorldPath = Main.SavePath + Path.DirectorySeparatorChar + "ModLoader" + Path.DirectorySeparatorChar + "Worlds";
+-		public static string CloudWorldPath = "ModLoader/worlds";
++		public static string TModLoaderWorldPath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Worlds";
 +		public static string LeveledWorldPath = Main.SavePath.Substring(0, Main.SavePath.Length - 8) + "Terraria Leveled" + Path.DirectorySeparatorChar + "Worlds";
- 		public static string CloudWorldPath = "worlds";
++		public static string CloudWorldPath = "worlds";
  		public static string PlayerPath = Main.SavePath + Path.DirectorySeparatorChar + "Players";
- 		public static string CloudPlayerPath = "players";
+-		public static string CloudPlayerPath = "ModLoader/players";
++		public static string CloudPlayerPath = "players";
  		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
-+		public static string SettingPath = Main.SavePath + Path.DirectorySeparatorChar + "TerraCustom";
++		public static string SettingPath = Main.TerraCustomSavePath;
  		public static string[] itemName = new string[3602];
  		public static string[] npcName = new string[540];
  		private static KeyboardState inputText;
-@@ -1914,11 +_,12 @@
+@@ -1919,14 +_,15 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
@@ -102,8 +104,12 @@
 +		public int selectedMenu2 = -1;
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
- 		public static int menuMode = 0;
-@@ -1981,6 +_,12 @@
+-		public static int menuMode = Interface.loadModsID;
++		public static int menuMode = ModLoader.Interface.loadModsID;//(int)TerraCustom.MenuModes.ChooseWorldSize;//0;
+ 		public static int menuSkip = 0;
+ 		private static Item cpItem = new Item();
+ 		public int textBlinkerCount;
+@@ -1986,6 +_,12 @@
  		private float scAdj;
  		private float cTop;
  
@@ -116,7 +122,7 @@
  		public static event Action OnEngineLoad;
  		public static event Action OnTick;
  
-@@ -2144,11 +_,13 @@
+@@ -2157,11 +_,13 @@
  				flag = false;
  				Main.anglerQuest = Main.rand.Next(Main.anglerQuestItemNetIDs.Length);
  				int num = Main.anglerQuestItemNetIDs[Main.anglerQuest];
@@ -132,7 +138,7 @@
  				{
  					flag = true;
  				}
-@@ -2156,7 +_,8 @@
+@@ -2169,7 +_,8 @@
  				{
  					flag = true;
  				}
@@ -142,7 +148,7 @@
  				{
  					flag = true;
  				}
-@@ -2176,7 +_,8 @@
+@@ -2189,7 +_,8 @@
  				{
  					flag = true;
  				}
@@ -152,7 +158,7 @@
  				{
  					flag = true;
  				}
-@@ -2192,7 +_,8 @@
+@@ -2205,7 +_,8 @@
  				{
  					flag = true;
  				}
@@ -162,7 +168,7 @@
  				{
  					flag = true;
  				}
-@@ -2218,6 +_,7 @@
+@@ -2232,6 +_,7 @@
  					Main.WorldList.Add(WorldFileData.FromInvalidWorld(files[i], false));
  				}
  			}
@@ -170,7 +176,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudWorldPath) + "/.+\\.wld");
-@@ -2234,6 +_,7 @@
+@@ -2248,6 +_,7 @@
  					}
  				}
  			}
@@ -178,7 +184,7 @@
  			Main.WorldList.Sort(new Comparison<WorldFileData>(Main.WorldListSortMethod));
  		}
  
-@@ -2256,6 +_,7 @@
+@@ -2270,6 +_,7 @@
  					Main.PlayerList.Add(fileData);
  				}
  			}
@@ -186,7 +192,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudPlayerPath) + "/.+\\.plr");
-@@ -2268,6 +_,7 @@
+@@ -2282,6 +_,7 @@
  					}
  				}
  			}
@@ -194,7 +200,7 @@
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
  
-@@ -2367,7 +_,7 @@
+@@ -2381,7 +_,7 @@
  			Main.Configuration.Put("KeyMapAlphaUp", Main.cMapAlphaUp);
  			Main.Configuration.Put("KeyMapAlphaDown", Main.cMapAlphaDown);
  			Main.Configuration.Put("KeyFavoriteModifier", Main.cFavoriteKey);
@@ -203,7 +209,15 @@
  			Main.Configuration.Put("WindowMaximized", Main.screenMaximized);
  			Main.Configuration.Put("DisplayWidth", Main.graphics.PreferredBackBufferWidth);
  			Main.Configuration.Put("DisplayHeight", Main.graphics.PreferredBackBufferHeight);
-@@ -2486,7 +_,7 @@
+@@ -2406,7 +_,6 @@
+ 			Main.Configuration.Put("ThickMouseEdges", Main.ThickMouse);
+ 			Main.Configuration.Put("ThickMouseEdgesPackedColor", Main.ThickMousePackedColor);
+ 			Main.Configuration.Put("ReverseUpDownForArmorSetBonuses", Main.ReversedUpDownArmorSetBonuses);
+-			ModLoader.ModLoader.SaveConfiguration();
+ 			return Main.Configuration.Save(true);
+ 		}
+ 
+@@ -2501,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
  			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
@@ -212,7 +226,7 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Main.mouseColor.R = Main.Configuration.Get<byte>("MouseColorR", Main.mouseColor.R);
-@@ -2698,10 +_,10 @@
+@@ -2714,11 +_,11 @@
  					File.Delete(Main.WorldList[i].Path + ".bak");
  #endif
  				}
@@ -220,40 +234,62 @@
 -				{
 -					SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 -				}
+-				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
 +				//else if (SocialAPI.Cloud != null)
 +				//{
 +				//	SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 +				//}
++                WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
  				Main.LoadWorlds();
  			}
  			catch
-@@ -2795,7 +_,8 @@
+@@ -2812,7 +_,8 @@
  				}
  				text += str;
  			}
 -			string text3 = cloudSave ? Main.CloudWorldPath : Main.WorldPath;
 +			//string text3 = cloudSave ? Main.CloudWorldPath : (Main.setting.SaveInTModFolder ? Main.TModLoaderWorldPath : Main.WorldPath);
-+			string text3 = Main.setting.SaveInTModFolder ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
++			string text3 = (Main.setting.SaveInTModFolder || Main.tModLoaderModsLoaded) ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
  			string path = string.Concat(new object[]
  				{
  					text3,
-@@ -3111,6 +_,7 @@
- 
- 		public void DedServ()
- 		{
-+			/*
- 			Main.rand = new Random();
- 			if (Main.autoShutdown)
- 			{
-@@ -3561,6 +_,7 @@
- 				}
- 				Thread.Sleep(0);
+@@ -3143,7 +_,7 @@
  			}
-+			*/
+ 			else
+ 			{
+-				Console.Title = "Terraria Server " + Main.versionNumber2 + " - " + ModLoader.ModLoader.versionedName;
++				Console.Title = "Terraria Server " + Main.versionNumber2;
+ 			}
+ 			Main.dedServ = true;
+ 			Main.showSplash = false;
+@@ -3166,7 +_,7 @@
+ 				while (flag)
+ 				{
+ 					Main.LoadWorlds();
+-					Console.WriteLine("Terraria Server " + Main.versionNumber2 + " - " + ModLoader.ModLoader.versionedName);
++					Console.WriteLine("Terraria Server " + Main.versionNumber2);
+ 					Console.WriteLine("");
+ 					for (int j = 0; j < Main.WorldList.Count; j++)
+ 					{
+@@ -3374,7 +_,7 @@
+ 					}
+ 					else if (text2 == "m" || text2 == "M")
+ 					{
+-						Interface.ServerModMenu();
++						ModLoader.Interface.ServerModMenu();
+ 						continue;
+ 					}
+ 					else
+@@ -3568,7 +_,7 @@
+ 					if (target < now) //can't catch up, reset target
+ 					{
+ 						target = now + delta;
+-					}
++				}
+ 					Thread.Sleep(Math.Max((int)remaining, 0));
+ 			}
  		}
- 
- 		public static void startDedInput()
-@@ -3720,7 +_,7 @@
+@@ -3730,7 +_,7 @@
  					{
  						WorldFile.saveWorld();
  						Netplay.disconnect = true;
@@ -262,7 +298,7 @@
  					}
  					else if (text == "fps")
  					{
-@@ -3994,6 +_,17 @@
+@@ -4004,6 +_,17 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
  #endif
@@ -280,191 +316,25 @@
  		}
  
  		protected void SetTitle()
-@@ -4001,7 +_,7 @@
+@@ -4011,7 +_,7 @@
  #if CLIENT
  			if (Main._cachedTitle == null)
  			{
 -				Main._cachedTitle = Lang.title();
-+				Main._cachedTitle = "TerraCustom";// Lang.title();
++				Main._cachedTitle = "TerraCustom -- Now with tModLoader support!";// Lang.title();
  			}
  			base.Window.Title = Main._cachedTitle;
  #endif
-@@ -5165,10 +_,10 @@
- 			this.SetTitle();
- 			Main.lo = Main.rand.Next(6);
- 			Main.critterCage = true;
--			for (int num3 = 0; num3 < 3600; num3++)
--			{
--				Main.CritterCages();
--			}
-+			//for (int num3 = 0; num3 < 3600; num3++)
-+			//{
-+			//	Main.CritterCages();
-+			//}
- 			Main.critterCage = false;
- 			Main.tileBrick[1] = true;
- 			Main.tileBrick[54] = true;
-@@ -6184,11 +_,11 @@
+@@ -6438,7 +_,7 @@
  			}
- 			for (int num12 = 0; num12 < 1001; num12++)
+ 			Main.clientUUID = Guid.NewGuid().ToString();
+ #if CLIENT
+-			keyBoardInput.newKeyEvent += delegate (char keyStroke)
++			keyBoardInput.newKeyEvent += delegate(char keyStroke)
  			{
--				Main.projectile[num12] = new Projectile();
-+				//	Main.projectile[num12] = new Projectile();
- 			}
- 			for (int num13 = 0; num13 < 501; num13++)
- 			{
--				Main.gore[num13] = new Gore();
-+				//	Main.gore[num13] = new Gore();
- 			}
- 			for (int num14 = 0; num14 < Main.maxRain + 1; num14++)
- 			{
-@@ -6207,7 +_,7 @@
- 				Main.itemText[num17] = new ItemText();
- 			}
- 			int num18 = 0;
--			while (num18 < 3602)
-+			while (false/*num18 < 3602*/)
- 			{
- 				Item item = new Item();
- 				item.SetDefaults(num18, false);
-@@ -6351,10 +_,10 @@
- 			Main.InitLifeBytes();
- 			for (int num19 = 0; num19 < Recipe.maxRecipes; num19++)
- 			{
--				Main.recipe[num19] = new Recipe();
--				Main.availableRecipeY[num19] = (float)(65 * num19);
--			}
--			Recipe.SetupRecipes();
-+				//Main.recipe[num19] = new Recipe();
-+				//	Main.availableRecipeY[num19] = (float)(65 * num19);
-+			}
-+			//	Recipe.SetupRecipes();
- 			for (int num20 = 0; num20 < Main.numChatLines; num20++)
- 			{
- 				Main.chatLine[num20] = new ChatLine();
-@@ -6384,7 +_,7 @@
- 			Main.teamColor[5] = new Microsoft.Xna.Framework.Color(224, 100, 242);
- 			if (Main.menuMode == 1)
- 			{
--				Main.LoadPlayers();
-+				//Main.LoadPlayers();
- 			}
- 			for (int num24 = 1; num24 < 651; num24++)
- 			{
-@@ -6517,7 +_,9 @@
- 				for (int i = 1; i < 40; i++)
+ 				if (Main.keyCount < 10)
  				{
- 					Main.music[i] = Main.soundBank.GetCue("Music_" + i);
--				}
-+					//  Main.music[6] = Main.soundBank.GetCue("Music_" + 6);
-+				}
-+				/*
- 				Main.soundMech[0] = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Mech_0");
- 				Main.soundInstanceMech[0] = Main.soundMech[0].CreateInstance();
- 				Main.soundGrab = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Grab");
-@@ -6558,12 +_,14 @@
- 				Main.soundInstanceDoorOpen = Main.soundDoorOpen.CreateInstance();
- 				Main.soundDoorClosed = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Door_Closed");
- 				Main.soundInstanceDoorClosed = Main.soundDoorClosed.CreateInstance();
-+				*/
- 				Main.soundMenuTick = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Tick");
- 				Main.soundInstanceMenuTick = Main.soundMenuTick.CreateInstance();
- 				Main.soundMenuOpen = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Open");
- 				Main.soundInstanceMenuOpen = Main.soundMenuOpen.CreateInstance();
- 				Main.soundMenuClose = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Menu_Close");
- 				Main.soundInstanceMenuClose = Main.soundMenuClose.CreateInstance();
-+				/*
- 				Main.soundShatter = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Shatter");
- 				Main.soundInstanceShatter = Main.soundShatter.CreateInstance();
- 				Main.soundCamera = base.Content.Load<SoundEffect>("Sounds" + Path.DirectorySeparatorChar + "Camera");
-@@ -6601,6 +_,7 @@
- 							}));
- 					Main.soundInstanceZombie[l] = Main.soundZombie[l].CreateInstance();
- 				}
-+				*/
- 				for (int m = 0; m < Main.soundLiquid.Length; m++)
- 				{
- 					Main.soundLiquid[m] = base.Content.Load<SoundEffect>(string.Concat(new object[]
-@@ -6612,6 +_,7 @@
- 							}));
- 					Main.soundInstanceLiquid[m] = Main.soundLiquid[m].CreateInstance();
- 				}
-+				/*
- 				for (int n = 0; n < Main.soundRoar.Length; n++)
- 				{
- 					Main.soundRoar[n] = base.Content.Load<SoundEffect>(string.Concat(new object[]
-@@ -6673,6 +_,7 @@
- 					Main.soundInstanceNPCKilled[num3] = Main.soundNPCKilled[num3].CreateInstance();
- 				}
- 				Main.soundInstanceMoonlordCry = Main.soundNPCKilled[10].CreateInstance();
-+				*/
- 			}
- 			catch
- 			{
-@@ -6924,6 +_,7 @@
- 					}));
- 			Main.spriteBatch = new SpriteBatch(base.GraphicsDevice);
- 			Main.tileBatch = new TileBatch(base.GraphicsDevice);
-+			/*
- 			for (int num20 = 1; num20 < 2; num20++)
- 			{
- 				Main.bannerTexture[num20] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -6974,9 +_,11 @@
- 							num24
- 						}));
- 			}
-+			*/
- 			this.LoadBackground(0);
- 			this.LoadBackground(49);
- 			Main.minecartMountTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Mount_Minecart");
-+			/*
- 			for (int num25 = 0; num25 < Main.rudolphMountTexture.Length; num25++)
- 			{
- 				Main.rudolphMountTexture[num25] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -7020,6 +_,7 @@
- 							num26
- 						}));
- 			}
-+			*/
- 			for (int num27 = 0; num27 < 6; num27++)
- 			{
- 				Main.gemTexture[num27] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -7030,12 +_,12 @@
- 							num27
- 						}));
- 			}
--			for (int num28 = 0; num28 < 540; num28++)
--			{
--				NPC nPC = new NPC();
--				nPC.SetDefaults(num28, -1f);
--				Main.npcName[num28] = nPC.name;
--			}
-+			//for (int num28 = 0; num28 < 540; num28++)
-+			//{
-+			//	NPC nPC = new NPC();
-+			//	nPC.SetDefaults(num28, -1f);
-+			//	Main.npcName[num28] = nPC.name;
-+			//}
- 			for (int num29 = 0; num29 < 22; num29++)
- 			{
- 				Main.cloudTexture[num29] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -7056,6 +_,7 @@
- 							num30
- 						}));
- 			}
-+			/*
- 			for (int num31 = 0; num31 < 12; num31++)
- 			{
- 				Main.liquidTexture[num31] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -7066,6 +_,7 @@
- 							num31
- 						}));
- 			}
-+			*/
- 			this.waterfallManager.LoadContent(base.Content);
- 			Main.npcToggleTexture[0] = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "House_1");
- 			Main.npcToggleTexture[1] = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "House_2");
-@@ -7074,8 +_,13 @@
+@@ -7088,8 +_,13 @@
  			Main.gridTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -480,83 +350,7 @@
  			Main.dustTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -7098,9 +_,9 @@
- 							num32
- 						}));
- 			}
--			Main.ninjaTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Ninja");
--			Main.antLionTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "AntlionBody");
--			Main.spikeBaseTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Spike_Base");
-+			//Main.ninjaTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Ninja");
-+			//Main.antLionTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "AntlionBody");
-+			//Main.spikeBaseTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Spike_Base");
- 			Main.woodTexture[0] = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Tiles_5_0");
- 			Main.woodTexture[1] = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Tiles_5_1");
- 			Main.woodTexture[2] = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Tiles_5_2");
-@@ -7140,6 +_,7 @@
- 							num35
- 						}));
- 			}
-+			/*
- 			Main.shroomCapTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Shroom_Tops");
- 			Main.inventoryBackTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Inventory_Back");
- 			Main.inventoryBack2Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Inventory_Back2");
-@@ -7158,6 +_,7 @@
- 			Main.inventoryBack15Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Inventory_Back15");
- 			Main.hairStyleBackTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "HairStyleBack");
- 			Main.clothesStyleBackTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "ClothesStyleBack");
-+			*/
- 			Main.inventoryTickOffTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Inventory_Tick_Off");
- 			Main.inventoryTickOnTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Inventory_Tick_On");
- 			Main.textBackTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Text_Back");
-@@ -7177,6 +_,7 @@
- 			Main.sunAltarTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "SunAltar");
- 			Main.xmasLightTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "XmasLight");
- 			Main.beetleTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "BeetleOrb");
-+			/*
- 			for (int num36 = 0; num36 < 16; num36++)
- 			{
- 				Main.chainsTexture[num36] = base.Content.Load<Texture2D>(string.Concat(new object[]
-@@ -7254,12 +_,13 @@
- 							num38
- 						}));
- 			}
-+			*/
- 			Main.fontItemStack = base.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "Item_Stack");
- 			Main.fontMouseText = base.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "Mouse_Text");
- 			Main.fontDeathText = base.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "Death_Text");
- 			Main.fontCombatText[0] = base.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "Combat_Text");
- 			Main.fontCombatText[1] = base.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "Combat_Crit");
--			Mount.Initialize();
-+			//Mount.Initialize();
- 			Minecart.Initialize();
- 		}
- 
-@@ -10863,10 +_,10 @@
- 				Animation.UpdateAll();
- 				AchievementCompleteUI.Update();
- 				this.UpdateMusic();
--				if (Main.showSplash)
--				{
--					return;
--				}
-+				//if (Main.showSplash)
-+				//{
-+				//	return;
-+				//}
- 				if (!Main.gameMenu && Main.netMode == 1)
- 				{
- 					if (!Main.saveTime.IsRunning)
-@@ -11794,7 +_,7 @@
- 						Main.tileFrame[410] = 0;
- 					}
- 				}
--				Main.CritterCages();
-+				//Main.CritterCages();
- 				Main.UpdateDrawAnimations();
- 				if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F10) && !Main.chatMode && !Main.editSign && !Main.editChest)
- 				{
-@@ -18256,21 +_,26 @@
+@@ -18333,21 +_,26 @@
  							int num315 = num293;
  							while (num315 < num293 + 100)
  							{
@@ -583,7 +377,7 @@
  								if (Main.tile[num292, num315].type == 60)
  								{
  									num310 = 2;
-@@ -18287,6 +_,7 @@
+@@ -18364,6 +_,7 @@
  									num313 = 48;
  									break;
  								}
@@ -591,7 +385,7 @@
  								if (Main.tile[num292, num315].type == 147)
  								{
  									num310 = 4;
-@@ -18323,6 +_,7 @@
+@@ -18400,6 +_,7 @@
  										break;
  									}
  								}
@@ -599,61 +393,12 @@
  								else
  								{
  									if (Main.tile[num292, num315].type == 199)
-@@ -30926,7 +_,7 @@
- 			}
- 			TimeLogger.DetailedDrawTime(10);
+@@ -36906,15 +_,15 @@
+ 			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
--
-+		/*
- 		protected void DrawInventory()
- 		{
- 			if (Main.netMode == 1)
-@@ -32354,7 +_,7 @@
- 				}
- 			}
- 		}
--
-+		*/
- 		private static void DrawPVPIcons()
- 		{
- 			Main.inventoryScale = 0.6f;
-@@ -34651,7 +_,7 @@
- 					{
- 						try
- 						{
--							this.DrawMap();
-+							//	this.DrawMap();
- 							goto IL_2493;
- 						}
- 						catch (Exception e2)
-@@ -34660,7 +_,7 @@
- 							goto IL_2493;
- 						}
- 					}
--					this.DrawMap();
-+					//	this.DrawMap();
- 				}
- 				IL_2493:
- 				if (Main.mH + 600 > Main.screenHeight)
-@@ -35013,7 +_,7 @@
- 				{
- 					try
- 					{
--						this.DrawInventory();
-+						//	this.DrawInventory();
- 						goto IL_378D;
- 					}
- 					catch (Exception e3)
-@@ -35022,7 +_,7 @@
- 						goto IL_378D;
- 					}
- 				}
--				this.DrawInventory();
-+				//this.DrawInventory();
- 			}
- 			else
- 			{
-@@ -36428,7 +_,7 @@
+ 
+-		protected void QuitGame()
++		public void QuitGame()
  		{
  			Main.SaveSettings();
  #if CLIENT
@@ -662,7 +407,12 @@
  #endif
  			base.Exit();
  #if MAC
-@@ -36706,9 +_,9 @@
+-			SDL.SDL_DestroyWindow(base.Window.Handle);
++            SDL.SDL_DestroyWindow(base.Window.Handle);
+ #endif
+ 		}
+ 
+@@ -37188,9 +_,9 @@
  				}
  			}
  			int num = 250;
@@ -674,7 +424,7 @@
  			int num5 = Main.menuMode;
  			int num6 = 0;
  			int num7 = 0;
-@@ -36722,7 +_,7 @@
+@@ -37204,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -683,7 +433,7 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			for (int j = 0; j < Main.maxMenuItems; j++)
-@@ -36733,7 +_,7 @@
+@@ -37215,10 +_,14 @@
  				array5[j] = 0;
  				array7[j] = 1f;
  			}
@@ -692,27 +442,14 @@
  			if (Main.menuMode == -1)
  			{
  				Main.menuMode = 0;
-@@ -36894,6 +_,7 @@
- 					Main.PlaySound(11, -1, -1, 1);
- 				}
++			}
++			if (Main.menuMode == 0)
++			{
++				Main.menuMode = (int)TerraCustom.MenuModes.Settings;
  			}
-+			/*
- 			else if (Main.menuMode == 31)
+ 			if (Main.menuMode == 1212)
  			{
- 				string serverPassword = Netplay.ServerPassword;
-@@ -36957,9 +_,10 @@
- 					Main.menuMode = 14;
- 				}
- 			}
-+			*/
- 			else
- 			{
--				if (Main.netMode == 1 || Main.menuMode == 14)
-+				if (Main.netMode == 1 /*|| Main.menuMode == 14*/)
- 				{
- 					num4 = 2;
- 					array9[0] = Main.statusText;
-@@ -36997,12 +_,13 @@
+@@ -37479,10 +_,10 @@
  						Main.PlaySound(11, -1, -1, 1);
  						Main.menuMode = 0;
  						Main.netMode = 0;
@@ -720,55 +457,41 @@
 -						{
 -							SocialAPI.Network.CancelJoin();
 -						}
--					}
--				}
 +						//if (SocialAPI.Network != null)
 +						//{
 +						//    SocialAPI.Network.CancelJoin();
 +						//}
-+					}
-+				}
-+				/*
+ 					}
+ 				}
  				else if (Main.menuMode == 30)
- 				{
- 					string serverPassword2 = Netplay.ServerPassword;
-@@ -37116,6 +_,7 @@
- 						Main.menuMode = 10;
- 					}
- 				}
-+				*/
- 				else if (Main.menuMode == 889)
- 				{
- 					num = 200;
-@@ -37276,6 +_,7 @@
- 					array[0] = true;
- 					num = 300;
- 				}
-+				/*
- 				else if (Main.menuMode == 0)
- 				{
- 					Main.eclipse = false;
-@@ -37886,10 +_,12 @@
- 						Main.menuMode = 1;
- 					}
- 				}
-+				*/
- 				else if (Main.menuMode != 4)
- 				{
- 					if (Main.menuMode == 5)
- 					{
-+						/*
- 						array9[0] = Lang.menu[46] + " " + Main.PlayerList[Main.selectedPlayer].Player.name + "?";
- 						array[0] = true;
- 						array9[1] = Lang.menu[104];
-@@ -37906,13 +_,14 @@
- 							Main.PlaySound(11, -1, -1, 1);
- 							Main.menuMode = 1;
+@@ -37733,7 +_,7 @@
+ 						Main.PlaySound(11, -1, -1, 1);
+ 						if (WorldIO.customDataFail == null)
+ 						{
+-							Main.menuMode = 0;
++						Main.menuMode = 0;
  						}
-+						*/
+ 						else
+ 						{
+@@ -37766,7 +_,7 @@
+ 						Main.PlaySound(11, -1, -1, 1);
+ 						if (WorldIO.customDataFail == null)
+ 						{
+-							Main.menuMode = 0;
++						Main.menuMode = 0;
+ 						}
+ 						else
+ 						{
+@@ -37879,7 +_,7 @@
+ 						Main.menuMode = 888;
  					}
- 					else if (Main.menuMode == 6)
+ 					num9++;
+-					Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num9, ref num4);
++					ModLoader.Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num9, ref num4);
+ 					array9[num9] = Lang.menu[14];
+ 					if (this.selectedMenu == num9)
  					{
+@@ -38428,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -777,7 +500,7 @@
  					{
  						num = 200;
  						num3 = 60;
-@@ -37944,22 +_,22 @@
+@@ -38460,22 +_,22 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1);
@@ -804,7 +527,7 @@
  					{
  						string a = Main.newWorldName;
  						Main.newWorldName = Main.GetInputText(Main.newWorldName);
-@@ -38022,14 +_,17 @@
+@@ -38538,14 +_,17 @@
  						if (this.selectedMenu == 3)
  						{
  							Main.PlaySound(11, -1, -1, 1);
@@ -815,7 +538,7 @@
  						if (this.selectedMenu == 2 || (!array2[2] && Main.inputTextEnter))
  						{
 -							Main.menuMode = 10;
-+							Main.menuMode = (int)MenuModes.Settings /*11*/; // 11?
++							Main.menuMode = (int)MenuModes.Settings;
 +							/*
  							Main.worldName = Main.newWorldName;
  							Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
@@ -824,364 +547,48 @@
  						}
  					}
  					else if (Main.menuMode == 8)
-@@ -38103,6 +_,7 @@
- 							Main.menuMode = 9;
- 						}
- 					}
-+					/*
- 					else if (Main.menuMode == 9)
- 					{
- 						array9[0] = Lang.menu[46] + " " + Main.WorldList[Main.selectedWorld].Name + "?";
-@@ -38528,6 +_,7 @@
+@@ -38841,7 +_,7 @@
  							Main.PlaySound(11, -1, -1, 1);
+ 							Main.menuMode = 272727;
  						}
+-						Interface.AddSettingsMenuButtons(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num20, ref num4);
++						ModLoader.Interface.AddSettingsMenuButtons(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num20, ref num4);
+ 						num20++;
+ 						array9[num20] = Lang.menu[103];
+ 						if (this.selectedMenu == num20)
+@@ -39593,7 +_,8 @@
  					}
-+					*/
- 					else if (Main.menuMode == 25)
+ 					else
  					{
- 						flag = true;
-@@ -38582,6 +_,7 @@
- 						if (this.selectedMenu == 2)
- 						{
- 							Main.menuMode = 1111;
-+							/*
- 							Main.PlaySound(11, -1, -1, 1);
- 						}
+-						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num4);
++						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num, ref num3, ref num4);
++						ModLoader.Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num4);
  					}
-@@ -38810,10 +_,12 @@
- 									Main.setKey = -1;
+ 				}
+ 			}
+@@ -40345,11 +_,10 @@
+ 				{
+ 					num98 = 2;
+ 				}
+-				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
+-				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
++				Vector2 origin3 = Main.fontMouseText.MeasureString(Main.versionNumber);
+ 				origin3.X *= 0.5f;
+ 				origin3.Y *= 0.5f;
+-				Main.spriteBatch.DrawString(Main.fontMouseText, drawVersion, new Vector2(origin3.X + (float)num97 + 10f, (float)Main.screenHeight - origin3.Y + (float)num98 - 2f), color11, 0f, origin3, 1f, SpriteEffects.None, 0f);
++				Main.spriteBatch.DrawString(Main.fontMouseText, Main.versionNumber, new Vector2(origin3.X + (float)num97 + 10f, (float)Main.screenHeight - origin3.Y + (float)num98 - 2f), color11, 0f, origin3, 1f, SpriteEffects.None, 0f);
+ 			}
+ 			Vector2 value = Main.DrawThickCursor(false);
+ 			Main.spriteBatch.Draw(Main.cursorTextures[0], new Vector2((float)Main.mouseX, (float)Main.mouseY) + value + Vector2.One, null, new Microsoft.Xna.Framework.Color((int)((float)Main.cursorColor.R * 0.2f), (int)((float)Main.cursorColor.G * 0.2f), (int)((float)Main.cursorColor.B * 0.2f), (int)((float)Main.cursorColor.A * 0.5f)), 0f, default(Vector2), Main.cursorScale * 1.1f, SpriteEffects.None, 0f);
+@@ -53898,8 +_,8 @@
+ 									}
  								}
  							}
-+					*/
- 						}
- 					}
- 					else if (Main.menuMode == 12)
- 					{
-+						/*
- 						int num27 = (SocialAPI.Network != null) ? 1 : 0;
- 						Main.menuServer = false;
- 						array9[0] = Lang.menu[(SocialAPI.Network != null) ? 146 : 87];
-@@ -38846,6 +_,7 @@
- 							Main.menuMode = 0;
- 						}
- 						num4 = 3 + num27;
-+					*/
- 					}
- 					else if (Main.menuMode == 13)
- 					{
-@@ -39073,6 +_,133 @@
- 							Main.PlaySound(10, -1, -1, 1);
- 							WorldGen.setWorldSize();
- 						}
-+					}
-+					else if (Main.menuMode == (int)MenuModes.ChooseWorldSize/*0*/)
-+					{
-+						Main.eclipse = false;
-+						Main.pumpkinMoon = false;
-+						Main.snowMoon = false;
-+						Main.ServerSideCharacter = false;
-+						Main.menuMultiplayer = false;
-+						Main.menuServer = false;
-+						Main.netMode = 0;
-+						for (int n = 0; n < 9; n++)
-+						{
-+							string text2 = "";
-+							switch (n)
-+							{
-+								case 0:
-+									text2 = "Solar";
-+									break;
-+								case 1:
-+									text2 = "Vortex";
-+									break;
-+								case 2:
-+									text2 = "Nebula";
-+									break;
-+								case 3:
-+									text2 = "Stardust";
-+									break;
-+								case 4:
-+									text2 = "MoonLord";
-+									break;
-+								case 5:
-+									text2 = "MonolithSolar";
-+									break;
-+								case 6:
-+									text2 = "MonolithVortex";
-+									break;
-+								case 7:
-+									text2 = "MonolithNebula";
-+									break;
-+								case 8:
-+									text2 = "MonolithStardust";
-+									break;
-+							}
-+							if (SkyManager.Instance[text2].IsActive())
-+							{
-+								SkyManager.Instance.Deactivate(text2, new object[0]);
-+							}
-+							if (Filters.Scene[text2].IsActive())
-+							{
-+								Filters.Scene[text2].Deactivate(new object[0]);
-+							}
-+						}
-+						if (Filters.Scene["BloodMoon"].IsActive())
-+						{
-+							Filters.Scene["BloodMoon"].Deactivate(new object[0]);
-+						}
-+						if (SkyManager.Instance["Martian"].IsActive())
-+						{
-+							SkyManager.Instance["Martian"].Deactivate(new object[0]);
-+						}
-+						if (SkyManager.Instance["Slime"].IsActive())
-+						{
-+							SkyManager.Instance["Slime"].Deactivate(new object[0]);
-+						}
-+						int num9 = 0;
-+						num4 = 6;
-+						num3 = 60;
-+						num = 170;
-+						num3 = 55;
-+						array4[2] = 20;
-+						array4[3] = 20;
-+						array4[4] = 20;
-+						array4[5] = 20;
-+						array4[6] = 60;
-+						array9[1] = Lang.menu[91];
-+						array[1] = true;
-+						array9[2] = Lang.menu[92];
-+						array9[3] = Lang.menu[93];
-+						array9[4] = Lang.menu[94];
-+						array9[5] = "Keep Previous Custom Size";
-+						array9[6] = Lang.menu[15];
-+						num4 = 7;
-+						if (this.selectedMenu == 6)
-+						{
-+							this.QuitGame();
-+						}
-+						else if (this.selectedMenu == 0)
-+						{
-+							Main.menuMode = 6;
-+						}
-+						else if (this.selectedMenu > 0)
-+						{
-+							if (this.selectedMenu == 2)
-+							{
-+								Main.maxTilesX = /*8400;// */4200;
-+								Main.maxTilesY = /*600;//*/1200;
-+								WorldGen.worldSize = 0;
-+							}
-+							else if (this.selectedMenu == 3)
-+							{
-+								Main.maxTilesX = 6400;
-+								Main.maxTilesY = 1800;
-+								WorldGen.worldSize = 1;
-+							}
-+							else if (this.selectedMenu == 4)
-+							{
-+								Main.maxTilesX = 8400;
-+								Main.maxTilesY = 2400;
-+								WorldGen.worldSize = 2;
-+							}
-+							else if (this.selectedMenu == 5)
-+							{
-+								if (Main.maxTilesX == 8401)
-+								{
-+									Main.maxTilesX = 4200;
-+									Main.maxTilesY = 1200;
-+									WorldGen.worldSize = 0;
+-						}
+-					}
 +								}
 +							}
-+							Main.clrInput();
-+							Main.menuMode = (int)MenuModes.SelectDifficulty/*-7*/;
-+							WorldGen.setWorldSize();
-+						}
-+					}
-+					else
-+					{
-+						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num, ref num3, ref num4);
- 					}
- 				}
- 			}
-@@ -42375,7 +_,7 @@
- 			TimeLogger.DetailedDrawTime(33);
- 			base.GraphicsDevice.SetRenderTarget(null);
- 		}
--
-+		/*
- 		protected void DrawToMap()
- 		{
- 			if (!Main.mapEnabled)
-@@ -42543,7 +_,7 @@
- 			Main.loadMap = false;
- 			Main.loadMapLock = false;
- 		}
--
-+		*/
- 		protected void DrawToMap_Section(int secX, int secY)
- 		{
- 			Stopwatch stopwatch = Stopwatch.StartNew();
-@@ -42562,6 +_,7 @@
- 			}
- 			int num9 = 0;
- 			Microsoft.Xna.Framework.Color arg_6A_0 = Microsoft.Xna.Framework.Color.Transparent;
-+			/*
- 			for (int i = num3; i < num4; i++)
- 			{
- 				for (int j = num; j < num2; j++)
-@@ -42571,6 +_,7 @@
- 					num9++;
- 				}
- 			}
-+			*/
- 			base.GraphicsDevice.SetRenderTarget(this.mapTarget[num5, num6]);
- 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
- 			double totalMilliseconds = stopwatch.Elapsed.TotalMilliseconds;
-@@ -42629,7 +_,7 @@
- 			}
- 			return text;
- 		}
--
-+		/*
- 		protected void DrawMap()
- 		{
- 			string text = "";
-@@ -43689,7 +_,7 @@
- 			}
- 			TimeLogger.DetailedDrawTime(9);
- 		}
--
-+		*/
- 		public void DrawItems()
- 		{
- 			for (int i = 0; i < 400; i++)
-@@ -44202,7 +_,7 @@
- 			Main.renderCount = 99;
- 			for (int k = 0; k < 3; k++)
- 			{
--				Lighting.LightTiles(x, num6, y, num7);
-+				//Lighting.LightTiles(x, num6, y, num7);
- 			}
- 			if ((float)(settings.Area.X * 16) <= vector.X - 16f || (float)(settings.Area.Y * 16) <= vector.Y - 16f || (float)((settings.Area.X + settings.Area.Width) * 16) >= vector.X + (float)num3 + 16f || (float)((settings.Area.Y + settings.Area.Height) * 16) >= vector.Y + (float)num4 + 16f)
- 			{
-@@ -44424,6 +_,7 @@
- 			if (Main.mapEnabled)
- 			{
- 				Main.spriteBatch.Begin();
-+				/*
- 				for (int num36 = area.X; num36 < area.X + area.Width; num36++)
- 				{
- 					for (int num37 = area.Y; num37 < area.Y + area.Height; num37++)
-@@ -44434,6 +_,7 @@
- 						}
- 					}
- 				}
-+				*/
- 				Main.spriteBatch.End();
- 			}
- 			Main.renderCount = 99;
-@@ -48874,7 +_,7 @@
- 			if (Main.loadMap)
- 			{
- 				Main.refreshMap = false;
--				this.DrawToMap();
-+				//	this.DrawToMap();
- 				TimeLogger.DetailedDrawTime(1);
- 			}
- 			if (Lighting.lightMode >= 2)
-@@ -49142,6 +_,7 @@
- 				}
- 			}
- 			Main.CheckMonoliths();
-+			/*
- 			if (Main.showSplash)
- 			{
- 				this.DrawSplash(gameTime);
-@@ -49149,6 +_,7 @@
- 				TimeLogger.EndDrawFrame();
- 				return;
- 			}
-+			*/
- 			Main.sunCircle += 0.01f;
- 			if ((double)Main.sunCircle > 6.285)
- 			{
-@@ -49165,8 +_,10 @@
- 					Main.renderNow = false;
- 					Main.renderCount = 99;
- 					this.Draw(gameTime);
-+					/*
- 					Lighting.LightTiles(this.firstTileX, this.lastTileX, this.firstTileY, this.lastTileY);
- 					Lighting.LightTiles(this.firstTileX, this.lastTileX, this.firstTileY, this.lastTileY);
-+					*/
- 					this.RenderTiles();
- 					Main.sceneTilePos.X = Main.screenPosition.X - (float)Main.offScreenRange;
- 					Main.sceneTilePos.Y = Main.screenPosition.Y - (float)Main.offScreenRange;
-@@ -49277,12 +_,12 @@
- 							Main.refreshMap = false;
- 							Main.sectionManager.ClearMapDraw();
- 						}
--						this.DrawToMap();
-+						//	this.DrawToMap();
- 						Main.updateMap = false;
- 					}
- 					else if (MapHelper.numUpdateTile > 0)
+ 					if (type >= 30 && type <= 35 && type != 39)
  					{
--						this.DrawToMap();
-+						//	this.DrawToMap();
- 					}
- 					TimeLogger.DetailedDrawTime(4);
- 				}
-@@ -50224,6 +_,7 @@
- 			if (Main.gameMenu)
- 			{
- 				Main.tranSpeed = 0.02f;
-+				//Main.bgStyle = Main.bgStylePreview;
- 				if (!Main.dayTime)
- 				{
- 					Main.bgStyle = 1;
-@@ -50578,7 +_,7 @@
- 			}
- 			if (!Main.drawSkip)
- 			{
--				Lighting.LightTiles(this.firstTileX, this.lastTileX, this.firstTileY, this.lastTileY);
-+				//	Lighting.LightTiles(this.firstTileX, this.lastTileX, this.firstTileY, this.lastTileY);
- 			}
- 			TimeLogger.DetailedDrawReset();
- 			if (!Main.mapFullscreen)
-@@ -50737,7 +_,7 @@
- 					{
- 						try
- 						{
--							this.DrawMap();
-+							//	this.DrawMap();
- 							goto IL_4D8B;
- 						}
- 						catch (Exception e4)
-@@ -50746,7 +_,7 @@
- 							goto IL_4D8B;
- 						}
- 					}
--					this.DrawMap();
-+					//	this.DrawMap();
- 				}
- 				IL_4D8B:
- 				TimeLogger.DetailedDrawReset();
-@@ -51063,7 +_,7 @@
- 			{
- 				Main.player[Main.myPlayer].ToggleInv();
- 			}
--			this.DrawMap();
-+			//this.DrawMap();
- 			this.DrawFPS();
- 			this.DrawPlayerChat();
- 			TimeLogger.MapDrawTime(stopwatch.Elapsed.TotalMilliseconds);
-@@ -53531,7 +_,7 @@
- 
- 		public static void OpenPlayerSelect(Main.OnPlayerSelected method)
- 		{
--			if (Main.gameMenu && (Main.menuMode == 10 || Main.menuMode == 14))
-+			if (Main.gameMenu && (Main.menuMode == 10 /*|| Main.menuMode == 14*/))
- 			{
- 				return;
- 			}
+ 						if (Main.ambientError > 0)
 

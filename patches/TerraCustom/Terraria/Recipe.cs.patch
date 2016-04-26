@@ -1,72 +1,22 @@
---- src/Terraria\Terraria\Recipe.cs
+--- src/tModLoader\Terraria\Recipe.cs
 +++ src/TerraCustom\Terraria\Recipe.cs
-@@ -286,7 +_,7 @@
+@@ -143,15 +_,15 @@
  		}
  
- 		public static void FindRecipes()
+ 		public bool ItemMatches(Item invItem, Item reqItem)
 -		{
-+		{/*
- 			int num = Main.availableRecipe[Main.focusRecipe];
- 			float num2 = Main.availableRecipeY[Main.focusRecipe];
- 			for (int i = 0; i < Recipe.maxRecipes; i++)
-@@ -456,10 +_,11 @@
- 			{
- 				Main.availableRecipeY[num8] -= num7;
- 			}
-+		*/
- 		}
++			{
+ 			return invItem.IsTheSameAs(reqItem) || this.useWood(invItem.type, reqItem.type)
+ 			|| this.useIronBar(invItem.type, reqItem.type) || this.useSand(invItem.type, reqItem.type)
+ 			|| this.useFragment(invItem.type, reqItem.type) || this.usePressurePlate(invItem.type, reqItem.type)
+ 			|| (this is ModRecipe && ((ModRecipe)this).UseCraftGroup(invItem.type, reqItem.type));
+-		}
++			}
  
- 		public static void SetupRecipes()
+ 		public bool useWood(int invType, int reqType)
 -		{
-+		{/*
- 			int stack = 5;
- 			int stack2 = 2;
- 			Recipe.newRecipe.createItem.SetDefaults(8, false);
-@@ -10139,10 +_,11 @@
- 				Main.recipe[m].createItem.checkMat();
- 			}
- 			int arg_27EA8_0 = Recipe.numRecipes;
-+		*/
++			{
+ 			CraftGroup group = CraftGroup.Wood;
+ 			return this.anyWood && group.Items.Contains(invType) && group.Items.Contains(reqType);
  		}
- 
- 		private static void PlatformReturn()
--		{
-+		{/*
- 			int num = Recipe.numRecipes;
- 			for (int i = 0; i < num; i++)
- 			{
-@@ -10165,10 +_,11 @@
- 					Main.recipe[i + 1] = recipe;
- 				}
- 			}
-+		*/
- 		}
- 
- 		private static void WallReturn()
--		{
-+		{/*
- 			int num = Recipe.numRecipes;
- 			for (int i = 0; i < num; i++)
- 			{
-@@ -10191,10 +_,11 @@
- 					Main.recipe[i + 1] = recipe;
- 				}
- 			}
-+		*/
- 		}
- 
- 		private static void AddRecipe()
--		{
-+		{/*
- 			if (Recipe.newRecipe.requiredTile[0] == 13)
- 			{
- 				Recipe.newRecipe.alchemy = true;
-@@ -10202,6 +_,7 @@
- 			Main.recipe[Recipe.numRecipes] = Recipe.newRecipe;
- 			Recipe.newRecipe = new Recipe();
- 			Recipe.numRecipes++;
-+		*/
- 		}
- 	}
- }
 

@@ -1,4 +1,4 @@
---- src/Terraria\Terraria\WindowsLaunch.cs
+--- src/tModLoader\Terraria\WindowsLaunch.cs
 +++ src/TerraCustom\Terraria\WindowsLaunch.cs
 @@ -3,7 +_,7 @@
  using System.IO;
@@ -18,4 +18,19 @@
  			}
  			return true;
  		}
+@@ -63,12 +_,12 @@
+ 					result = Assembly.Load(array);
+ 				}
+ 				return result;
+-            };
++			};
+ #if SERVER
+ 			WindowsLaunch._handleRoutine = new WindowsLaunch.HandlerRoutine(WindowsLaunch.ConsoleCtrlCheck);
+ 			WindowsLaunch.SetConsoleCtrlHandler(WindowsLaunch._handleRoutine, true);
+ #endif
+-            Program.LaunchGame(args);
++			Program.LaunchGame(args);
+ 		}
+ 	}
+ }
 

@@ -58,7 +58,6 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory.CSharp">
       <HintPath>lib\ICSharpCode.NRefactory.CSharp.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="ILSpy">
       <HintPath>lib\ILSpy.exe</HintPath>

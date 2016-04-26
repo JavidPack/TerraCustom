@@ -14,6 +14,7 @@ namespace Terraria.TerraCustom.Setup
 
         public static ProgramSetting<DateTime> MergedDiffCutoff = new ProgramSetting<DateTime>("MergedDiffCutoff");
         public static ProgramSetting<DateTime> TerrariaDiffCutoff = new ProgramSetting<DateTime>("TerrariaDiffCutoff");
+        public static ProgramSetting<DateTime> tModLoaderDiffCutoff  = new ProgramSetting<DateTime>("tModLoaderDiffCutoff");
         public static ProgramSetting<DateTime> TerraCustomDiffCutoff = new ProgramSetting<DateTime>("TerraCustomDiffCutoff");
 
         public static bool SelectTerrariaDialog() {

@@ -1,4 +1,4 @@
---- src/Terraria\Terraria\Tile.cs
+--- src/tModLoader\Terraria\Tile.cs
 +++ src/TerraCustom\Terraria\Tile.cs
 @@ -366,6 +_,22 @@
  				return;

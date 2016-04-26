@@ -1,0 +1,40 @@
+--- src/tModLoader\Terraria.ModLoader\ModLoader.cs
++++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
+@@ -29,8 +_,8 @@
+         public const bool windows = false;
+ #endif
+ 		//change Terraria.Main.SavePath and cloud fields to use "ModLoader" folder
+-		public static readonly string ModPath = Main.SavePath + Path.DirectorySeparatorChar + "Mods";
+-		public static readonly string ModSourcePath = Main.SavePath + Path.DirectorySeparatorChar + "Mod Sources";
++		public static readonly string ModPath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Mods";
++		public static readonly string ModSourcePath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Mod Sources";
+ 		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
+ 		private static bool assemblyResolverAdded = false;
+ 		internal const int earliestRelease = 149;
+@@ -133,7 +_,24 @@
+ 				Main.menuMode = Interface.errorMessageID;
+ 				return;
+ 			}
+-			Main.menuMode = 0;
++			//Main.menuMode = 0;
++			if (!Main.firstModLoad)
++			{
++				Main.menuMode = (int)TerraCustom.MenuModes.Settings;
++			}
++			else
++			{
++				Main.menuMode = (int)TerraCustom.MenuModes.ChooseWorldSize;
++			}
++			if (mods.Count > 1)
++			{
++				Main.tModLoaderModsLoaded = true;
++			}
++			else
++			{
++				Main.tModLoaderModsLoaded = false;
++			}
++			Main.firstModLoad = false;
+ 			numLoads++;
+ 		}
+ 
+

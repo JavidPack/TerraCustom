@@ -10,14 +10,15 @@ namespace Terraria.TerraCustom
 {
 	public enum MenuModes
 	{
-		SelectDifficulty = -7,
-		ChooseWorldSize = 0,
-		EnterWorldName = 7,
-		Settings = 11,
-		ChallengeOption = 113,
-
+		// Vanilla
+		SelectDifficulty = 1000,
+		EnterWorldName,
+		// Custom
+		Settings,
+		ChooseWorldSize,
+		ChallengeOption,
 		ResetAllSettings,
-		MicroBiomes1 = 1000,
+		MicroBiomes1,
 		MicroBiomes2,
 		DownedFound,
 		Downed,
@@ -50,6 +51,7 @@ namespace Terraria.TerraCustom
 
 		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset All", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
+			new ActionLabel("Reload tModLoader mods", () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
 			new ActionLabel("Terrain", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
 			new ActionLabel("Ores", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
 			new ActionLabel("Ore Amount", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.OreAmount; }),
@@ -277,7 +279,7 @@ namespace Terraria.TerraCustom
 
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Debug Settings", Setting.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] {"Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
+			new OptionLabel(new string[] { "Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
 			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = (x > 0) ? true : false),
@@ -864,7 +866,7 @@ namespace Terraria.TerraCustom
 				if (main.selectedMenu == num48)
 				{
 					main.lastSelectedMenu = -1;
-					Main.menuMode = (int)MenuModes.Settings /*11*/;
+					Main.menuMode = (int)MenuModes.Settings;
 				}
 
 				if (main.selectedMenu != -1)
@@ -1304,6 +1306,63 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.OreAmount)
 			{
 				GenericMenu(main, OreAmountMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.ChooseWorldSize)
+			{
+				num = 170;
+				defaultLabelSpacing = 55;
+				array4[1] = 20;
+				array4[2] = 20;
+				array4[3] = 20;
+				array4[4] = 20;
+				//array4[5] = 20;
+				array4[5] = 60;
+				clickableLabelText[0] = Lang.menu[91];
+				array[0] = true;
+				clickableLabelText[1] = Lang.menu[92];
+				clickableLabelText[2] = Lang.menu[93];
+				clickableLabelText[3] = Lang.menu[94];
+				//	clickableLabelText[4] = Lang.menu[5];
+				clickableLabelText[4] = "Keep Previous Custom Size";
+				clickableLabelText[5] = Lang.menu[15];
+				numberClickableLabels = 6;
+				if (main.selectedMenu == 5)
+				{
+					main.QuitGame();
+				}
+				else if (main.selectedMenu > 0)
+				{
+					if (main.selectedMenu == 1)
+					{
+						Main.maxTilesX = /*8400;// */4200;
+						Main.maxTilesY = /*600;//*/1200;
+						WorldGen.worldSize = 0;
+					}
+					else if (main.selectedMenu == 2)
+					{
+						Main.maxTilesX = 6400;
+						Main.maxTilesY = 1800;
+						WorldGen.worldSize = 1;
+					}
+					else if (main.selectedMenu == 3)
+					{
+						Main.maxTilesX = 8400;
+						Main.maxTilesY = 2400;
+						WorldGen.worldSize = 2;
+					}
+					else if (main.selectedMenu == 4)
+					{
+						if (Main.maxTilesX == 8401)
+						{
+							Main.maxTilesX = 4200;
+							Main.maxTilesY = 1200;
+							WorldGen.worldSize = 0;
+						}
+					}
+					Main.clrInput();
+					Main.menuMode = (int)MenuModes.SelectDifficulty;
+					WorldGen.setWorldSize();
+				}
 			}
 		}
 

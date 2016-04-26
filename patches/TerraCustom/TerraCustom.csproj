@@ -2,108 +2,95 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{3996D5FA-6E59-4FE4-9F2B-40EEEF9645D5}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">WindowsDebug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
-    <AssemblyName>TerraCustom</AssemblyName>
+    <AssemblyName>Terraria</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DefineConstants>CLIENT; WINDOWS</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsRelease|x86'">
+    <OutputPath>bin\x86\WindowsRelease\</OutputPath>
     <DefineConstants>CLIENT; WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsServerRelease|x86'">
+    <OutputPath>bin\x86\WindowsServerRelease\</OutputPath>
+    <DefineConstants>SERVER; WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsDebug|x86'">
+    <OutputPath>bin\x86\WindowsDebug\</OutputPath>
+    <DefineConstants>DEBUG;CLIENT; WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsServerDebug|x86' ">
+    <OutputPath>bin\x86\WindowsServerDebug\</OutputPath>
+    <DefineConstants>DEBUG;SERVER; WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MacRelease|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\MacRelease\</OutputPath>
     <DefineConstants>CLIENT; MAC</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>CLIENT; WINDOWS</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>CLIENT; WINDOWS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MacRelease|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\MacRelease\</OutputPath>
-    <DefineConstants>CLIENT; MAC</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MacServerRelease|x86'">
+    <OutputPath>bin\x86\MacServerRelease\</OutputPath>
+    <DefineConstants>SERVER; MAC</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LinuxRelease|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\LinuxRelease\</OutputPath>
     <DefineConstants>CLIENT; LINUX</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LinuxRelease|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\LinuxRelease\</OutputPath>
-    <DefineConstants>CLIENT; MAC</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LinuxServerRelease|x86'">
+    <OutputPath>bin\x86\LinuxServerRelease\</OutputPath>
+    <DefineConstants>SERVER; LINUX</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="$(DefineConstants.Contains('CLIENT'))">
+      <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <OutputType>Exe</OutputType>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <Choose>
+    <When Condition="$(DefineConstants.Contains('DEBUG'))">
+      <PropertyGroup>
+        <Optimize>false</Optimize>
+        <DebugType>full</DebugType>
+        <OutputType>Exe</OutputType>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Reference Include="FNA" Condition="!$(DefineConstants.Contains('WINDOWS'))">
       <HintPath>..\..\references\FNA.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip.CF, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+    <Reference Include="Ionic.Zip.Reduced">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Terraria.Libraries\DotNetZip\Ionic.Zip.CF.dll</HintPath>
+      <HintPath>..\..\references\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework.Game" Condition="$(DefineConstants.Contains('WINDOWS'))" />
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\references\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MP3Sharp">
+      <HintPath>..\..\references\MP3Sharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Terraria.Libraries\JSON.NET\Newtonsoft.Json.dll</HintPath>
@@ -125,6 +112,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\EnumerationExtensions.cs" />
+    <Compile Include="NATUPNPLib\IStaticPortMapping.cs" Condition="$(DefineConstants.Contains('SERVER'))" />
+    <Compile Include="NATUPNPLib\IStaticPortMappingCollection.cs" Condition="$(DefineConstants.Contains('SERVER'))" />
+    <Compile Include="NATUPNPLib\IUPnPNAT.cs" Condition="$(DefineConstants.Contains('SERVER'))" />
+    <Compile Include="NATUPNPLib\UPnPNAT.cs" Condition="$(DefineConstants.Contains('SERVER'))" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terraria.Achievements\Achievement.cs" />
     <Compile Include="Terraria.Achievements\AchievementCategory.cs" />
@@ -279,6 +270,7 @@
     <Compile Include="Terraria.ID\ItemID.cs" />
     <Compile Include="Terraria.ID\MessageID.cs" />
     <Compile Include="Terraria.ID\MountID.cs" />
+    <Compile Include="Terraria.ID\MusicID.cs" />
     <Compile Include="Terraria.ID\NPCID.cs" />
     <Compile Include="Terraria.ID\PlayerTextureID.cs" />
     <Compile Include="Terraria.ID\PlayerVariantID.cs" />
@@ -307,6 +299,102 @@
     <Compile Include="Terraria.Map\MapHelper.cs" />
     <Compile Include="Terraria.Map\MapTile.cs" />
     <Compile Include="Terraria.Map\WorldMap.cs" />
+    <Compile Include="Terraria.ModLoader.Default\AprilFools.cs" />
+    <Compile Include="Terraria.ModLoader.Default\ModLoaderMod.cs" />
+    <Compile Include="Terraria.ModLoader.Default\MysteryItem.cs" />
+    <Compile Include="Terraria.ModLoader.Default\MysteryTile.cs" />
+    <Compile Include="Terraria.ModLoader.Default\MysteryWorld.cs" />
+    <Compile Include="Terraria.ModLoader.Default\MysteryPlayer.cs" />
+    <Compile Include="Terraria.ModLoader.Default\StartBag.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\CustomModDataException.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\DuplicateNameException.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\MissingResourceException.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\ModSortingException.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\RecipeException.cs" />
+    <Compile Include="Terraria.ModLoader.IO\ItemIO.cs" />
+    <Compile Include="Terraria.ModLoader.IO\MapIO.cs" />
+    <Compile Include="Terraria.ModLoader.IO\TileIO.cs" />
+    <Compile Include="Terraria.ModLoader.IO\TmodFile.cs" />
+    <Compile Include="Terraria.ModLoader.IO\UploadFile.cs" />
+    <Compile Include="Terraria.ModLoader.IO\WAVCacheIO.cs" />
+    <Compile Include="Terraria.ModLoader.IO\WorldIO.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIBuildMod.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIColorTextPanel.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UICycleImage.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIDownloadMod.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIErrorMessage.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIHoverImage.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIInputTextField.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UILoadMods.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UILoadProgress.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIManagePublished.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIMessageBox.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModBrowser.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModControls.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModDownloadItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModInfo.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModManageItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIMods.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModSourceItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModSources.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIUpdateMessage.cs" />
+    <Compile Include="Terraria.ModLoader\AssemblyManager.cs" />
+    <Compile Include="Terraria.ModLoader\BuffLoader.cs" />
+    <Compile Include="Terraria.ModLoader\BuildProperties.cs" />
+    <Compile Include="Terraria.ModLoader\CraftGroup.cs" />
+    <Compile Include="Terraria.ModLoader\DrawInfo.cs" />
+    <Compile Include="Terraria.ModLoader\EntityInfo.cs" />
+    <Compile Include="Terraria.ModLoader\EquipLoader.cs" />
+    <Compile Include="Terraria.ModLoader\EquipTexture.cs" />
+    <Compile Include="Terraria.ModLoader\EquipType.cs" />
+    <Compile Include="Terraria.ModLoader\ErrorLogger.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalBuff.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalItem.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalNPC.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalProjectile.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalRecipe.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalTile.cs" />
+    <Compile Include="Terraria.ModLoader\GlobalWall.cs" />
+    <Compile Include="Terraria.ModLoader\Interface.cs" />
+    <Compile Include="Terraria.ModLoader\ItemLoader.cs" />
+    <Compile Include="Terraria.ModLoader\MapEntry.cs" />
+    <Compile Include="Terraria.ModLoader\MapLegend.cs" />
+    <Compile Include="Terraria.ModLoader\MapLoader.cs" />
+    <Compile Include="Terraria.ModLoader\Mod.cs" />
+    <Compile Include="Terraria.ModLoader\ModBuff.cs" />
+    <Compile Include="Terraria.ModLoader\ModCompile.cs" />
+    <Compile Include="Terraria.ModLoader\ModDust.cs" />
+    <Compile Include="Terraria.ModLoader\ModGore.cs" />
+    <Compile Include="Terraria.ModLoader\ModHooks.cs" />
+    <Compile Include="Terraria.ModLoader\ModItem.cs" />
+    <Compile Include="Terraria.ModLoader\ModLoader.cs" />
+    <Compile Include="Terraria.ModLoader\ModMountData.cs" />
+    <Compile Include="Terraria.ModLoader\ModNPC.cs" />
+    <Compile Include="Terraria.ModLoader\ModPlayer.cs" />
+    <Compile Include="Terraria.ModLoader\ModProjectile.cs" />
+    <Compile Include="Terraria.ModLoader\ModProperties.cs" />
+    <Compile Include="Terraria.ModLoader\ModRecipe.cs" />
+    <Compile Include="Terraria.ModLoader\ModSound.cs" />
+    <Compile Include="Terraria.ModLoader\ModTile.cs" />
+    <Compile Include="Terraria.ModLoader\ModWall.cs" />
+    <Compile Include="Terraria.ModLoader\ModWorld.cs" />
+    <Compile Include="Terraria.ModLoader\RecipeHooks.cs" />
+    <Compile Include="Terraria.ModLoader\WorldHooks.cs" />
+    <Compile Include="Terraria.ModLoader\MountLoader.cs" />
+    <Compile Include="Terraria.ModLoader\MountTextureType.cs" />
+    <Compile Include="Terraria.ModLoader\MusicWrapper.cs" />
+    <Compile Include="Terraria.ModLoader\NPCHeadLoader.cs" />
+    <Compile Include="Terraria.ModLoader\NPCLoader.cs" />
+    <Compile Include="Terraria.ModLoader.IO\PlayerIO.cs" />
+    <Compile Include="Terraria.ModLoader\NPCSpawnInfo.cs" />
+    <Compile Include="Terraria.ModLoader\DrawLayer.cs" />
+    <Compile Include="Terraria.ModLoader\ProjectileLoader.cs" />
+    <Compile Include="Terraria.ModLoader\SoundLoader.cs" />
+    <Compile Include="Terraria.ModLoader\SoundType.cs" />
+    <Compile Include="Terraria.ModLoader\TileLoader.cs" />
+    <Compile Include="Terraria.ModLoader\WallLoader.cs" />
+    <Compile Include="Terraria.ModLoader\PlayerHooks.cs" />
     <Compile Include="Terraria.Modules\AnchorDataModule.cs" />
     <Compile Include="Terraria.Modules\AnchorTypesModule.cs" />
     <Compile Include="Terraria.Modules\LiquidDeathModule.cs" />
@@ -454,18 +542,57 @@
     <Compile Include="Terraria\WorldSections.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Terraria.Libraries\DotNetZip\Ionic.Zip.CF.dll" />
+    <EmbeddedResource Include="Microsoft.Xna.Framework.RuntimeProfile" />
+    <EmbeddedResource Include="..\..\references\Ionic.Zip.Reduced.dll" />
     <EmbeddedResource Include="Terraria.Libraries\JSON.NET\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Terraria.Libraries\Steamworks.NET\Steamworks.NET.dll" />
+    <EmbeddedResource Include="..\..\references\MP3Sharp.dll" />
+    <EmbeddedResource Include="..\..\references\Mono.Cecil.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon.ico" />
+    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonError.png" />
+    <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryTile.png" />
+    <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
+    <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
+    <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
     <EmbeddedResource Include="Terraria.TerraCustom\DungeonColors.png" />
     <EmbeddedResource Include="Terraria.TerraCustom\Logo.png" />
     <EmbeddedResource Include="Terraria.TerraCustom\MossColors.png" />
     <EmbeddedResource Include="Terraria.TerraCustom\TreeTops.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\terraria\$(TargetName)$(ConfigurationName).exe"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)4gb_patch.exe" "$(TargetPath)"
+
+SET RELEASEFILE=""
+
+IF $(ConfigurationName) == MacRelease SET RELEASEFILE=ModCompile/tModLoaderMac
+IF $(ConfigurationName) == WindowsServerDebug SET RELEASEFILE=tModLoaderServerDebug
+IF $(ConfigurationName) == WindowsServerRelease SET RELEASEFILE=tModLoaderServer
+IF $(ConfigurationName) == WindowsDebug SET RELEASEFILE=tModLoaderDebug
+IF $(ConfigurationName) == WindowsRelease SET RELEASEFILE=tModLoader
+
+for /f "tokens=* delims=" %25%25i in ('"$(ProjectDir)..\..\setup\bin\setup" --steamdir') do set TERRARIASTEAMDIR=%25%25i
+
+IF NOT %25RELEASEFILE%25=="" (
+
+mkdir "%25TERRARIASTEAMDIR%25\ModCompile\"
+copy "$(TargetDir)$(TargetName)$(TargetExt)" "%25TERRARIASTEAMDIR%25\%25RELEASEFILE%25$(TargetExt)"
+
+IF NOT %25RELEASEFILE:Debug=%25==%25RELEASEFILE%25 (
+	copy "$(TargetDir)$(TargetName).pdb" "%25TERRARIASTEAMDIR%25\%25RELEASEFILE%25.pdb"
+)
+
+)</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

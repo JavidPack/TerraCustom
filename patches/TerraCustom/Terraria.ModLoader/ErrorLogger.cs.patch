@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.ModLoader\ErrorLogger.cs
++++ src/TerraCustom\Terraria.ModLoader\ErrorLogger.cs
+@@ -8,7 +_,7 @@
+ {
+ 	public static class ErrorLogger
+ 	{
+-		public static readonly string LogPath = Path.Combine(Main.SavePath, "Logs");
++		public static readonly string LogPath = Path.Combine(Main.TerraCustomSavePath, "Logs");
+ 		internal static string CompileErrorPath = Path.Combine(LogPath, "Compile Errors.txt");
+ 		private static readonly string[] buildDllLines =
+ 		{
+

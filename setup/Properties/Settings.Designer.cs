@@ -94,5 +94,17 @@ namespace Terraria.TerraCustom.Properties {
                 this["TerraCustomDiffCutoff"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2015-01-01")]
+        public global::System.DateTime tModLoaderDiffCutoff {
+            get {
+                return ((global::System.DateTime)(this["tModLoaderDiffCutoff"]));
+            }
+            set {
+                this["tModLoaderDiffCutoff"] = value;
+            }
+        }
     }
 }

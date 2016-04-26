@@ -1,12 +1,34 @@
---- src/Terraria\Terraria\Netplay.cs
+--- src/tModLoader\Terraria\Netplay.cs
 +++ src/TerraCustom\Terraria\Netplay.cs
-@@ -310,7 +_,7 @@
- 							WorldGen.clearWorld();
- 							if (Main.mapEnabled)
- 							{
--								Main.Map.Load();
-+								//	Main.Map.Load();
- 							}
- 						}
- 						if (Netplay.Connection.State == 5 && Main.loadMapLock)
+@@ -235,9 +_,9 @@
+ 				catch
+ 				{
+ #if MAC
+-					Thread.Sleep(200);
+-					Netplay.Connection.Socket.Close();
+-					Netplay.Connection.Socket = new TcpSocket();
++                    Thread.Sleep(200);
++                    Netplay.Connection.Socket.Close();
++                    Netplay.Connection.Socket = new TcpSocket();
+ #endif
+ 					if (!Netplay.disconnect && Main.gameMenu)
+ 					{
+@@ -567,12 +_,12 @@
+ 				if (NetMessage.buffer.Any(b => b.checkBytes) || Clients.Any(c => c.PendingTermination)) InvokeOnMainThread(() => {
+ 					for (int k = 0; k < 256; k++) {
+ 						if (NetMessage.buffer[k].checkBytes) {
+-							NetMessage.CheckBytes(k);
+-						}
++						NetMessage.CheckBytes(k);
++					}
+ 						if (Netplay.Clients[k].PendingTermination) {
+-							Netplay.Clients[k].Reset();
+-							NetMessage.syncPlayers();
+-						}
++						Netplay.Clients[k].Reset();
++						NetMessage.syncPlayers();
++					}
+ 					}
+ 				});
+ 				int num3 = 0;
 

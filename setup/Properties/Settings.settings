@@ -20,5 +20,8 @@
     <Setting Name="TerraCustomDiffCutoff" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">2015-01-01</Value>
     </Setting>
+    <Setting Name="tModLoaderDiffCutoff" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2015-01-01</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

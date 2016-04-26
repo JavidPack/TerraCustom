@@ -12,6 +12,7 @@ namespace Terraria.TerraCustom.Setup
     public class FormatTask : Task
     {
         public static CSharpFormattingOptions TerraCustomFormat = FormattingOptionsFactory.CreateAllman();
+        //public static CSharpFormattingOptions tModLoaderFormat = FormattingOptionsFactory.CreateAllman();
 
         public static string FormatCode(string text, CSharpFormattingOptions options, CancellationToken ct) {
             var formatter = new CSharpFormatter(options) { FormattingMode = FormattingMode.Intrusive };

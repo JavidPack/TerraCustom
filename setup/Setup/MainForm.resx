@@ -122,7 +122,7 @@
   </metadata>
   <data name="buttonDiffTerraCustom.ToolTip" xml:space="preserve">
     <value>Recalculates the TerraCustom patches
-Diffs the src/Terraria and src/TerraCustom directories
+Diffs the src/tModLoader and src/TerraCustom directories
 Use this after making changes then commit the patches directory to the git
 Internally formats the Terraria sources before diffing
 
@@ -131,6 +131,13 @@ Internally formats the Terraria sources before diffing
   <metadata name="mainMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>143, 12</value>
   </metadata>
+  <data name="buttonDiffModLoader.ToolTip" xml:space="preserve">
+    <value>Recalculates the TerraCustom patches
+Diffs the src/Terraria and src/tModLoader directories
+Internally formats the Terraria sources before diffing
+
+</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>58</value>
   </metadata>

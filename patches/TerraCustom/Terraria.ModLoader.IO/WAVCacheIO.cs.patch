@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.ModLoader.IO\WAVCacheIO.cs
++++ src/TerraCustom\Terraria.ModLoader.IO\WAVCacheIO.cs
+@@ -7,7 +_,7 @@
+ {
+ 	internal static class WAVCacheIO
+ 	{
+-		public static readonly string ModCachePath = Main.SavePath + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "Cache";
++		public static readonly string ModCachePath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Mods" + Path.DirectorySeparatorChar + "Cache";
+ 
+ 		internal static bool WAVCacheAvailable(string wavCachePath)
+ 		{
+
