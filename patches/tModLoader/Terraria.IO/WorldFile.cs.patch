@@ -1,0 +1,91 @@
+--- src/Terraria\Terraria.IO\WorldFile.cs
++++ src/tModLoader\Terraria.IO\WorldFile.cs
+@@ -5,6 +_,9 @@
+ using Terraria.DataStructures;
+ using Terraria.GameContent.Events;
+ using Terraria.ID;
++using Terraria.ModLoader;
++using Terraria.ModLoader.Exceptions;
++using Terraria.ModLoader.IO;
+ using Terraria.Social;
+ using Terraria.Utilities;
+ 
+@@ -106,6 +_,8 @@
+ 						}
+ 						binaryReader.Close();
+ 						memoryStream.Close();
++						WorldHooks.SetupWorld();
++						WorldIO.ReadModFile(Main.worldPathName, flag);
+ 						if (num2 != 0)
+ 						{
+ 							WorldGen.loadFailed = true;
+@@ -302,6 +_,7 @@
+ 				{
+ 					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
+ 				}
++				WorldIO.WriteModFile(Main.worldPathName, useCloudSaving);
+ 				WorldGen.saveLock = false;
+ 			}
+ 			Main.serverGenLock = false;
+@@ -997,7 +_,14 @@
+ 				writer.Write(Main.anglerWhoFinishedToday[i]);
+ 			}
+ 			writer.Write(NPC.savedAngler);
+-			writer.Write(Main.anglerQuest);
++			if (Main.anglerQuest < ItemLoader.vanillaQuestFishCount)
++			{
++				writer.Write(Main.anglerQuest);
++			}
++			else
++			{
++				writer.Write(0);
++			}
+ 			writer.Write(NPC.savedStylist);
+ 			writer.Write(NPC.savedTaxCollector);
+ 			writer.Write(Main.invasionSizeStart);
+@@ -1050,7 +_,7 @@
+ 					byte b2;
+ 					byte b = b2 = (b3 = 0);
+ 					bool flag = false;
+-					if (tile.active())
++					if (tile.active() && tile.type < TileID.Count)
+ 					{
+ 						flag = true;
+ 						if (tile.type == 127)
+@@ -1087,9 +_,11 @@
+ 						}
+ 						if (Main.tileFrameImportant[(int)tile.type])
+ 						{
+-							array[num2] = (byte)(tile.frameX & 255);
++							short frameX = tile.frameX;
++							TileIO.VanillaSaveFrames(tile, ref frameX);
++							array[num2] = (byte)(frameX & 255);
+ 							num2++;
+-							array[num2] = (byte)(((int)tile.frameX & 65280) >> 8);
++							array[num2] = (byte)(((int)frameX & 65280) >> 8);
+ 							num2++;
+ 							array[num2] = (byte)(tile.frameY & 255);
+ 							num2++;
+@@ -1103,10 +_,10 @@
+ 							num2++;
+ 						}
+ 					}
+-					if (tile.wall != 0)
++					if (tile.wall != 0 && tile.wall < WallID.Count)
+ 					{
+ 						b2 |= 4;
+-						array[num2] = tile.wall;
++						array[num2] = (byte)tile.wall;
+ 						num2++;
+ 						if (tile.wallColor() != 0)
+ 						{
+@@ -1260,7 +_,7 @@
+ 					for (int l = 0; l < 40; l++)
+ 					{
+ 						Item item = chest.item[l];
+-						if (item == null)
++						if (item == null || ItemLoader.IsModItem(item))
+ 						{
+ 							writer.Write((short)0);
+ 						}
+

@@ -1,0 +1,33 @@
+--- src/Terraria\Terraria.Utilities\PlatformUtilties.cs
++++ src/tModLoader\Terraria.Utilities\PlatformUtilties.cs
+@@ -87,7 +_,8 @@
+ 		{
+ #if WINDOWS
+ 			string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "My Games");
+-			return Path.Combine(path, "Terraria");
++			path = Path.Combine(path, "Terraria");
++			return Path.Combine(path, "ModLoader");
+ #endif
+ #if MAC
+ 			string text = Environment.GetEnvironmentVariable("HOME");
+@@ -96,7 +_,8 @@
+ 				return ".";
+ 			}
+ 			text += "/Library/Application Support";
+-			return Path.Combine(text, "Terraria");
++			text = Path.Combine(text, "Terraria");
++			return Path.Combine(text, "ModLoader");
+ #endif
+ #if LINUX
+ 			string text = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+@@ -109,7 +_,8 @@
+ 				}
+ 				text += "/.local/share";
+  			}
+- 			return Path.Combine(text, "Terraria");
++ 			text = Path.Combine(text, "Terraria");
++			return Path.Combine(text, "ModLoader");
+ #endif
+ 		}
+ 		#if !WINDOWS
+

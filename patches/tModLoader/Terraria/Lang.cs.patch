@@ -1,0 +1,63 @@
+--- src/Terraria\Terraria\Lang.cs
++++ src/tModLoader\Terraria\Lang.cs
+@@ -1,4 +_,5 @@
+ using System;
++using Terraria.ModLoader;
+ 
+ #if CLIENT
+ using Terraria.Map;
+@@ -17,7 +_,7 @@
+ 		public static string[] dt = new string[4];
+ 		public static string[] chestType = new string[52];
+ 		public static string[] dresserType = new string[28];
+-		public static string[] mapLegend;
++		public static MapLegend mapLegend;
+ 		public static string[] prefix = new string[84];
+ 		public static string the;
+ 
+@@ -3519,6 +_,10 @@
+ 
+ 		public static string npcName(int l, bool english = false)
+ 		{
++			if (l >= Main.maxNPCTypes)
++			{
++				return NPCLoader.DisplayName(l);
++			}
+ 			if (Lang.lang <= 1 || english)
+ 			{
+ 				switch (l)
+@@ -31781,6 +_,16 @@
+ 							text = "\n(Caught Jungle Surface)";
+ 						}
+ 						break;
++					default:
++						if (gotFish)
++						{
++							array = array2;
++						}
++						else
++						{
++							flag = true;
++						}
++						break;
+ 				}
+ 			}
+ 			string text2 = array[0];
+@@ -31791,6 +_,7 @@
+ 					text2 = text2 + " " + array[i];
+ 				}
+ 			}
++			ItemLoader.AnglerChat(gotFish, Main.anglerQuestFinished, Main.anglerQuestItemNetIDs[Main.anglerQuest], ref text2, ref text);
+ 			if (text.Length > 0)
+ 			{
+ 				text2 = text2 + "\n" + text;
+@@ -32679,7 +_,7 @@
+ #if CLIENT
+ 				if (Lang.mapLegend == null)
+ 				{
+-					Lang.mapLegend = new string[MapHelper.LookupCount()];
++					Lang.mapLegend = new MapLegend(MapHelper.LookupCount());
+ 				}
+ 				Lang.mapLegend[MapHelper.TileToLookup(4, 0)] = "Torch";
+ 				Lang.mapLegend[MapHelper.TileToLookup(4, 1)] = "Torch";
+

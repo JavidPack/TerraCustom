@@ -1,0 +1,115 @@
+--- src/Terraria\Terraria\Mount.cs
++++ src/tModLoader\Terraria\Mount.cs
+@@ -6,6 +_,7 @@
+ using Terraria.GameContent.Achievements;
+ using Terraria.Graphics.Shaders;
+ using Terraria.ID;
++using Terraria.ModLoader;
+ 
+ namespace Terraria
+ {
+@@ -42,8 +_,14 @@
+ 			}
+ 		}
+ 
+-		private class MountData
+-		{
++		public class MountData
++		{
++			public ModMountData modMountData
++			{
++				get;
++				set;
++			}
++
+ 			public Texture2D backTexture;
+ 			public Texture2D backTextureGlow;
+ 			public Texture2D backTextureExtra;
+@@ -140,7 +_,7 @@
+ 		public const float drillRotationChange = 0.05235988f;
+ 		public const float maxDrillLength = 48f;
+ 		public static int currentShader = 0;
+-		private static Mount.MountData[] mounts;
++		public static Mount.MountData[] mounts;
+ 		private static Vector2[] scutlixEyePositions;
+ 		private static Vector2 scutlixTextureSize;
+ 		public static Vector2 drillDiodePoint1 = new Vector2(36f, -6f);
+@@ -149,28 +_,28 @@
+ 		public static int drillPickPower = 210;
+ 		public static int drillPickTime = 6;
+ 		public static int drillBeamCooldownMax = 1;
+-		private Mount.MountData _data;
+-		private int _type;
+-		private bool _flipDraw;
+-		private int _frame;
+-		private float _frameCounter;
+-		private int _frameExtra;
+-		private float _frameExtraCounter;
+-		private int _frameState;
+-		private int _flyTime;
+-		private int _idleTime;
+-		private int _idleTimeNext;
+-		private float _fatigue;
+-		private float _fatigueMax;
+-		private bool _abilityCharging;
+-		private int _abilityCharge;
+-		private int _abilityCooldown;
+-		private int _abilityDuration;
+-		private bool _abilityActive;
+-		private bool _aiming;
++		public Mount.MountData _data;
++		public int _type;
++		public bool _flipDraw;
++		public int _frame;
++		public float _frameCounter;
++		public int _frameExtra;
++		public float _frameExtraCounter;
++		public int _frameState;
++		public int _flyTime;
++		public int _idleTime;
++		public int _idleTimeNext;
++		public float _fatigue;
++		public float _fatigueMax;
++		public bool _abilityCharging;
++		public int _abilityCharge;
++		public int _abilityCooldown;
++		public int _abilityDuration;
++		public bool _abilityActive;
++		public bool _aiming;
+ 		public List<DrillDebugDraw> _debugDraw;
+-		private object _mountSpecificData;
+-		private bool _active;
++		public object _mountSpecificData;
++		public bool _active;
+ 
+ 		public bool Active
+ 		{
+@@ -1747,6 +_,10 @@
+ 
+ 		public void UpdateFrame(Player mountedPlayer, int state, Vector2 velocity)
+ 		{
++			if (!MountLoader.UpdateFrame(mountedPlayer, state, velocity))
++			{
++				return;
++			}
+ 			if (this._frameState != state)
+ 			{
+ 				this._frameState = state;
+@@ -2171,6 +_,7 @@
+ 		public void UpdateEffects(Player mountedPlayer)
+ 		{
+ 			mountedPlayer.autoJump = this.AutoJump;
++			MountLoader.UpdateEffects(mountedPlayer);
+ 			switch (this._type)
+ 			{
+ 				case 8:
+@@ -2901,7 +_,7 @@
+ 
+ 		public void SetMount(int m, Player mountedPlayer, bool faceLeft = false)
+ 		{
+-			if (this._type == m || m <= -1 || m >= 14)
++			if (this._type == m || m <= -1 || m >= mounts.Length)
+ 			{
+ 				return;
+ 			}
+

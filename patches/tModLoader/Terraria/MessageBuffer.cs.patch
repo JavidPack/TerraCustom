@@ -1,0 +1,112 @@
+--- src/Terraria\Terraria\MessageBuffer.cs
++++ src/tModLoader\Terraria\MessageBuffer.cs
+@@ -9,6 +_,9 @@
+ using Terraria.GameContent.UI;
+ using Terraria.GameContent.UI.Chat;
+ using Terraria.ID;
++using Terraria.ModLoader;
++using Terraria.ModLoader.Exceptions;
++using Terraria.ModLoader.IO;
+ using Terraria.Net;
+ using Terraria.UI;
+ 
+@@ -1070,7 +_,7 @@
+ 								}
+ 								if (tile.wall > 0)
+ 								{
+-									tile.wall = this.reader.ReadByte();
++									tile.wall = this.reader.ReadUInt16();
+ 								}
+ 								if (flag8)
+ 								{
+@@ -1097,6 +_,7 @@
+ 						int pre = (int)this.reader.ReadByte();
+ 						int num60 = (int)this.reader.ReadByte();
+ 						int num61 = (int)this.reader.ReadInt16();
++						byte[] data = num61 >= ItemID.Count ? this.reader.ReadBytes(this.reader.ReadUInt16()) : new byte[0];
+ 						if (Main.netMode == 1)
+ 						{
+ 							if (num61 == 0)
+@@ -1106,7 +_,7 @@
+ 							}
+ 							int num62 = num59;
+ 							Item item = Main.item[num62];
+-							bool newAndShiny = (item.newAndShiny || item.netID != num61) && ItemSlot.Options.HighlightNewItems && (num61 < 0 || num61 >= 3602 || !ItemID.Sets.NeverShiny[num61]);
++							bool newAndShiny = (item.newAndShiny || item.netID != num61) && ItemSlot.Options.HighlightNewItems && (num61 < 0 || !ItemID.Sets.NeverShiny[num61]);
+ 							item.netDefaults(num61);
+ 							item.newAndShiny = newAndShiny;
+ 							item.Prefix(pre);
+@@ -1114,6 +_,13 @@
+ 							item.position = position;
+ 							item.velocity = velocity;
+ 							item.active = true;
++							try
++							{
++								ItemIO.ReadCustomData(item, data);
++							}
++							catch (CustomModDataException)
++							{
++							}
+ 							if (b == 90)
+ 							{
+ 								item.instanced = true;
+@@ -1159,6 +_,13 @@
+ 								item3.position = position;
+ 								item3.velocity = velocity;
+ 								item3.active = true;
++								try
++								{
++									ItemIO.ReadCustomData(item3, data);
++								}
++								catch (CustomModDataException)
++								{
++								}
+ 								item3.owner = Main.myPlayer;
+ 								if (flag9)
+ 								{
+@@ -1292,8 +_,8 @@
+ 						if (Main.npcCatchable[nPC.type])
+ 						{
+ 							nPC.releaseOwner = (short)this.reader.ReadByte();
+-							return;
+-						}
++						}
++						NPCLoader.ReceiveExtraAI(nPC, reader);
+ 						return;
+ 					}
+ 				case 24:
+@@ -1472,6 +_,7 @@
+ 						{
+ 							num84 = -1;
+ 						}
++						byte[] extraAI = ProjectileLoader.ReadExtraAI(reader, bitsByte14);
+ 						if (Main.netMode == 2)
+ 						{
+ 							num81 = this.whoAmI;
+@@ -1525,6 +_,7 @@
+ 							projectile.projUUID = num84;
+ 							Main.projectileIdentity[num81, num84] = num85;
+ 						}
++						ProjectileLoader.ReceiveExtraAI(projectile, extraAI);
+ 						projectile.ProjectileFixDesperation();
+ 						if (Main.netMode == 2)
+ 						{
+@@ -1669,6 +_,17 @@
+ 						Main.chest[num99].item[num100].netDefaults(type4);
+ 						Main.chest[num99].item[num100].Prefix(pre2);
+ 						Main.chest[num99].item[num100].stack = stack4;
++						if (type4 >= ItemID.Count)
++						{
++							byte[] data = this.reader.ReadBytes(this.reader.ReadUInt16());
++							try
++							{
++								ItemIO.ReadCustomData(Main.chest[num99].item[num100], data);
++							}
++							catch (CustomModDataException)
++							{
++							}
++						}
+ 						Recipe.FindRecipes();
+ 						return;
+ 					}
+
