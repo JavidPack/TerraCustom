@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria\NetMessage.cs
 +++ src/tModLoader\Terraria\NetMessage.cs
-@@ -6,6 +_,8 @@
+@@ -7,6 +_,8 @@
  using Terraria.GameContent.Tile_Entities;
  using Terraria.ID;
  using Terraria.IO;
@@ -9,7 +9,28 @@
  using Terraria.Net.Sockets;
  using Terraria.Social;
  
-@@ -429,6 +_,7 @@
+@@ -42,7 +_,7 @@
+ 				switch (msgType)
+ 				{
+ 					case 1:
+-						writer.Write("Terraria" + Main.curRelease);
++						writer.Write(ModLoader.ModLoader.versionedName);
+ 						break;
+ 					case 2:
+ 						writer.Write(text);
+@@ -404,7 +_,10 @@
+ 									}
+ 									if (tile.wall > 0)
+ 									{
+-										writer.Write(tile.wall);
++										if (ModNet.AllowVanillaClients)
++											writer.Write((byte)tile.wall);
++										else
++											writer.Write(tile.wall);
+ 									}
+ 									if (tile.liquid > 0 && Main.netMode == 2)
+ 									{
+@@ -431,6 +_,7 @@
  								value = (short)item2.netID;
  							}
  							writer.Write(value);
@@ -17,7 +38,7 @@
  							break;
  						}
  					case 22:
-@@ -496,6 +_,7 @@
+@@ -498,6 +_,7 @@
  							{
  								writer.Write((byte)nPC.releaseOwner);
  							}
@@ -25,24 +46,32 @@
  							break;
  						}
  					case 24:
-@@ -541,7 +_,7 @@
+@@ -544,10 +_,11 @@
  									bb14[num10] = true;
  								}
  							}
--							if (projectile.type > 0 && projectile.type < 651 && ProjectileID.Sets.NeedsUUID[projectile.type])
+-							if (projectile.type > 0 && projectile.type < 656 && ProjectileID.Sets.NeedsUUID[projectile.type])
 +							if (projectile.type > 0 && ProjectileID.Sets.NeedsUUID[projectile.type])
  							{
  								bb14[Projectile.maxAI] = true;
  							}
-@@ -557,6 +_,7 @@
++							byte[] extraAI = ProjectileLoader.SendExtraAI(projectile, ref bb14);
+ 							writer.Write(bb14);
+ 							for (int num11 = 0; num11 < Projectile.maxAI; num11++)
  							{
- 								writer.Write((short)projectile.projUUID);
+@@ -555,6 +_,11 @@
+ 								{
+ 									writer.Write(projectile.ai[num11]);
+ 								}
++							}
++							if (bb14[Projectile.maxAI + 1])
++							{
++								writer.Write((byte)extraAI.Length);
++								writer.Write(extraAI);
  							}
-+							ProjectileLoader.SendExtraAI(projectile, writer, ref bb14);
- 							break;
- 						}
- 					case 28:
-@@ -591,6 +_,7 @@
+ 							if (bb14[Projectile.maxAI])
+ 							{
+@@ -594,6 +_,7 @@
  							writer.Write((short)item3.stack);
  							writer.Write(item3.prefix);
  							writer.Write(value3);
@@ -50,33 +79,40 @@
  							break;
  						}
  					case 33:
-@@ -1426,7 +_,7 @@
+@@ -1461,7 +_,7 @@
  			int num5 = 0;
  			int num6 = 0;
  			byte b = 0;
 -			byte[] array4 = new byte[13];
-+			byte[] array4 = new byte[14];
++			byte[] array4 = new byte[ModNet.AllowVanillaClients ? 13 : 14];
  			Tile tile = null;
  			for (int i = yStart; i < yStart + height; i++)
  			{
-@@ -1557,7 +_,10 @@
+@@ -1603,7 +_,17 @@
  						if (tile2.wall != 0)
  						{
  							b |= 4;
 -							array4[num5] = tile2.wall;
-+							byte[] wallBytes = BitConverter.GetBytes(tile2.wall);
-+							array4[num5] = wallBytes[0];
-+							num5++;
-+							array4[num5] = wallBytes[1];
++							if (ModNet.AllowVanillaClients)
++							{
++								array4[num5] = (byte) tile2.wall;
++							}
++							else
++							{
++								byte[] wallBytes = BitConverter.GetBytes(tile2.wall);
++								array4[num5] = wallBytes[0];
++								num5++;
++								array4[num5] = wallBytes[1];
++							}
  							num5++;
  							if (tile2.wallColor() != 0)
  							{
-@@ -1789,7 +_,7 @@
+@@ -1839,7 +_,7 @@
  						}
  						if ((b3 & 4) == 4)
  						{
 -							tile.wall = reader.ReadByte();
-+							tile.wall = reader.ReadUInt16();
++							tile.wall = ModNet.AllowVanillaClients ? reader.ReadByte() : reader.ReadUInt16();
  							if ((b & 16) == 16)
  							{
  								tile.wallColor(reader.ReadByte());

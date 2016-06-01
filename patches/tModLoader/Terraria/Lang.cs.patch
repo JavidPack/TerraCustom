@@ -1,12 +1,13 @@
 --- src/Terraria\Terraria\Lang.cs
 +++ src/tModLoader\Terraria\Lang.cs
-@@ -1,4 +_,5 @@
+@@ -1,5 +_,6 @@
  using System;
+ using Terraria.ID;
 +using Terraria.ModLoader;
  
  #if CLIENT
  using Terraria.Map;
-@@ -17,7 +_,7 @@
+@@ -18,7 +_,7 @@
  		public static string[] dt = new string[4];
  		public static string[] chestType = new string[52];
  		public static string[] dresserType = new string[28];
@@ -15,7 +16,7 @@
  		public static string[] prefix = new string[84];
  		public static string the;
  
-@@ -3519,6 +_,10 @@
+@@ -3520,6 +_,10 @@
  
  		public static string npcName(int l, bool english = false)
  		{
@@ -26,10 +27,17 @@
  			if (Lang.lang <= 1 || english)
  			{
  				switch (l)
-@@ -31781,6 +_,16 @@
- 							text = "\n(Caught Jungle Surface)";
+@@ -32339,10 +_,21 @@
+ 							array = array2;
  						}
- 						break;
+ 						else
++						//patch file: array, array2, flag, text
+ 						{
+ 							array[num2++] = "Piranhas and sharks are ugly! Soooo ugly! Did you know there's a fish that looks very pretty and still can eat your face off? I would pay 2 platinum to see that happen, by the way... To the point, though, you catchy for me. Just make sure I have it before you lose your face!";
+ 							flag = true;
+ 							text = "\n(Caught Jungle Surface)";
++						}
++						break;
 +					default:
 +						if (gotFish)
 +						{
@@ -38,12 +46,10 @@
 +						else
 +						{
 +							flag = true;
-+						}
-+						break;
+ 						}
+ 						break;
  				}
- 			}
- 			string text2 = array[0];
-@@ -31791,6 +_,7 @@
+@@ -32355,6 +_,7 @@
  					text2 = text2 + " " + array[i];
  				}
  			}
@@ -51,7 +57,7 @@
  			if (text.Length > 0)
  			{
  				text2 = text2 + "\n" + text;
-@@ -32679,7 +_,7 @@
+@@ -33394,7 +_,7 @@
  #if CLIENT
  				if (Lang.mapLegend == null)
  				{

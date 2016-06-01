@@ -8,15 +8,22 @@
  using Terraria.ObjectData;
  
  namespace Terraria
-@@ -787,6 +_,7 @@
- 					}
- 				}
- 			}
+@@ -851,9 +_,11 @@
+ 								Main.travelShop[num2++] = 3641;
+ 								break;
+ 						}
+-					}
+-				}
+-			}
++						//patch file: num2
++					}
++				}
++			}
 +			NPCLoader.SetupTravelShop(Main.travelShop, ref num2);
  		}
  
  		public void SetupShop(int type)
-@@ -1891,6 +_,7 @@
+@@ -1982,6 +_,7 @@
  					num++;
  				}
  			}

@@ -54,6 +54,8 @@ namespace Terraria.ModLoader
 
 		internal static int ReserveProjectileID()
 		{
+			if (ModNet.AllowVanillaClients) throw new Exception("Adding projectiles breaks vanilla client compatiblity");
+
 			int reserveID = nextProjectile;
 			nextProjectile++;
 			return reserveID;
@@ -74,6 +76,7 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Main.projHook, nextProjectile);
 			Array.Resize(ref Main.projFrames, nextProjectile);
 			Array.Resize(ref Main.projPet, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.ForcePlateDetection, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.TrailingMode, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.TrailCacheLength, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.LightPet, nextProjectile);
@@ -212,7 +215,7 @@ namespace Terraria.ModLoader
 		}
 		//in Terraria.NetMessage.SendData at end of case 27 call
 		//  ProjectileLoader.SendExtraAI(projectile, writer, ref bb14);
-		public static void SendExtraAI(Projectile projectile, BinaryWriter writer, ref BitsByte flags)
+		public static byte[] SendExtraAI(Projectile projectile, ref BitsByte flags)
 		{
 			if (projectile.modProjectile != null)
 			{
@@ -229,10 +232,10 @@ namespace Terraria.ModLoader
 				if (data.Length > 0)
 				{
 					flags[Projectile.maxAI + 1] = true;
-					writer.Write((byte)data.Length);
-					writer.Write(data);
 				}
+				return data;
 			}
+			return new byte[0];
 		}
 		//in Terraria.MessageBuffer.GetData for case 27 after reading all data add
 		//  byte[] extraAI = ProjectileLoader.ReadExtraAI(reader, bitsByte14);

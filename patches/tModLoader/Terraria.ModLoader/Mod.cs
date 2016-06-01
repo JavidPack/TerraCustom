@@ -22,11 +22,14 @@ namespace Terraria.ModLoader
 		public Version Version => File?.version ?? ModLoader.version;
 
 		public ModProperties Properties { get; protected set; }
+		public ModSide Side { get; internal set; }
+		public string DisplayName { get; internal set; }
+
+		internal short netID = -1;
 
 		internal readonly IDictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 		internal readonly IDictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 		internal readonly IList<ModRecipe> recipes = new List<ModRecipe>();
-		internal readonly IDictionary<string, CraftGroup> craftGroups = new Dictionary<string, CraftGroup>();
 		internal readonly IDictionary<string, ModItem> items = new Dictionary<string, ModItem>();
 		internal readonly IDictionary<string, GlobalItem> globalItems = new Dictionary<string, GlobalItem>();
 		internal readonly IDictionary<string, EquipTexture> equipTextures = new Dictionary<string, EquipTexture>();
@@ -58,26 +61,8 @@ namespace Terraria.ModLoader
 		{
 		}
 
-		public virtual void AddCraftGroups()
+		public virtual void AddRecipeGroups()
 		{
-		}
-
-		public void AddCraftGroup(string name, string displayName, params int[] items)
-		{
-			CraftGroup group = new CraftGroup(name, displayName, items);
-			craftGroups[name] = group;
-		}
-
-		public CraftGroup GetCraftGroup(string name)
-		{
-			if (craftGroups.ContainsKey(name))
-			{
-				return craftGroups[name];
-			}
-			else
-			{
-				return null;
-			}
 		}
 
 		public virtual void AddRecipes()
@@ -1332,7 +1317,6 @@ namespace Terraria.ModLoader
 		{
 			Unload();
 			recipes.Clear();
-			craftGroups.Clear();
 			items.Clear();
 			globalItems.Clear();
 			equipTextures.Clear();
@@ -1403,6 +1387,15 @@ namespace Terraria.ModLoader
 		public virtual object Call(params object[] args)
 		{
 			return null;
+		}
+
+		public ModPacket GetPacket(int capacity = 256) {
+			if (netID < 0)
+				throw new Exception("Cannot get packet for "+Name+" because it does not exist on the other side");
+
+			var p = new ModPacket(MessageID.ModPacket, capacity+5);
+			p.Write(netID);
+			return p;
 		}
 	}
 }

@@ -125,6 +125,8 @@ namespace Terraria.ModLoader
 
 		internal static int ReserveNPCID()
 		{
+			if (ModNet.AllowVanillaClients) throw new Exception("Adding npcs breaks vanilla client compatiblity");
+
 			int reserveID = nextNPC;
 			nextNPC++;
 			return reserveID;
@@ -152,6 +154,8 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Main.npcFrameCount, nextNPC);
 			Array.Resize(ref NPC.killCount, nextNPC);
 			Array.Resize(ref EmoteBubble.CountNPCs, nextNPC);
+			Array.Resize(ref NPCID.Sets.StatueSpawnedDropRarity, nextNPC);
+			Array.Resize(ref NPCID.Sets.NoEarlymodeLootWhenSpawnedFromStatue, nextNPC);
 			Array.Resize(ref NPCID.Sets.NeedsExpertScaling, nextNPC);
 			Array.Resize(ref NPCID.Sets.ProjectileNPC, nextNPC);
 			Array.Resize(ref NPCID.Sets.SavesAndLoads, nextNPC);
@@ -175,6 +179,7 @@ namespace Terraria.ModLoader
 			{
 				Main.NPCLoaded[k] = true;
 				Main.npcFrameCount[k] = 1;
+				NPCID.Sets.StatueSpawnedDropRarity[k] = -1f;
 				NPCID.Sets.TrailCacheLength[k] = 10;
 				NPCID.Sets.DangerDetectRange[k] = -1;
 				NPCID.Sets.AttackTime[k] = -1;
@@ -400,14 +405,17 @@ namespace Terraria.ModLoader
 		//  NPCLoader.ReceiveExtraAI(nPC, reader);
 		public static void ReceiveExtraAI(NPC npc, BinaryReader reader)
 		{
-			byte[] extraAI = reader.ReadBytes(reader.ReadByte());
-			if (extraAI.Length > 0 && npc.modNPC != null)
+			if (npc.modNPC != null)
 			{
-				using (MemoryStream stream = new MemoryStream(extraAI))
+				byte[] extraAI = reader.ReadBytes(reader.ReadByte());
+				if (extraAI.Length > 0)
 				{
-					using (BinaryReader modReader = new BinaryReader(stream))
+					using (MemoryStream stream = new MemoryStream(extraAI))
 					{
-						npc.modNPC.ReceiveExtraAI(modReader);
+						using (BinaryReader modReader = new BinaryReader(stream))
+						{
+							npc.modNPC.ReceiveExtraAI(modReader);
+						}
 					}
 				}
 			}

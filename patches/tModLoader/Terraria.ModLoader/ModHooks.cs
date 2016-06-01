@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using Microsoft.Xna.Framework;
+using Terraria.GameInput;
 
 namespace Terraria.ModLoader
 {
@@ -14,6 +17,20 @@ namespace Terraria.ModLoader
 
 		public virtual void HotKeyPressed(string name)
 		{
+		}
+
+		public virtual void HandlePacket(BinaryReader reader, int whoAmI)
+		{
+		}
+
+		public virtual bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
+		{
+			return false;
+		}
+
+		public virtual Matrix ModifyTransformMatrix(Matrix Transform)
+		{
+			return Transform;
 		}
 	}
 
@@ -40,19 +57,34 @@ namespace Terraria.ModLoader
 			}
 		}
 
-		internal static void HotKeyPressed(string key)
+		internal static void HotKeyPressed()
 		{
-			// Key is name, value is keycode
-			foreach (var item in ModLoader.modHotKeys)
+			foreach (var modHotkey in ModLoader.modHotKeys)
 			{
-				if (item.Value.Item2.Equals(key))
+				if (PlayerInput.Triggers.Current.KeyStatus[modHotkey.Value.displayName])
 				{
-					foreach (Mod mod in ModLoader.mods.Values)
-					{
-						mod.HotKeyPressed(item.Key);
-					}
+					modHotkey.Value.mod.HotKeyPressed(modHotkey.Value.name);
 				}
+				// TODO - KeyDown, KeyUp, Down?
+				//if (PlayerInput.Triggers.JustPressed.KeyStatus[modHotkey.Value.name])
+				//{
+				//}
+				//if (PlayerInput.Triggers.JustReleased.KeyStatus[modHotkey.Value.name])
+				//{
+				//}
+				//if (PlayerInput.Triggers.Old.KeyStatus[modHotkey.Value.name])
+				//{
+				//}
 			}
+		}
+
+		internal static Matrix ModifyTransformMatrix(Matrix Transform)
+		{
+			foreach (Mod mod in ModLoader.mods.Values)
+			{
+				Transform = mod.ModifyTransformMatrix(Transform);
+			}
+			return Transform;
 		}
 	}
 }

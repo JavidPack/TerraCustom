@@ -20,33 +20,35 @@ namespace Terraria.ModLoader
 	public static class ModLoader
 	{
 		//change Terraria.Main.DrawMenu change drawn version number string to include this
-		public static readonly Version version = new Version(0, 8, 0, 0);
+		public static readonly Version version = new Version(0, 8, 1, 1);
 		public static readonly string versionedName = "tModLoader v" + version;
 #if WINDOWS
 		public const bool windows = true;
 
 #else
-        public const bool windows = false;
+		public const bool windows = false;
 #endif
 		//change Terraria.Main.SavePath and cloud fields to use "ModLoader" folder
 		public static readonly string ModPath = Main.SavePath + Path.DirectorySeparatorChar + "Mods";
 		public static readonly string ModSourcePath = Main.SavePath + Path.DirectorySeparatorChar + "Mod Sources";
 		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
-		private static bool assemblyResolverAdded = false;
 		internal const int earliestRelease = 149;
 		internal static string modToBuild;
 		internal static bool reloadAfterBuild = false;
 		internal static bool buildAll = false;
-		internal static int numLoads;
 		private static readonly Stack<string> loadOrder = new Stack<string>();
+		private static Mod[] loadedMods;
 		internal static readonly IDictionary<string, Mod> mods = new Dictionary<string, Mod>();
-		internal static readonly IDictionary<string, Tuple<Mod, string, string>> modHotKeys = new Dictionary<string, Tuple<Mod, string, string>>();
+		internal static readonly IDictionary<string, ModHotkey> modHotKeys = new Dictionary<string, ModHotkey>();
 		internal static readonly string modBrowserPublicKey = "<RSAKeyValue><Modulus>oCZObovrqLjlgTXY/BKy72dRZhoaA6nWRSGuA+aAIzlvtcxkBK5uKev3DZzIj0X51dE/qgRS3OHkcrukqvrdKdsuluu0JmQXCv+m7sDYjPQ0E6rN4nYQhgfRn2kfSvKYWGefp+kqmMF9xoAq666YNGVoERPm3j99vA+6EIwKaeqLB24MrNMO/TIf9ysb0SSxoV8pC/5P/N6ViIOk3adSnrgGbXnFkNQwD0qsgOWDks8jbYyrxUFMc4rFmZ8lZKhikVR+AisQtPGUs3ruVh4EWbiZGM2NOkhOCOM4k1hsdBOyX2gUliD0yjK5tiU3LBqkxoi2t342hWAkNNb4ZxLotw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+		internal static Action PostLoad;
 
 		internal static bool ModLoaded(string name)
 		{
 			return mods.ContainsKey(name);
 		}
+
+		public static int ModCount => loadedMods.Length;
 
 		public static Mod GetMod(string name)
 		{
@@ -54,6 +56,13 @@ namespace Terraria.ModLoader
 			mods.TryGetValue(name, out m);
 			return m;
 		}
+
+		public static Mod GetMod(int index)
+		{
+			return index >= 0 && index < loadedMods.Length ? loadedMods[index] : null;
+		}
+
+		public static Mod[] LoadedMods => (Mod[]) loadedMods.Clone();
 
 		public static string[] GetLoadedMods()
 		{
@@ -114,6 +123,10 @@ namespace Terraria.ModLoader
 				}
 				num++;
 			}
+
+			if (Main.dedServ)
+				ModNet.AssignNetIDs();
+
 			MapLoader.SetupModMap();
 			Interface.loadMods.SetProgressRecipes();
 			for (int k = 0; k < Recipe.maxRecipes; k++)
@@ -121,20 +134,27 @@ namespace Terraria.ModLoader
 				Main.recipe[k] = new Recipe();
 			}
 			Recipe.numRecipes = 0;
+			RecipeGroupHelper.ResetRecipeGroups();
 			try
 			{
-				CraftGroup.ResetVanillaGroups();
-				AddCraftGroups();
 				Recipe.SetupRecipes();
 			}
-			catch (Exception e)
+			catch (AddRecipesException e)
 			{
-				ErrorLogger.LogLoadingError("recipes", version, e);
+				ErrorLogger.LogLoadingError(e.modName, version, e.InnerException, true);
 				Main.menuMode = Interface.errorMessageID;
 				return;
 			}
-			Main.menuMode = 0;
-			numLoads++;
+			if (PostLoad != null)
+			{
+				PostLoad();
+				PostLoad = null;
+			}
+			else
+			{
+				Main.menuMode = 0;
+			}
+			GameInput.PlayerInput.ReInitialize();
 		}
 
 		private static void ResizeArrays(bool unloading = false)
@@ -179,6 +199,7 @@ namespace Terraria.ModLoader
 			var modsToLoad = FindMods()
 				.Where(IsEnabled)
 				.Select(mod => new LoadingMod(mod, BuildProperties.ReadModFile(mod)))
+				.Where(mod => LoadSide(mod.properties.side))
 				.ToList();
 
 			if (!VerifyNames(modsToLoad))
@@ -202,6 +223,7 @@ namespace Terraria.ModLoader
 				return false;
 
 			modInstances.Insert(0, new ModLoaderMod());
+			loadedMods = modInstances.ToArray();
 			foreach (var mod in modInstances)
 			{
 				loadOrder.Push(mod.Name);
@@ -307,6 +329,7 @@ namespace Terraria.ModLoader
 				GetMod(loadOrder.Pop()).UnloadContent();
 
 			loadOrder.Clear();
+			loadedMods = new Mod[0];
 
 			ItemLoader.Unload();
 			EquipLoader.Unload();
@@ -327,6 +350,9 @@ namespace Terraria.ModLoader
 			modHotKeys.Clear();
 			WorldHooks.Unload();
 			RecipeHooks.Unload();
+
+			if (!Main.dedServ && Main.netMode != 1) //disable vanilla client compatiblity restrictions when reloading on a client
+				ModNet.AllowVanillaClients = false;
 		}
 
 		internal static void Reload()
@@ -334,6 +360,8 @@ namespace Terraria.ModLoader
 			Unload();
 			Main.menuMode = Interface.loadModsID;
 		}
+
+		internal static bool LoadSide(ModSide side) => side != (Main.dedServ ? ModSide.Client : ModSide.Server);
 
 		internal static bool IsEnabled(TmodFile mod)
 		{
@@ -493,82 +521,46 @@ namespace Terraria.ModLoader
 
 		public static void RegisterHotKey(Mod mod, string name, string defaultKey)
 		{
-			string configurationString = mod.Name + "_" + "HotKey" + "_" + name.Replace(' ', '_');
-			string keyFromConfigutation = Main.Configuration.Get<string>(configurationString, defaultKey);
-			modHotKeys[name] = new Tuple<Mod, string, string>(mod, keyFromConfigutation, defaultKey);
+			//string configurationString = mod.Name + "_" + "HotKey" + "_" + name.Replace(' ', '_');
+			//string keyFromConfigutation = Main.Configuration.Get<string>(configurationString, defaultKey);
+			modHotKeys[name] = new ModHotkey(name, mod, defaultKey);
 		}
 		// example: ExampleMod_HotKey_Random_Buff="P"
-		internal static void SaveConfiguration()
-		{
-			foreach (KeyValuePair<string, Tuple<Mod, string, string>> hotKey in modHotKeys)
-			{
-				string name = hotKey.Value.Item1.Name + "_" + "HotKey" + "_" + hotKey.Key.Replace(' ', '_');
-				Main.Configuration.Put(name, hotKey.Value.Item2);
-			}
+		//internal static void SaveConfiguration()
+		//{
+		//	foreach (KeyValuePair<string, Tuple<Mod, string, string>> hotKey in modHotKeys)
+		//	{
+		//		string name = hotKey.Value.Item1.Name + "_" + "HotKey" + "_" + hotKey.Key.Replace(' ', '_');
+		//		Main.Configuration.Put(name, hotKey.Value.Item2);
+		//	}
+		//}
+
+		/// <summary>
+		/// Allows type inference on T and F
+		/// </summary>
+		internal static void BuildGlobalHook<T, F>(ref F[] list, IList<T> providers, Expression<Func<T, F>> expr) {
+			list = BuildGlobalHook(providers, expr).Select(expr.Compile()).ToArray();
 		}
 
-		private static void AddCraftGroups()
-		{
-			foreach (Mod mod in mods.Values)
-			{
-				try
-				{
-					mod.AddCraftGroups();
-				}
-				catch
-				{
-					DisableMod(mod.File);
-					throw;
-				}
+		internal static T[] BuildGlobalHook<T, F>(IList<T> providers, Expression<Func<T, F>> expr) {
+			MethodInfo method;
+			try {
+				var convert = expr.Body as UnaryExpression;
+				var makeDelegate = convert.Operand as MethodCallExpression;
+				var methodArg = makeDelegate.Arguments[2] as ConstantExpression;
+				method = methodArg.Value as MethodInfo;
+				if (method == null) throw new NullReferenceException();
 			}
+			catch (Exception e) {
+				throw new ArgumentException("Invalid hook expression " + expr, e);
+			}
+
+			if (!method.IsVirtual) throw new ArgumentException("Cannot build hook for non-virtual method " + method);
+			var argTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
+			return providers.Where(p => p.GetType().GetMethod(method.Name, argTypes).DeclaringType != typeof(T)).ToArray();
 		}
-		//place near end of Terraria.Recipe.SetupRecipes before material checks
-		internal static void AddRecipes()
-		{
-			foreach (Mod mod in mods.Values)
-			{
-				try
-				{
-					mod.AddRecipes();
-					foreach (ModItem item in mod.items.Values)
-					{
-						item.AddRecipes();
-					}
-				}
-				catch
-				{
-					DisableMod(mod.File);
-					throw;
-				}
-			}
-        }
 
-        /// <summary>
-        /// Allows type inference on T and F
-        /// </summary>
-	    internal static void BuildGlobalHook<T, F>(ref F[] list, IList<T> providers, Expression<Func<T, F>> expr) {
-	        list = BuildGlobalHook(providers, expr).Select(expr.Compile()).ToArray();
-	    }
-
-	    internal static T[] BuildGlobalHook<T, F>(IList<T> providers, Expression<Func<T, F>> expr) {
-            MethodInfo method;
-            try {
-                var convert = expr.Body as UnaryExpression;
-                var makeDelegate = convert.Operand as MethodCallExpression;
-                var methodArg = makeDelegate.Arguments[2] as ConstantExpression;
-                method = methodArg.Value as MethodInfo;
-                if (method == null) throw new NullReferenceException();
-            }
-            catch (Exception e) {
-                throw new ArgumentException("Invalid hook expression " + expr, e);
-            }
-
-            if (!method.IsVirtual) throw new ArgumentException("Cannot build hook for non-virtual method " + method);
-            var argTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
-            return providers.Where(p => p.GetType().GetMethod(method.Name, argTypes).DeclaringType != typeof(T)).ToArray();
-        }
-
-        internal class LoadingMod
+		internal class LoadingMod
 		{
 			public readonly TmodFile modFile;
 			public readonly BuildProperties properties;

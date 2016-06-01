@@ -22,6 +22,7 @@ namespace Terraria.ModLoader
 		internal const int modControlsID = 10010;
 		internal const int managePublishedID = 10011;
 		internal const int updateMessageID = 10012;
+		internal const int infoMessageID = 10013;
 		private static UIMods modsMenu = new UIMods();
 		internal static UILoadMods loadMods = new UILoadMods();
 		private static UIModSources modSources = new UIModSources();
@@ -32,8 +33,9 @@ namespace Terraria.ModLoader
 		internal static UIDownloadMod downloadMod = new UIDownloadMod();
 		internal static UIManagePublished managePublished = new UIManagePublished();
 		internal static UIUpdateMessage updateMessage = new UIUpdateMessage();
+		internal static UIInfoMessage infoMessage = new UIInfoMessage();
 		//add to Terraria.Main.DrawMenu in Main.menuMode == 0 after achievements
-		//Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num9, ref num4);
+		//Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num10, ref num5);
 		internal static void AddMenuButtons(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, ref int offY, ref int spacing, ref int buttonIndex, ref int numButtons)
 		{
 			buttonNames[buttonIndex] = "Mods";
@@ -68,23 +70,23 @@ namespace Terraria.ModLoader
 			spacing = 45;
 		}
 
-		internal static void AddSettingsMenuButtons(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, int[] virticalSpacing, ref int offY, ref int spacing, ref int buttonIndex, ref int numButtons)
-		{
-			buttonIndex++;
-			numButtons++;
-			buttonNames[buttonIndex] = "Mod " + Lang.menu[66];
-			if (selectedMenu == buttonIndex)
-			{
-				Main.PlaySound(10, -1, -1, 1);
-				Main.menuMode = modControlsID;
-			}
-			for (int k = 0; k < numButtons; k++)
-			{
-				buttonScales[k] = 0.73f;
-				virticalSpacing[k] = 0;
-			}
-			virticalSpacing[numButtons - 1] = 8;
-		}
+		//internal static void AddSettingsMenuButtons(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, int[] virticalSpacing, ref int offY, ref int spacing, ref int buttonIndex, ref int numButtons)
+		//{
+		//	buttonIndex++;
+		//	numButtons++;
+		//	buttonNames[buttonIndex] = "Mod " + Lang.menu[66];
+		//	if (selectedMenu == buttonIndex)
+		//	{
+		//		Main.PlaySound(10, -1, -1, 1);
+		//		Main.menuMode = modControlsID;
+		//	}
+		//	for (int k = 0; k < numButtons; k++)
+		//	{
+		//		buttonScales[k] = 0.73f;
+		//		virticalSpacing[k] = 0;
+		//	}
+		//	virticalSpacing[numButtons - 1] = 8;
+		//}
 		//add to end of if else chain of Main.menuMode in Terraria.Main.DrawMenu
 		//Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num4);
 		internal static void ModLoaderMenus(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, int[] buttonVerticalSpacing, ref int offY, ref int spacing, ref int numButtons)
@@ -146,13 +148,18 @@ namespace Terraria.ModLoader
 				Main.MenuUI.SetState(managePublished);
 				Main.menuMode = 888;
 			}
-			else if (Main.menuMode == modControlsID)
-			{
-				UIModControls.ModLoaderMenus(main, selectedMenu, buttonNames, buttonScales, buttonVerticalSpacing, ref offY, ref spacing, ref numButtons);
-			}
+			//else if (Main.menuMode == modControlsID)
+			//{
+			//	UIModControls.ModLoaderMenus(main, selectedMenu, buttonNames, buttonScales, buttonVerticalSpacing, ref offY, ref spacing, ref numButtons);
+			//}
 			else if (Main.menuMode == updateMessageID)
 			{
 				Main.MenuUI.SetState(updateMessage);
+				Main.menuMode = 888;
+			}
+			else if (Main.menuMode == infoMessageID)
+			{
+				Main.MenuUI.SetState(infoMessage);
 				Main.menuMode = 888;
 			}
 		}

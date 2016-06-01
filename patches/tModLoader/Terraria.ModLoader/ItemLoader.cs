@@ -116,6 +116,8 @@ namespace Terraria.ModLoader
 
 		internal static int ReserveItemID()
 		{
+			if (ModNet.AllowVanillaClients) throw new Exception("Adding items breaks vanilla client compatiblity");
+
 			int reserveID = nextItem;
 			nextItem++;
 			return reserveID;
@@ -135,8 +137,11 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Main.itemFlameLoaded, nextItem);
 			Array.Resize(ref Main.itemFlameTexture, nextItem);
 			Array.Resize(ref Main.itemAnimations, nextItem);
+			Array.Resize(ref Item.itemCaches, nextItem);
 			Array.Resize(ref Item.staff, nextItem);
 			Array.Resize(ref Item.claw, nextItem);
+			//Array.Resize(ref ItemID.Sets.TextureCopyLoad, nextItem); //not needed?
+			Array.Resize(ref ItemID.Sets.TrapSigned, nextItem);
 			Array.Resize(ref ItemID.Sets.Deprecated, nextItem);
 			Array.Resize(ref ItemID.Sets.NeverShiny, nextItem);
 			Array.Resize(ref ItemID.Sets.ItemIconPulse, nextItem);
@@ -147,17 +152,42 @@ namespace Terraria.ModLoader
 			Array.Resize(ref ItemID.Sets.NebulaPickup, nextItem);
 			Array.Resize(ref ItemID.Sets.AnimatesAsSoul, nextItem);
 			Array.Resize(ref ItemID.Sets.gunProj, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityBossSpawns, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityWiring, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityMaterials, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityExtractibles, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityRopes, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityPainting, nextItem);
+			Array.Resize(ref ItemID.Sets.SortingPriorityTerraforming, nextItem);
+			Array.Resize(ref ItemID.Sets.GamepadExtraRange, nextItem);
+			Array.Resize(ref ItemID.Sets.GamepadWholeScreenUseRange, nextItem);
+			Array.Resize(ref ItemID.Sets.GamepadSmartQuickReach, nextItem);
+			Array.Resize(ref ItemID.Sets.Yoyo, nextItem);
+			Array.Resize(ref ItemID.Sets.AlsoABuildingItem, nextItem);
+			Array.Resize(ref ItemID.Sets.LockOnIgnoresCollision, nextItem);
+			Array.Resize(ref ItemID.Sets.LockOnAimAbove, nextItem);
+			Array.Resize(ref ItemID.Sets.LockOnAimCompensation, nextItem);
+			Array.Resize(ref ItemID.Sets.SingleUseInGamepad, nextItem);
 			for (int k = ItemID.Count; k < nextItem; k++)
 			{
+				Item.itemCaches[k] = -1;
+				//ItemID.Sets.TextureCopyLoad[k] = -1;
 				ItemID.Sets.ExtractinatorMode[k] = -1;
 				ItemID.Sets.StaffMinionSlotsRequired[k] = 1;
+				ItemID.Sets.SortingPriorityBossSpawns[k] = -1;
+				ItemID.Sets.SortingPriorityWiring[k] = -1;
+				ItemID.Sets.SortingPriorityMaterials[k] = -1;
+				ItemID.Sets.SortingPriorityExtractibles[k] = -1;
+				ItemID.Sets.SortingPriorityRopes[k] = -1;
+				ItemID.Sets.SortingPriorityPainting[k] = -1;
+				ItemID.Sets.SortingPriorityTerraforming[k] = -1;
 			}
 			Array.Resize(ref Main.anglerQuestItemNetIDs, vanillaQuestFishCount + questFish.Count);
 			for (int k = 0; k < questFish.Count; k++)
 			{
 				Main.anglerQuestItemNetIDs[vanillaQuestFishCount + k] = questFish[k];
 			}
-            
+			
 			ModLoader.BuildGlobalHook(ref HookSetDefaults, globalItems, g => g.SetDefaults);
 			ModLoader.BuildGlobalHook(ref HookCanUseItem, globalItems, g => g.CanUseItem);
 			ModLoader.BuildGlobalHook(ref HookCanUseItem, globalItems, g => g.CanUseItem);
@@ -1334,7 +1364,7 @@ namespace Terraria.ModLoader
 			foreach (var hook in HookOnCraft)
 			{
 				hook(item, recipe);
-            }
+			}
 		}
 	}
 }
