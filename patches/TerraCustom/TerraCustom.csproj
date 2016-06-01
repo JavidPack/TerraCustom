@@ -167,7 +167,6 @@
     <Compile Include="Terraria.GameContent.Dyes\LegacyHairShaderData.cs" />
     <Compile Include="Terraria.GameContent.Dyes\ReflectiveArmorShaderData.cs" />
     <Compile Include="Terraria.GameContent.Dyes\TeamArmorShaderData.cs" />
-    <Compile Include="Terraria.GameContent.Events\BlameNPCTest.cs" />
     <Compile Include="Terraria.GameContent.Events\CultistRitual.cs" />
     <Compile Include="Terraria.GameContent.Events\MoonlordDeathDrama.cs" />
     <Compile Include="Terraria.GameContent.Events\ScreenDarkness.cs" />
@@ -195,9 +194,11 @@
     <Compile Include="Terraria.GameContent.Skies\StardustSky.cs" />
     <Compile Include="Terraria.GameContent.Skies\VortexSky.cs" />
     <Compile Include="Terraria.GameContent.Tile_Entities\TEItemFrame.cs" />
+    <Compile Include="Terraria.GameContent.Tile_Entities\TELogicSensor.cs" />
     <Compile Include="Terraria.GameContent.Tile_Entities\TETrainingDummy.cs" />
     <Compile Include="Terraria.GameContent.UI.Chat\AchievementTagHandler.cs" />
     <Compile Include="Terraria.GameContent.UI.Chat\ColorTagHandler.cs" />
+    <Compile Include="Terraria.GameContent.UI.Chat\GlyphTagHandler.cs" />
     <Compile Include="Terraria.GameContent.UI.Chat\ItemTagHandler.cs" />
     <Compile Include="Terraria.GameContent.UI.Chat\NameTagHandler.cs" />
     <Compile Include="Terraria.GameContent.UI.Chat\PlainTagHandler.cs" />
@@ -209,24 +210,43 @@
     <Compile Include="Terraria.GameContent.UI.Elements\UIImage.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIImageButton.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIImageFramed.cs" />
+    <Compile Include="Terraria.GameContent.UI.Elements\UIKeybindingListItem.cs" />
+    <Compile Include="Terraria.GameContent.UI.Elements\UIKeybindingSimpleListItem.cs" />
+    <Compile Include="Terraria.GameContent.UI.Elements\UIKeybindingSliderItem.cs" />
+    <Compile Include="Terraria.GameContent.UI.Elements\UIKeybindingToggleListItem.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIList.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIPanel.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIProgressBar.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIScrollbar.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIText.cs" />
+    <Compile Include="Terraria.GameContent.UI.Elements\UITextBox.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UITextPanel.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIToggleImage.cs" />
     <Compile Include="Terraria.GameContent.UI.Elements\UIWorldListItem.cs" />
     <Compile Include="Terraria.GameContent.UI.States\UIAchievementsMenu.cs" />
     <Compile Include="Terraria.GameContent.UI.States\UICharacterSelect.cs" />
+    <Compile Include="Terraria.GameContent.UI.States\UIManageControls.cs" />
+    <Compile Include="Terraria.GameContent.UI.States\UISortableElement.cs" />
+    <Compile Include="Terraria.GameContent.UI.States\UIVirtualKeyboard.cs" />
     <Compile Include="Terraria.GameContent.UI.States\UIWorldLoad.cs" />
     <Compile Include="Terraria.GameContent.UI.States\UIWorldSelect.cs" />
     <Compile Include="Terraria.GameContent.UI\EmoteBubble.cs" />
     <Compile Include="Terraria.GameContent.UI\EmoteID.cs" />
     <Compile Include="Terraria.GameContent.UI\ItemRarity.cs" />
+    <Compile Include="Terraria.GameContent.UI\WiresUI.cs" />
     <Compile Include="Terraria.GameContent.UI\WorldUIAnchor.cs" />
     <Compile Include="Terraria.GameContent\ChildSafety.cs" />
     <Compile Include="Terraria.GameContent\PortalHelper.cs" />
+    <Compile Include="Terraria.GameContent\PressurePlateHelper.cs" />
+    <Compile Include="Terraria.GameInput\InputMode.cs" />
+    <Compile Include="Terraria.GameInput\KeyConfiguration.cs" />
+    <Compile Include="Terraria.GameInput\LockOnHelper.cs" />
+    <Compile Include="Terraria.GameInput\PlayerInput.cs" />
+    <Compile Include="Terraria.GameInput\PlayerInputProfile.cs" />
+    <Compile Include="Terraria.GameInput\PresetProfiles.cs" />
+    <Compile Include="Terraria.GameInput\TriggerNames.cs" />
+    <Compile Include="Terraria.GameInput\TriggersPack.cs" />
+    <Compile Include="Terraria.GameInput\TriggersSet.cs" />
     <Compile Include="Terraria.Graphics.Capture\CaptureBiome.cs" />
     <Compile Include="Terraria.Graphics.Capture\CaptureCamera.cs" />
     <Compile Include="Terraria.Graphics.Capture\CaptureInterface.cs" />
@@ -275,6 +295,7 @@
     <Compile Include="Terraria.ID\PlayerTextureID.cs" />
     <Compile Include="Terraria.ID\PlayerVariantID.cs" />
     <Compile Include="Terraria.ID\ProjectileID.cs" />
+    <Compile Include="Terraria.ID\RecipeGroupID.cs" />
     <Compile Include="Terraria.ID\SetFactory.cs" />
     <Compile Include="Terraria.ID\StatusID.cs" />
     <Compile Include="Terraria.ID\TileEntityID.cs" />
@@ -287,6 +308,7 @@
     <Compile Include="Terraria.Initializers\NetworkInitializer.cs" />
     <Compile Include="Terraria.Initializers\PlayerDataInitializer.cs" />
     <Compile Include="Terraria.Initializers\ScreenEffectInitializer.cs" />
+    <Compile Include="Terraria.Initializers\UILinksInitializer.cs" />
     <Compile Include="Terraria.IO\FavoritesFile.cs" />
     <Compile Include="Terraria.IO\FileData.cs" />
     <Compile Include="Terraria.IO\FileMetadata.cs" />
@@ -306,6 +328,7 @@
     <Compile Include="Terraria.ModLoader.Default\MysteryWorld.cs" />
     <Compile Include="Terraria.ModLoader.Default\MysteryPlayer.cs" />
     <Compile Include="Terraria.ModLoader.Default\StartBag.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\AddRecipesException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\CustomModDataException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\DuplicateNameException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\MissingResourceException.cs" />
@@ -324,6 +347,7 @@
     <Compile Include="Terraria.ModLoader.UI\UIDownloadMod.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIErrorMessage.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIHoverImage.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIInfoMessage.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIInputTextField.cs" />
     <Compile Include="Terraria.ModLoader.UI\UILoadMods.cs" />
     <Compile Include="Terraria.ModLoader.UI\UILoadProgress.cs" />
@@ -342,7 +366,6 @@
     <Compile Include="Terraria.ModLoader\AssemblyManager.cs" />
     <Compile Include="Terraria.ModLoader\BuffLoader.cs" />
     <Compile Include="Terraria.ModLoader\BuildProperties.cs" />
-    <Compile Include="Terraria.ModLoader\CraftGroup.cs" />
     <Compile Include="Terraria.ModLoader\DrawInfo.cs" />
     <Compile Include="Terraria.ModLoader\EntityInfo.cs" />
     <Compile Include="Terraria.ModLoader\EquipLoader.cs" />
@@ -367,18 +390,23 @@
     <Compile Include="Terraria.ModLoader\ModDust.cs" />
     <Compile Include="Terraria.ModLoader\ModGore.cs" />
     <Compile Include="Terraria.ModLoader\ModHooks.cs" />
+    <Compile Include="Terraria.ModLoader\ModHotkey.cs" />
     <Compile Include="Terraria.ModLoader\ModItem.cs" />
     <Compile Include="Terraria.ModLoader\ModLoader.cs" />
     <Compile Include="Terraria.ModLoader\ModMountData.cs" />
+    <Compile Include="Terraria.ModLoader\ModNet.cs" />
     <Compile Include="Terraria.ModLoader\ModNPC.cs" />
+    <Compile Include="Terraria.ModLoader\ModPacket.cs" />
     <Compile Include="Terraria.ModLoader\ModPlayer.cs" />
     <Compile Include="Terraria.ModLoader\ModProjectile.cs" />
     <Compile Include="Terraria.ModLoader\ModProperties.cs" />
     <Compile Include="Terraria.ModLoader\ModRecipe.cs" />
+    <Compile Include="Terraria.ModLoader\ModSide.cs" />
     <Compile Include="Terraria.ModLoader\ModSound.cs" />
     <Compile Include="Terraria.ModLoader\ModTile.cs" />
     <Compile Include="Terraria.ModLoader\ModWall.cs" />
     <Compile Include="Terraria.ModLoader\ModWorld.cs" />
+    <Compile Include="Terraria.ModLoader\RecipeGroupHelper.cs" />
     <Compile Include="Terraria.ModLoader\RecipeHooks.cs" />
     <Compile Include="Terraria.ModLoader\WorldHooks.cs" />
     <Compile Include="Terraria.ModLoader\MountLoader.cs" />
@@ -427,6 +455,7 @@
     <Compile Include="Terraria.Social.Base\CloudSocialModule.cs" />
     <Compile Include="Terraria.Social.Base\FriendsSocialModule.cs" />
     <Compile Include="Terraria.Social.Base\NetSocialModule.cs" />
+    <Compile Include="Terraria.Social.Base\OverlaySocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\AchievementsSocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\CloudSocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\CoreSocialModule.cs" />
@@ -436,6 +465,7 @@
     <Compile Include="Terraria.Social.Steam\NetClientSocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\NetServerSocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\NetSocialModule.cs" />
+    <Compile Include="Terraria.Social.Steam\OverlaySocialModule.cs" />
     <Compile Include="Terraria.Social.Steam\SteamP2PReader.cs" />
     <Compile Include="Terraria.Social.Steam\SteamP2PWriter.cs" />
     <Compile Include="Terraria.Social\ISocialModule.cs" />
@@ -447,11 +477,19 @@
     <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
     <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
     <Compile Include="Terraria.UI.Chat\TextSnippet.cs" />
+    <Compile Include="Terraria.UI.Gamepad\GamepadMainMenuHandler.cs" />
+    <Compile Include="Terraria.UI.Gamepad\GamepadPageID.cs" />
+    <Compile Include="Terraria.UI.Gamepad\GamepadPointID.cs" />
+    <Compile Include="Terraria.UI.Gamepad\UILinkPage.cs" />
+    <Compile Include="Terraria.UI.Gamepad\UILinkPoint.cs" />
+    <Compile Include="Terraria.UI.Gamepad\UILinkPointNavigator.cs" />
     <Compile Include="Terraria.UI\AchievementCompleteUI.cs" />
-    <Compile Include="Terraria.UI\AchievementsUI.cs" />
     <Compile Include="Terraria.UI\CalculatedStyle.cs" />
     <Compile Include="Terraria.UI\ChestUI.cs" />
+    <Compile Include="Terraria.UI\IngameFancyUI.cs" />
     <Compile Include="Terraria.UI\ItemSlot.cs" />
+    <Compile Include="Terraria.UI\ItemSorting.cs" />
+    <Compile Include="Terraria.UI\SnapPoint.cs" />
     <Compile Include="Terraria.UI\StyleDimension.cs" />
     <Compile Include="Terraria.UI\UIAlign.cs" />
     <Compile Include="Terraria.UI\UIElement.cs" />
@@ -496,8 +534,10 @@
     <Compile Include="Terraria\Collision.cs" />
     <Compile Include="Terraria\CombatText.cs" />
     <Compile Include="Terraria\DelegateMethods.cs" />
+    <Compile Include="Terraria\DeprecatedClassLeftInForLoading.cs" />
     <Compile Include="Terraria\Dust.cs" />
     <Compile Include="Terraria\Entity.cs" />
+    <Compile Include="Terraria\FrameSkipTest.cs" />
     <Compile Include="Terraria\Framing.cs" />
     <Compile Include="Terraria\Gore.cs" />
     <Compile Include="Terraria\HitTile.cs" />
@@ -523,6 +563,7 @@
     <Compile Include="Terraria\Projectile.cs" />
     <Compile Include="Terraria\Rain.cs" />
     <Compile Include="Terraria\Recipe.cs" />
+    <Compile Include="Terraria\RecipeGroup.cs" />
     <Compile Include="Terraria\Ref.cs" />
     <Compile Include="Terraria\RemoteClient.cs" />
     <Compile Include="Terraria\RemoteServer.cs" />
@@ -530,7 +571,8 @@
     <Compile Include="Terraria.TerraCustom\SettingSaver.cs" />
     <Compile Include="Terraria\Sign.cs" />
     <Compile Include="Terraria\Star.cs" />
-    <Compile Include="Terraria\TargetDummy.cs" />
+    <Compile Include="Terraria\TestHighFPSIssues.cs" />
+    <Compile Include="Terraria\TexturePackSupport.cs" />
     <Compile Include="Terraria\Tile.cs" />
     <Compile Include="Terraria\TileObject.cs" />
     <Compile Include="Terraria\TimeLogger.cs" />
@@ -572,11 +614,11 @@
 
 SET RELEASEFILE=""
 
-IF $(ConfigurationName) == MacRelease SET RELEASEFILE=ModCompile/tModLoaderMac
+IF $(ConfigurationName) == MacRelease SET RELEASEFILE=ModCompile/TerraCustomMac
 IF $(ConfigurationName) == WindowsServerDebug SET RELEASEFILE=tModLoaderServerDebug
 IF $(ConfigurationName) == WindowsServerRelease SET RELEASEFILE=tModLoaderServer
-IF $(ConfigurationName) == WindowsDebug SET RELEASEFILE=tModLoaderDebug
-IF $(ConfigurationName) == WindowsRelease SET RELEASEFILE=tModLoader
+IF $(ConfigurationName) == WindowsDebug SET RELEASEFILE=TerraCustomDebug
+IF $(ConfigurationName) == WindowsRelease SET RELEASEFILE=TerraCustom
 
 for /f "tokens=* delims=" %25%25i in ('"$(ProjectDir)..\..\setup\bin\setup" --steamdir') do set TERRARIASTEAMDIR=%25%25i
 

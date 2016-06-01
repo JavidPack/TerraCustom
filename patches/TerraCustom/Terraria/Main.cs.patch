@@ -1,27 +1,17 @@
 --- src/tModLoader\Terraria\Main.cs
 +++ src/TerraCustom\Terraria\Main.cs
-@@ -46,11 +_,13 @@
- using Terraria.ModLoader.IO;
- using Terraria.Net;
- using Terraria.ObjectData;
-+
- using Terraria.Social;
- using Terraria.UI;
- using Terraria.UI.Chat;
+@@ -53,6 +_,7 @@
+ using Terraria.UI.Gamepad;
  using Terraria.Utilities;
  using Terraria.World.Generation;
 +using Terraria.TerraCustom;
  
  #if SERVER
  using Terraria.Server;
-@@ -134,12 +_,21 @@
- 		public bool unityMouseOver;
- 		public static Main instance;
- 		public static int curRelease = 156;
--		public static string versionNumber = "v1.3.0.8";
--		public static string versionNumber2 = "v1.3.0.8";
-+		public static string versionNumber = "jopojelly's TerraCustom v0.3.1";
-+		public static string versionNumber2 = "jopojelly's TerraCustom v0.3.1";
+@@ -144,12 +_,21 @@
+ 		public static int curRelease = 169;
+ 		public static string versionNumber = "v1.3.1.1";
+ 		public static string versionNumber2 = "v1.3.1.1";
 +		// TerraCustom Start
 +		public static Setting setting = new Setting();
 +		public static SettingSaver settingSaver = new SettingSaver();
@@ -32,6 +22,8 @@
  		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath();
 +		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
 +		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
+ 		public static bool AnnouncementBoxDisabled = false;
+ 		public static int AnnouncementBoxRange = -1;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
  		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
 -		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
@@ -39,7 +31,7 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
-@@ -344,7 +_,7 @@
+@@ -355,7 +_,7 @@
  		public static int[] desertBG = new int[2];
  		public static int oceanBG;
  		public static int[] treeX = new int[4];
@@ -48,16 +40,7 @@
  		public static int[] caveBackX = new int[4];
  		public static int[] caveBackStyle = new int[4];
  		public static int iceBackStyle;
-@@ -458,7 +_,7 @@
- 		private static bool flameRingLoaded;
- 		private Texture2D flameRingTexture;
- 		private Texture2D mapDeathTexture;
--		public RenderTarget2D[,] mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
-+		private RenderTarget2D[,] mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
- 		private RenderTarget2D mapSectionTexture;
- 		public static bool[,] initMap = new bool[Main.mapTargetX, Main.mapTargetY];
- 		public static bool[,] mapWasContentLost = new bool[Main.mapTargetX, Main.mapTargetY];
-@@ -584,6 +_,7 @@
+@@ -598,6 +_,7 @@
  		public static bool serverStarting = false;
  		public static float leftWorld = 0f;
  		public static float rightWorld = 134400f;
@@ -65,7 +48,7 @@
  		public static float topWorld = 0f;
  		public static float bottomWorld = 38400f;
  		public static int maxTilesX = (int)Main.rightWorld / 16 + 1;
-@@ -1113,6 +_,7 @@
+@@ -1139,6 +_,7 @@
  		public static bool tilesLoaded = false;
  		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
  		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
@@ -73,29 +56,27 @@
  		public static Dust[] dust = new Dust[6001];
  		public static Star[] star = new Star[130];
  		public static Item[] item = new Item[401];
-@@ -1265,10 +_,13 @@
+@@ -1292,9 +_,12 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
  		public static string WorldPath = Main.SavePath + Path.DirectorySeparatorChar + "Worlds";
 -		public static string CloudWorldPath = "ModLoader/worlds";
++		public static string CloudWorldPath = "worlds";
 +		public static string TModLoaderWorldPath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Worlds";
 +		public static string LeveledWorldPath = Main.SavePath.Substring(0, Main.SavePath.Length - 8) + "Terraria Leveled" + Path.DirectorySeparatorChar + "Worlds";
-+		public static string CloudWorldPath = "worlds";
  		public static string PlayerPath = Main.SavePath + Path.DirectorySeparatorChar + "Players";
 -		public static string CloudPlayerPath = "ModLoader/players";
 +		public static string CloudPlayerPath = "players";
- 		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
 +		public static string SettingPath = Main.TerraCustomSavePath;
- 		public static string[] itemName = new string[3602];
- 		public static string[] npcName = new string[540];
- 		private static KeyboardState inputText;
-@@ -1919,14 +_,15 @@
+ 		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
+ 		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
+ 		public static string[] itemName = new string[3730];
+@@ -1964,14 +_,14 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
 -		private static int maxMenuItems = 16;
-+		public static int maxMenuItems = 24;
-+//16;
++		public static int maxMenuItems = 24;//16;
  		private float[] menuItemScale = new float[Main.maxMenuItems];
  		private int focusMenu = -1;
 -		private int selectedMenu = -1;
@@ -109,7 +90,7 @@
  		public static int menuSkip = 0;
  		private static Item cpItem = new Item();
  		public int textBlinkerCount;
-@@ -1986,6 +_,12 @@
+@@ -2042,6 +_,12 @@
  		private float scAdj;
  		private float cTop;
  
@@ -122,53 +103,53 @@
  		public static event Action OnEngineLoad;
  		public static event Action OnTick;
  
-@@ -2157,11 +_,13 @@
- 				flag = false;
+@@ -2258,11 +_,13 @@
  				Main.anglerQuest = Main.rand.Next(Main.anglerQuestItemNetIDs.Length);
  				int num = Main.anglerQuestItemNetIDs[Main.anglerQuest];
+ 				//patch file: num, flag2
 -				if (num == 2454 && (!Main.hardMode || WorldGen.crimson))
 +				//if (num == 2454 && (!Main.hardMode || WorldGen.crimson))
 +				if (num == 2454 && (!Main.hardMode || WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
 -				if (num == 2457 && WorldGen.crimson)
 +				//if (num == 2457 && WorldGen.crimson)
 +				if (num == 2457 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
-@@ -2169,7 +_,8 @@
+@@ -2270,7 +_,8 @@
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
 -				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				//if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
-@@ -2189,7 +_,8 @@
+@@ -2290,7 +_,8 @@
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
 -				if (num == 2477 && !WorldGen.crimson)
 +				//if (num == 2477 && !WorldGen.crimson)
 +				if (num == 2477 && (!WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
-@@ -2205,7 +_,8 @@
+@@ -2306,7 +_,8 @@
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
 -				if (num == 2485 && WorldGen.crimson)
 +				//if (num == 2485 && WorldGen.crimson)
 +				if (num == 2485 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
- 					flag = true;
+ 					flag2 = true;
  				}
-@@ -2232,6 +_,7 @@
+@@ -2337,6 +_,7 @@
  					Main.WorldList.Add(WorldFileData.FromInvalidWorld(files[i], false));
  				}
  			}
@@ -176,7 +157,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudWorldPath) + "/.+\\.wld");
-@@ -2248,6 +_,7 @@
+@@ -2353,6 +_,7 @@
  					}
  				}
  			}
@@ -184,7 +165,7 @@
  			Main.WorldList.Sort(new Comparison<WorldFileData>(Main.WorldListSortMethod));
  		}
  
-@@ -2270,6 +_,7 @@
+@@ -2375,6 +_,7 @@
  					Main.PlayerList.Add(fileData);
  				}
  			}
@@ -192,7 +173,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudPlayerPath) + "/.+\\.plr");
-@@ -2282,6 +_,7 @@
+@@ -2387,6 +_,7 @@
  					}
  				}
  			}
@@ -200,24 +181,7 @@
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
  
-@@ -2381,7 +_,7 @@
- 			Main.Configuration.Put("KeyMapAlphaUp", Main.cMapAlphaUp);
- 			Main.Configuration.Put("KeyMapAlphaDown", Main.cMapAlphaDown);
- 			Main.Configuration.Put("KeyFavoriteModifier", Main.cFavoriteKey);
--			Main.Configuration.Put("Fullscreen", Main.graphics.IsFullScreen);
-+			//Main.Configuration.Put("Fullscreen", Main.graphics.IsFullScreen);
- 			Main.Configuration.Put("WindowMaximized", Main.screenMaximized);
- 			Main.Configuration.Put("DisplayWidth", Main.graphics.PreferredBackBufferWidth);
- 			Main.Configuration.Put("DisplayHeight", Main.graphics.PreferredBackBufferHeight);
-@@ -2406,7 +_,6 @@
- 			Main.Configuration.Put("ThickMouseEdges", Main.ThickMouse);
- 			Main.Configuration.Put("ThickMouseEdgesPackedColor", Main.ThickMousePackedColor);
- 			Main.Configuration.Put("ReverseUpDownForArmorSetBonuses", Main.ReversedUpDownArmorSetBonuses);
--			ModLoader.ModLoader.SaveConfiguration();
- 			return Main.Configuration.Save(true);
- 		}
- 
-@@ -2501,7 +_,7 @@
+@@ -2626,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
  			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
@@ -225,8 +189,8 @@
 +			//Main.Configuration.Get<bool>("Fullscreen", ref fullscreen);
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
- 			Main.mouseColor.R = Main.Configuration.Get<byte>("MouseColorR", Main.mouseColor.R);
-@@ -2714,11 +_,11 @@
+ 			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
+@@ -3025,11 +_,11 @@
  					File.Delete(Main.WorldList[i].Path + ".bak");
  #endif
  				}
@@ -243,7 +207,7 @@
  				Main.LoadWorlds();
  			}
  			catch
-@@ -2812,7 +_,8 @@
+@@ -3123,7 +_,8 @@
  				}
  				text += str;
  			}
@@ -253,7 +217,7 @@
  			string path = string.Concat(new object[]
  				{
  					text3,
-@@ -3143,7 +_,7 @@
+@@ -3454,7 +_,7 @@
  			}
  			else
  			{
@@ -262,7 +226,7 @@
  			}
  			Main.dedServ = true;
  			Main.showSplash = false;
-@@ -3166,7 +_,7 @@
+@@ -3477,7 +_,7 @@
  				while (flag)
  				{
  					Main.LoadWorlds();
@@ -271,7 +235,7 @@
  					Console.WriteLine("");
  					for (int j = 0; j < Main.WorldList.Count; j++)
  					{
-@@ -3374,7 +_,7 @@
+@@ -3685,7 +_,7 @@
  					}
  					else if (text2 == "m" || text2 == "M")
  					{
@@ -280,16 +244,16 @@
  						continue;
  					}
  					else
-@@ -3568,7 +_,7 @@
+@@ -3883,7 +_,7 @@
  					if (target < now) //can't catch up, reset target
  					{
  						target = now + delta;
 -					}
 +				}
  					Thread.Sleep(Math.Max((int)remaining, 0));
+ 				}
  			}
- 		}
-@@ -3730,7 +_,7 @@
+@@ -4046,7 +_,7 @@
  					{
  						WorldFile.saveWorld();
  						Netplay.disconnect = true;
@@ -298,7 +262,7 @@
  					}
  					else if (text == "fps")
  					{
-@@ -4004,6 +_,17 @@
+@@ -4320,6 +_,17 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
  #endif
@@ -316,7 +280,7 @@
  		}
  
  		protected void SetTitle()
-@@ -4011,7 +_,7 @@
+@@ -4327,7 +_,7 @@
  #if CLIENT
  			if (Main._cachedTitle == null)
  			{
@@ -325,75 +289,66 @@
  			}
  			base.Window.Title = Main._cachedTitle;
  #endif
-@@ -6438,7 +_,7 @@
- 			}
- 			Main.clientUUID = Guid.NewGuid().ToString();
- #if CLIENT
--			keyBoardInput.newKeyEvent += delegate (char keyStroke)
-+			keyBoardInput.newKeyEvent += delegate(char keyStroke)
- 			{
- 				if (Main.keyCount < 10)
- 				{
-@@ -7088,8 +_,13 @@
- 			Main.gridTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
- 			Main.trashTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
- 			Main.cdTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
--			Main.logoTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
--			Main.logo2Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
-+			//	Main.logoTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
-+			//	Main.logo2Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
+@@ -7595,8 +_,13 @@
+ 			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
+ 			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
+ 			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
+-			Main.logoTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
+-			Main.logo2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
++			//Main.logoTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
++			//Main.logo2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
 +			Main.logoTexture = TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
 +			Main.logo2Texture = TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
 +			Main.TCTreeTops = TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.TreeTops.png");
 +			Main.TCMossColors = TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.MossColors.png");
 +			Main.TCDungeonColors = TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.DungeonColors.png");
- 			Main.dustTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
- 			Main.sunTexture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
- 			Main.sun2Texture = base.Content.Load<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -18333,21 +_,26 @@
- 							int num315 = num293;
- 							while (num315 < num293 + 100)
+ 			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
+ 			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
+ 			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
+@@ -19101,21 +_,26 @@
+ 							int num323 = num301;
+ 							while (num323 < num301 + 100)
  							{
 +								// 19 total: 6 grass, 1 mush, 1 crim, 1 corrup,
 +								//TileID.Grass -- 0, 6,7,8,9,10,
- 								if (Main.tile[num292, num315].type == 2)
+ 								if (Main.tile[num300, num323].type == 2)
  								{
- 									num310 = Main.GetTreeStyle(num292);
+ 									num318 = Main.GetTreeStyle(num300);
  									break;
  								}
 +								// corrup -- 1
- 								if (Main.tile[num292, num315].type == 23)
+ 								if (Main.tile[num300, num323].type == 23)
  								{
- 									num310 = 1;
+ 									num318 = 1;
  									break;
  								}
 +								//TileID.MushroomGrass -- 14
- 								if (Main.tile[num292, num315].type == 70)
+ 								if (Main.tile[num300, num323].type == 70)
  								{
- 									num310 = 14;
+ 									num318 = 14;
  									break;
  								}
 +								// Jungle -- 2,11,13
- 								if (Main.tile[num292, num315].type == 60)
+ 								if (Main.tile[num300, num323].type == 60)
  								{
- 									num310 = 2;
-@@ -18364,6 +_,7 @@
- 									num313 = 48;
+ 									num318 = 2;
+@@ -19132,6 +_,7 @@
+ 									num321 = 48;
  									break;
  								}
 +								// Snow -- 4,12,16,17,18
- 								if (Main.tile[num292, num315].type == 147)
+ 								if (Main.tile[num300, num323].type == 147)
  								{
- 									num310 = 4;
-@@ -18400,6 +_,7 @@
+ 									num318 = 4;
+@@ -19168,6 +_,7 @@
  										break;
  									}
  								}
 +								// Hallow == 5,3
  								else
  								{
- 									if (Main.tile[num292, num315].type == 199)
-@@ -36906,15 +_,15 @@
+ 									if (Main.tile[num300, num323].type == 199)
+@@ -38959,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -407,24 +362,32 @@
  #endif
  			base.Exit();
  #if MAC
--			SDL.SDL_DestroyWindow(base.Window.Handle);
-+            SDL.SDL_DestroyWindow(base.Window.Handle);
- #endif
+@@ -39203,10 +_,10 @@
+ 
+ 		private void OnWorldNamed(string text)
+ 		{
+-			Main.menuMode = 10;
++			Main.menuMode = (int)MenuModes.Settings/*10*/;
+ 			Main.worldName = text.Trim();
+ 			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
+-			WorldGen.CreateNewWorld(null);
++			//WorldGen.CreateNewWorld(null);
  		}
  
-@@ -37188,9 +_,9 @@
+ 		private static Action CreateGoToMenuEvent(int menu)
+@@ -39337,9 +_,9 @@
  				}
  			}
- 			int num = 250;
--			int num2 = Main.screenWidth / 2;
-+			int num2 = Main.screenWidth / 2; // screenHorizontalCenter
- 			int num3 = 80;
--			int num4 = 0;
-+			int num4 = 0; // numberClickableLabels
- 			int num5 = Main.menuMode;
- 			int num6 = 0;
+ 			int num2 = 250;
+-			int num3 = Main.screenWidth / 2;
++			int num3 = Main.screenWidth / 2; // screenHorizontalCenter
+ 			int num4 = 80;
+-			int num5 = 0;
++			int num5 = 0; // numberClickableLabels
+ 			int num6 = Main.menuMode;
  			int num7 = 0;
-@@ -37204,7 +_,7 @@
+ 			int num8 = 0;
+@@ -39353,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -432,8 +395,8 @@
 +			float[] array7 = new float[Main.maxMenuItems]; // clickableLabelScale
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
- 			for (int j = 0; j < Main.maxMenuItems; j++)
-@@ -37215,10 +_,14 @@
+ 			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
+@@ -39365,10 +_,14 @@
  				array5[j] = 0;
  				array7[j] = 1f;
  			}
@@ -447,9 +410,9 @@
 +			{
 +				Main.menuMode = (int)TerraCustom.MenuModes.Settings;
  			}
- 			if (Main.menuMode == 1212)
- 			{
-@@ -37479,10 +_,10 @@
+ 			bool loadedEverything = Program.LoadedEverything;
+ 			if (loadedEverything)
+@@ -39647,10 +_,10 @@
  						Main.PlaySound(11, -1, -1, 1);
  						Main.menuMode = 0;
  						Main.netMode = 0;
@@ -464,7 +427,7 @@
  					}
  				}
  				else if (Main.menuMode == 30)
-@@ -37733,7 +_,7 @@
+@@ -39911,7 +_,7 @@
  						Main.PlaySound(11, -1, -1, 1);
  						if (WorldIO.customDataFail == null)
  						{
@@ -473,34 +436,25 @@
  						}
  						else
  						{
-@@ -37766,7 +_,7 @@
- 						Main.PlaySound(11, -1, -1, 1);
- 						if (WorldIO.customDataFail == null)
- 						{
--							Main.menuMode = 0;
-+						Main.menuMode = 0;
- 						}
- 						else
- 						{
-@@ -37879,7 +_,7 @@
+@@ -40060,7 +_,7 @@
  						Main.menuMode = 888;
  					}
- 					num9++;
--					Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num9, ref num4);
-+					ModLoader.Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num9, ref num4);
- 					array9[num9] = Lang.menu[14];
- 					if (this.selectedMenu == num9)
+ 					num10++;
+-					Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num2, ref num4, ref num10, ref num5);
++					ModLoader.Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num2, ref num4, ref num10, ref num5);
+ 					array9[num10] = Lang.menu[14];
+ 					if (this.selectedMenu == num10)
  					{
-@@ -38428,7 +_,7 @@
+@@ -40539,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
 -					else if (Main.menuMode == -7)
 +					else if (Main.menuMode == (int)MenuModes.SelectDifficulty /*-7*/)
  					{
- 						num = 200;
- 						num3 = 60;
-@@ -38460,22 +_,22 @@
+ 						num2 = 200;
+ 						num4 = 60;
+@@ -40571,25 +_,25 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1);
@@ -512,10 +466,11 @@
  							Main.expertMode = true;
  							Main.PlaySound(10, -1, -1, 1);
 -							Main.menuMode = 7;
-+							Main.menuMode = (int)MenuModes.EnterWorldName /*7*/;
++							Main.menuMode = (int)MenuModes.EnterWorldName/*7*/;
  						}
- 						else if (this.selectedMenu == 4)
+ 						else if (this.selectedMenu == 4 || flag5)
  						{
+ 							flag5 = false;
  							Main.PlaySound(11, -1, -1, 1);
 -							Main.menuMode = 16;
 +							Main.menuMode = (int)MenuModes.ChooseWorldSize /*0*/;
@@ -523,64 +478,34 @@
  						Main.clrInput();
  					}
 -					else if (Main.menuMode == 7)
+-					{
+-						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48], "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent(-7), 0));
 +					else if (Main.menuMode == (int)MenuModes.EnterWorldName /*7*/)
- 					{
- 						string a = Main.newWorldName;
- 						Main.newWorldName = Main.GetInputText(Main.newWorldName);
-@@ -38538,14 +_,17 @@
- 						if (this.selectedMenu == 3)
- 						{
- 							Main.PlaySound(11, -1, -1, 1);
--							Main.menuMode = -7;
-+							Main.menuMode = (int)MenuModes.SelectDifficulty /*- 7*/; // 0?? -7 is Expert mode selection
-+							// World size -> difficulty -> name
- 						}
- 						if (this.selectedMenu == 2 || (!array2[2] && Main.inputTextEnter))
- 						{
--							Main.menuMode = 10;
-+							Main.menuMode = (int)MenuModes.Settings;
-+							/*
- 							Main.worldName = Main.newWorldName;
- 							Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
- 							WorldGen.CreateNewWorld(null);
-+							*/
- 						}
++					{
++						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48], "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent( (int)MenuModes.SelectDifficulty /*-7*/), 0)); 
+ 						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -38841,7 +_,7 @@
- 							Main.PlaySound(11, -1, -1, 1);
- 							Main.menuMode = 272727;
- 						}
--						Interface.AddSettingsMenuButtons(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num20, ref num4);
-+						ModLoader.Interface.AddSettingsMenuButtons(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num20, ref num4);
- 						num20++;
- 						array9[num20] = Lang.menu[103];
- 						if (this.selectedMenu == num20)
-@@ -39593,7 +_,8 @@
+@@ -41853,7 +_,8 @@
  					}
  					else
  					{
--						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num4);
-+						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num, ref num3, ref num4);
-+						ModLoader.Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num, ref num3, ref num4);
+-						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5);
++						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num2, ref num4, ref num5);
++						ModLoader.Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5);
  					}
  				}
  			}
-@@ -40345,11 +_,10 @@
+@@ -42718,7 +_,7 @@
  				{
- 					num98 = 2;
+ 					num107 = 2;
  				}
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
--				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
-+				Vector2 origin3 = Main.fontMouseText.MeasureString(Main.versionNumber);
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.2";
+ 				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
--				Main.spriteBatch.DrawString(Main.fontMouseText, drawVersion, new Vector2(origin3.X + (float)num97 + 10f, (float)Main.screenHeight - origin3.Y + (float)num98 - 2f), color11, 0f, origin3, 1f, SpriteEffects.None, 0f);
-+				Main.spriteBatch.DrawString(Main.fontMouseText, Main.versionNumber, new Vector2(origin3.X + (float)num97 + 10f, (float)Main.screenHeight - origin3.Y + (float)num98 - 2f), color11, 0f, origin3, 1f, SpriteEffects.None, 0f);
- 			}
- 			Vector2 value = Main.DrawThickCursor(false);
- 			Main.spriteBatch.Draw(Main.cursorTextures[0], new Vector2((float)Main.mouseX, (float)Main.mouseY) + value + Vector2.One, null, new Microsoft.Xna.Framework.Color((int)((float)Main.cursorColor.R * 0.2f), (int)((float)Main.cursorColor.G * 0.2f), (int)((float)Main.cursorColor.B * 0.2f), (int)((float)Main.cursorColor.A * 0.5f)), 0f, default(Vector2), Main.cursorScale * 1.1f, SpriteEffects.None, 0f);
-@@ -53898,8 +_,8 @@
+@@ -57027,8 +_,8 @@
  									}
  								}
  							}

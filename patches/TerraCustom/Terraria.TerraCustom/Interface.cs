@@ -69,7 +69,7 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28], () => {
 				Main.menuMode = 10;
-				Main.worldName = Main.newWorldName;
+				//Main.worldName = Main.newWorldName;
 				if(Main.setting.LeveledRPGCriticalMode) Main.expertMode = true;
 				Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
 				WorldGen.CreateNewWorld(null);

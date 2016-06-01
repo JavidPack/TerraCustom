@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria\Tile.cs
 +++ src/TerraCustom\Terraria\Tile.cs
-@@ -366,6 +_,22 @@
+@@ -400,6 +_,22 @@
  				return;
  			}
  			this.bTileHeader3 &= 239;
@@ -22,5 +22,5 @@
 +			}
  		}
  
- 		public bool wire()
+ 		public byte color()
 

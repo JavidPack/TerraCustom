@@ -16,14 +16,14 @@
  			Stopwatch stopwatch = new Stopwatch();
  			float num = 0f;
  			foreach (GenPass current in this._passes)
-@@ -33,6 +_,7 @@
+@@ -32,6 +_,7 @@
+ 			progress.TotalWeight = num;
  			string text = "";
- 			Main.MenuUI.SetState(new UIWorldLoad(progress));
  			Main.menuMode = 888;
 +			int a = 0;
+ 			Main.MenuUI.SetState(new UIWorldLoad(progress));
  			foreach (GenPass current2 in this._passes)
  			{
- 				stopwatch.Start();
 @@ -50,7 +_,17 @@
  						",\n"
  					});
