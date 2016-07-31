@@ -40,8 +40,12 @@ namespace Terraria.ModLoader
 		public int closeDoorID = -1;
 		public int openDoorID = -1;
 		public string chest = "";
+		public int chestDrop = 0;
+		public string dresser = "";
+		public int dresserDrop = 0;
 		public bool bed = false;
 		public bool torch = false;
+		public bool sapling = false;
 
 		public void AddToArray(ref int[] array)
 		{
@@ -73,6 +77,21 @@ namespace Terraria.ModLoader
 				}
 				MapLoader.tileEntries[Type].Add(entry);
 			}
+		}
+
+		public void SetModTree(ModTree tree)
+		{
+			TileLoader.trees[Type] = tree;
+		}
+
+		public void SetModPalmTree(ModPalmTree palmTree)
+		{
+			TileLoader.palmTrees[Type] = palmTree;
+		}
+
+		public void SetModCactus(ModCactus cactus)
+		{
+			TileLoader.cacti[Type] = cactus;
 		}
 
 		public virtual bool Autoload(ref string name, ref string texture)
@@ -220,6 +239,15 @@ namespace Terraria.ModLoader
 
 		public virtual void WalkDust(ref int dustType, ref bool makeDust, ref Color color)
 		{
+		}
+
+		public virtual void ChangeWaterfallStyle(ref int style)
+		{
+		}
+
+		public virtual int SaplingGrowthType(ref int style)
+		{
+			return -1;
 		}
 	}
 }

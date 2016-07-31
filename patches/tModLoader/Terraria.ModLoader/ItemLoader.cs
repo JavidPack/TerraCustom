@@ -60,6 +60,8 @@ namespace Terraria.ModLoader
 		private static Action<Item, Player>[] HookRightClick;
 		private static Func<string, Player, int, bool>[] HookPreOpenVanillaBag;
 		private static Action<string, Player, int>[] HookOpenVanillaBag;
+		private static Action<Item>[] HookPreReforge;
+		private static Action<Item>[] HookPostReforge;
 		private delegate void DelegateDrawHands(int body, ref bool drawHands, ref bool drawArms);
 		private static DelegateDrawHands[] HookDrawHands;
 		private delegate void DelegateDrawHair(int body, ref bool drawHair, ref bool drawAltHair);
@@ -100,6 +102,8 @@ namespace Terraria.ModLoader
 		private delegate void DelegateAnglerChat(bool turningInFish, bool anglerQuestFinished, int type, ref string chat, ref string catchLocation);
 		private static DelegateAnglerChat[] HookAnglerChat;
 		private static Action<Item, Recipe>[] HookOnCraft;
+		private static Action<Item, List<TooltipLine>>[] HookModifyTooltips;
+		private static Func<Item, bool>[] HookNeedsCustomSaving;
 
 		static ItemLoader()
 		{
@@ -223,6 +227,8 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookRightClick, globalItems, g => g.RightClick);
 			ModLoader.BuildGlobalHook(ref HookPreOpenVanillaBag, globalItems, g => g.PreOpenVanillaBag);
 			ModLoader.BuildGlobalHook(ref HookOpenVanillaBag, globalItems, g => g.OpenVanillaBag);
+			ModLoader.BuildGlobalHook(ref HookPreReforge, globalItems, g => g.PreReforge);
+			ModLoader.BuildGlobalHook(ref HookPostReforge, globalItems, g => g.PostReforge);
 			ModLoader.BuildGlobalHook(ref HookDrawHands, globalItems, g => g.DrawHands);
 			ModLoader.BuildGlobalHook(ref HookDrawHair, globalItems, g => g.DrawHair);
 			ModLoader.BuildGlobalHook(ref HookDrawHead, globalItems, g => g.DrawHead);
@@ -251,6 +257,8 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookIsAnglerQuestAvailable, globalItems, g => g.IsAnglerQuestAvailable);
 			ModLoader.BuildGlobalHook(ref HookAnglerChat, globalItems, g => g.AnglerChat);
 			ModLoader.BuildGlobalHook(ref HookOnCraft, globalItems, g => g.OnCraft);
+			ModLoader.BuildGlobalHook(ref HookModifyTooltips, globalItems, g => g.ModifyTooltips);
+			ModLoader.BuildGlobalHook(ref HookNeedsCustomSaving, globalItems, g => g.NeedsCustomSaving);
 		}
 
 		internal static void Unload()
@@ -298,7 +306,7 @@ namespace Terraria.ModLoader
 		//in Terraria.Item.SetDefaults move Lang stuff before SetupItem
 		internal static void SetupItem(Item item)
 		{
-			item.itemInfo = infoList.Select(info => info.Clone()).ToArray();
+			SetupItemInfo(item);
 			if (IsModItem(item))
 			{
 				GetItem(item.type).SetupItem(item);
@@ -307,6 +315,11 @@ namespace Terraria.ModLoader
 			{
 				hook(item);
 			}
+		}
+
+		internal static void SetupItemInfo(Item item)
+		{
+			item.itemInfo = infoList.Select(info => info.Clone()).ToArray();
 		}
 
 		internal static ItemInfo GetItemInfo(Item item, Mod mod, string name)
@@ -894,6 +907,30 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		public static void PreReforge(Item item)
+		{
+			if (IsModItem(item))
+			{
+				item.modItem.PreReforge();
+			}
+			foreach (var hook in HookPreReforge)
+			{
+				hook(item);
+			}
+		}
+
+		public static void PostReforge(Item item)
+		{
+			if (IsModItem(item))
+			{
+				item.modItem.PostReforge();
+			}
+			foreach (var hook in HookPostReforge)
+			{
+				hook(item);
+			}
+		}
+
 		public static void DrawHands(Player player, ref bool drawHands, ref bool drawArms)
 		{
 			EquipTexture texture = EquipLoader.GetEquipTexture(EquipType.Body, player.body);
@@ -1365,6 +1402,70 @@ namespace Terraria.ModLoader
 			{
 				hook(item, recipe);
 			}
+		}
+
+		public static void ModifyTooltips(Item item, ref int numTooltips, string[] names, ref string[] text,
+			ref bool[] modifier, ref bool[] badModifier, ref int oneDropLogo, out Color?[] overrideColor)
+		{
+			List<TooltipLine> tooltips = new List<TooltipLine>();
+			for (int k = 0; k < numTooltips; k++)
+			{
+				TooltipLine tooltip = new TooltipLine(names[k], text[k]);
+				tooltip.isModifier = modifier[k];
+				tooltip.isModifierBad = badModifier[k];
+				if (k == oneDropLogo)
+				{
+					tooltip.oneDropLogo = true;
+				}
+				tooltips.Add(tooltip);
+			}
+			if (IsModItem(item))
+			{
+				item.modItem.ModifyTooltips(tooltips);
+			}
+			foreach (var hook in HookModifyTooltips)
+			{
+				hook(item, tooltips);
+			}
+			numTooltips = tooltips.Count;
+			text = new string[numTooltips];
+			modifier = new bool[numTooltips];
+			badModifier = new bool[numTooltips];
+			oneDropLogo = -1;
+			overrideColor = new Color?[numTooltips];
+			for (int k = 0; k < numTooltips; k++)
+			{
+				text[k] = tooltips[k].text;
+				modifier[k] = tooltips[k].isModifier;
+				badModifier[k] = tooltips[k].isModifierBad;
+				if (tooltips[k].oneDropLogo)
+				{
+					oneDropLogo = k;
+				}
+				overrideColor[k] = tooltips[k].overrideColor;
+			}
+		}
+
+		public static int NeedsGlobalCustomSaving(Item item)
+		{
+			if (item.type == 0)
+			{
+				return 0;
+			}
+			int numGlobalData = 0;
+			foreach (var hook in HookNeedsCustomSaving)
+			{
+				if (hook(item))
+				{
+					numGlobalData++;
+				}
+			}
+			return numGlobalData;
+		}
+
+		public static bool NeedsModSaving(Item item)
+		{
+			return IsModItem(item) || NeedsGlobalCustomSaving(item) > 0;
 		}
 	}
 }

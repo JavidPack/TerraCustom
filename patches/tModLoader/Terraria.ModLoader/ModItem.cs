@@ -250,6 +250,14 @@ namespace Terraria.ModLoader
 		{
 		}
 
+		public virtual void PreReforge()
+		{
+		}
+
+		public virtual void PostReforge()
+		{
+		}
+
 		public virtual void DrawHands(ref bool drawHands, ref bool drawArms)
 		{
 		}
@@ -435,6 +443,10 @@ namespace Terraria.ModLoader
 		}
 
 		public virtual void OnCraft(Recipe recipe)
+		{
+		}
+
+		public virtual void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 		}
 	}

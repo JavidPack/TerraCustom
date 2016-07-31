@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria.ID\MessageID.cs
 +++ src/tModLoader\Terraria.ID\MessageID.cs
-@@ -5,74 +_,289 @@
+@@ -5,74 +_,290 @@
  	public class MessageID
  	{
  		public const byte NeverCalled = 0;
@@ -21,6 +21,7 @@
 +		//sent once the server has accepted the player and assigned an id
 +		//client connection state 1->2
 +		//client sends SyncPlayer, ClientUUID, PlayerHealth, PlayerMana, PlayerBuffs and SyncEquipment
++		//tModLoader calls PlayerHooks.SyncPlayer
 +		//client sends RequestWorldInfo
 +		//client connection state 2->3
 +		public const byte LoadPlayer = 3;
@@ -396,10 +397,10 @@
  		public const byte ShopOverride = 104;
  		public const byte GemLockToggle = 105;
  		public const byte PoofOfSmoke = 106;
-@@ -116,5 +_,24 @@
- 		public const byte MassWireOperation = 109;
- 		public const byte MassWireOperationPay = 110;
- 		public const byte Count = 111;
+@@ -118,5 +_,24 @@
+ 		public const byte ToggleParty = 111;
+ 		public const byte SpecialFX = 112;
+ 		public const byte Count = 113;
 +		//contains a netID followed by custom data sent by mods
 +		//special case netID == -1, is sent by the server in response to SyncMods and contains the netIDs of every non-server only mod
 +		//netIDs will be sent for no-sync mods, and packets will be ignored if the mod is not installed on the client

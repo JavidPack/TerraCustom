@@ -36,6 +36,14 @@ namespace Terraria.ModLoader
 		{
 		}
 
+		public virtual void SendCustomData(BinaryWriter writer)
+		{
+		}
+
+		public virtual void ReceiveCustomData(BinaryReader reader)
+		{
+		}
+
 		public virtual void PreWorldGen()
 		{
 		}
@@ -57,6 +65,10 @@ namespace Terraria.ModLoader
 		}
 
 		public virtual void TileCountsAvailable(int[] tileCounts)
+		{
+		}
+
+		public virtual void ChooseWaterStyle(ref int style)
 		{
 		}
 		//TODO

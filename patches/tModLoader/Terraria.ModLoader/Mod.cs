@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Liquid;
 using Terraria.ID;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
@@ -47,6 +48,11 @@ namespace Terraria.ModLoader
 		internal readonly IDictionary<string, ModBuff> buffs = new Dictionary<string, ModBuff>();
 		internal readonly IDictionary<string, GlobalBuff> globalBuffs = new Dictionary<string, GlobalBuff>();
 		internal readonly IDictionary<string, ModWorld> worlds = new Dictionary<string, ModWorld>();
+		internal readonly IDictionary<string, ModUgBgStyle> ugBgStyles = new Dictionary<string, ModUgBgStyle>();
+		internal readonly IDictionary<string, ModSurfaceBgStyle> surfaceBgStyles = new Dictionary<string, ModSurfaceBgStyle>();
+		internal readonly IDictionary<string, GlobalBgStyle> globalBgStyles = new Dictionary<string, GlobalBgStyle>();
+		internal readonly IDictionary<string, ModWaterStyle> waterStyles = new Dictionary<string, ModWaterStyle>();
+		internal readonly IDictionary<string, ModWaterfallStyle> waterfallStyles = new Dictionary<string, ModWaterfallStyle>();
 		internal readonly IDictionary<string, GlobalRecipe> globalRecipes = new Dictionary<string, GlobalRecipe>();
 
 		public virtual void Load()
@@ -85,6 +91,7 @@ namespace Terraria.ModLoader
 							using (MemoryStream buffer = new MemoryStream(data))
 							{
 								textures[texturePath] = Texture2D.FromStream(Main.instance.GraphicsDevice, buffer);
+								textures[texturePath].Name = Name + "/" + texturePath;
 							}
 							break;
 						case ".wav":
@@ -216,6 +223,26 @@ namespace Terraria.ModLoader
 				{
 					AutoloadModWorld(type);
 				}
+				else if (type.IsSubclassOf(typeof(ModUgBgStyle)))
+				{
+					AutoloadUgBgStyle(type);
+				}
+				else if (type.IsSubclassOf(typeof(ModSurfaceBgStyle)))
+				{
+					AutoloadSurfaceBgStyle(type);
+				}
+				else if (type.IsSubclassOf(typeof(GlobalBgStyle)))
+				{
+					AutoloadGlobalBgStyle(type);
+				}
+				else if (type.IsSubclassOf(typeof(ModWaterStyle)))
+				{
+					AutoloadWaterStyle(type);
+				}
+				else if (type.IsSubclassOf(typeof(ModWaterfallStyle)))
+				{
+					AutoloadWaterfallStyle(type);
+				}
 				else if (type.IsSubclassOf(typeof(GlobalRecipe)))
 				{
 					AutoloadGlobalRecipe(type);
@@ -229,6 +256,10 @@ namespace Terraria.ModLoader
 			{
 				AutoloadSounds(modSounds);
 			}
+			if (Properties.AutoloadBackgrounds)
+			{
+				AutoloadBackgrounds();
+			}
 		}
 
 		public void AddItem(string name, ModItem item, string texture)
@@ -236,6 +267,7 @@ namespace Terraria.ModLoader
 			int id = ItemLoader.ReserveItemID();
 			item.item.name = name;
 			item.item.ResetStats(id);
+			item.item.modItem = item;
 			items[name] = item;
 			ItemLoader.items.Add(item);
 			item.texture = texture;
@@ -314,7 +346,7 @@ namespace Terraria.ModLoader
 			equipTexture.Slot = slot;
 			equipTexture.item = item;
 			EquipLoader.equipTextures[type][slot] = equipTexture;
-            equipTextures[name] = equipTexture;
+			equipTextures[name] = equipTexture;
 			ModLoader.GetTexture(texture);
 			if (type == EquipType.Body)
 			{
@@ -710,7 +742,7 @@ namespace Terraria.ModLoader
 			}
 		}
 
-		public void AddNPC(string name, ModNPC npc, string texture)
+		public void AddNPC(string name, ModNPC npc, string texture, string[] altTextures = null)
 		{
 			int id = NPCLoader.ReserveNPCID();
 			npc.npc.name = name;
@@ -718,6 +750,7 @@ namespace Terraria.ModLoader
 			npcs[name] = npc;
 			NPCLoader.npcs.Add(npc);
 			npc.texture = texture;
+			npc.altTextures = altTextures;
 			npc.mod = this;
 		}
 
@@ -801,9 +834,10 @@ namespace Terraria.ModLoader
 			string name = type.Name;
 			string texture = (type.Namespace + "." + type.Name).Replace('.', '/');
 			string defaultTexture = texture;
-			if (npc.Autoload(ref name, ref texture))
+			string[] altTextures = new string[0];
+			if (npc.Autoload(ref name, ref texture, ref altTextures))
 			{
-				AddNPC(name, npc, texture);
+				AddNPC(name, npc, texture, altTextures);
 				string headTexture = defaultTexture + "_Head";
 				string bossHeadTexture = headTexture + "_Boss";
 				npc.AutoloadHead(ref headTexture, ref bossHeadTexture);
@@ -1029,6 +1063,218 @@ namespace Terraria.ModLoader
 			return mountData.Type;
 		}
 
+		public void AddModWorld(string name, ModWorld modWorld)
+		{
+			modWorld.Name = name;
+			worlds[name] = modWorld;
+			modWorld.mod = this;
+			WorldHooks.Add(modWorld);
+		}
+
+		private void AutoloadModWorld(Type type)
+		{
+			ModWorld modWorld = (ModWorld)Activator.CreateInstance(type);
+			modWorld.mod = this;
+			string name = type.Name;
+			if (modWorld.Autoload(ref name))
+			{
+				AddModWorld(name, modWorld);
+			}
+		}
+
+		public ModWorld GetModWorld(string name)
+		{
+			if (worlds.ContainsKey(name))
+			{
+				return worlds[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public void AddUgBgStyle(string name, ModUgBgStyle ugBgStyle)
+		{
+			int slot = UgBgStyleLoader.ReserveBackgroundSlot();
+			ugBgStyle.mod = this;
+			ugBgStyle.Name = name;
+			ugBgStyle.Slot = slot;
+			ugBgStyles[name] = ugBgStyle;
+			UgBgStyleLoader.ugBgStyles.Add(ugBgStyle);
+		}
+
+		public ModUgBgStyle GetUgBgStyle(string name)
+		{
+			if (ugBgStyles.ContainsKey(name))
+			{
+				return ugBgStyles[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		private void AutoloadUgBgStyle(Type type)
+		{
+			ModUgBgStyle ugBgStyle = (ModUgBgStyle)Activator.CreateInstance(type);
+			ugBgStyle.mod = this;
+			string name = type.Name;
+			if (ugBgStyle.Autoload(ref name))
+			{
+				AddUgBgStyle(name, ugBgStyle);
+			}
+		}
+
+		public void AddSurfaceBgStyle(string name, ModSurfaceBgStyle surfaceBgStyle)
+		{
+			int slot = SurfaceBgStyleLoader.ReserveBackgroundSlot();
+			surfaceBgStyle.mod = this;
+			surfaceBgStyle.Name = name;
+			surfaceBgStyle.Slot = slot;
+			surfaceBgStyles[name] = surfaceBgStyle;
+			SurfaceBgStyleLoader.surfaceBgStyles.Add(surfaceBgStyle);
+		}
+
+		public ModSurfaceBgStyle GetSurfaceBgStyle(string name)
+		{
+			if (surfaceBgStyles.ContainsKey(name))
+			{
+				return surfaceBgStyles[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public int GetSurfaceBgStyleSlot(string name)
+		{
+			ModSurfaceBgStyle style = GetSurfaceBgStyle(name);
+			return style == null ? -1 : style.Slot;
+		}
+
+		private void AutoloadSurfaceBgStyle(Type type)
+		{
+			ModSurfaceBgStyle surfaceBgStyle = (ModSurfaceBgStyle)Activator.CreateInstance(type);
+			surfaceBgStyle.mod = this;
+			string name = type.Name;
+			if (surfaceBgStyle.Autoload(ref name))
+			{
+				AddSurfaceBgStyle(name, surfaceBgStyle);
+			}
+		}
+
+		public void AddGlobalBgStyle(string name, GlobalBgStyle globalBgStyle)
+		{
+			globalBgStyle.mod = this;
+			globalBgStyle.Name = name;
+			globalBgStyles[name] = globalBgStyle;
+			GlobalBgStyleLoader.globalBgStyles.Add(globalBgStyle);
+		}
+
+		public GlobalBgStyle GetGlobalBgStyle(string name)
+		{
+			if (globalBgStyles.ContainsKey(name))
+			{
+				return globalBgStyles[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		private void AutoloadGlobalBgStyle(Type type)
+		{
+			GlobalBgStyle globalBgStyle = (GlobalBgStyle)Activator.CreateInstance(type);
+			globalBgStyle.mod = this;
+			string name = type.Name;
+			if (globalBgStyle.Autoload(ref name))
+			{
+				AddGlobalBgStyle(name, globalBgStyle);
+			}
+		}
+
+		public void AddWaterStyle(string name, ModWaterStyle waterStyle, string texture, string blockTexture)
+		{
+			int style = WaterStyleLoader.ReserveStyle();
+			waterStyle.mod = this;
+			waterStyle.Name = name;
+			waterStyle.Type = style;
+			waterStyle.texture = texture;
+			waterStyle.blockTexture = blockTexture;
+			waterStyles[name] = waterStyle;
+			WaterStyleLoader.waterStyles.Add(waterStyle);
+		}
+
+		public ModWaterStyle GetWaterStyle(string name)
+		{
+			if (waterStyles.ContainsKey(name))
+			{
+				return waterStyles[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		private void AutoloadWaterStyle(Type type)
+		{
+			ModWaterStyle waterStyle = (ModWaterStyle)Activator.CreateInstance(type);
+			waterStyle.mod = this;
+			string name = type.Name;
+			string texture = (type.Namespace + "." + type.Name).Replace('.', '/');
+			string blockTexture = texture + "_Block";
+			if (waterStyle.Autoload(ref name, ref texture, ref blockTexture))
+			{
+				AddWaterStyle(name, waterStyle, texture, blockTexture);
+			}
+		}
+
+		public void AddWaterfallStyle(string name, ModWaterfallStyle waterfallStyle, string texture)
+		{
+			int slot = WaterfallStyleLoader.ReserveStyle();
+			waterfallStyle.mod = this;
+			waterfallStyle.Name = name;
+			waterfallStyle.Type = slot;
+			waterfallStyle.texture = texture;
+			waterfallStyles[name] = waterfallStyle;
+			WaterfallStyleLoader.waterfallStyles.Add(waterfallStyle);
+		}
+
+		public ModWaterfallStyle GetWaterfallStyle(string name)
+		{
+			if (waterfallStyles.ContainsKey(name))
+			{
+				return waterfallStyles[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		public int GetWaterfallStyleSlot(string name)
+		{
+			ModWaterfallStyle style = GetWaterfallStyle(name);
+			return style == null ? -1 : style.Type;
+		}
+
+		private void AutoloadWaterfallStyle(Type type)
+		{
+			ModWaterfallStyle waterfallStyle = (ModWaterfallStyle)Activator.CreateInstance(type);
+			waterfallStyle.mod = this;
+			string name = type.Name;
+			string texture = (type.Namespace + "." + type.Name).Replace('.', '/');
+			if (waterfallStyle.Autoload(ref name, ref texture))
+			{
+				AddWaterfallStyle(name, waterfallStyle, texture);
+			}
+		}
+
 		public void AddGore(string texture, ModGore modGore = null)
 		{
 			int id = ModGore.ReserveGoreID();
@@ -1036,17 +1282,6 @@ namespace Terraria.ModLoader
 			if (modGore != null)
 			{
 				ModGore.modGores[id] = modGore;
-			}
-		}
-
-		public void AddSound(SoundType type, string soundPath, ModSound modSound = null)
-		{
-			int id = SoundLoader.ReserveSoundID(type);
-			SoundLoader.sounds[type][soundPath] = id;
-			if (modSound != null)
-			{
-				SoundLoader.modSounds[type][id] = modSound;
-				modSound.sound = ModLoader.GetSound(soundPath);
 			}
 		}
 
@@ -1062,10 +1297,21 @@ namespace Terraria.ModLoader
 			{
 				ModGore modGore = null;
 				Type t;
-				if (modGoreNames.TryGetValue(texture.Replace('/', '.'), out t))
+				if (modGoreNames.TryGetValue(Name + "." + texture.Replace('/', '.'), out t))
 					modGore = (ModGore)Activator.CreateInstance(t);
 
 				AddGore(Name + '/' + texture, modGore);
+			}
+		}
+
+		public void AddSound(SoundType type, string soundPath, ModSound modSound = null)
+		{
+			int id = SoundLoader.ReserveSoundID(type);
+			SoundLoader.sounds[type][soundPath] = id;
+			if (modSound != null)
+			{
+				SoundLoader.modSounds[type][id] = modSound;
+				modSound.sound = ModLoader.GetSound(soundPath);
 			}
 		}
 
@@ -1106,6 +1352,26 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		public void AddBackgroundTexture(string texture)
+		{
+			int slot = BackgroundTextureLoader.ReserveBackgroundSlot();
+			BackgroundTextureLoader.backgrounds[texture] = slot;
+			ModLoader.GetTexture(texture);
+		}
+
+		public int GetBackgroundSlot(string name)
+		{
+			return BackgroundTextureLoader.GetBackgroundSlot(Name + '/' + name);
+		}
+
+		private void AutoloadBackgrounds()
+		{
+			foreach (string texture in textures.Keys.Where(t => t.StartsWith("Backgrounds/")))
+			{
+				AddBackgroundTexture(Name + '/' + texture);
+			}
+		}
+
 		public void AddGlobalRecipe(string name, GlobalRecipe globalRecipe)
 		{
 			globalRecipe.Name = name;
@@ -1130,37 +1396,6 @@ namespace Terraria.ModLoader
 			if (globalRecipes.ContainsKey(name))
 			{
 				return globalRecipes[name];
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		public void AddModWorld(string name, ModWorld modWorld)
-		{
-			modWorld.Name = name;
-			worlds[name] = modWorld;
-			modWorld.mod = this;
-			WorldHooks.Add(modWorld);
-		}
-
-		private void AutoloadModWorld(Type type)
-		{
-			ModWorld modWorld = (ModWorld)Activator.CreateInstance(type);
-			modWorld.mod = this;
-			string name = type.Name;
-			if (modWorld.Autoload(ref name))
-			{
-				AddModWorld(name, modWorld);
-			}
-		}
-
-		public ModWorld GetModWorld(string name)
-		{
-			if (worlds.ContainsKey(name))
-			{
-				return worlds[name];
 			}
 			else
 			{
@@ -1232,6 +1467,7 @@ namespace Terraria.ModLoader
 				Main.itemTexture[item.item.type] = ModLoader.GetTexture(item.texture);
 				Main.itemName[item.item.type] = item.item.name;
 				EquipLoader.SetSlot(item.item);
+				ItemLoader.SetupItemInfo(item.item);
 				item.SetDefaults();
 				DrawAnimation animation = item.GetAnimation();
 				if (animation != null)
@@ -1270,6 +1506,7 @@ namespace Terraria.ModLoader
 			{
 				Main.projectileTexture[projectile.projectile.type] = ModLoader.GetTexture(projectile.texture);
 				Main.projFrames[projectile.projectile.type] = 1;
+				ProjectileLoader.SetupProjectileInfo(projectile.projectile);
 				projectile.SetDefaults();
 				if (projectile.projectile.hostile)
 				{
@@ -1284,6 +1521,7 @@ namespace Terraria.ModLoader
 			{
 				Main.npcTexture[npc.npc.type] = ModLoader.GetTexture(npc.texture);
 				Main.npcName[npc.npc.type] = npc.npc.name;
+				NPCLoader.SetupNPCInfo(npc.npc);
 				npc.SetDefaults();
 				if (npc.npc.lifeMax > 32767 || npc.npc.boss)
 				{
@@ -1296,6 +1534,16 @@ namespace Terraria.ModLoader
 				else
 				{
 					Main.npcLifeBytes[npc.npc.type] = 1;
+				}
+				int altTextureCount = NPCID.Sets.ExtraTextureCount[npc.npc.type];
+				Main.npcAltTextures[npc.npc.type] = new Texture2D[altTextureCount + 1];
+				if (altTextureCount > 0)
+				{
+					Main.npcAltTextures[npc.npc.type][0] = Main.npcTexture[npc.npc.type];
+				}
+				for (int k = 1; k <= altTextureCount; k++)
+				{
+					Main.npcAltTextures[npc.npc.type][k] = ModLoader.GetTexture(npc.altTextures[k - 1]);
 				}
 			}
 			foreach (ModMountData modMountData in mountDatas.Values)
@@ -1310,6 +1558,16 @@ namespace Terraria.ModLoader
 				Main.buffTexture[buff.Type] = ModLoader.GetTexture(buff.texture);
 				Main.buffName[buff.Type] = buff.Name;
 				buff.SetDefaults();
+			}
+			foreach (ModWaterStyle waterStyle in waterStyles.Values)
+			{
+				LiquidRenderer.Instance._liquidTextures[waterStyle.Type] = ModLoader.GetTexture(waterStyle.texture);
+				Main.liquidTexture[waterStyle.Type] = ModLoader.GetTexture(waterStyle.blockTexture);
+			}
+			foreach (ModWaterfallStyle waterfallStyle in waterfallStyles.Values)
+			{
+				Main.instance.waterfallManager.waterfallTexture[waterfallStyle.Type]
+					= ModLoader.GetTexture(waterfallStyle.texture);
 			}
 		}
 
@@ -1332,6 +1590,11 @@ namespace Terraria.ModLoader
 			buffs.Clear();
 			globalBuffs.Clear();
 			worlds.Clear();
+			ugBgStyles.Clear();
+			surfaceBgStyles.Clear();
+			globalBgStyles.Clear();
+			waterStyles.Clear();
+			waterfallStyles.Clear();
 			globalRecipes.Clear();
 		}
 
@@ -1362,7 +1625,7 @@ namespace Terraria.ModLoader
 		public void AddTexture(string name, Texture2D texture)
 		{
 			if (TextureExists(name))
-				throw new DuplicateNameException("Texture already exist: " + name);
+				throw new ModNameException("Texture already exist: " + name);
 
 			textures[name] = texture;
 		}
@@ -1389,11 +1652,12 @@ namespace Terraria.ModLoader
 			return null;
 		}
 
-		public ModPacket GetPacket(int capacity = 256) {
+		public ModPacket GetPacket(int capacity = 256)
+		{
 			if (netID < 0)
-				throw new Exception("Cannot get packet for "+Name+" because it does not exist on the other side");
+				throw new Exception("Cannot get packet for " + Name + " because it does not exist on the other side");
 
-			var p = new ModPacket(MessageID.ModPacket, capacity+5);
+			var p = new ModPacket(MessageID.ModPacket, capacity + 5);
 			p.Write(netID);
 			return p;
 		}

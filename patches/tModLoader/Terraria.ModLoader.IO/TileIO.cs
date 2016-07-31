@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
-using Terraria.ModLoader;
+using Terraria.ModLoader.Default;
 
 namespace Terraria.ModLoader.IO
 {
@@ -17,6 +17,8 @@ namespace Terraria.ModLoader.IO
 			internal IDictionary<ushort, ushort> tiles;
 			internal IDictionary<ushort, bool> frameImportant;
 			internal IDictionary<ushort, ushort> walls;
+			internal IDictionary<ushort, string> tileModNames;
+			internal IDictionary<ushort, string> tileNames;
 
 			internal static TileTables Create()
 			{
@@ -24,6 +26,8 @@ namespace Terraria.ModLoader.IO
 				tables.tiles = new Dictionary<ushort, ushort>();
 				tables.frameImportant = new Dictionary<ushort, bool>();
 				tables.walls = new Dictionary<ushort, ushort>();
+				tables.tileModNames = new Dictionary<ushort, string>();
+				tables.tileNames = new Dictionary<ushort, string>();
 				return tables;
 			}
 		}
@@ -83,6 +87,12 @@ namespace Terraria.ModLoader.IO
 				string name = reader.ReadString();
 				Mod mod = ModLoader.GetMod(modName);
 				tables.tiles[type] = mod == null ? (ushort)0 : (ushort)mod.TileType(name);
+				if (tables.tiles[type] == 0)
+				{
+					tables.tiles[type] = (ushort)ModLoader.GetMod("ModLoader").TileType("PendingMysteryTile");
+					tables.tileModNames[type] = modName;
+					tables.tileNames[type] = name;
+				}
 				tables.frameImportant[type] = reader.ReadBoolean();
 			}
 			count = reader.ReadUInt16();
@@ -293,6 +303,30 @@ namespace Terraria.ModLoader.IO
 					tile.frameX = -1;
 					tile.frameY = -1;
 				}
+				if (tile.type == ModLoader.GetMod("ModLoader").TileType("PendingMysteryTile")
+					&& tables.tileNames.ContainsKey(saveType))
+				{
+					MysteryTileInfo info;
+					if (tables.frameImportant[saveType])
+					{
+						info = new MysteryTileInfo(tables.tileModNames[saveType], tables.tileNames[saveType],
+							tile.frameX, tile.frameY);
+					}
+					else
+					{
+						info = new MysteryTileInfo(tables.tileModNames[saveType], tables.tileNames[saveType]);
+					}
+					MysteryTilesWorld modWorld = (MysteryTilesWorld)ModLoader.GetMod("ModLoader").GetModWorld("MysteryTilesWorld");
+					int pendingFrameID = modWorld.pendingInfos.IndexOf(info);
+					if (pendingFrameID < 0)
+					{
+						pendingFrameID = modWorld.pendingInfos.Count;
+						modWorld.pendingInfos.Add(info);
+					}
+					MysteryTileFrame pendingFrame = new MysteryTileFrame(pendingFrameID);
+					tile.frameX = pendingFrame.FrameX;
+					tile.frameY = pendingFrame.FrameY;
+				}
 				if ((flags & 8) == 8)
 				{
 					tile.color(reader.ReadByte());
@@ -416,7 +450,7 @@ namespace Terraria.ModLoader.IO
 			foreach (KeyValuePair<int, TileEntity> entity in TileEntity.ByID)
 			{
 				TEItemFrame itemFrame = entity.Value as TEItemFrame;
-				if (itemFrame != null && itemFrame.item.netID >= ItemID.Count)
+				if (itemFrame != null && ItemLoader.NeedsModSaving(itemFrame.item))
 				{
 					itemFrames.Add(itemFrame.ID, tileEntity);
 					flags[0] |= 2;

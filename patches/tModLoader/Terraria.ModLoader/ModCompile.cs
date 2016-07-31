@@ -67,7 +67,7 @@ namespace Terraria.ModLoader
 
             List<BuildingMod> modsToBuild;
             try {
-                var sortedModList = TopoSort(modList);
+                var sortedModList = TopoSort(modList, true);
                 modsToBuild = sortedModList.OfType<BuildingMod>().ToList();
             }
             catch (ModSortingException e) {
@@ -86,13 +86,20 @@ namespace Terraria.ModLoader
         }
 
         internal static void BuildModCommandLine(string modFolder) {
-            try {
+            var lockFile = AcquireConsoleBuildLock();
+            try
+            {
                 if (!Build(modFolder, new ConsoleBuildStatus()))
                     Environment.ExitCode = 1;
+
             }
             catch (Exception e) {
                 Console.WriteLine(e);
                 Environment.ExitCode = 1;
+            }
+            finally
+            {
+                lockFile.Close();
             }
         }
 
@@ -251,7 +258,7 @@ namespace Terraria.ModLoader
         }
 
         private static bool FindReferencedMods(BuildProperties properties, Dictionary<string, LoadingMod> mods) {
-            foreach (var refName in properties.modReferences) {
+            foreach (var refName in properties.RefNames(true)) {
                 if (mods.ContainsKey(refName))
                     continue;
 
@@ -365,17 +372,17 @@ namespace Terraria.ModLoader
                     pdb = File.ReadAllBytes(Path.Combine(tempDir, mod.Name + ".pdb"));
             }
             finally {
-				int numTries = 10;
-				while (numTries > 0) {
-					try {
-						Directory.Delete(tempDir, true);
-						numTries = 0;
-					}
-					catch {
-						System.Threading.Thread.Sleep(1);
-						numTries--;
-					}
-				}
+                int numTries = 10;
+                while (numTries > 0) {
+                    try {
+                        Directory.Delete(tempDir, true);
+                        numTries = 0;
+                    }
+                    catch {
+                        System.Threading.Thread.Sleep(1);
+                        numTries--;
+                    }
+                }
             }
         }
 
@@ -401,6 +408,23 @@ namespace Terraria.ModLoader
                     .Invoke(null, new object[] { compileOptions.OutputAssembly });
             
             return res;
+        }
+
+        private static FileStream AcquireConsoleBuildLock() {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/ModCompile/buildlock";
+            bool first = true;
+            while (true) {
+                try
+                {
+                    return new FileStream(path, FileMode.OpenOrCreate);
+                }
+                catch (IOException) {
+                    if (first) {
+                        Console.WriteLine("Waiting for other builds to complete");
+                        first = false;
+                    }
+                }
+            }
         }
     }
 }

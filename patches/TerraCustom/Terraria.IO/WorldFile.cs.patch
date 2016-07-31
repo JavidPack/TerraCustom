@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.IO\WorldFile.cs
 +++ src/TerraCustom\Terraria.IO\WorldFile.cs
-@@ -311,8 +_,15 @@
+@@ -334,8 +_,15 @@
  				{
  					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
  				}
@@ -17,13 +17,4 @@
  			}
  			Main.serverGenLock = false;
  		}
-@@ -1009,7 +_,7 @@
- 			writer.Write(NPC.savedAngler);
- 			if (Main.anglerQuest < ItemLoader.vanillaQuestFishCount)
- 			{
--				writer.Write(Main.anglerQuest);
-+			writer.Write(Main.anglerQuest);
- 			}
- 			else
- 			{
 

@@ -13,6 +13,7 @@ using Mono.Cecil;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 using System.Security.Cryptography;
 
 namespace Terraria.ModLoader
@@ -20,7 +21,7 @@ namespace Terraria.ModLoader
 	public static class ModLoader
 	{
 		//change Terraria.Main.DrawMenu change drawn version number string to include this
-		public static readonly Version version = new Version(0, 8, 1, 1);
+		public static readonly Version version = new Version(0, 8, 3, 1);
 		public static readonly string versionedName = "tModLoader v" + version;
 #if WINDOWS
 		public const bool windows = true;
@@ -29,7 +30,8 @@ namespace Terraria.ModLoader
 		public const bool windows = false;
 #endif
 		//change Terraria.Main.SavePath and cloud fields to use "ModLoader" folder
-		public static readonly string ModPath = Main.SavePath + Path.DirectorySeparatorChar + "Mods";
+		public static string ModPath => modPath;
+		internal static string modPath = Main.SavePath + Path.DirectorySeparatorChar + "Mods";
 		public static readonly string ModSourcePath = Main.SavePath + Path.DirectorySeparatorChar + "Mod Sources";
 		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
 		internal const int earliestRelease = 149;
@@ -128,6 +130,8 @@ namespace Terraria.ModLoader
 				ModNet.AssignNetIDs();
 
 			MapLoader.SetupModMap();
+			ItemSorting.SetupWhiteLists();
+			
 			Interface.loadMods.SetProgressRecipes();
 			for (int k = 0; k < Recipe.maxRecipes; k++)
 			{
@@ -172,6 +176,12 @@ namespace Terraria.ModLoader
 			SoundLoader.ResizeAndFillArrays();
 			MountLoader.ResizeArrays();
 			BuffLoader.ResizeArrays();
+			BackgroundTextureLoader.ResizeAndFillArrays();
+			UgBgStyleLoader.ResizeAndFillArrays();
+			SurfaceBgStyleLoader.ResizeAndFillArrays();
+			GlobalBgStyleLoader.ResizeAndFillArrays(unloading);
+			WaterStyleLoader.ResizeArrays();
+			WaterfallStyleLoader.ResizeArrays();
 		}
 
 		internal static TmodFile[] FindMods()
@@ -207,7 +217,7 @@ namespace Terraria.ModLoader
 
 			try
 			{
-				modsToLoad = TopoSort(modsToLoad);
+				modsToLoad = TopoSort(modsToLoad, false);
 			}
 			catch (ModSortingException e)
 			{
@@ -250,11 +260,14 @@ namespace Terraria.ModLoader
 			{
 				try
 				{
+					if (mod.Name.Length == 0)
+						throw new ModNameException("Mods must actually have stuff in their names");
+
 					if (mod.Name.Equals("Terraria", StringComparison.InvariantCultureIgnoreCase))
-						throw new DuplicateNameException("Mods names cannot be named Terraria");
+						throw new ModNameException("Mods names cannot be named Terraria");
 
 					if (names.Contains(mod.Name))
-						throw new DuplicateNameException("Two mods share the internal name " + mod.Name);
+						throw new ModNameException("Two mods share the internal name " + mod.Name);
 
 					names.Add(mod.Name);
 				}
@@ -269,14 +282,49 @@ namespace Terraria.ModLoader
 			return true;
 		}
 
-		internal static List<LoadingMod> TopoSort(ICollection<LoadingMod> mods)
+		internal static List<LoadingMod> TopoSort(ICollection<LoadingMod> mods, bool building)
 		{
 			var nameMap = mods.ToDictionary(mod => mod.Name);
+			var errored = new HashSet<LoadingMod>();
+			var errorLog = new StringBuilder();
+
+			//ensure dependencies exist
+			foreach (var mod in mods)
+				foreach (var depName in mod.properties.RefNames(building))
+					if (!nameMap.ContainsKey(depName))
+					{
+						errored.Add(mod);
+						errorLog.AppendLine("Missing mod: " + depName + " required by " + mod.Name);
+					}
+
+			if (errored.Count > 0)
+				throw new ModSortingException(errored, errorLog.ToString());
+
+			//ensure target versions are met
+			foreach (var mod in mods)
+				foreach (var dep in mod.properties.Refs(true))
+				{
+					LoadingMod inst;
+					if (nameMap.TryGetValue(dep.mod, out inst) && inst.properties.version < dep.target)
+					{
+						errored.Add(mod);
+						errorLog.AppendLine(mod.Name + " requires version " + dep.target + "+ of " + dep.target + 
+							" but version " + inst.properties.version + " is installed");
+					}
+				}
+
+			if (errored.Count > 0)
+				throw new ModSortingException(errored, errorLog.ToString());
+
+			//build graph
+			var modsBefore = mods.ToDictionary(mod => mod.Name, mod => mod.properties.sortAfter.ToList());
+			foreach (var mod in mods)
+				foreach (var before in mod.properties.sortBefore)
+					modsBefore[before].Add(mod.Name);
+
 
 			var visiting = new Stack<LoadingMod>();
 			var sorted = new List<LoadingMod>();
-			var errored = new HashSet<LoadingMod>();
-			var errorLog = new StringBuilder();
 
 			Action<LoadingMod> Visit = null;
 			Visit = mod =>
@@ -285,15 +333,8 @@ namespace Terraria.ModLoader
 					return;
 
 				visiting.Push(mod);
-				foreach (var depName in mod.properties.modReferences)
+				foreach (var depName in modsBefore[mod.Name].Where(nameMap.ContainsKey))
 				{
-					if (!nameMap.ContainsKey(depName))
-					{
-						errored.Add(mod);
-						errorLog.AppendLine("Missing mod: " + depName + " required by " + mod.Name);
-						continue;
-					}
-
 					var dep = nameMap[depName];
 					if (visiting.Contains(dep))
 					{
@@ -344,9 +385,16 @@ namespace Terraria.ModLoader
 			MountLoader.Unload();
 			ModGore.Unload();
 			SoundLoader.Unload();
+			BackgroundTextureLoader.Unload();
+			UgBgStyleLoader.Unload();
+			SurfaceBgStyleLoader.Unload();
+			GlobalBgStyleLoader.Unload();
+			WaterStyleLoader.Unload();
+			WaterfallStyleLoader.Unload();
 			mods.Clear();
 			ResizeArrays(true);
 			MapLoader.UnloadModMap();
+			ItemSorting.SetupWhiteLists();
 			modHotKeys.Clear();
 			WorldHooks.Unload();
 			RecipeHooks.Unload();

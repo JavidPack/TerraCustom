@@ -167,6 +167,7 @@
     <Compile Include="Terraria.GameContent.Dyes\LegacyHairShaderData.cs" />
     <Compile Include="Terraria.GameContent.Dyes\ReflectiveArmorShaderData.cs" />
     <Compile Include="Terraria.GameContent.Dyes\TeamArmorShaderData.cs" />
+    <Compile Include="Terraria.GameContent.Events\BirthdayParty.cs" />
     <Compile Include="Terraria.GameContent.Events\CultistRitual.cs" />
     <Compile Include="Terraria.GameContent.Events\MoonlordDeathDrama.cs" />
     <Compile Include="Terraria.GameContent.Events\ScreenDarkness.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Terraria.GameContent.Skies\MartianSky.cs" />
     <Compile Include="Terraria.GameContent.Skies\MoonLordSky.cs" />
     <Compile Include="Terraria.GameContent.Skies\NebulaSky.cs" />
+    <Compile Include="Terraria.GameContent.Skies\PartySky.cs" />
     <Compile Include="Terraria.GameContent.Skies\SlimeSky.cs" />
     <Compile Include="Terraria.GameContent.Skies\SolarSky.cs" />
     <Compile Include="Terraria.GameContent.Skies\StardustSky.cs" />
@@ -325,13 +327,14 @@
     <Compile Include="Terraria.ModLoader.Default\ModLoaderMod.cs" />
     <Compile Include="Terraria.ModLoader.Default\MysteryItem.cs" />
     <Compile Include="Terraria.ModLoader.Default\MysteryTile.cs" />
+    <Compile Include="Terraria.ModLoader.Default\MysteryTilesWorld.cs" />
     <Compile Include="Terraria.ModLoader.Default\MysteryWorld.cs" />
     <Compile Include="Terraria.ModLoader.Default\MysteryPlayer.cs" />
     <Compile Include="Terraria.ModLoader.Default\StartBag.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\AddRecipesException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\CustomModDataException.cs" />
-    <Compile Include="Terraria.ModLoader.Exceptions\DuplicateNameException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\MissingResourceException.cs" />
+    <Compile Include="Terraria.ModLoader.Exceptions\ModNameException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\ModSortingException.cs" />
     <Compile Include="Terraria.ModLoader.Exceptions\RecipeException.cs" />
     <Compile Include="Terraria.ModLoader.IO\ItemIO.cs" />
@@ -364,8 +367,11 @@
     <Compile Include="Terraria.ModLoader.UI\UIModSources.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIUpdateMessage.cs" />
     <Compile Include="Terraria.ModLoader\AssemblyManager.cs" />
+    <Compile Include="Terraria.ModLoader\BackgroundStyleLoaders.cs" />
+    <Compile Include="Terraria.ModLoader\BackgroundTextureLoader.cs" />
     <Compile Include="Terraria.ModLoader\BuffLoader.cs" />
     <Compile Include="Terraria.ModLoader\BuildProperties.cs" />
+    <Compile Include="Terraria.ModLoader\ConvertiblePlants.cs" />
     <Compile Include="Terraria.ModLoader\DrawInfo.cs" />
     <Compile Include="Terraria.ModLoader\EntityInfo.cs" />
     <Compile Include="Terraria.ModLoader\EquipLoader.cs" />
@@ -385,6 +391,7 @@
     <Compile Include="Terraria.ModLoader\MapLegend.cs" />
     <Compile Include="Terraria.ModLoader\MapLoader.cs" />
     <Compile Include="Terraria.ModLoader\Mod.cs" />
+    <Compile Include="Terraria.ModLoader\ModBackgroundStyle.cs" />
     <Compile Include="Terraria.ModLoader\ModBuff.cs" />
     <Compile Include="Terraria.ModLoader\ModCompile.cs" />
     <Compile Include="Terraria.ModLoader\ModDust.cs" />
@@ -405,9 +412,14 @@
     <Compile Include="Terraria.ModLoader\ModSound.cs" />
     <Compile Include="Terraria.ModLoader\ModTile.cs" />
     <Compile Include="Terraria.ModLoader\ModWall.cs" />
+    <Compile Include="Terraria.ModLoader\ModWaterStyle.cs" />
     <Compile Include="Terraria.ModLoader\ModWorld.cs" />
+    <Compile Include="Terraria.ModLoader\RecipeEditor.cs" />
+    <Compile Include="Terraria.ModLoader\RecipeFinder.cs" />
     <Compile Include="Terraria.ModLoader\RecipeGroupHelper.cs" />
     <Compile Include="Terraria.ModLoader\RecipeHooks.cs" />
+    <Compile Include="Terraria.ModLoader\TooltipLine.cs" />
+    <Compile Include="Terraria.ModLoader\WaterStyleLoader.cs" />
     <Compile Include="Terraria.ModLoader\WorldHooks.cs" />
     <Compile Include="Terraria.ModLoader\MountLoader.cs" />
     <Compile Include="Terraria.ModLoader\MountTextureType.cs" />
@@ -558,6 +570,7 @@
     <Compile Include="Terraria\NetMessage.cs" />
     <Compile Include="Terraria\Netplay.cs" />
     <Compile Include="Terraria\NPC.cs" />
+    <Compile Include="Terraria\PartyHatColor.cs" />
     <Compile Include="Terraria\Player.cs" />
     <Compile Include="Terraria\Program.cs" />
     <Compile Include="Terraria\Projectile.cs" />

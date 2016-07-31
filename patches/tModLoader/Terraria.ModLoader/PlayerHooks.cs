@@ -1,9 +1,9 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 using Terraria.ModLoader.Default;
 
 namespace Terraria.ModLoader
@@ -148,11 +148,130 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		public static bool CustomBiomesMatch(Player player, Player other)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				if (!modPlayer.CustomBiomesMatch(other))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public static void CopyCustomBiomesTo(Player player, Player other)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.CopyCustomBiomesTo(other);
+			}
+		}
+
+		public static void SendCustomBiomes(Player player, BinaryWriter writer)
+		{
+			ushort count = 0;
+			byte[] data;
+			using (MemoryStream stream = new MemoryStream())
+			{
+				using (BinaryWriter customWriter = new BinaryWriter(stream))
+				{
+					foreach (ModPlayer modPlayer in player.modPlayers)
+					{
+						if (SendCustomBiomes(modPlayer, customWriter))
+						{
+							count++;
+						}
+					}
+					customWriter.Flush();
+					data = stream.ToArray();
+				}
+			}
+			writer.Write(count);
+			writer.Write(data);
+		}
+
+		private static bool SendCustomBiomes(ModPlayer modPlayer, BinaryWriter writer)
+		{
+			byte[] data;
+			using (MemoryStream stream = new MemoryStream())
+			{
+				using (BinaryWriter customWriter = new BinaryWriter(stream))
+				{
+					modPlayer.SendCustomBiomes(customWriter);
+					customWriter.Flush();
+					data = stream.ToArray();
+				}
+			}
+			if (data.Length > 0)
+			{
+				writer.Write(modPlayer.mod.Name);
+				writer.Write(modPlayer.Name);
+				writer.Write((byte)data.Length);
+				writer.Write(data);
+				return true;
+			}
+			return false;
+		}
+
+		public static void ReceiveCustomBiomes(Player player, BinaryReader reader)
+		{
+			int count = reader.ReadUInt16();
+			for (int k = 0; k < count; k++)
+			{
+				string modName = reader.ReadString();
+				string name = reader.ReadString();
+				byte[] data = reader.ReadBytes(reader.ReadByte());
+				Mod mod = ModLoader.GetMod(modName);
+				ModPlayer modPlayer = mod == null ? null : player.GetModPlayer(mod, name);
+				if (modPlayer != null)
+				{
+					using (MemoryStream stream = new MemoryStream(data))
+					{
+						using (BinaryReader customReader = new BinaryReader(stream))
+						{
+							try
+							{
+								modPlayer.ReceiveCustomBiomes(customReader);
+							}
+							catch
+							{
+							}
+						}
+					}
+				}
+			}
+		}
+
 		public static void UpdateBiomeVisuals(Player player)
 		{
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
 				modPlayer.UpdateBiomeVisuals();
+			}
+		}
+
+		public static void clientClone(Player player, Player clientClone)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.clientClone(clientClone.GetModPlayer(modPlayer.mod, modPlayer.Name));
+			}
+		}
+
+		public static void SyncPlayer(Player player, int toWho, int fromWho, bool newPlayer)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.SyncPlayer(toWho, fromWho, newPlayer);
+			}
+		}
+
+		public static void SendClientChanges(Player player, Player clientPlayer)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.SendClientChanges(clientPlayer.GetModPlayer(modPlayer.mod, modPlayer.Name));
 			}
 		}
 
@@ -658,6 +777,14 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		public static void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
+		{
+			foreach (ModPlayer modPlayer in drawInfo.drawPlayer.modPlayers)
+			{
+				modPlayer.ModifyDrawInfo(ref drawInfo);
+			}
+		}
+
 		public static List<PlayerLayer> GetDrawLayers(Player drawPlayer)
 		{
 			List<PlayerLayer> layers = new List<PlayerLayer>();
@@ -732,6 +859,22 @@ namespace Terraria.ModLoader
 				modPlayer.ModifyDrawHeadLayers(layers);
 			}
 			return layers;
+		}
+
+		public static void ModifyScreenPosition(Player player)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.ModifyScreenPosition();
+			}
+		}
+
+		public static void ModifyZoom(Player player, ref float zoom)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.ModifyZoom(ref zoom);
+			}
 		}
 	}
 }

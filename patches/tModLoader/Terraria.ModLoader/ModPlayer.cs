@@ -77,7 +77,36 @@ namespace Terraria.ModLoader
 		{
 		}
 
+		public virtual bool CustomBiomesMatch(Player other)
+		{
+			return true;
+		}
+
+		public virtual void CopyCustomBiomesTo(Player other)
+		{
+		}
+
+		public virtual void SendCustomBiomes(BinaryWriter writer)
+		{
+		}
+
+		public virtual void ReceiveCustomBiomes(BinaryReader reader)
+		{
+		}
+
 		public virtual void UpdateBiomeVisuals()
+		{
+		}
+
+		public virtual void clientClone(ModPlayer clientClone)
+		{
+		}
+
+		public virtual void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+		{
+		}
+
+		public virtual void SendClientChanges(ModPlayer clientPlayer)
 		{
 		}
 
@@ -299,11 +328,23 @@ namespace Terraria.ModLoader
 		{
 		}
 
+		public virtual void ModifyDrawInfo(ref PlayerDrawInfo drawInfo)
+		{
+		}
+
 		public virtual void ModifyDrawLayers(List<PlayerLayer> layers)
 		{
 		}
 
 		public virtual void ModifyDrawHeadLayers(List<PlayerHeadLayer> layers)
+		{
+		}
+
+		public virtual void ModifyScreenPosition()
+		{
+		}
+
+		public virtual void ModifyZoom(ref float zoom)
 		{
 		}
 	}

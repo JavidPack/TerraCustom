@@ -66,6 +66,8 @@ namespace Terraria.ModLoader
 		private static DelegateDrawEffects[] HookDrawEffects;
 		private static Func<NPC, SpriteBatch, Color, bool>[] HookPreDraw;
 		private static Action<NPC, SpriteBatch, Color>[] HookPostDraw;
+		private delegate bool? DelegateDrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 offset);
+		private static DelegateDrawHealthBar[] HookDrawHealthBar;
 		private delegate void DelegateEditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns);
 		private static DelegateEditSpawnRate[] HookEditSpawnRate;
 		private delegate void DelegateEditSpawnRange(Player player, ref int spawnRangeX, ref int spawnRangeY, ref int safeRangeX, ref int safeRangeY);
@@ -149,10 +151,12 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Main.nextNPC, nextNPC);
 			Array.Resize(ref Main.slimeRainNPC, nextNPC);
 			Array.Resize(ref Main.npcTexture, nextNPC);
+			Array.Resize(ref Main.npcAltTextures, nextNPC);
 			Array.Resize(ref Main.npcCatchable, nextNPC);
 			Array.Resize(ref Main.npcName, nextNPC);
 			Array.Resize(ref Main.npcFrameCount, nextNPC);
 			Array.Resize(ref NPC.killCount, nextNPC);
+			Array.Resize(ref NPC.npcsFoundForCheckActive, nextNPC);
 			Array.Resize(ref EmoteBubble.CountNPCs, nextNPC);
 			Array.Resize(ref NPCID.Sets.StatueSpawnedDropRarity, nextNPC);
 			Array.Resize(ref NPCID.Sets.NoEarlymodeLootWhenSpawnedFromStatue, nextNPC);
@@ -162,6 +166,7 @@ namespace Terraria.ModLoader
 			Array.Resize(ref NPCID.Sets.TrailCacheLength, nextNPC);
 			Array.Resize(ref NPCID.Sets.MPAllowedEnemies, nextNPC);
 			Array.Resize(ref NPCID.Sets.TownCritter, nextNPC);
+			Array.Resize(ref NPCID.Sets.HatOffsetY, nextNPC);
 			Array.Resize(ref NPCID.Sets.FaceEmote, nextNPC);
 			Array.Resize(ref NPCID.Sets.ExtraFramesCount, nextNPC);
 			Array.Resize(ref NPCID.Sets.AttackFrameCount, nextNPC);
@@ -175,6 +180,8 @@ namespace Terraria.ModLoader
 			Array.Resize(ref NPCID.Sets.ExcludedFromDeathTally, nextNPC);
 			Array.Resize(ref NPCID.Sets.TechnicallyABoss, nextNPC);
 			Array.Resize(ref NPCID.Sets.MustAlwaysDraw, nextNPC);
+			Array.Resize(ref NPCID.Sets.ExtraTextureCount, nextNPC);
+			Array.Resize(ref NPCID.Sets.NPCFramingGroup, nextNPC);
 			for (int k = NPCID.Count; k < nextNPC; k++)
 			{
 				Main.NPCLoaded[k] = true;
@@ -223,6 +230,7 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookDrawEffects, globalNPCs, g => g.DrawEffects);
 			ModLoader.BuildGlobalHook(ref HookPreDraw, globalNPCs, g => g.PreDraw);
 			ModLoader.BuildGlobalHook(ref HookPostDraw, globalNPCs, g => g.PostDraw);
+			ModLoader.BuildGlobalHook(ref HookDrawHealthBar, globalNPCs, g => g.DrawHealthBar);
 			ModLoader.BuildGlobalHook(ref HookEditSpawnRate, globalNPCs, g => g.EditSpawnRate);
 			ModLoader.BuildGlobalHook(ref HookEditSpawnRange, globalNPCs, g => g.EditSpawnRange);
 			ModLoader.BuildGlobalHook(ref HookEditSpawnPool, globalNPCs, g => g.EditSpawnPool);
@@ -261,8 +269,9 @@ namespace Terraria.ModLoader
 		}
 		//in Terraria.NPC.SetDefaults after if else setting properties call NPCLoader.SetupNPC(this);
 		//in Terraria.NPC.SetDefaults move Lang stuff before SetupNPC and replace this.netID with this.type
-		internal static void SetupNPC(NPC npc) {
-			npc.npcInfo = infoList.Select(info => info.Clone()).ToArray();
+		internal static void SetupNPC(NPC npc)
+		{
+			SetupNPCInfo(npc);
 			if (IsModNPC(npc))
 			{
 				GetNPC(npc.type).SetupNPC(npc);
@@ -271,6 +280,11 @@ namespace Terraria.ModLoader
 			{
 				hook(npc);
 			}
+		}
+
+		internal static void SetupNPCInfo(NPC npc)
+		{
+			npc.npcInfo = infoList.Select(info => info.Clone()).ToArray();
 		}
 
 		internal static NPCInfo GetNPCInfo(NPC npc, Mod mod, string name)
@@ -824,6 +838,50 @@ namespace Terraria.ModLoader
 				hook(npc, spriteBatch, drawColor);
 			}
 		}
+
+		public static bool DrawHealthBar(NPC npc, ref float scale)
+		{
+			Vector2 position = new Vector2(npc.position.X + npc.width / 2, npc.position.Y + npc.gfxOffY);
+			if (Main.hbPosition == 1)
+			{
+				position.Y += npc.height + 10f + Main.NPCAddHeight(npc.whoAmI);
+			}
+			else if (Main.hbPosition == 2)
+			{
+				position.Y -= 24f + Main.NPCAddHeight(npc.whoAmI) / 2f;
+			}
+			foreach (var hook in HookDrawHealthBar)
+			{
+				bool? result = hook(npc, Main.hbPosition, ref scale, ref position);
+				if (result.HasValue)
+				{
+					if (result.Value)
+					{
+						DrawHealthBar(npc, position, scale);
+					}
+					return false;
+				}
+			}
+			if (NPCLoader.IsModNPC(npc))
+			{
+				bool? result = npc.modNPC.DrawHealthBar(Main.hbPosition, ref scale, ref position);
+				if (result.HasValue)
+				{
+					if (result.Value)
+					{
+						DrawHealthBar(npc, position, scale);
+					}
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private static void DrawHealthBar(NPC npc, Vector2 position, float scale)
+		{
+			float alpha = Lighting.Brightness((int)(npc.Center.X / 16f), (int)(npc.Center.Y / 16f));
+			Main.instance.DrawHealthBar(position.X, position.Y, npc.life, npc.lifeMax, alpha, scale);
+		}
 		//in Terraria.NPC.SpawnNPC after modifying NPC.spawnRate and NPC.maxSpawns call
 		//  NPCLoader.EditSpawnRate(Main.player[j], ref NPC.spawnRate, ref NPC.maxSpawns);
 		public static void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
@@ -921,6 +979,11 @@ namespace Terraria.ModLoader
 		public static string TownNPCName(int type)
 		{
 			return GetNPC(type)?.TownNPCName() ?? "";
+		}
+
+		public static bool UsesPartyHat(NPC npc)
+		{
+			return npc.modNPC?.UsesPartyHat() ?? true;
 		}
 		//in Terraria.NPC.GetChat before returning result add NPCLoader.GetChat(this, ref result);
 		public static void GetChat(NPC npc, ref string chat)

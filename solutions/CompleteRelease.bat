@@ -1,7 +1,7 @@
 :: After Pulling, Patching, and making sure the version number is changed in src, this bat will compile and create zips for all release.
 :: It will also create a zip for ExampleMod
 
-set version=v0.3.2
+set version=v0.3.3
 set exeFile=TerraCustom %version%.exe
 set destinationFolder=.\TerraCustom %version% Release
 
@@ -49,9 +49,9 @@ rmdir "%destinationFolder%\TerraCustom Mac %version%" /S /Q
 rmdir "%destinationFolder%\TerraCustom Linux %version%" /S /Q
 
 :: Copy to public DropBox Folder
-copy "%destinationFolder%\TerraCustom Windows %version%.zip" "C:\Users\Javid\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Windows %version%.zip"
-copy "%destinationFolder%\TerraCustom Mac %version%.zip" "C:\Users\Javid\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Mac %version%.zip"
-copy "%destinationFolder%\TerraCustom Linux %version%.zip" "C:\Users\Javid\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Linux %version%.zip"
+copy "%destinationFolder%\TerraCustom Windows %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Windows %version%.zip"
+copy "%destinationFolder%\TerraCustom Mac %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Mac %version%.zip"
+copy "%destinationFolder%\TerraCustom Linux %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Linux %version%.zip"
 
 echo(
 echo(

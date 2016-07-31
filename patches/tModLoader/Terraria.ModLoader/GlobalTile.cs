@@ -25,6 +25,21 @@ namespace Terraria.ModLoader
 			array[array.Length - 1] = type;
 		}
 
+		public void AddModTree(int soilType, ModTree tree)
+		{
+			TileLoader.trees[soilType] = tree;
+		}
+
+		public void AddModPalmTree(int soilType, ModPalmTree palmTree)
+		{
+			TileLoader.palmTrees[soilType] = palmTree;
+		}
+
+		public void AddModCactus(int soilType, ModCactus cactus)
+		{
+			TileLoader.cacti[soilType] = cactus;
+		}
+
 		public virtual bool Autoload(ref string name)
 		{
 			return mod.Properties.Autoload;
@@ -148,6 +163,15 @@ namespace Terraria.ModLoader
 		public virtual bool Slope(int i, int j, int type)
 		{
 			return true;
+		}
+
+		public virtual void ChangeWaterfallStyle(int type, ref int style)
+		{
+		}
+
+		public virtual int SaplingGrowthType(int type, ref int style)
+		{
+			return -1;
 		}
 	}
 }

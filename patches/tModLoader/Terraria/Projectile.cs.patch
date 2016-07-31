@@ -96,12 +96,16 @@
  			{
  				if (ProjectileID.Sets.NeedsUUID[Type])
  				{
-@@ -8042,7 +_,7 @@
+@@ -8042,7 +_,11 @@
  			{
  				return;
  			}
 -			if (Main.projPet[this.type] && this.type != 266 && this.type != 407 && this.type != 317 && (this.type != 388 || this.ai[0] != 2f) && (this.type < 390 || this.type > 392) && (this.type < 393 || this.type > 395) && (this.type != 533 || this.ai[0] < 6f || this.ai[0] > 8f) && (this.type < 625 || this.type > 628))
 +			if (Main.projPet[this.type] && this.type != 266 && this.type != 407 && this.type != 317 && (this.type != 388 || this.ai[0] != 2f) && (this.type < 390 || this.type > 392) && (this.type < 393 || this.type > 395) && (this.type != 533 || this.ai[0] < 6f || this.ai[0] > 8f) && (this.type < 625 || this.type > 628) && !ProjectileLoader.MinionContactDamage(this))
++			{
++				return;
++			}
++			if (!ProjectileLoader.CanDamage(this))
  			{
  				return;
  			}
@@ -326,6 +330,17 @@
  					{
  						this.position += this.velocity;
  						this.numUpdates = 0;
+@@ -11507,6 +_,10 @@
+ 				{
+ 					return;
+ 				}
++				if (!ProjectileLoader.ShouldUpdatePosition(this))
++				{
++					return;
++				}
+ 				if (this.wet)
+ 				{
+ 					this.position += wetVelocity;
 @@ -11558,12 +_,14 @@
  				{
  					num5++;
@@ -437,12 +452,12 @@
  														Rectangle value14 = new Rectangle((int)Main.player[this.owner].position.X, (int)Main.player[this.owner].position.Y, Main.player[this.owner].width, Main.player[this.owner].height);
  														if (rectangle5.Intersects(value14))
  														{
--															if (this.ai[1] > 0f && this.ai[1] < 3730f)
+-															if (this.ai[1] > 0f && this.ai[1] < 3770f)
 +															if (this.ai[1] > 0f && this.ai[1] < (float)ItemLoader.ItemCount)
  															{
  																int num594 = (int)this.ai[1];
  																Item item = new Item();
-@@ -36218,6 +_,11 @@
+@@ -36215,6 +_,11 @@
  			Main.projectileIdentity[this.owner, this.identity] = -1;
  			int num = this.timeLeft;
  			this.timeLeft = 0;
@@ -454,19 +469,21 @@
  			if (this.type == 634 || this.type == 635)
  			{
  				int num2 = Utils.SelectRandom<int>(Main.rand, new int[]
-@@ -40816,6 +_,11 @@
- 									if (!Main.hardMode && Main.tile[num714, num715].type == 58)
+@@ -40810,7 +_,13 @@
  									{
  										flag4 = false;
-+										//patch file
-+									}
-+									if (!TileLoader.CanExplode(num707, num708))
+ 									}
++									//patch file: num714, num715
+ 									if (!Main.hardMode && Main.tile[num714, num715].type == 58)
 +									{
 +										flag4 = false;
- 									}
- 									if (flag4)
++										//patch file: num714, num715
++									}
++									if (!TileLoader.CanExplode(num714, num715))
  									{
-@@ -41204,11 +_,17 @@
+ 										flag4 = false;
+ 									}
+@@ -41201,11 +_,17 @@
  					}
  				}
  			}

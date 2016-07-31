@@ -27,6 +27,9 @@ namespace Terraria.ModLoader
 		private static int nextTile = TileID.Count;
 		internal static readonly IList<ModTile> tiles = new List<ModTile>();
 		internal static readonly IList<GlobalTile> globalTiles = new List<GlobalTile>();
+		internal static readonly IDictionary<int, ModTree> trees = new Dictionary<int, ModTree>();
+		internal static readonly IDictionary<int, ModPalmTree> palmTrees = new Dictionary<int, ModPalmTree>();
+		internal static readonly IDictionary<int, ModCactus> cacti = new Dictionary<int, ModCactus>();
 		private static bool loaded = false;
 		private static int vanillaChairCount = TileID.Sets.RoomNeeds.CountsAsChair.Length;
 		private static int vanillaTableCount = TileID.Sets.RoomNeeds.CountsAsTable.Length;
@@ -68,6 +71,10 @@ namespace Terraria.ModLoader
 		private static Func<int, int, int, Item, bool>[] HookAutoSelect;
 		private static Action<int, int, int>[] HookHitWire;
 		private static Func<int, int, int, bool>[] HookSlope;
+		private delegate void DelegateChangeWaterfallStyle(int type, ref int style);
+		private static DelegateChangeWaterfallStyle[] HookChangeWaterfallStyle;
+		private delegate int DelegateSaplingGrowthType(int type, ref int style);
+		private static DelegateSaplingGrowthType[] HookSaplingGrowthType;
 
 		internal static int ReserveTileID()
 		{
@@ -174,10 +181,6 @@ namespace Terraria.ModLoader
 			Array.Resize(ref TileID.Sets.TileInteractRead, nextTile);
 			Array.Resize(ref TileID.Sets.HasOutlines, nextTile);
 			Array.Resize(ref TileID.Sets.AllTiles, nextTile);
-			for (int k = TileID.Count; k < nextTile; k++)
-			{
-				TileID.Sets.AllTiles[k] = true;
-			}
 			Array.Resize(ref TileID.Sets.Mud, nextTile);
 			Array.Resize(ref TileID.Sets.Snow, nextTile);
 			Array.Resize(ref TileID.Sets.Ices, nextTile);
@@ -208,6 +211,12 @@ namespace Terraria.ModLoader
 			Array.Resize(ref TileID.Sets.Falling, nextTile);
 			Array.Resize(ref TileID.Sets.Ore, nextTile);
 			Array.Resize(ref TileID.Sets.ForceObsidianKill, nextTile);
+			for (int k = TileID.Count; k < nextTile; k++)
+			{
+				TileID.Sets.AllTiles[k] = true;
+				TileID.Sets.GeneralPlacementTiles[k] = true;
+				TileID.Sets.CanBeClearedDuringGeneration[k] = true;
+			}
 			while (TileObjectData._data.Count < nextTile)
 			{
 				TileObjectData._data.Add(null);
@@ -239,6 +248,8 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookAutoSelect, globalTiles, g => g.AutoSelect);
 			ModLoader.BuildGlobalHook(ref HookHitWire, globalTiles, g => g.HitWire);
 			ModLoader.BuildGlobalHook(ref HookSlope, globalTiles, g => g.Slope);
+			ModLoader.BuildGlobalHook(ref HookChangeWaterfallStyle, globalTiles, g => g.ChangeWaterfallStyle);
+			ModLoader.BuildGlobalHook(ref HookSaplingGrowthType, globalTiles, g => g.SaplingGrowthType);
 
 			if (!unloading)
 			{
@@ -252,6 +263,9 @@ namespace Terraria.ModLoader
 			tiles.Clear();
 			nextTile = TileID.Count;
 			globalTiles.Clear();
+			trees.Clear();
+			palmTrees.Clear();
+			cacti.Clear();
 			Array.Resize(ref TileID.Sets.RoomNeeds.CountsAsChair, vanillaChairCount);
 			Array.Resize(ref TileID.Sets.RoomNeeds.CountsAsTable, vanillaTableCount);
 			Array.Resize(ref TileID.Sets.RoomNeeds.CountsAsTorch, vanillaTorchCount);
@@ -416,6 +430,25 @@ namespace Terraria.ModLoader
 			}
 			return "";
 		}
+
+		public static bool IsDresser(int type)
+		{
+			if (type == TileID.Dressers)
+			{
+				return true;
+			}
+			return ModDresserName(type).Length > 0;
+		}
+
+		public static string ModDresserName(int type)
+		{
+			ModTile modTile = GetTile(type);
+			if (modTile != null)
+			{
+				return modTile.dresser;
+			}
+			return "";
+		}
 		//in Terraria.Player.CheckSpawn add this to bed type check
 		public static bool IsModBed(int type)
 		{
@@ -435,6 +468,16 @@ namespace Terraria.ModLoader
 				return type == TileID.Torches;
 			}
 			return modTile.torch;
+		}
+
+		public static bool IsSapling(int type)
+		{
+			ModTile modTile = GetTile(type);
+			if (modTile == null)
+			{
+				return type == TileID.Saplings;
+			}
+			return modTile.sapling;
 		}
 
 		public static bool IsModMusicBox(Tile tile)
@@ -914,6 +957,152 @@ namespace Terraria.ModLoader
 		public static void WalkDust(int type, ref int dustType, ref bool makeDust, ref Color color)
 		{
 			GetTile(type)?.WalkDust(ref dustType, ref makeDust, ref color);
+		}
+
+		public static void ChangeWaterfallStyle(int type, ref int style)
+		{
+			GetTile(type)?.ChangeWaterfallStyle(ref style);
+			foreach (var hook in HookChangeWaterfallStyle)
+			{
+				hook(type, ref style);
+			}
+		}
+
+		public static bool SaplingGrowthType(int type, ref int saplingType, ref int style)
+		{
+			int originalType = saplingType;
+			int originalStyle = style;
+			bool flag = false;
+			ModTile modTile = GetTile(type);
+			if (modTile != null)
+			{
+				saplingType = modTile.SaplingGrowthType(ref style);
+				if (IsSapling(saplingType))
+				{
+					originalType = saplingType;
+					originalStyle = style;
+					flag = true;
+				}
+				else
+				{
+					saplingType = originalType;
+					style = originalStyle;
+				}
+			}
+			foreach (var hook in HookSaplingGrowthType)
+			{
+				saplingType = hook(type, ref style);
+				if (IsSapling(saplingType))
+				{
+					originalType = saplingType;
+					originalStyle = style;
+					flag = true;
+				}
+				else
+				{
+					saplingType = originalType;
+					style = originalStyle;
+				}
+			}
+			return flag;
+		}
+
+		public static bool CanGrowModTree(int type)
+		{
+			return trees.ContainsKey(type);
+		}
+
+		public static void TreeDust(Tile tile, ref int dust)
+		{
+			if (tile.active() && trees.ContainsKey(tile.type))
+			{
+				dust = trees[tile.type].CreateDust();
+			}
+		}
+
+		public static void TreeGrowthFXGore(int type, ref int gore)
+		{
+			if (trees.ContainsKey(type))
+			{
+				gore = trees[type].GrowthFXGore();
+			}
+		}
+
+		public static bool CanDropAcorn(int type)
+		{
+			return trees.ContainsKey(type) ? trees[type].CanDropAcorn() : false;
+		}
+
+		public static void DropTreeWood(int type, ref int wood)
+		{
+			if (trees.ContainsKey(type))
+			{
+				wood = trees[type].DropWood();
+			}
+		}
+
+		public static Texture2D GetTreeTexture(Tile tile)
+		{
+			return tile.active() && trees.ContainsKey(tile.type) ? trees[tile.type].GetTexture() : null;
+		}
+
+		public static Texture2D GetTreeTopTextures(int type)
+		{
+			return trees.ContainsKey(type) ? trees[type].GetTopTextures() : null;
+		}
+
+		public static Texture2D GetTreeBranchTextures(int type)
+		{
+			return trees.ContainsKey(type) ? trees[type].GetBranchTextures() : null;
+		}
+
+		public static bool CanGrowModPalmTree(int type)
+		{
+			return palmTrees.ContainsKey(type);
+		}
+
+		public static void PalmTreeDust(Tile tile, ref int dust)
+		{
+			if (tile.active() && palmTrees.ContainsKey(tile.type))
+			{
+				dust = palmTrees[tile.type].CreateDust();
+			}
+		}
+
+		public static void PalmTreeGrowthFXGore(int type, ref int gore)
+		{
+			if (palmTrees.ContainsKey(type))
+			{
+				gore = palmTrees[type].GrowthFXGore();
+			}
+		}
+
+		public static void DropPalmTreeWood(int type, ref int wood)
+		{
+			if (palmTrees.ContainsKey(type))
+			{
+				wood = palmTrees[type].DropWood();
+			}
+		}
+
+		public static Texture2D GetPalmTreeTexture(Tile tile)
+		{
+			return tile.active() && palmTrees.ContainsKey(tile.type) ? palmTrees[tile.type].GetTexture() : null;
+		}
+
+		public static Texture2D GetPalmTreeTopTextures(int type)
+		{
+			return palmTrees.ContainsKey(type) ? palmTrees[type].GetTopTextures() : null;
+		}
+
+		public static bool CanGrowModCactus(int type)
+		{
+			return cacti.ContainsKey(type);
+		}
+
+		public static Texture2D GetCactusTexture(int type)
+		{
+			return cacti.ContainsKey(type) ? cacti[type].GetTexture() : null;
 		}
 	}
 }
