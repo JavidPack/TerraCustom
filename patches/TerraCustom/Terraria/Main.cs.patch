@@ -517,7 +517,7 @@
  					num108 = 2;
  				}
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.3";
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.4";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;

@@ -5252,7 +5252,7 @@
  					{
  						if (Biomes<MahoganyTreeBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 50, 50, 500, 50), structures))
  						{
-@@ -10366,21 +_,43 @@
+@@ -10366,21 +_,44 @@
  					}
  					progress.Message = Lang.gen[76] + "..Corruption Pits";
  					progress.Set(0.4f);
@@ -5297,7 +5297,8 @@
  					progress.Message = Lang.gen[76] + "..Minecart Tracks";
  					progress.Set(0.5f);
 -					TrackGenerator.Run((int)(10f * num), (int)(num * 25f) + 250);
-+					TrackGenerator.Run((int)(10f * num * Main.setting.MineCartMultiplier), (int)(num * 25f) + 250);
++					int minTrackLength = Math.Min((int)(num * 25f) + 250, 350); 
++					TrackGenerator.Run(progress, (int)(10f * num * Main.setting.MineCartMultiplier), minTrackLength);
  					progress.Set(1f);
  				});
  			WorldGen.AddGenerationPass("Final Cleanup", delegate(GenerationProgress progress)

@@ -1,0 +1,75 @@
+--- src/tModLoader\Terraria.GameContent.Generation\TrackGenerator.cs
++++ src/TerraCustom\Terraria.GameContent.Generation\TrackGenerator.cs
+@@ -28,6 +_,16 @@
+ 			}
+ 		}
+ 
++		public TrackGenerator(GenerationProgress progress)
++		{
++			this.progress = progress;
++		}
++
++		public TrackGenerator()
++		{
++		}
++
++		private GenerationProgress progress;
+ 		private const int TOTAL_TILE_IGNORES = 150;
+ 		private const int PLAYER_HEIGHT = 6;
+ 		private const int MAX_RETRIES = 400;
+@@ -49,7 +_,7 @@
+ 			87,
+ 			86
+ 		};
+-		private TrackGenerator.TrackHistory[] _historyCache = new TrackGenerator.TrackHistory[2048];
++		private TrackGenerator.TrackHistory[] _historyCache = new TrackGenerator.TrackHistory[2048 * 2]; // 2048 vanilla.
+ 
+ 		public void Generate(int trackCount, int minimumLength)
+ 		{
+@@ -68,6 +_,8 @@
+ 					if (this.FindPath(x, num, minimumLength, false))
+ 					{
+ 						i--;
++						progress.Set(0.5f + .5f * ((trackCount - i) / (float)trackCount));
++						progress.Message = Lang.gen[76] + $"..Minecart Tracks\n\n\n               {trackCount - i} of {trackCount}";
+ 					}
+ 				}
+ 			}
+@@ -121,7 +_,7 @@
+ 			{
+ 				if (flag)
+ 				{
+-					num = Math.Min(i + 15, num);
++					num = Math.Min(i + MAX_SMOOTH_DISTANCE, num);
+ 					if (history[i].Y >= history[num].Y)
+ 					{
+ 						int num2 = i + 1;
+@@ -160,11 +_,11 @@
+ 			}
+ 			int num3 = 1;
+ 			int num4 = 0;
+-			int num5 = 400;
++			int num5 = MAX_RETRIES;
+ 			bool flag2 = false;
+-			int num6 = 150;
++			int num6 = TOTAL_TILE_IGNORES;
+ 			int num7 = 0;
+-			int num8 = 1000000;
++			int num8 = MAX_ITERATIONS;
+ 			while (num8 > 0 && flag && num < historyCache.Length - 1)
+ 			{
+ 				num8--;
+@@ -313,9 +_,9 @@
+ 			return false;
+ 		}
+ 
+-		public static void Run(int trackCount = 30, int minimumLength = 250)
+-		{
+-			new TrackGenerator().Generate(trackCount, minimumLength);
++		public static void Run(GenerationProgress progress, int trackCount = 30, int minimumLength = 250)
++		{
++			new TrackGenerator(progress).Generate(trackCount, minimumLength);
+ 		}
+ 
+ 		public static void Run(Point start)
+
