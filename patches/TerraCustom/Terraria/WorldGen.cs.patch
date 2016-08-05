@@ -1038,23 +1038,31 @@
  					for (int k = 0; k < Main.maxTilesX; k++)
  					{
  						float value = (float)k / (float)Main.maxTilesX;
-@@ -4627,23 +_,23 @@
+@@ -4627,23 +_,25 @@
  								num2 *= (int)((double)WorldGen.genRand.Next(5, 30) * 0.2);
  							}
  						}
 -						num2--;
 -						if ((double)k > (double)Main.maxTilesX * 0.43 && (double)k < (double)Main.maxTilesX * 0.57 && num >= 3)
+-						{
+-							num = WorldGen.genRand.Next(3);
+-						}
+-						if ((double)k > (double)Main.maxTilesX * 0.47 && (double)k < (double)Main.maxTilesX * 0.53)
+-						{
+-							num = 0;
+-						}
+-						if (num == 0)
 +						num2--; // randomness??
 +						if ((double)k > (double)Main.maxTilesX * 0.43 && (double)k < (double)Main.maxTilesX * 0.57 && num >= 3) // flatish near bigger middle
- 						{
- 							num = WorldGen.genRand.Next(3);
- 						}
--						if ((double)k > (double)Main.maxTilesX * 0.47 && (double)k < (double)Main.maxTilesX * 0.53)
++						{
++							if(!Main.setting.BypassSpawnAreaFlatness)
++								num = WorldGen.genRand.Next(3);
++						}
 +						if ((double)k > (double)Main.maxTilesX * 0.47 && (double)k < (double)Main.maxTilesX * 0.53) // flat near middle
- 						{
- 							num = 0;
- 						}
--						if (num == 0)
++						{
++							if(!Main.setting.BypassSpawnAreaFlatness)
++								num = 0;
++						}
 +						if (num == 0)  // +/- 1: 1/7th chance
  						{
  							while (WorldGen.genRand.Next(0, 7) == 0)

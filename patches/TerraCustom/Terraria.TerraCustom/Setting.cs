@@ -34,6 +34,7 @@ namespace Terraria.TerraCustom
 			Main.setting.SurfaceTerrainHeightMultiplier = 1f;
 			Main.setting.SurfaceTerrainHeightMax = .17f;
 			Main.setting.SurfaceTerrainHeightMin = .3f;
+			Main.setting.BypassSpawnAreaFlatness = false;
 			Main.setting.BeachSizeMultiplier = 1f;
 			Main.setting.DungeonSizeMultiplier = 1f;
 			Main.setting.TempleSizeMultiplier = 1f;
@@ -636,6 +637,9 @@ namespace Terraria.TerraCustom
 
 		[DataMember]
 		public float SurfaceTerrainHeightMin { get; internal set; } = .3f;
+
+		[DataMember]
+		public bool BypassSpawnAreaFlatness { get; internal set; }
 
 		[DataMember]
 		public float DungeonSizeMultiplier { get; internal set; } = 1f;
