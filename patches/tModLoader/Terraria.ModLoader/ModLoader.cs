@@ -21,7 +21,7 @@ namespace Terraria.ModLoader
 	public static class ModLoader
 	{
 		//change Terraria.Main.DrawMenu change drawn version number string to include this
-		public static readonly Version version = new Version(0, 8, 3, 1);
+		public static readonly Version version = new Version(0, 8, 3, 2);
 		public static readonly string versionedName = "tModLoader v" + version;
 #if WINDOWS
 		public const bool windows = true;
@@ -43,6 +43,7 @@ namespace Terraria.ModLoader
 		internal static readonly IDictionary<string, Mod> mods = new Dictionary<string, Mod>();
 		internal static readonly IDictionary<string, ModHotkey> modHotKeys = new Dictionary<string, ModHotkey>();
 		internal static readonly string modBrowserPublicKey = "<RSAKeyValue><Modulus>oCZObovrqLjlgTXY/BKy72dRZhoaA6nWRSGuA+aAIzlvtcxkBK5uKev3DZzIj0X51dE/qgRS3OHkcrukqvrdKdsuluu0JmQXCv+m7sDYjPQ0E6rN4nYQhgfRn2kfSvKYWGefp+kqmMF9xoAq666YNGVoERPm3j99vA+6EIwKaeqLB24MrNMO/TIf9ysb0SSxoV8pC/5P/N6ViIOk3adSnrgGbXnFkNQwD0qsgOWDks8jbYyrxUFMc4rFmZ8lZKhikVR+AisQtPGUs3ruVh4EWbiZGM2NOkhOCOM4k1hsdBOyX2gUliD0yjK5tiU3LBqkxoi2t342hWAkNNb4ZxLotw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+		internal static string modBrowserPassphrase = "";
 		internal static Action PostLoad;
 
 		internal static bool ModLoaded(string name)
@@ -308,7 +309,7 @@ namespace Terraria.ModLoader
 					if (nameMap.TryGetValue(dep.mod, out inst) && inst.properties.version < dep.target)
 					{
 						errored.Add(mod);
-						errorLog.AppendLine(mod.Name + " requires version " + dep.target + "+ of " + dep.target + 
+						errorLog.AppendLine(mod.Name + " requires version " + dep.target + "+ of " + dep.mod + 
 							" but version " + inst.properties.version + " is installed");
 					}
 				}
@@ -574,14 +575,20 @@ namespace Terraria.ModLoader
 			modHotKeys[name] = new ModHotkey(name, mod, defaultKey);
 		}
 		// example: ExampleMod_HotKey_Random_Buff="P"
-		//internal static void SaveConfiguration()
-		//{
-		//	foreach (KeyValuePair<string, Tuple<Mod, string, string>> hotKey in modHotKeys)
-		//	{
-		//		string name = hotKey.Value.Item1.Name + "_" + "HotKey" + "_" + hotKey.Key.Replace(' ', '_');
-		//		Main.Configuration.Put(name, hotKey.Value.Item2);
-		//	}
-		//}
+		internal static void SaveConfiguration()
+		{
+			Main.Configuration.Put("ModBrowserPassphrase", ModLoader.modBrowserPassphrase);
+			//foreach (KeyValuePair<string, Tuple<Mod, string, string>> hotKey in modHotKeys)
+			//{
+			//	string name = hotKey.Value.Item1.Name + "_" + "HotKey" + "_" + hotKey.Key.Replace(' ', '_');
+			//	Main.Configuration.Put(name, hotKey.Value.Item2);
+			//}
+		}
+		
+		internal static void LoadConfiguration()
+		{
+			Main.Configuration.Get<string>("ModBrowserPassphrase", ref ModLoader.modBrowserPassphrase);
+		}
 
 		/// <summary>
 		/// Allows type inference on T and F
