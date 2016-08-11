@@ -181,6 +181,15 @@
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
  
+@@ -2541,7 +_,7 @@
+ 					}
+ 				});
+ 			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
+-			ModLoader.ModLoader.SaveConfiguration();
++			//ModLoader.ModLoader.SaveConfiguration();
+ 			bool flag = Main.Configuration.Save(true);
+ 			return flag && PlayerInput.Save();
+ 		}
 @@ -2640,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
@@ -190,7 +199,16 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -3040,11 +_,11 @@
+@@ -2839,7 +_,7 @@
+ 					Main.cMapAlphaDown
+ 				};
+ 			}
+-			ModLoader.ModLoader.LoadConfiguration();
++			//ModLoader.ModLoader.LoadConfiguration();
+ 			PlayerInput.Load();
+ 			if (num2 < 165)
+ 			{
+@@ -3041,11 +_,11 @@
  					File.Delete(Main.WorldList[i].Path + ".bak");
  #endif
  				}
@@ -207,7 +225,7 @@
  				Main.LoadWorlds();
  			}
  			catch
-@@ -3138,7 +_,8 @@
+@@ -3139,7 +_,8 @@
  				}
  				text += str;
  			}
@@ -217,7 +235,7 @@
  			string path = string.Concat(new object[]
  				{
  					text3,
-@@ -3473,7 +_,7 @@
+@@ -3474,7 +_,7 @@
  			}
  			else
  			{
@@ -226,7 +244,7 @@
  			}
  			Main.dedServ = true;
  			Main.showSplash = false;
-@@ -3496,7 +_,7 @@
+@@ -3497,7 +_,7 @@
  				while (flag)
  				{
  					Main.LoadWorlds();
@@ -235,7 +253,7 @@
  					Console.WriteLine("");
  					for (int j = 0; j < Main.WorldList.Count; j++)
  					{
-@@ -3748,7 +_,7 @@
+@@ -3749,7 +_,7 @@
  					}
  					else if (text2 == "m" || text2 == "M")
  					{
@@ -244,7 +262,7 @@
  						continue;
  					}
  					else
-@@ -3947,7 +_,7 @@
+@@ -3948,7 +_,7 @@
  					if (target < now) //can't catch up, reset target
  					{
  						target = now + delta;
@@ -253,7 +271,7 @@
  					Thread.Sleep(Math.Max((int)remaining, 0));
  				}
  			}
-@@ -4110,7 +_,7 @@
+@@ -4111,7 +_,7 @@
  					{
  						WorldFile.saveWorld();
  						Netplay.disconnect = true;
@@ -262,7 +280,7 @@
  					}
  					else if (text == "fps")
  					{
-@@ -4384,12 +_,23 @@
+@@ -4385,12 +_,23 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
  #endif
@@ -287,7 +305,7 @@
  			base.Window.Title = Main._cachedTitle;
  #endif
  		}
-@@ -7699,8 +_,13 @@
+@@ -7700,8 +_,13 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -303,7 +321,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -19525,21 +_,26 @@
+@@ -19526,21 +_,26 @@
  								{
  									break;
  								}
@@ -330,7 +348,7 @@
  								if (Main.tile[num309, num332].type == 60)
  								{
  									num327 = 2;
-@@ -19556,6 +_,7 @@
+@@ -19557,6 +_,7 @@
  									num330 = 48;
  									break;
  								}
@@ -338,7 +356,7 @@
  								if (Main.tile[num309, num332].type == 147)
  								{
  									num327 = 4;
-@@ -19592,6 +_,7 @@
+@@ -19593,6 +_,7 @@
  										break;
  									}
  								}
@@ -346,7 +364,7 @@
  								else
  								{
  									if (Main.tile[num309, num332].type == 199)
-@@ -39651,11 +_,11 @@
+@@ -39652,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -360,7 +378,7 @@
  #endif
  			base.Exit();
  #if MAC
-@@ -39895,10 +_,10 @@
+@@ -39896,10 +_,10 @@
  
  		private void OnWorldNamed(string text)
  		{
@@ -373,7 +391,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -40029,9 +_,9 @@
+@@ -40030,9 +_,9 @@
  				}
  			}
  			int num2 = 250;
@@ -385,7 +403,7 @@
  			int num6 = Main.menuMode;
  			int num7 = 0;
  			int num8 = 0;
-@@ -40045,7 +_,7 @@
+@@ -40046,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -394,7 +412,7 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
-@@ -40057,10 +_,14 @@
+@@ -40058,10 +_,14 @@
  				array5[j] = 0;
  				array7[j] = 1f;
  			}
@@ -410,7 +428,7 @@
  			}
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -40339,10 +_,10 @@
+@@ -40340,10 +_,10 @@
  						Main.PlaySound(11, -1, -1, 1);
  						Main.menuMode = 0;
  						Main.netMode = 0;
@@ -425,7 +443,7 @@
  					}
  				}
  				else if (Main.menuMode == 30)
-@@ -40603,7 +_,7 @@
+@@ -40604,7 +_,7 @@
  						Main.PlaySound(11, -1, -1, 1);
  						if (WorldIO.customDataFail == null)
  						{
@@ -434,7 +452,7 @@
  						}
  						else
  						{
-@@ -40752,7 +_,7 @@
+@@ -40753,7 +_,7 @@
  						Main.menuMode = 888;
  					}
  					num10++;
@@ -443,7 +461,7 @@
  					array9[num10] = Lang.menu[14];
  					if (this.selectedMenu == num10)
  					{
-@@ -41231,7 +_,7 @@
+@@ -41232,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -452,7 +470,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -41263,27 +_,36 @@
+@@ -41264,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1);
@@ -489,7 +507,7 @@
  						}
  						Main.clrInput();
  					}
-@@ -41334,9 +_,9 @@
+@@ -41335,9 +_,9 @@
  						num15++;
  						Main.clrInput();
  					}
@@ -502,7 +520,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -42600,7 +_,8 @@
+@@ -42601,7 +_,8 @@
  					}
  					else
  					{
@@ -512,12 +530,12 @@
  					}
  				}
  			}
-@@ -43465,7 +_,7 @@
+@@ -43466,7 +_,7 @@
  				{
  					num108 = 2;
  				}
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.4";
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.5";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;

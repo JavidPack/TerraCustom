@@ -106,6 +106,7 @@ namespace Terraria.TerraCustom
 			Main.setting.AdditionalDartTrapMultiplier = 0f;
 			Main.setting.AdditionalBoulderTrapMultiplier = 0f;
 			Main.setting.AdditionalExplosiveTrapMultiplier = 0f;
+			Main.setting.AdditionalGeyserTrapMultiplier = 0f;
 			Main.setting.TempleTrapMultiplier = 1f;
 		}
 
@@ -161,6 +162,9 @@ namespace Terraria.TerraCustom
 		{
 			Main.setting.IsCorruption = 0;
 			Main.setting.CrimsonCorruptionAvoidJungle = false;
+			Main.setting.CrimsonCorruptionAvoidEachOther = false;
+			Main.setting.CrimsonMultiplier = 1f;
+			Main.setting.CorruptionMultiplier = 1f;
 			Main.setting.DungeonSide = 0;
 			Main.setting.IsPyramid = 2;
 			Main.setting.IsGiantTree = 2;
@@ -525,6 +529,9 @@ namespace Terraria.TerraCustom
 		public float AdditionalExplosiveTrapMultiplier { get; internal set; } = 0f;
 
 		[DataMember]
+		public float AdditionalGeyserTrapMultiplier { get; internal set; } = 0f;
+
+		[DataMember]
 		public bool NoUnderworld { get; internal set; } = false;
 
 		[DataMember]
@@ -535,6 +542,15 @@ namespace Terraria.TerraCustom
 
 		[DataMember]
 		public bool CrimsonCorruptionAvoidJungle { get; internal set; } = false;
+
+		[DataMember]
+		public bool CrimsonCorruptionAvoidEachOther { get; internal set; } = false;
+
+		[DataMember]
+		public float CrimsonMultiplier { get; internal set; } = 1f;
+
+		[DataMember]
+		public float CorruptionMultiplier { get; internal set; } = 1f;
 
 		[DataMember]
 		public bool NoAnthill { get; internal set; }

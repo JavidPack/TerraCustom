@@ -540,7 +540,7 @@
  		}
  
  		private static void ResetGenerator()
-@@ -3583,9 +_,14 @@
+@@ -3583,9 +_,15 @@
  				return true;
  			}
  		}
@@ -549,6 +549,7 @@
 +		// 0: 19/40, Dart
 +		// 1: 19/40, Boulder // If snow/ice, change to dart
 +		// 2: 1/20 Explosives
++		// 3: Below Lava: 5/6 Geyser
  		public static bool placeTrap(int x2, int y2, int type = -1)
  		{
 +			int inType = type;
@@ -791,6 +792,111 @@
  						}
  						WorldGen.trapDiag[type, 1]++;
  					}
+@@ -3926,25 +_,91 @@
+ 											int num31 = num;
+ 											while (num30 != num19 || num31 != num18)
+ 											{
+-												Main.tile[num30, num31].wire(true);
+-												if (num30 > num19)
++												if (wireType == 0)
+ 												{
+-													num30--;
++													Main.tile[num30, num31].wire(true);
++													if (num30 > num19)
++													{
++														num30--;
++													}
++													if (num30 < num19)
++													{
++														num30++;
++													}
++													Main.tile[num30, num31].wire(true);
++													if (num31 > num18)
++													{
++														num31--;
++													}
++													if (num31 < num18)
++													{
++														num31++;
++													}
++													Main.tile[num30, num31].wire(true);
+ 												}
+-												if (num30 < num19)
++												else if (wireType == 1)
+ 												{
+-													num30++;
++													Main.tile[num30, num31].wire2(true);
++													if (num30 > num19)
++													{
++														num30--;
++													}
++													if (num30 < num19)
++													{
++														num30++;
++													}
++													Main.tile[num30, num31].wire2(true);
++													if (num31 > num18)
++													{
++														num31--;
++													}
++													if (num31 < num18)
++													{
++														num31++;
++													}
++													Main.tile[num30, num31].wire2(true);
+ 												}
+-												Main.tile[num30, num31].wire(true);
+-												if (num31 > num18)
++												else
+ 												{
+-													num31--;
++													Main.tile[num30, num31].wire3(true);
++													if (num30 > num19)
++													{
++														num30--;
++													}
++													if (num30 < num19)
++													{
++														num30++;
++													}
++													Main.tile[num30, num31].wire3(true);
++													if (num31 > num18)
++													{
++														num31--;
++													}
++													if (num31 < num18)
++													{
++														num31++;
++													}
++													Main.tile[num30, num31].wire3(true);
+ 												}
+-												if (num31 < num18)
+-												{
+-													num31++;
+-												}
+-												Main.tile[num30, num31].wire(true);
++												//Main.tile[num30, num31].wire(true);
++												//if (num30 > num19)
++												//{
++												//	num30--;
++												//}
++												//if (num30 < num19)
++												//{
++												//	num30++;
++												//}
++												//Main.tile[num30, num31].wire(true);
++												//if (num31 > num18)
++												//{
++												//	num31--;
++												//}
++												//if (num31 < num18)
++												//{
++												//	num31++;
++												//}
++												//Main.tile[num30, num31].wire(true);
+ 											}
+ 											num17++;
+ 											WorldGen.trapDiag[type, 1]++;
 @@ -4018,22 +_,22 @@
  				WorldGen.PlaceTile(num33 + 1, num32 + 2, 130, true, false, -1, 0);
  				WorldGen.PlaceTile(num33 + 1, num32 + 1, 138, true, false, -1, 0);
@@ -890,6 +996,14 @@
  			{
  				WorldGen.mossType[2] = WorldGen.genRand.Next(5);
  			}
+@@ -4462,6 +_,7 @@
+ 			int silver = 9;
+ 			int gold = 8;
+ 			int dungeonSide = 0;
++			int crimsonSide = 0;
+ 			ushort jungleHut = (ushort)WorldGen.genRand.Next(5);
+ 			int howFar = 0;
+ 			int[] PyrX = null;
 @@ -4525,30 +_,70 @@
  					WorldGen.ironBar = 22;
  					WorldGen.silverBar = 21;
@@ -982,7 +1096,7 @@
  					{
  						jungleHut = 119;
  					}
-@@ -4578,19 +_,45 @@
+@@ -4578,19 +_,49 @@
  					{
  						jungleHut = 45;
  					}
@@ -1017,6 +1131,10 @@
 +						case 2:
 +							dungeonSide = 1;
 +							break;
++					}
++					if (Main.setting.CrimsonCorruptionAvoidEachOther && (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4) && !Main.setting.CrimsonCorruptionAvoidJungle)
++					{
++						crimsonSide = ((WorldGen.genRand.Next(2) == 0) ? -1 : 1);
 +					}
  				});
 -			WorldGen.AddGenerationPass("Terrain", delegate(GenerationProgress progress)
@@ -2530,7 +2648,7 @@
  					int x;
  					if (dungeonSide == -1)
  					{
-@@ -6027,15 +_,23 @@
+@@ -6027,17 +_,25 @@
  						dungeonSide = 1;
  					}
  					int y = (int)((Main.worldSurface + Main.rockLayer) / 2.0) + WorldGen.genRand.Next(-200, 200);
@@ -2555,11 +2673,15 @@
  						progress.Message = Lang.gen[72];
  						int num = 0;
 -						while ((double)num < (double)Main.maxTilesX * 0.00045)
-+						while ((double)num < (double)Main.maxTilesX * 0.00045) // todo, add crimson multiplier?
- 						{
- 							float value = (float)((double)num / ((double)Main.maxTilesX * 0.00045));
+-						{
+-							float value = (float)((double)num / ((double)Main.maxTilesX * 0.00045));
++						while ((double)num < (double)Main.maxTilesX * 0.00045 * Main.setting.CrimsonMultiplier)
++						{
++							float value = (float)((double)num / ((double)Main.maxTilesX * 0.00045 * Main.setting.CrimsonMultiplier));
  							progress.Set(value);
-@@ -6051,29 +_,87 @@
+ 							bool flag2 = false;
+ 							int num2 = 0;
+@@ -6051,29 +_,106 @@
  								int num7 = 200;
  								if (dungeonSide < 0)
  								{
@@ -2622,6 +2744,25 @@
 +										}
 +									}
 +								}
++								if (Main.setting.CrimsonCorruptionAvoidEachOther)
++								{
++									if (crimsonSide == -1) // Crimson on left
++									{
++										if (num2 > Main.maxTilesX / 2)
++										{
++											flag2 = false;
++											continue;
++										}
++									}
++									else if (crimsonSide == 1)
++									{
++										if (num2 < Main.maxTilesX / 2)
++										{
++											flag2 = false;
++											continue;
++										}
++									}
++								}
 +								if (Main.maxTilesY < 1000)
 +								{
 +									num3 = num2 - WorldGen.genRand.Next(50) - 50;
@@ -2667,7 +2808,7 @@
  								}
  								if (num2 > num6 - num7 && num2 < num6 + num7)
  								{
-@@ -6252,233 +_,279 @@
+@@ -6252,233 +_,299 @@
  							}
  							num++;
  						}
@@ -2764,11 +2905,12 @@
 +					}
 +					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
 +					{
++						// Making the world evil -- corruption
 +						progress.Message = Lang.gen[20];
 +						int num19 = 0;
-+						while ((double)num19 < (double)Main.maxTilesX * 0.00045)
++						while ((double)num19 < (double)Main.maxTilesX * 0.00045 * Main.setting.CorruptionMultiplier)
 +						{
-+							float value2 = (float)((double)num19 / ((double)Main.maxTilesX * 0.00045));
++							float value2 = (float)((double)num19 / ((double)Main.maxTilesX * 0.00045 * Main.setting.CorruptionMultiplier));
 +							progress.Set(value2);
 +							bool flag5 = false;
 +							int num20 = 0;
@@ -2808,6 +2950,25 @@
 +									else
 +									{
 +										if (num20 < Main.maxTilesX / 2)
++										{
++											flag5 = false;
++											continue;
++										}
++									}
++								}
++								if (Main.setting.CrimsonCorruptionAvoidEachOther)
++								{
++									if (crimsonSide == -1) // Crimson on left
++									{
++										if (num20 < Main.maxTilesX / 2)
++										{
++											flag5 = false;
++											continue;
++										}
++									}
++									else if (crimsonSide == 1)
++									{
++										if (num20 > Main.maxTilesX / 2)
 +										{
 +											flag5 = false;
 +											continue;
@@ -3835,7 +3996,7 @@
 -							if (Main.tile[num2, num3].type == 26)
 +							if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
 +							{
-+								style = WorldGen.genRand.Next(2);
++								style = WorldGen.genRand.Next(2); // TODO Fix altars to be correct maybe?
 +							}
 +							if (!Main.setting.NoAltar)
 +							{
@@ -4375,7 +4536,7 @@
  						progress.Set(value);
  						for (int l = 0; l < 1150; l++)
  						{
-@@ -7775,14 +_,60 @@
+@@ -7775,14 +_,75 @@
  						}
  					}
  					Main.NewText(WorldGen.trapDiag[3, 0] + " " + WorldGen.trapDiag[3, 1], 255, 255, 255, false);
@@ -4419,6 +4580,21 @@
 +							int num = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
 +							int num2 = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 300);
 +							if (Main.tile[num, num2].wall == 0 && WorldGen.placeTrap(num, num2, 2))
++							{
++								break;
++							}
++						}
++					}
++					progress.Message = "Placing more traps: Geyser";
++					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier); k++)
++					{
++						float value = (float)((double)k / ((double)Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier));
++						progress.Set(value);
++						for (int l = 0; l < 10000; l++)
++						{
++							int num = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
++							int num2 = WorldGen.genRand.Next(WorldGen.lavaLine + 30, Main.maxTilesY - 300);
++							if (Main.tile[num, num2].wall == 0 && WorldGen.placeTrap(num, num2, 3))
 +							{
 +								break;
 +							}
@@ -5178,14 +5354,16 @@
  				{
  					for (int k = 40; k < Main.maxTilesX - 40; k++)
  					{
-@@ -10067,6 +_,10 @@
+@@ -10066,7 +_,11 @@
+ 								int num7 = 0;
  								int num8 = k;
  								num7 += num6 / 2;
- 								num7 = (WorldGen.crimson ? 1 : 0);
-+								if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
-+								{
-+									num7 = WorldGen.genRand.Next(2);
-+								}
+-								num7 = (WorldGen.crimson ? 1 : 0);
++								//num7 = (WorldGen.crimson ? 1 : 0);
++								//if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++								//{
++								//	num7 = WorldGen.genRand.Next(2); // TODO fix shadow orbs to be correct
++								//}
  								num6 %= 2;
  								num8 -= num6;
  								int num9 = (int)(Main.tile[k, l].frameY / 18);
@@ -5260,8 +5438,11 @@
  					{
  						if (Biomes<MahoganyTreeBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 50, 50, 500, 50), structures))
  						{
-@@ -10366,21 +_,44 @@
+@@ -10364,23 +_,47 @@
+ 						}
+ 						num9++;
  					}
++					// The tiny pits that are added to already formed corruption biomes
  					progress.Message = Lang.gen[76] + "..Corruption Pits";
  					progress.Set(0.4f);
 -					if (!WorldGen.crimson)
@@ -5392,17 +5573,31 @@
  			{
  				return false;
  			}
-@@ -13618,6 +_,10 @@
- 			if (WorldGen.crimson)
+@@ -13594,7 +_,7 @@
+ 			return false;
+ 		}
+ 
+-		public static void AddShadowOrb(int x, int y)
++		public static void AddShadowOrb(int x, int y, bool shadowOrb)
+ 		{
+ 			if (x < 10 || x > Main.maxTilesX - 10)
+ 			{
+@@ -13615,10 +_,14 @@
+ 				}
+ 			}
+ 			short num = 0;
+-			if (WorldGen.crimson)
++			if (!shadowOrb /*WorldGen.crimson*/)
  			{
  				num += 36;
-+			}
-+			if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
-+			{
-+				num = (short)((genRand.Next(0, 2) == 0) ? 0 : 36);
  			}
++			//if (Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4)
++			//{
++			//	num = (short)((genRand.Next(0, 2) == 0) ? 0 : 36);
++			//}
  			Main.tile[x - 1, y - 1].active(true);
  			Main.tile[x - 1, y - 1].type = 31;
+ 			Main.tile[x - 1, y - 1].frameX = num;
 @@ -13659,6 +_,7 @@
  					{
  						wallType = 14;
@@ -5950,7 +6145,16 @@
  			int num = j;
  			if ((double)num > Main.worldSurface)
  			{
-@@ -43643,7 +_,7 @@
+@@ -43345,7 +_,7 @@
+ 			}
+ 			for (int num35 = 0; num35 < WorldGen.heartCount; num35++)
+ 			{
+-				WorldGen.AddShadowOrb((int)WorldGen.heartPos[num35].X, (int)WorldGen.heartPos[num35].Y);
++				WorldGen.AddShadowOrb((int)WorldGen.heartPos[num35].X, (int)WorldGen.heartPos[num35].Y, false);
+ 			}
+ 			int num36 = Main.maxTilesX;
+ 			int num37 = 0;
+@@ -43643,10 +_,10 @@
  				}
  				if (num <= 0f)
  				{
@@ -5958,7 +6162,11 @@
 +					if (!flag2 && !Main.setting.NoOrbHeart)
  					{
  						flag2 = true;
- 						WorldGen.AddShadowOrb((int)value.X, (int)value.Y);
+-						WorldGen.AddShadowOrb((int)value.X, (int)value.Y);
++						WorldGen.AddShadowOrb((int)value.X, (int)value.Y, true);
+ 					}
+ 					else if (!flag3)
+ 					{
 @@ -43675,18 +_,25 @@
  							}
  							if ((double)num10 > Main.worldSurface)
