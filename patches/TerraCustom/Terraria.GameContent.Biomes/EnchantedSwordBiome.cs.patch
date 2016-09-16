@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.GameContent.Biomes\EnchantedSwordBiome.cs
++++ src/TerraCustom\Terraria.GameContent.Biomes\EnchantedSwordBiome.cs
+@@ -102,7 +_,7 @@
+ 						new Actions.SetTile(397, false, true).Output(data)
+ 					}));
+ 			WorldUtils.Gen(new Point(origin.X, point.Y + 10), new ModShapes.All(data), new Actions.SetFrames(true));
+-			if (GenBase._random.Next(3) == 0)
++			if (GenBase._random.Next(3) == 0 || Main.setting.ForceEnchantedSwordShrineReal)
+ 			{
+ 				WorldGen.PlaceTile(point4.X, point4.Y - 15, 187, true, false, -1, 17);
+ 			}
+

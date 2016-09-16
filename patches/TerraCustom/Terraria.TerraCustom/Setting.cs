@@ -170,6 +170,7 @@ namespace Terraria.TerraCustom
 			Main.setting.IsGiantTree = 2;
 			Main.hardMode = false;
 			Main.setting.HardmodeStripes = true;
+			Main.setting.ForceEnchantedSwordShrineReal = false; //WorldGen.PlaceTile\([^,]+,[^,]+,\s187
 		}
 
 		public static void initializeBGs()
@@ -319,6 +320,9 @@ namespace Terraria.TerraCustom
 
 		[DataMember]
 		public int IsGiantTree { get; internal set; } = 2;
+
+		[DataMember]
+		public bool ForceEnchantedSwordShrineReal { get; internal set; } = false;
 
 		[DataMember]
 		public int MoonStyle { get; internal set; } = 3;

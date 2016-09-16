@@ -162,6 +162,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"}, () => Main.setting.HardmodeStripes ? 1 : 0, x => Main.setting.HardmodeStripes = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"}, () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
 			new OptionLabel(new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" }, () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
+			new OptionLabel(new string[] { "Force Enchanted Sword Shrine Real: No","Force Enchanted Sword Shrine Real: Yes" }, () => Main.setting.ForceEnchantedSwordShrineReal ? 1 : 0, x => Main.setting.ForceEnchantedSwordShrineReal = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
