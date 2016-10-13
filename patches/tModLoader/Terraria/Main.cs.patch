@@ -101,6 +101,15 @@
  		public static int hairStart = 0;
  		private static int oldHairStyle;
  		private static Microsoft.Xna.Framework.Color oldHairColor;
+@@ -2013,7 +_,7 @@
+ 		public static Player dresserDummy;
+ 		private bool _needToSetupDrawInterfaceLayers = true;
+ 		private List<MethodSequenceListItem> _drawInterfaceLayers;
+-		private static GameTime _drawInterfaceGameTime;
++		public static GameTime _drawInterfaceGameTime;
+ 		private static bool _MouseOversCanClear = false;
+ 		private static Vector2 _itemIconCacheScreenPosition;
+ 		private static int _itemIconCacheSelectedItemID;
 @@ -2051,12 +_,12 @@
  		};
  		private static float tranSpeed = 0.05f;
@@ -316,6 +325,15 @@
  			}
  		}
  
+@@ -4199,7 +_,7 @@
+ 					}
+ 					else if (text == "version")
+ 					{
+-						Console.WriteLine("Terraria Server " + Main.versionNumber);
++						Console.WriteLine("Terraria Server " + Main.versionNumber + " - " + ModLoader.ModLoader.versionedName);
+ 					}
+ 					else
+ 					{
 @@ -4411,7 +_,7 @@
  		public static void InitLifeBytes()
  		{
@@ -1792,7 +1810,7 @@
 +			}
 +			else
 +			{
-+				drawLayers[layerIndex].Draw(drawInfo);
++				drawLayers[layerIndex].Draw(ref drawInfo);
 +			}
 +			goto layerLoopContinue;
 +			headLayer:
@@ -2192,6 +2210,10 @@
 +			goto heldItemColor;
 +			postSetupVars:
 +			PlayerHooks.ModifyDrawInfo(ref drawInfo);
++			List<PlayerLayer> drawLayers = PlayerHooks.GetDrawLayers(drawPlayer);
++			int layerIndex = -1;
++			layerLoopContinue:
++			layerIndex++;
 +			Position = drawInfo.position;
 +			shadow = drawInfo.shadow;
 +			value2 = drawInfo.itemLocation;
@@ -2242,10 +2264,6 @@
 +			vector2 = drawInfo.legOrigin;
 +			origin = drawInfo.bodyOrigin;
 +			vector3 = drawInfo.headOrigin;
-+			List<PlayerLayer> drawLayers = PlayerHooks.GetDrawLayers(drawPlayer);
-+			int layerIndex = -1;
-+			layerLoopContinue:
-+			layerIndex++;
 +			if (layerIndex >= drawLayers.Count)
 +			{
 +				goto postDraw;
@@ -2364,7 +2382,7 @@
 +			}
 +			else
 +			{
-+				drawLayers[layerIndex].Draw(drawInfo);
++				drawLayers[layerIndex].Draw(ref drawInfo);
 +			}
 +			goto layerLoopContinue;
 +			hairBackLayer:
@@ -2733,9 +2751,9 @@
  			float scale = 1f;
  			Microsoft.Xna.Framework.Color alpha = item.GetAlpha(color);
  			ItemSlot.GetItemLight(ref alpha, ref scale, item, false);
-+			if (!ItemLoader.PreDrawInWorld(item, Main.spriteBatch, color, alpha, ref num4, ref scale))
++			if (!ItemLoader.PreDrawInWorld(item, Main.spriteBatch, color, alpha, ref num4, ref scale, whoami))
 +			{
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
 +				return;
 +			}
  			float num5 = (float)(item.height - Main.itemTexture[item.type].Height);
@@ -2745,7 +2763,7 @@
  				int num8 = Main.coinTexture[num7].Height / 8;
  				num6 = (float)(item.width / 2 - Main.coinTexture[num7].Width / 2);
  				Main.spriteBatch.Draw(Main.coinTexture[num7], new Vector2(item.position.X - Main.screenPosition.X + (float)(width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(num8 / 2) + num5), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, Main.itemFrame[whoami] * num8 + 1, Main.itemTexture[item.type].Width, num8)), alpha, num4, new Vector2((float)(width / 2), (float)(num8 / 2)), scale, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			if (ItemID.Sets.NebulaPickup[item.type])
@@ -2753,7 +2771,7 @@
  				num6 = (float)(item.width / 2 - rectangle.Width / 2);
  				num5 = (float)(item.height - rectangle.Height);
  				Main.spriteBatch.Draw(Main.itemTexture[item.type], new Vector2(item.position.X - Main.screenPosition.X + (float)(rectangle.Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(rectangle.Height / 2) + num5), new Microsoft.Xna.Framework.Rectangle?(rectangle), alpha, num4, rectangle.Size() / 2f, scale, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			if (ItemID.Sets.AnimatesAsSoul[item.type])
@@ -2761,7 +2779,7 @@
  				num6 = (float)(item.width / 2 - rectangle2.Width / 2);
  				num5 = (float)(item.height - rectangle2.Height);
  				Main.spriteBatch.Draw(Main.itemTexture[item.type], new Vector2(item.position.X - Main.screenPosition.X + (float)(rectangle2.Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(rectangle2.Height / 2) + num5), new Microsoft.Xna.Framework.Rectangle?(rectangle2), alpha, num4, rectangle2.Size() / 2f, scale, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			if (ItemID.Sets.TrapSigned[item.type])
@@ -2769,25 +2787,25 @@
  					Main.spriteBatch.Draw(Main.glowMaskTexture[(int)item.glowMask], new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height)), new Microsoft.Xna.Framework.Color(250, 250, 250, item.alpha), num4, new Vector2((float)(Main.itemTexture[item.type].Width / 2), (float)(Main.itemTexture[item.type].Height / 2)), scale, SpriteEffects.None, 0f);
  				}
  				Main.spriteBatch.Draw(Main.wireTexture, new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f) + Main.itemTexture[item.type].Size().RotatedBy((double)num4, default(Vector2)) * 0.45f * item.scale, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(4, 58, 8, 8)), alpha, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			if ((item.type >= 1522 && item.type <= 1527) || item.type == 3643)
  			{
  				Main.spriteBatch.Draw(Main.itemTexture[item.type], new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height)), new Microsoft.Xna.Framework.Color(250, 250, 250, (int)(Main.mouseTextColor / 2)), num4, new Vector2((float)(Main.itemTexture[item.type].Width / 2), (float)(Main.itemTexture[item.type].Height / 2)), (float)Main.mouseTextColor / 1000f + 0.8f, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			if (item.type == 3779)
  			{
  				Main.spriteBatch.Draw(Main.itemTexture[item.type], new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height)), alpha, num4, new Vector2((float)(Main.itemTexture[item.type].Width / 2), (float)(Main.itemTexture[item.type].Height / 2)), scale, SpriteEffects.None, 0f);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
 +				return;
 +			}
 +			if (ItemLoader.animations.Contains(item.type))
 +			{
 +				ItemLoader.DrawAnimatedItem(item, whoami, color, alpha, num4, scale);
-+				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++				ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  				return;
  			}
  			Main.spriteBatch.Draw(Main.itemTexture[item.type], new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height)), alpha, num4, new Vector2((float)(Main.itemTexture[item.type].Width / 2), (float)(Main.itemTexture[item.type].Height / 2)), scale, SpriteEffects.None, 0f);
@@ -2795,7 +2813,7 @@
  			{
  				Main.spriteBatch.Draw(Main.glowMaskTexture[(int)item.glowMask], new Vector2(item.position.X - Main.screenPosition.X + (float)(Main.itemTexture[item.type].Width / 2) + num6, item.position.Y - Main.screenPosition.Y + (float)(Main.itemTexture[item.type].Height / 2) + num5 + 2f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, Main.itemTexture[item.type].Width, Main.itemTexture[item.type].Height)), new Microsoft.Xna.Framework.Color(250, 250, 250, item.alpha), num4, new Vector2((float)(Main.itemTexture[item.type].Width / 2), (float)(Main.itemTexture[item.type].Height / 2)), scale, SpriteEffects.None, 0f);
  			}
-+			ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale);
++			ItemLoader.PostDrawInWorld(item, Main.spriteBatch, color, alpha, num4, scale, whoami);
  		}
  
  		protected void DrawRain()
@@ -2938,6 +2956,22 @@
  				}
  			}
  		}
+@@ -36575,6 +_,7 @@
+ 			{
+ 				return;
+ 			}
++			this._needToSetupDrawInterfaceLayers = false;
+ 			this._drawInterfaceLayers = new List<MethodSequenceListItem>();
+ 			List<MethodSequenceListItem> arg_5FE_0 = this._drawInterfaceLayers;
+ 			MethodSequenceListItem[] array = new MethodSequenceListItem[42];
+@@ -36787,6 +_,7 @@
+ 			{
+ 				current.Skip = false;
+ 			}
++			ModHooks.ModifyInterfaceLayers(list);
+ 			MethodSequenceListItem.ExecuteSequence(list);
+ 		}
+ 
 @@ -37052,6 +_,8 @@
  
  		private void DrawInterface_33_MouseText()

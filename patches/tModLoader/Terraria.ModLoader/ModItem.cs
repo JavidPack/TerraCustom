@@ -329,12 +329,12 @@ namespace Terraria.ModLoader
 			return null;
 		}
 
-		public virtual bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale)
+		public virtual bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 		{
 			return true;
 		}
 
-		public virtual void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale)
+		public virtual void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
 		{
 		}
 
@@ -405,7 +405,7 @@ namespace Terraria.ModLoader
 		//  return newItem;
 		internal void SetupModItem(Item item)
 		{
-			ModItem newItem = Clone();
+			ModItem newItem = Clone(item);
 			newItem.item = item;
 			item.modItem = newItem;
 			newItem.mod = mod;
@@ -413,7 +413,7 @@ namespace Terraria.ModLoader
 
 		internal void SetupClone(Item clone)
 		{
-			ModItem newItem = CloneNewInstances ? Clone() : (ModItem)Activator.CreateInstance(GetType());
+			ModItem newItem = CloneNewInstances ? Clone(clone) : (ModItem)Activator.CreateInstance(GetType());
 			newItem.item = clone;
 			newItem.mod = mod;
 			newItem.texture = texture;
@@ -421,6 +421,11 @@ namespace Terraria.ModLoader
 			newItem.projOnSwing = projOnSwing;
 			newItem.bossBagNPC = bossBagNPC;
 			clone.modItem = newItem;
+		}
+
+		public virtual ModItem Clone(Item item)
+		{
+			return Clone();
 		}
 
 		public virtual ModItem Clone()
