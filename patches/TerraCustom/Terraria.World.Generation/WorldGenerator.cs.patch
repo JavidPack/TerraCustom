@@ -5,10 +5,10 @@
  using System.Diagnostics;
  using Terraria.GameContent.UI.States;
 +using Terraria.IO;
- using Terraria.ModLoader;
  
  namespace Terraria.World.Generation
-@@ -19,6 +_,7 @@
+ {
+@@ -18,6 +_,7 @@
  
  		public void GenerateWorld(GenerationProgress progress = null)
  		{
@@ -16,7 +16,7 @@
  			Stopwatch stopwatch = new Stopwatch();
  			float num = 0f;
  			foreach (GenPass current in this._passes)
-@@ -32,6 +_,7 @@
+@@ -31,6 +_,7 @@
  			progress.TotalWeight = num;
  			string text = "";
  			Main.menuMode = 888;
@@ -24,7 +24,7 @@
  			Main.MenuUI.SetState(new UIWorldLoad(progress));
  			foreach (GenPass current2 in this._passes)
  			{
-@@ -50,7 +_,17 @@
+@@ -49,7 +_,17 @@
  						",\n"
  					});
  				stopwatch.Reset();

@@ -9,19 +9,19 @@
  #if SERVER
  using Terraria.Server;
 @@ -147,12 +_,21 @@
- 		public static int curRelease = 176;
- 		public static string versionNumber = "v1.3.3.2";
- 		public static string versionNumber2 = "v1.3.3.2";
+ 		public static int curRelease = 177;
+ 		public static string versionNumber = "v1.3.3.3";
+ 		public static string versionNumber2 = "v1.3.3.3";
 +		// TerraCustom Start
-+		public static Setting setting = new Setting();
-+		public static SettingSaver settingSaver = new SettingSaver();
-+		public static int bgStylePreview = 1;
-+		public static bool tModLoaderModsLoaded = false;
-+		public static bool firstModLoad = true;
-+		// TerraCustom End
++ 		public static Setting setting = new Setting();
++ 		public static SettingSaver settingSaver = new SettingSaver();
++ 		public static int bgStylePreview = 1;
++ 		public static bool tModLoaderModsLoaded = false;
++ 		public static bool firstModLoad = true;
++ 		// TerraCustom End
  		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath();
-+		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
-+		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
++ 		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
++ 		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
  		public static bool AnnouncementBoxDisabled = false;
  		public static int AnnouncementBoxRange = -1;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
@@ -364,7 +364,7 @@
  								else
  								{
  									if (Main.tile[num300, num324].type == 199)
-@@ -40531,11 +_,11 @@
+@@ -40533,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -378,7 +378,7 @@
  #endif
  			base.Exit();
  #if MAC
-@@ -40775,10 +_,10 @@
+@@ -40777,10 +_,10 @@
  
  		private void OnWorldNamed(string text)
  		{
@@ -391,7 +391,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -40909,9 +_,9 @@
+@@ -40911,9 +_,9 @@
  				}
  			}
  			int num2 = 250;
@@ -403,7 +403,7 @@
  			int num6 = Main.menuMode;
  			int num7 = 0;
  			int num8 = 0;
-@@ -40925,7 +_,7 @@
+@@ -40927,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -412,7 +412,7 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
-@@ -40937,10 +_,14 @@
+@@ -40939,10 +_,14 @@
  				array5[j] = 0;
  				array7[j] = 1f;
  			}
@@ -428,7 +428,7 @@
  			}
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -41219,10 +_,10 @@
+@@ -41221,10 +_,10 @@
  						Main.PlaySound(11, -1, -1, 1);
  						Main.menuMode = 0;
  						Main.netMode = 0;
@@ -443,7 +443,7 @@
  					}
  				}
  				else if (Main.menuMode == 30)
-@@ -41483,7 +_,7 @@
+@@ -41485,7 +_,7 @@
  						Main.PlaySound(11, -1, -1, 1);
  						if (WorldIO.customDataFail == null)
  						{
@@ -452,7 +452,7 @@
  						}
  						else
  						{
-@@ -41641,7 +_,7 @@
+@@ -41643,7 +_,7 @@
  						Main.menuMode = 888;
  					}
  					num10++;
@@ -461,7 +461,7 @@
  					array9[num10] = Lang.menu[14];
  					if (this.selectedMenu == num10)
  					{
-@@ -42120,7 +_,7 @@
+@@ -42122,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -470,7 +470,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -42152,27 +_,36 @@
+@@ -42154,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1);
@@ -507,7 +507,7 @@
  						}
  						Main.clrInput();
  					}
-@@ -42223,9 +_,9 @@
+@@ -42225,9 +_,9 @@
  						num15++;
  						Main.clrInput();
  					}
@@ -520,7 +520,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -43495,7 +_,8 @@
+@@ -43497,7 +_,8 @@
  					}
  					else
  					{
@@ -530,7 +530,7 @@
  					}
  				}
  			}
-@@ -44360,7 +_,7 @@
+@@ -44362,7 +_,7 @@
  				{
  					num108 = 2;
  				}

@@ -375,6 +375,8 @@
     <Compile Include="Terraria.ModLoader.UI\UIModInfo.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIModItem.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIModManageItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModPackItem.cs" />
+    <Compile Include="Terraria.ModLoader.UI\UIModPacks.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIMods.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIModSourceItem.cs" />
     <Compile Include="Terraria.ModLoader.UI\UIModSources.cs" />
