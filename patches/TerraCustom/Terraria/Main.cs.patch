@@ -8,26 +8,21 @@
  
  #if SERVER
  using Terraria.Server;
-@@ -147,12 +_,21 @@
- 		public static int curRelease = 177;
- 		public static string versionNumber = "v1.3.3.3";
- 		public static string versionNumber2 = "v1.3.3.3";
+@@ -152,7 +_,16 @@
+ 		public static int AnnouncementBoxRange = -1;
+ 		public static Vector2 destroyerHB = new Vector2(0f, 0f);
+ 		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
+-		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
++		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
 +		// TerraCustom Start
++		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
++ 		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
 + 		public static Setting setting = new Setting();
 + 		public static SettingSaver settingSaver = new SettingSaver();
 + 		public static int bgStylePreview = 1;
 + 		public static bool tModLoaderModsLoaded = false;
 + 		public static bool firstModLoad = true;
 + 		// TerraCustom End
- 		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath();
-+ 		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
-+ 		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
- 		public static bool AnnouncementBoxDisabled = false;
- 		public static int AnnouncementBoxRange = -1;
- 		public static Vector2 destroyerHB = new Vector2(0f, 0f);
- 		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
--		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
-+		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
@@ -535,7 +530,7 @@
  					num108 = 2;
  				}
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.6";
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.7";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
