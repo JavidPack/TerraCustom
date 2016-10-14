@@ -3,10 +3,13 @@ using System;
 using System.Xml.Serialization;
 using Terraria.TerraCustom;
 using System.Runtime.Serialization;
+using System.ComponentModel;
+using Newtonsoft.Json;
+using Terraria.ModLoader;
 
 namespace Terraria.TerraCustom
 {
-	[DataContract]
+	//[DataContract]
 	public class Setting
 	{
 		public static void initializeAll()
@@ -170,7 +173,7 @@ namespace Terraria.TerraCustom
 			Main.setting.IsGiantTree = 2;
 			Main.hardMode = false;
 			Main.setting.HardmodeStripes = true;
-			Main.setting.ForceEnchantedSwordShrineReal = false; //WorldGen.PlaceTile\([^,]+,[^,]+,\s187
+			Main.setting.ForceEnchantedSwordShrineReal = false; // Useful Regular Expression for Search: WorldGen.PlaceTile\([^,]+,[^,]+,\s187
 		}
 
 		public static void initializeBGs()
@@ -250,509 +253,371 @@ namespace Terraria.TerraCustom
 			initializeAll();
 		}
 
-		[DataMember]
-		public bool generateLeveledRPGSave { get; internal set; } = false;
+		// Hints
+		// [JsonIgnoreAttribute] to ignore
+		// [DefaultValue(2)] for default
+			
+		// Properties for non Setting things
+		public bool HardMode { get { return Main.hardMode; } set { Main.hardMode = value; } }
+		[DefaultValue(4200)]
+		public int WorldWidth { get { return Main.maxTilesX; } set { Main.maxTilesX = value; } }
+		[DefaultValue(1200)]
+		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
 
-		[DataMember]
-		public bool LeveledRPGCriticalMode { get; internal set; } = false;
+		public bool generateLeveledRPGSave { get; internal set; }
 
-		[DataMember]
+		public bool LeveledRPGCriticalMode { get; internal set; }
+
 		public float PreSmashAltar { get; internal set; }
 
-		[DataMember]
-		public bool PreSmashAltarOreAlternates { get; internal set; } = false;
+		public bool PreSmashAltarOreAlternates { get; internal set; }
 
-		[DataMember]
+		[DefaultValue(true)]
 		public bool PreSmashAltarPreventPatches { get; internal set; } = true;
 
-		[DataMember]
-		private float percSnow = 0.2f;
-		[DataMember]
-		private float percJungle = 0.2f;
-		[DataMember]
-		private float multiGemCave = 0.05f;
-		[DataMember]
-		private int[] selectTreeStyle = new int[]
-		{
-			6,
-			6,
-			6,
-			6
-		};
-		[DataMember]
-		private int[] selectMossType = new int[]
-		{
-			5,
-			5,
-			5
-		};
-		[DataMember]
-		private int selectDungeon = 3;
-		[DataMember]
-		private int shrineType;
+		[JsonIgnoreAttribute]
+		//[DefaultValue(new int[] { 6, 6, 6, 6 })]
+		public int[] SelectTreeStyle { get; internal set; } = new int[] { 6, 6, 6, 6 };
 
-		[DataMember]
+		[DefaultValue(6)]
+		public int SelectTreeStyle0 { get { return SelectTreeStyle[0]; } set { SelectTreeStyle[0] = value; } }
+		[DefaultValue(6)]
+		public int SelectTreeStyle1 { get { return SelectTreeStyle[1]; } set { SelectTreeStyle[1] = value; } }
+		[DefaultValue(6)]
+		public int SelectTreeStyle2 { get { return SelectTreeStyle[2]; } set { SelectTreeStyle[2] = value; } }
+		[DefaultValue(6)]
+		public int SelectTreeStyle3 { get { return SelectTreeStyle[3]; } set { SelectTreeStyle[3] = value; } }
+
+		[JsonIgnoreAttribute]
+		//[DefaultValue(new int[] { 5, 5, 5 })]
+		public int[] SelectMossType { get; internal set; } = new int[] { 5, 5, 5 };
+		
+		[DefaultValue(5)]
+		public int SelectMossType0 { get { return SelectMossType[0]; } set { SelectMossType[0] = value; } }
+		[DefaultValue(5)]
+		public int SelectMossType1 { get { return SelectMossType[1]; } set { SelectMossType[1] = value; } }
+		[DefaultValue(5)]
+		public int SelectMossType2 { get { return SelectMossType[2]; } set { SelectMossType[2] = value; } }
+
+		[DefaultValue(2)]
 		public int IsCopper { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsIron { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsSilver { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsGold { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsCobalt { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsMythril { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsAdaman { get; internal set; } = 2;
 
-		[DataMember]
-		public int IsCorruption { get; internal set; } = 0;
+		public int IsCorruption { get; internal set; }
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsPyramid { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int IsGiantTree { get; internal set; } = 2;
 
-		[DataMember]
-		public bool ForceEnchantedSwordShrineReal { get; internal set; } = false;
+		public bool ForceEnchantedSwordShrineReal { get; internal set; }
 
-		[DataMember]
+		//const int defaultMoonStyle = 3; // Should I use this approach?
+		[DefaultValue(3)]
 		public int MoonStyle { get; internal set; } = 3;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int DungeonStyle { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(14)]
 		public int ForestStyle { get; internal set; } = 14;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int CorruptStyle { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int JungleStyle { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(11)]
 		public int SnowStyle { get; internal set; } = 11;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int HallowStyle { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(3)]
 		public int CrimsonStyle { get; internal set; } = 3;
 
-		[DataMember]
+		[DefaultValue(2)]
 		public int DesertStyle { get; internal set; } = 2;
 
-		[DataMember]
+		[DefaultValue(3)]
 		public int OceanStyle { get; internal set; } = 3;
 
-		[DataMember]
 		public bool NoTree { get; internal set; }
 
-		[DataMember]
 		public bool NoDungeon { get; internal set; }
 
-		[DataMember]
 		public bool NoTemple { get; internal set; }
 
-		[DataMember]
 		public bool NoSnow { get; internal set; }
 
-		[DataMember]
 		public bool NoJungle { get; internal set; }
 
-		[DataMember]
-		public int MossColor1 { get; internal set; } = 5;
-
-		[DataMember]
-		public int MossColor2 { get; internal set; } = 5;
-
-		[DataMember]
-		public int MossColor3 { get; internal set; } = 5;
-
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercCopp { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercIron { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercSilv { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercGold { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercDemonite { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PercHellstone { get; internal set; } = 1f;
 
-		[DataMember]
-		public float PercSnow
-		{
-			get
-			{
-				return this.percSnow;
-			}
-			set
-			{
-				this.percSnow = value;
-			}
-		}
+		[DefaultValue(3)]
+		public int SelectDungeon { get; internal set; } = 3;
 
-		[DataMember]
-		public float PercJungle
-		{
-			get
-			{
-				return this.percJungle;
-			}
-			set
-			{
-				this.percJungle = value;
-			}
-		}
-
-		[DataMember]
-		public float MultiGemCave
-		{
-			get
-			{
-				return this.multiGemCave;
-			}
-			set
-			{
-				this.multiGemCave = value;
-			}
-		}
-
-		[DataMember]
-		public int[] SelectTreeStyle
-		{
-			get
-			{
-				return this.selectTreeStyle;
-			}
-			set
-			{
-				this.selectTreeStyle = value;
-			}
-		}
-
-		[DataMember]
-		public int[] SelectMossType
-		{
-			get
-			{
-				return this.selectMossType;
-			}
-			set
-			{
-				this.selectMossType = value;
-			}
-		}
-
-		[DataMember]
-		public int SelectDungeon
-		{
-			get
-			{
-				return this.selectDungeon;
-			}
-			set
-			{
-				this.selectDungeon = value;
-			}
-		}
-
-		[DataMember]
 		public bool NoSpiderCave { get; internal set; }
 
-		[DataMember]
 		public bool NoHive { get; internal set; }
 
-		[DataMember]
 		public bool NoPot { get; internal set; }
 
-		[DataMember]
 		public bool NoChest { get; internal set; }
 
-		[DataMember]
 		public bool NoAltar { get; internal set; }
 
-		[DataMember]
 		public bool NoOrbHeart { get; internal set; }
 
-		[DataMember]
-		public int ShrineType
-		{
-			get
-			{
-				return this.shrineType;
-			}
-			set
-			{
-				this.shrineType = value;
-			}
-		}
+		public int ShrineType { get; internal set; }
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float EnchantedSwordBiomeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float ThinIceBiomeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float CampsiteBiomeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float MushroomBiomeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float MiningExplosiveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float TrapMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
-		public float AdditionalDartTrapMultiplier { get; internal set; } = 0f;
+		public float AdditionalDartTrapMultiplier { get; internal set; }
+
 		//[DataMember(EmitDefaultValue = false)]
-		[DataMember]
-		public float AdditionalBoulderTrapMultiplier { get; internal set; } = 0f;
+		public float AdditionalBoulderTrapMultiplier { get; internal set; }
 
-		[DataMember]
-		public float AdditionalExplosiveTrapMultiplier { get; internal set; } = 0f;
+		public float AdditionalExplosiveTrapMultiplier { get; internal set; }
 
-		[DataMember]
-		public float AdditionalGeyserTrapMultiplier { get; internal set; } = 0f;
+		public float AdditionalGeyserTrapMultiplier { get; internal set; }
 
-		[DataMember]
 		public bool NoUnderworld { get; internal set; } = false;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float SkyIslandMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
 		public int DungeonSide { get; internal set; } = 0;
 
-		[DataMember]
 		public bool CrimsonCorruptionAvoidJungle { get; internal set; } = false;
 
-		[DataMember]
 		public bool CrimsonCorruptionAvoidEachOther { get; internal set; } = false;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float CrimsonMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float CorruptionMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
 		public bool NoAnthill { get; internal set; }
 
-		[DataMember]
 		public bool NoBeach { get; internal set; }
 
-		[DataMember]
 		public bool downedSlimeKing { get; internal set; }
 
-		[DataMember]
 		public bool downedQueenBee { get; internal set; }
 
-		[DataMember]
 		public bool downedEyeOfCthulu { get; internal set; }
 
-		[DataMember]
 		public bool downedEaterBrain { get; internal set; }
 
-		[DataMember]
 		public bool downedSkeletron { get; internal set; }
 
-		[DataMember]
 		public bool downedTwins { get; internal set; }
 
-		[DataMember]
 		public bool downedDestroyer { get; internal set; }
 
-		[DataMember]
 		public bool downedSkeletronPrime { get; internal set; }
 
-		[DataMember]
 		public bool downedPlantera { get; internal set; }
 
-		[DataMember]
 		public bool downedGolem { get; internal set; }
 
-		[DataMember]
 		public bool downedFishron { get; internal set; }
 
-		[DataMember]
 		public bool downedAncientCultist { get; internal set; }
 
-		[DataMember]
 		public bool downedMoonlord { get; internal set; }
 
-		[DataMember]
 		public bool savedStylist { get; internal set; }
 
-		[DataMember]
 		public bool savedGoblin { get; internal set; }
 
-		[DataMember]
 		public bool savedWizard { get; internal set; }
 
-		[DataMember]
 		public bool savedMechanic { get; internal set; }
 
-		[DataMember]
 		public bool savedAngler { get; internal set; }
 
-		[DataMember]
 		public bool savedTaxCollector { get; internal set; }
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float MineCartMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float GemMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float GemCaveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float GemCaveSizeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float HiveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float SpiderCaveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float GraniteCaveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float MarbleCaveMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float CrystalHeartMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float StatueMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float SurfaceTerrainHeightMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(.17f)]
 		public float SurfaceTerrainHeightMax { get; internal set; } = .17f;
 
-		[DataMember]
+		[DefaultValue(.3f)]
 		public float SurfaceTerrainHeightMin { get; internal set; } = .3f;
 
-		[DataMember]
 		public bool BypassSpawnAreaFlatness { get; internal set; }
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float DungeonSizeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float BeachSizeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
 		public int PreDropMeteor { get; internal set; } = 0;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float UndergroundCabinMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float TempleTrapMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float TempleSizeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
 		public int IceBackStyle { get; internal set; } = 0;
 
-		[DataMember]
 		public int HellBackStyle { get; internal set; } = 0;
 
-		[DataMember]
 		public int JungleBackStyle { get; internal set; } = 0;
 
-		[DataMember]
 		public int CaveBackStyle1 { get; internal set; } = 0;
 
-		[DataMember]
 		public int CaveBackStyle2 { get; internal set; } = 0;
 
-		[DataMember]
 		public int CaveBackStyle3 { get; internal set; } = 0;
 
-		[DataMember]
 		public int CaveBackStyle4 { get; internal set; } = 0;
 
-		[DataMember]
+		[DefaultValue(5)]
 		public int TreeLowerBound { get; internal set; } = 5;
 
-		[DataMember]
-		public int TreeUpperBound { get; internal set; } = 5;
+		[DefaultValue(16)]
+		public int TreeUpperBound { get; internal set; } = 16;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float SurfaceHorizontalTunnelsMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float LakeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1)]
 		public int BiomeChestSets { get; internal set; } = 1;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float JungleShrineMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float PotsMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(true)]
 		public bool HardmodeStripes { get; internal set; } = true;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float MahoganyTreeMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float WaterChestMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float SurfaceChestMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float TempleChestMultiplier { get; internal set; } = 1f;
 
-		[DataMember]
+		[DefaultValue(1f)]
 		public float ShadowChestMultiplier { get; internal set; } = 1f;
 
-		[NonSerialized]
+		[JsonIgnoreAttribute]
 		public SettingDelegate ShadowChestMultiplierDelegate = new SettingDelegate(
-			                                                       "Shadow Chests:", 
-			                                                       5f, 
-			                                                       () => Main.setting.ShadowChestMultiplier, 
-			                                                       x => Main.setting.ShadowChestMultiplier = x, 
-			                                                       x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests"
-		                                                       );
+																   "Shadow Chests:",
+																   5f,
+																   () => Main.setting.ShadowChestMultiplier,
+																   x => Main.setting.ShadowChestMultiplier = x,
+																   x => Math.Round((double)(Main.setting.ShadowChestMultiplier * 100f)) + "%" + " -> " + (int)(5f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + "-" + (int)(8f * (Main.maxTilesX / 4200) * Main.setting.ShadowChestMultiplier) + " chests"
+															   );
+
 		//public int NumberGenerationPassSteps { get; internal set; } = 95;
-		[DataMember]
+
 		public bool GenerateWldEachStep { get; internal set; } = false;
 
-		[DataMember]
 		public bool SaveInTModFolder { get; internal set; } = false;
+
 		//public float AltarMultiplier { get; internal set; } = 1f;
 	}
 
@@ -808,7 +673,7 @@ namespace Terraria.TerraCustom
 		public virtual void HandleMeAdditional(ref bool isPlainWhiteLabel)
 		{
 		}
-		
+
 	}
 	// Slider Item
 	public class SliderItem : TerraCustomMenuItem
@@ -950,3 +815,14 @@ namespace Terraria.TerraCustom
 		}
 	}
 }
+
+
+// Gets the attributes for the property.
+// AttributeCollection attributes = 
+//    TypeDescriptor.GetProperties(this)["MyProperty"].Attributes;
+
+/* Prints the default value by retrieving the DefaultValueAttribute 
+ * from the AttributeCollection. */
+//DefaultValueAttribute myAttribute = 
+//    (DefaultValueAttribute)attributes[typeof(DefaultValueAttribute)];
+// Console.WriteLine("The default value is: " + myAttribute.Value.ToString());

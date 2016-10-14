@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.IO;
+using Terraria.TerraCustom.UI;
 
 namespace Terraria.TerraCustom
 {
@@ -35,10 +36,12 @@ namespace Terraria.TerraCustom
 		Chests,
 		Debug,
 		Traps,
-		SavedSettings,
+		//SavedSettings,
+		SettingsView,
 	}
 	class Interface
 	{
+		internal static UISettingsView settingsViewMenu = new UISettingsView();
 		/*
 		GenericMenu(main, DownedFoundMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref num3, ref numberClickableLabels);
 		
@@ -64,7 +67,7 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
 			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
 			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
-			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SavedSettings; }),
+			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28], () => {
@@ -390,20 +393,20 @@ namespace Terraria.TerraCustom
 			{
 				GenericMenu(main, OresMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
-			else if (Main.menuMode == (int)MenuModes.SavedSettings)
-			{
-				//	SettingSaver settingSaver = new SettingSaver();
-				Main.settingSaver.getSettings();
+			//else if (Main.menuMode == (int)MenuModes.SavedSettings)
+			//{
+			//	//	SettingSaver settingSaver = new SettingSaver();
+			//	Main.settingSaver.getSettings();
 
-				TerraCustomMenuItem[] SavedSettingItems = new TerraCustomMenuItem[] {
-					new ActionLabel("Load", Main.settingSaver.loadSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-					new ActionLabel("Save", Main.settingSaver.saveSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-					new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
-				};
+			//	TerraCustomMenuItem[] SavedSettingItems = new TerraCustomMenuItem[] {
+			//		new ActionLabel("Load", Main.settingSaver.loadSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			//		new ActionLabel("Save", Main.settingSaver.saveSetting2) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			//		new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			//	};
 
 
-				GenericMenu(main, SavedSettingItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
-			}
+			//	GenericMenu(main, SavedSettingItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			//}
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
 				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
@@ -1369,6 +1372,11 @@ namespace Terraria.TerraCustom
 					Main.menuMode = (int)MenuModes.SelectDifficulty;
 					WorldGen.setWorldSize();
 				}
+			}
+			else if (Main.menuMode == (int)MenuModes.SettingsView)
+			{
+				Main.MenuUI.SetState(settingsViewMenu);
+				Main.menuMode = 888;
 			}
 		}
 

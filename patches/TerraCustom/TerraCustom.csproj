@@ -498,6 +498,8 @@
     <Compile Include="Terraria.Social\ISocialModule.cs" />
     <Compile Include="Terraria.Social\SocialAPI.cs" />
     <Compile Include="Terraria.Social\SocialMode.cs" />
+    <Compile Include="Terraria.TerraCustom.UI\UISettingsItem.cs" />
+    <Compile Include="Terraria.TerraCustom.UI\UISettingsView.cs" />
     <Compile Include="Terraria.TerraCustom\Interface.cs" />
     <Compile Include="Terraria.TerraCustom\TerraCustomUtils.cs" />
     <Compile Include="Terraria.UI.Chat\ChatLine.cs" />

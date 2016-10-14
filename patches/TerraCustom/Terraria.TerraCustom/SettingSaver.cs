@@ -3,99 +3,70 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml;
+using Newtonsoft.Json;
+using Terraria.ModLoader;
 
 namespace Terraria.TerraCustom
 {
 	public class SettingSaver
 	{
-		private const string Extension = ".xml";
-		public const int MaxLoadSetting = 1000;
-		public static string[] settings = new string[1000];
-		public static string[] settingPaths = new string[1000];
-		public static int numSettingsLoad = 0;
-
-		public void saveSetting2()
-		{
-			saveSetting("setting1");
-		}
-
-		public void loadSetting2()
-		{
-			loadSetting("setting1");
-		}
-
-		public void saveSetting(string settingName = "setting1")
+		public void saveSetting(string settingName)
 		{
 			Directory.CreateDirectory(Main.SettingPath);
-			//XmlSerializer xmlSerializer = new XmlSerializer(typeof(Setting));
-			//string path = string.Concat(new object[]
-			//	{
-			//		Main.SettingPath,
-			//		Path.DirectorySeparatorChar,
-			//		settingName,
-			//		".xml"
-			//	});
-			//FileStream fileStream = new FileStream(path, FileMode.Create);
-			//xmlSerializer.Serialize(fileStream, Main.setting);
-			//fileStream.Close();
-			DataContractSerializer serializer = new DataContractSerializer(typeof(Setting));
 			string path = string.Concat(new object[]
 				{
 					Main.SettingPath,
 					Path.DirectorySeparatorChar,
 					settingName,
-					".xml"
+					".json"
 				});
-			XmlWriter writer = XmlWriter.Create(path);
-			serializer.WriteObject(writer, Main.setting);
-			writer.Close();
+			string json = JsonConvert.SerializeObject(
+				Main.setting, 
+				Newtonsoft.Json.Formatting.Indented,
+				new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }
+				//Ignore members where the member value is the same as the member's default value when serializing objects so that is is not written to JSON. This option will ignore all default values (e.g. null for objects and nullable types; 0 for integers, decimals and floating point numbers; and false for booleans). The default value ignored can be changed by placing the DefaultValueAttribute on the property.
+				);
+			File.WriteAllText(path, json);
 		}
 
 		public void loadSetting(string settingName)
 		{
 			Directory.CreateDirectory(Main.SettingPath);
-			//XmlSerializer xmlSerializer = new XmlSerializer(typeof(Setting));
-			DataContractSerializer serializer = new DataContractSerializer(typeof(Setting));
 			string path = string.Concat(new object[]
 				{
 					Main.SettingPath,
 					Path.DirectorySeparatorChar,
 					settingName,
-					".xml"
+					".json"
 				});
-			XmlReader reader = XmlReader.Create(path);
-			Main.setting = (Setting)serializer.ReadObject(reader);
-			//FileStream fileStream = new FileStream(path, FileMode.Open);
-			//	Main.setting = (Setting)xmlSerializer.Deserialize(fileStream);
-			//	fileStream.Close();
+			if (File.Exists(path))
+			{
+				using (StreamReader r = new StreamReader(path))
+				{
+					string json = r.ReadToEnd();
+					Main.setting = JsonConvert.DeserializeObject<Setting>(
+						json, 
+						new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate }
+						);
+					// "Members with a default value but no JSON will be set to their default value when deserializing."
+				}
+			}
 		}
 
-		public int getSettings()
+		public void deleteSetting(string settingName)
 		{
 			Directory.CreateDirectory(Main.SettingPath);
-			string[] files = Directory.GetFiles(Main.SettingPath, "*.xml");
-			SettingSaver.numSettingsLoad = files.Length;
-			if (!Main.dedServ && SettingSaver.numSettingsLoad > 1000)
+			string path = string.Concat(new object[]
+				{
+					Main.SettingPath,
+					Path.DirectorySeparatorChar,
+					settingName,
+					".json"
+				});
+			if (File.Exists(path))
 			{
-				SettingSaver.numSettingsLoad = 1000;
+				File.Delete(path);
 			}
-			for (int i = 0; i < SettingSaver.numSettingsLoad; i++)
-			{
-				SettingSaver.settingPaths[i] = files[i];
-				SettingSaver.settings[i] = SettingSaver.GetSettingName(SettingSaver.settingPaths[i]);
-			}
-			return SettingSaver.numSettingsLoad;
-		}
-
-		public static string GetSettingName(string path)
-		{
-			if (path == null)
-			{
-				return string.Empty;
-			}
-			path = path.Substring(Main.SettingPath.Length + 1);
-			path = path.Remove(path.Length - ".xml".Length);
-			return path;
 		}
 	}
 }
