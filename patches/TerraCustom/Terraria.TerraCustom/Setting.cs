@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 namespace Terraria.TerraCustom
 {
 	//[DataContract]
+	//[JsonObject(MemberSerialization = MemberSerialization.OptOut)]
 	public class Setting
 	{
 		public static void initializeAll()
@@ -246,17 +247,11 @@ namespace Terraria.TerraCustom
 			Main.setting.LeveledRPGCriticalMode = false;
 		}
 
-		[OnDeserializing]
-		public void Hi(StreamingContext context)
-		{
-			Main.setting = this;
-			initializeAll();
-		}
-
 		// Hints
 		// [JsonIgnoreAttribute] to ignore
 		// [DefaultValue(2)] for default
-			
+		// [JsonProperty] on all autoproperties since json.net has problems without it. 
+
 		// Properties for non Setting things
 		public bool HardMode { get { return Main.hardMode; } set { Main.hardMode = value; } }
 		[DefaultValue(4200)]
@@ -264,21 +259,26 @@ namespace Terraria.TerraCustom
 		[DefaultValue(1200)]
 		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
 
+		[JsonProperty]
 		public bool generateLeveledRPGSave { get; internal set; }
 
+		[JsonProperty]
 		public bool LeveledRPGCriticalMode { get; internal set; }
 
+		[JsonProperty]
 		public float PreSmashAltar { get; internal set; }
 
+		[JsonProperty]
 		public bool PreSmashAltarOreAlternates { get; internal set; }
 
+		[JsonProperty]
 		[DefaultValue(true)]
 		public bool PreSmashAltarPreventPatches { get; internal set; } = true;
 
 		[JsonIgnoreAttribute]
 		//[DefaultValue(new int[] { 6, 6, 6, 6 })]
 		public int[] SelectTreeStyle { get; internal set; } = new int[] { 6, 6, 6, 6 };
-
+		
 		[DefaultValue(6)]
 		public int SelectTreeStyle0 { get { return SelectTreeStyle[0]; } set { SelectTreeStyle[0] = value; } }
 		[DefaultValue(6)]
@@ -291,7 +291,7 @@ namespace Terraria.TerraCustom
 		[JsonIgnoreAttribute]
 		//[DefaultValue(new int[] { 5, 5, 5 })]
 		public int[] SelectMossType { get; internal set; } = new int[] { 5, 5, 5 };
-		
+
 		[DefaultValue(5)]
 		public int SelectMossType0 { get { return SelectMossType[0]; } set { SelectMossType[0] = value; } }
 		[DefaultValue(5)]
@@ -299,307 +299,424 @@ namespace Terraria.TerraCustom
 		[DefaultValue(5)]
 		public int SelectMossType2 { get { return SelectMossType[2]; } set { SelectMossType[2] = value; } }
 
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsCopper { get; internal set; } = 2;
 
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsIron { get; internal set; } = 2;
 
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsSilver { get; internal set; } = 2;
 
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsGold { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsCobalt { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsMythril { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsAdaman { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		public int IsCorruption { get; internal set; }
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsPyramid { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsGiantTree { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		public bool ForceEnchantedSwordShrineReal { get; internal set; }
-
+		
+		[JsonProperty]
 		//const int defaultMoonStyle = 3; // Should I use this approach?
 		[DefaultValue(3)]
 		public int MoonStyle { get; internal set; } = 3;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int DungeonStyle { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(14)]
 		public int ForestStyle { get; internal set; } = 14;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int CorruptStyle { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int JungleStyle { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(11)]
 		public int SnowStyle { get; internal set; } = 11;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int HallowStyle { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(3)]
 		public int CrimsonStyle { get; internal set; } = 3;
-
+		
+		[JsonProperty]
 		[DefaultValue(2)]
 		public int DesertStyle { get; internal set; } = 2;
-
+		
+		[JsonProperty]
 		[DefaultValue(3)]
 		public int OceanStyle { get; internal set; } = 3;
-
+		
+		[JsonProperty]
 		public bool NoTree { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoDungeon { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoTemple { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoSnow { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoJungle { get; internal set; }
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercCopp { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercIron { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercSilv { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercGold { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercDemonite { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PercHellstone { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(3)]
 		public int SelectDungeon { get; internal set; } = 3;
-
+		
+		[JsonProperty]
 		public bool NoSpiderCave { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoHive { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoPot { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoChest { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoAltar { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoOrbHeart { get; internal set; }
-
+		
+		[JsonProperty]
 		public int ShrineType { get; internal set; }
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float EnchantedSwordBiomeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float ThinIceBiomeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float CampsiteBiomeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float MushroomBiomeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float MiningExplosiveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float TrapMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		public float AdditionalDartTrapMultiplier { get; internal set; }
 
-		//[DataMember(EmitDefaultValue = false)]
+		//[JsonProperty(EmitDefaultValue = false)]
+		[JsonProperty]
 		public float AdditionalBoulderTrapMultiplier { get; internal set; }
-
+		
+		[JsonProperty]
 		public float AdditionalExplosiveTrapMultiplier { get; internal set; }
-
+		
+		[JsonProperty]
 		public float AdditionalGeyserTrapMultiplier { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoUnderworld { get; internal set; } = false;
 
 		[DefaultValue(1f)]
 		public float SkyIslandMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		public int DungeonSide { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public bool CrimsonCorruptionAvoidJungle { get; internal set; } = false;
-
+		
+		[JsonProperty]
 		public bool CrimsonCorruptionAvoidEachOther { get; internal set; } = false;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float CrimsonMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float CorruptionMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		public bool NoAnthill { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool NoBeach { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedSlimeKing { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedQueenBee { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedEyeOfCthulu { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedEaterBrain { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedSkeletron { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedTwins { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedDestroyer { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedSkeletronPrime { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedPlantera { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedGolem { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedFishron { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedAncientCultist { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool downedMoonlord { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedStylist { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedGoblin { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedWizard { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedMechanic { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedAngler { get; internal set; }
-
+		
+		[JsonProperty]
 		public bool savedTaxCollector { get; internal set; }
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float MineCartMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float GemMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float GemCaveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float GemCaveSizeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float HiveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SpiderCaveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float GraniteCaveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float MarbleCaveMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float CrystalHeartMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float StatueMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SurfaceTerrainHeightMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(.17f)]
 		public float SurfaceTerrainHeightMax { get; internal set; } = .17f;
-
+		
+		[JsonProperty]
 		[DefaultValue(.3f)]
 		public float SurfaceTerrainHeightMin { get; internal set; } = .3f;
-
+		
+		[JsonProperty]
 		public bool BypassSpawnAreaFlatness { get; internal set; }
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float DungeonSizeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float BeachSizeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		public int PreDropMeteor { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float UndergroundCabinMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float TempleTrapMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float TempleSizeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		public int IceBackStyle { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int HellBackStyle { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int JungleBackStyle { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int CaveBackStyle1 { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int CaveBackStyle2 { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int CaveBackStyle3 { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		public int CaveBackStyle4 { get; internal set; } = 0;
-
+		
+		[JsonProperty]
 		[DefaultValue(5)]
 		public int TreeLowerBound { get; internal set; } = 5;
 
+		[JsonProperty]
 		[DefaultValue(16)]
 		public int TreeUpperBound { get; internal set; } = 16;
 
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SurfaceHorizontalTunnelsMultiplier { get; internal set; } = 1f;
 
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float LakeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1)]
 		public int BiomeChestSets { get; internal set; } = 1;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float JungleShrineMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float PotsMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(true)]
 		public bool HardmodeStripes { get; internal set; } = true;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float MahoganyTreeMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float WaterChestMultiplier { get; internal set; } = 1f;
-
+		
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SurfaceChestMultiplier { get; internal set; } = 1f;
 
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float TempleChestMultiplier { get; internal set; } = 1f;
 
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float ShadowChestMultiplier { get; internal set; } = 1f;
 
@@ -614,8 +731,10 @@ namespace Terraria.TerraCustom
 
 		//public int NumberGenerationPassSteps { get; internal set; } = 95;
 
+		[JsonProperty]
 		public bool GenerateWldEachStep { get; internal set; } = false;
 
+		[JsonProperty]
 		public bool SaveInTModFolder { get; internal set; } = false;
 
 		//public float AltarMultiplier { get; internal set; } = 1f;

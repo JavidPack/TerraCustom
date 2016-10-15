@@ -44,10 +44,12 @@ namespace Terraria.TerraCustom
 				using (StreamReader r = new StreamReader(path))
 				{
 					string json = r.ReadToEnd();
+					//ErrorLogger.Log("1 Main.setting.PercCopp" + Main.setting.PercCopp);
 					Main.setting = JsonConvert.DeserializeObject<Setting>(
 						json, 
-						new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate }
+						new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate }
 						);
+
 					// "Members with a default value but no JSON will be set to their default value when deserializing."
 				}
 			}
