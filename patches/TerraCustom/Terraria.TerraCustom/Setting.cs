@@ -258,6 +258,7 @@ namespace Terraria.TerraCustom
 		public int WorldWidth { get { return Main.maxTilesX; } set { Main.maxTilesX = value; } }
 		[DefaultValue(1200)]
 		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
+		public bool ExpertMode { get { return Main.expertMode; } set { Main.expertMode = value; } }
 
 		[JsonProperty]
 		public bool generateLeveledRPGSave { get; internal set; }
@@ -346,8 +347,7 @@ namespace Terraria.TerraCustom
 		[DefaultValue(3)]
 		public int MoonStyle { get; internal set; } = 3;
 		
-		[JsonProperty]
-		[DefaultValue(2)]
+		// Not saved, is intermediary storage value
 		public int DungeonStyle { get; internal set; } = 2;
 		
 		[JsonProperty]

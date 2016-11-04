@@ -71,6 +71,7 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28], () => {
+				Main.settingSaver.saveSetting("Autosave-LastUsed");
 				Main.menuMode = 10;
 				//Main.worldName = Main.newWorldName;
 				if(Main.setting.LeveledRPGCriticalMode) Main.expertMode = true;
@@ -1325,7 +1326,8 @@ namespace Terraria.TerraCustom
 				array4[3] = 20;
 				array4[4] = 20;
 				//array4[5] = 20;
-				array4[5] = 60;
+				array4[5] = 20;
+				array4[6] = 60;
 				clickableLabelText[0] = Lang.menu[91];
 				array[0] = true;
 				clickableLabelText[1] = Lang.menu[92];
@@ -1333,11 +1335,34 @@ namespace Terraria.TerraCustom
 				clickableLabelText[3] = Lang.menu[94];
 				//	clickableLabelText[4] = Lang.menu[5];
 				clickableLabelText[4] = "Keep Previous Custom Size";
-				clickableLabelText[5] = Lang.menu[15];
-				numberClickableLabels = 6;
-				if (main.selectedMenu == 5)
+				clickableLabelText[5] = "Load Autosaved Config";
+				clickableLabelText[6] = Lang.menu[15];
+				numberClickableLabels = 7;
+				if (main.selectedMenu == 6)
 				{
 					main.QuitGame();
+				}
+				else if (main.selectedMenu == 5)
+				{
+					if (Main.settingSaver.settingExists("Autosave-LastUsed"))
+					{
+						Main.settingSaver.loadSetting("Autosave-LastUsed");
+						if (Main.maxTilesX <= 4200)
+						{
+							WorldGen.worldSize = 0;
+						}
+						else if (Main.maxTilesX <= 6400)
+						{
+							WorldGen.worldSize = 1;
+						}
+						else// (Main.maxTilesX <= 8400)
+						{
+							WorldGen.worldSize = 2;
+						}
+						Main.clrInput();
+						Main.menuMode = (int)MenuModes.EnterWorldName;
+						WorldGen.setWorldSize();
+					}
 				}
 				else if (main.selectedMenu > 0)
 				{
