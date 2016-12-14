@@ -1,5 +1,5 @@
---- src/tModLoader\Terraria.Utilities\PlatformUtilties.cs
-+++ src/TerraCustom\Terraria.Utilities\PlatformUtilties.cs
+--- src/tModLoader\Terraria.Utilities\PlatformUtilities.cs
++++ src/TerraCustom\Terraria.Utilities\PlatformUtilities.cs
 @@ -87,8 +_,7 @@
  		{
  #if WINDOWS

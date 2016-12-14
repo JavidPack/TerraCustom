@@ -96,7 +96,7 @@
  
 @@ -2198,11 +_,12 @@
  			WorldGen.clearWorld();
- 			WorldGen.generateWorld(-1, threadContext as GenerationProgress);
+ 			WorldGen.generateWorld(Main.ActiveWorldFileData.Seed, threadContext as GenerationProgress);
  			WorldFile.saveWorld(Main.ActiveWorldFileData.IsCloudSave, true);
 -			if (Main.menuMode == 10 || Main.menuMode == 888)
 -			{
@@ -106,7 +106,7 @@
 +			//	{
 +			//		Main.menuMode = 6;
 +			//	}
- 			Main.PlaySound(10, -1, -1, 1);
+ 			Main.PlaySound(10, -1, -1, 1, 1f, 0f);
 +			Main.menuMode = (int)TerraCustom.MenuModes.Settings;
  		}
  
@@ -128,7 +128,7 @@
  			}
  			NPC.MoonLordCountdown = 0;
  			Main.pumpkinMoon = false;
-@@ -2527,40 +_,40 @@
+@@ -2527,42 +_,42 @@
  			WorldGen.spawnNPC = 0;
  			WorldGen.shadowOrbCount = 0;
  			WorldGen.altarCount = 0;
@@ -143,6 +143,7 @@
 -			Main.hardMode = false;
 +			//Main.hardMode = false;
  			Main.helpText = 0;
+ 			Main.BartenderHelpTextIndex = 0;
  			Main.dungeonX = 0;
  			Main.dungeonY = 0;
 -			NPC.downedBoss1 = false;
@@ -190,6 +191,7 @@
 +			NPC.savedMech = Main.setting.savedMechanic; //false;
 +			NPC.savedTaxCollector = Main.setting.savedTaxCollector; //false;
 +			NPC.savedAngler = Main.setting.savedAngler; //false;
+ 			NPC.savedBartender = false;
  			NPC.downedGoblins = false;
  			NPC.downedClown = false;
  			NPC.downedFrost = false;
@@ -4536,10 +4538,9 @@
  						progress.Set(value);
  						for (int l = 0; l < 1150; l++)
  						{
-@@ -7812,14 +_,75 @@
+@@ -7812,13 +_,74 @@
  						}
  					}
- 					Main.NewText(WorldGen.trapDiag[3, 0] + " " + WorldGen.trapDiag[3, 1], 255, 255, 255, false);
 +					progress.Message = "Placing more traps: Dart";
 +					for (int k = 0; k < (int)((double)Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier); k++)
 +					{
@@ -6046,12 +6047,12 @@
 -					}
 -					if (Main.netMode == 2)
 -					{
--						NetMessage.SendTileSquare(-1, num12, num13, 1);
+-						NetMessage.SendTileSquare(-1, num12, num13, 1, TileChangeType.None);
 +							Main.tile[num12, num13].type = 117; //TileID.Pearlstone
 +						}
 +						if (Main.netMode == 2)
 +						{
-+							NetMessage.SendTileSquare(-1, num12, num13, 1);
++							NetMessage.SendTileSquare(-1, num12, num13, 1, TileChangeType.None);
 +							break;
 +						}
  						break;

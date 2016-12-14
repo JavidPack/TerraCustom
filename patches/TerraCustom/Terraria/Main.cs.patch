@@ -46,7 +46,7 @@
 @@ -1145,6 +_,7 @@
  		public static bool tilesLoaded = false;
  		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
- 		public static Tile[,] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
+ 		public static Tile[, ] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
 +		// Adjust
  		public static Dust[] dust = new Dust[6001];
  		public static Star[] star = new Star[130];
@@ -86,8 +86,8 @@
  		private static Item cpItem = new Item();
  		public int textBlinkerCount;
 @@ -2063,6 +_,12 @@
- 		internal float scAdj;
  		private float cTop;
+ 		private static SlotVector<ActiveSound> _trackedSounds = new SlotVector<ActiveSound>(4096);
  
 +		public static Texture2D TCTreeTops;
 +		public static Texture2D TCMossColors;
@@ -95,10 +95,10 @@
 +
 +		public int lastSelectedMenu = -1;
 +
+ 		public static event Action OnEnginePreload;
  		public static event Action OnEngineLoad;
  		public static event Action OnTick;
- 
-@@ -2287,11 +_,13 @@
+@@ -2287,12 +_,14 @@
  				Main.anglerQuest = Main.rand.Next(Main.anglerQuestItemNetIDs.Length);
  				int num = Main.anglerQuestItemNetIDs[Main.anglerQuest];
  				//patch file: num, flag2
@@ -108,70 +108,78 @@
  				{
  					flag2 = true;
  				}
+  
 -				if (num == 2457 && WorldGen.crimson)
 +				//if (num == 2457 && WorldGen.crimson)
 +				if (num == 2457 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2299,7 +_,8 @@
+@@ -2299,8 +_,9 @@
  				{
  					flag2 = true;
  				}
+  
 -				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				//if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2319,7 +_,8 @@
+@@ -2319,8 +_,9 @@
  				{
  					flag2 = true;
  				}
+  
 -				if (num == 2477 && !WorldGen.crimson)
 +				//if (num == 2477 && !WorldGen.crimson)
 +				if (num == 2477 && (!WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2335,7 +_,8 @@
+@@ -2335,8 +_,9 @@
  				{
  					flag2 = true;
  				}
+  
 -				if (num == 2485 && WorldGen.crimson)
 +				//if (num == 2485 && WorldGen.crimson)
 +				if (num == 2485 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2366,6 +_,7 @@
+@@ -2366,7 +_,8 @@
  					Main.WorldList.Add(WorldFileData.FromInvalidWorld(files[i], false));
  				}
  			}
+ 
 +			/*
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudWorldPath) + "/.+\\.wld");
-@@ -2382,6 +_,7 @@
+@@ -2382,7 +_,8 @@
  					}
  				}
  			}
 +			*/
+ 
  			Main.WorldList.Sort(new Comparison<WorldFileData>(Main.WorldListSortMethod));
  		}
  
-@@ -2404,6 +_,7 @@
+@@ -2404,7 +_,8 @@
  					Main.PlayerList.Add(fileData);
  				}
  			}
+ 
 +			/*
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudPlayerPath) + "/.+\\.plr");
-@@ -2416,6 +_,7 @@
+@@ -2416,7 +_,8 @@
  					}
  				}
  			}
+ 
 +			*/
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
@@ -194,36 +202,39 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -2857,7 +_,7 @@
+@@ -2857,8 +_,8 @@
  					Main.cMapAlphaDown
  				};
  			}
+
 -			ModLoader.ModLoader.LoadConfiguration();
 +			//ModLoader.ModLoader.LoadConfiguration();
  			PlayerInput.Load();
  			if (num2 < 165)
  			{
-@@ -3059,11 +_,11 @@
+@@ -3059,12 +_,12 @@
  					File.Delete(Main.WorldList[i].Path + ".bak");
- #endif
+ 					#endif
  				}
 -				else if (SocialAPI.Cloud != null)
 -				{
 -					SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 -				}
+-
 -				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
 +				//else if (SocialAPI.Cloud != null)
 +				//{
 +				//	SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 +				//}
-+                WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
++
++				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
  				Main.LoadWorlds();
  			}
  			catch
 @@ -3157,7 +_,8 @@
- 				}
  				text += str;
  			}
+
 -			string text3 = cloudSave ? Main.CloudWorldPath : Main.WorldPath;
 +			//string text3 = cloudSave ? Main.CloudWorldPath : (Main.setting.SaveInTModFolder ? Main.TModLoaderWorldPath : Main.WorldPath);
 +			string text3 = (Main.setting.SaveInTModFolder || Main.tModLoaderModsLoaded) ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
@@ -243,8 +254,8 @@
  				while (flag)
  				{
  					Main.LoadWorlds();
--					Console.WriteLine("Terraria Server " + Main.versionNumber2 + " - " + ModLoader.ModLoader.versionedName);
-+					Console.WriteLine("Terraria Server " + Main.versionNumber2);
+-					Console.WriteLine(Language.GetTextValue("CLI.Server", Main.versionNumber2) + " - " + ModLoader.ModLoader.versionedName);
++					Console.WriteLine(Language.GetTextValue("CLI.Server", Main.versionNumber2));
  					Console.WriteLine("");
  					for (int i = 0; i < Main.WorldList.Count; i++)
  					{
@@ -257,11 +268,12 @@
  						continue;
  					}
  					else
-@@ -3961,7 +_,7 @@
+@@ -3961,8 +_,8 @@
  					if (target < now) //can't catch up, reset target
  					{
  						target = now + delta;
 -					}
+
 +				}
  					Thread.Sleep(Math.Max((int)remaining, 0));
  				}
@@ -278,7 +290,7 @@
 @@ -4414,12 +_,23 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
- #endif
+			#endif
 +			// Terraria.app/Contents/MacOS/Terraria.exe
 +			// Terraria.app/Contents/MacOS/Content/
 +#if MAC
@@ -294,11 +306,11 @@
  
  		protected void SetTitle()
  		{
- #if CLIENT
+			#if CLIENT
 -			Main._cachedTitle = Lang.title();
 +			Main._cachedTitle = "TerraCustom -- " + Lang.title();
  			base.Window.Title = Main._cachedTitle;
- #endif
+			#endif
  		}
 @@ -7751,8 +_,13 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
@@ -316,49 +328,6 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -19588,21 +_,26 @@
- 								{
- 									break;
- 								}
-+								// 19 total: 6 grass, 1 mush, 1 crim, 1 corrup,
-+								//TileID.Grass -- 0, 6,7,8,9,10,
- 								if (Main.tile[num300, num324].type == 2)
- 								{
- 									num319 = Main.GetTreeStyle(num300);
- 									break;
- 								}
-+								// corrup -- 1
- 								if (Main.tile[num300, num324].type == 23)
- 								{
- 									num319 = 1;
- 									break;
- 								}
-+								//TileID.MushroomGrass -- 14
- 								if (Main.tile[num300, num324].type == 70)
- 								{
- 									num319 = 14;
- 									break;
- 								}
-+								// Jungle -- 2,11,13
- 								if (Main.tile[num300, num324].type == 60)
- 								{
- 									num319 = 2;
-@@ -19619,6 +_,7 @@
- 									num322 = 48;
- 									break;
- 								}
-+								// Snow -- 4,12,16,17,18
- 								if (Main.tile[num300, num324].type == 147)
- 								{
- 									num319 = 4;
-@@ -19655,6 +_,7 @@
- 										break;
- 									}
- 								}
-+								// Hallow == 5,3
- 								else
- 								{
- 									if (Main.tile[num300, num324].type == 199)
 @@ -40533,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
@@ -367,13 +336,13 @@
 +		public void QuitGame()
  		{
  			Main.SaveSettings();
- #if CLIENT
+			#if CLIENT
 -			SocialAPI.Shutdown();
 +			//SocialAPI.Shutdown();
- #endif
+			#endif
  			base.Exit();
- #if MAC
-@@ -40777,10 +_,10 @@
+			#if MAC
+@@ -40777,16 +_,16 @@
  
  		private void OnWorldNamed(string text)
  		{
@@ -381,6 +350,12 @@
 +			Main.menuMode = (int)MenuModes.Settings/*10*/;
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
+ 			if (Main.UseSeedUI)
+ 			{
+ 				Main.menuMode = 5000;
+ 				return;
+ 			}
+ 			
 -			WorldGen.CreateNewWorld(null);
 +			//WorldGen.CreateNewWorld(null);
  		}
@@ -407,10 +382,10 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
-@@ -40939,10 +_,14 @@
- 				array5[j] = 0;
+@@ -40939,11 +_,15 @@
  				array7[j] = 1f;
  			}
+ 
 -			string[] array9 = new string[Main.maxMenuItems];
 +			string[] array9 = new string[Main.maxMenuItems]; // clickableLabelText
  			if (Main.menuMode == -1)
@@ -421,6 +396,7 @@
 +			{
 +				Main.menuMode = (int)TerraCustom.MenuModes.Settings;
  			}
+ 
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
 @@ -41221,10 +_,10 @@
@@ -468,7 +444,7 @@
 @@ -42154,27 +_,36 @@
  						{
  							Main.expertMode = false;
- 							Main.PlaySound(10, -1, -1, 1);
+ 							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
 +							Main.menuMode = (int)MenuModes.EnterWorldName;
 +							/*
  							Main.menuMode = 7;
@@ -481,7 +457,7 @@
  						else if (this.selectedMenu == 3)
  						{
  							Main.expertMode = true;
- 							Main.PlaySound(10, -1, -1, 1);
+ 							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
 +							Main.menuMode = (int)MenuModes.EnterWorldName;
 +							/*
  							Main.menuMode = 7;
@@ -494,41 +470,41 @@
  						else if (this.selectedMenu == 4 || flag5)
  						{
  							flag5 = false;
- 							Main.PlaySound(11, -1, -1, 1);
+ 							Main.PlaySound(11, -1, -1, 1, 1f, 0f);
 +							Main.menuMode = (int)MenuModes.ChooseWorldSize;
 +							/*
  							Main.menuMode = 16;
 +							*/
  						}
+ 						
  						Main.clrInput();
- 					}
 @@ -42225,9 +_,9 @@
  						num15++;
  						Main.clrInput();
  					}
 -					else if (Main.menuMode == 7)
 -					{
--						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48], "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent(-7), 0));
+-						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48], "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent(-7), 0, false));
 +					else if (Main.menuMode == (int)MenuModes.EnterWorldName /*7*/)
 +					{
 +						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48], "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent((int)MenuModes.SelectDifficulty /*-7*/), 0));
  						Main.menuMode = 888;
  					}
- 					else if (Main.menuMode == 8)
+ 					else if (Main.menuMode == 5000)
 @@ -43497,7 +_,8 @@
  					}
  					else
  					{
--						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5);
+-						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
 +						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num2, ref num4, ref num5);
-+						ModLoader.Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5);
++						ModLoader.Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  					}
  				}
  			}
 @@ -44362,7 +_,7 @@
- 				{
  					num108 = 2;
  				}
+ 
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
 +				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.9";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);

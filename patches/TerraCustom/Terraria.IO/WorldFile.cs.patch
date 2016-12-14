@@ -4,10 +4,10 @@
  				{
  					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
  				}
--				WorldIO.WriteModFile(Main.worldPathName, useCloudSaving);
+-				WorldIO.Save(Main.worldPathName, useCloudSaving);
 +				if (Main.tModLoaderModsLoaded)
 +				{
-+					WorldIO.WriteModFile(Main.worldPathName, useCloudSaving);
++					WorldIO.Save(Main.worldPathName, useCloudSaving);
 +				}
  				WorldGen.saveLock = false;
 +			}

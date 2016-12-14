@@ -1,9 +1,10 @@
 --- src/tModLoader\Terraria.World.Generation\WorldGenerator.cs
 +++ src/TerraCustom\Terraria.World.Generation\WorldGenerator.cs
-@@ -2,6 +_,7 @@
+@@ -2,7 +_,8 @@
  using System.Collections.Generic;
  using System.Diagnostics;
  using Terraria.GameContent.UI.States;
+ using Terraria.Utilities;
 +using Terraria.IO;
  
  namespace Terraria.World.Generation

@@ -1,11 +1,12 @@
 --- src/tModLoader\Terraria\Program.cs
 +++ src/TerraCustom\Terraria\Program.cs
-@@ -10,7 +_,7 @@
+@@ -10,8 +_,8 @@
  #endif
  using Terraria.Initializers;
- using Terraria.ModLoader;
+ using Terraria.Localization;
 -using Terraria.Social;
 +//using Terraria.Social;
+ using Terraria.ModLoader;
  
  namespace Terraria
  {
