@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria\Program.cs
 +++ src/TerraCustom\Terraria\Program.cs
-@@ -10,8 +_,8 @@
+@@ -10,7 +_,7 @@
  #endif
  using Terraria.Initializers;
  using Terraria.Localization;
@@ -9,14 +9,13 @@
  using Terraria.ModLoader;
  
  namespace Terraria
- {
-@@ -145,7 +_,7 @@
+@@ -147,7 +_,7 @@
  			{
  				try
  				{
 -					SocialAPI.Initialize(null);
 +					//SocialAPI.Initialize(null);
  					LaunchInitializer.LoadParameters(main);
- 					Main.OnEngineLoad += delegate
+ 					Main.OnEnginePreload += delegate
  					{
 

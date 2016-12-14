@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria\Main.cs
 +++ src/TerraCustom\Terraria\Main.cs
-@@ -54,6 +_,7 @@
+@@ -58,6 +_,7 @@
  using Terraria.UI.Gamepad;
  using Terraria.Utilities;
  using Terraria.World.Generation;
@@ -8,15 +8,15 @@
  
  #if SERVER
  using Terraria.Server;
-@@ -152,7 +_,16 @@
+@@ -157,7 +_,16 @@
  		public static int AnnouncementBoxRange = -1;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
  		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
 -		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
 +		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
 +		// TerraCustom Start
-+		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "ModLoader");
-+ 		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilties.GetStoragePath(), "TerraCustom");
++		public static string TModLoaderSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilities.GetStoragePath(), "ModLoader");
++ 		public static string TerraCustomSavePath = Path.Combine(Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : PlatformUtilities.GetStoragePath(), "TerraCustom");
 + 		public static Setting setting = new Setting();
 + 		public static SettingSaver settingSaver = new SettingSaver();
 + 		public static int bgStylePreview = 1;
@@ -26,7 +26,7 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
-@@ -358,7 +_,7 @@
+@@ -368,7 +_,7 @@
  		public static int[] desertBG = new int[2];
  		public static int oceanBG;
  		public static int[] treeX = new int[4];
@@ -35,7 +35,7 @@
  		public static int[] caveBackX = new int[4];
  		public static int[] caveBackStyle = new int[4];
  		public static int iceBackStyle;
-@@ -601,6 +_,7 @@
+@@ -612,6 +_,7 @@
  		public static bool serverStarting = false;
  		public static float leftWorld = 0f;
  		public static float rightWorld = 134400f;
@@ -43,7 +43,7 @@
  		public static float topWorld = 0f;
  		public static float bottomWorld = 38400f;
  		public static int maxTilesX = (int)Main.rightWorld / 16 + 1;
-@@ -1145,6 +_,7 @@
+@@ -1162,6 +_,7 @@
  		public static bool tilesLoaded = false;
  		public static WorldMap Map = new WorldMap(Main.maxTilesX, Main.maxTilesY);
  		public static Tile[, ] tile = new Tile[Main.maxTilesX, Main.maxTilesY];
@@ -51,7 +51,7 @@
  		public static Dust[] dust = new Dust[6001];
  		public static Star[] star = new Star[130];
  		public static Item[] item = new Item[401];
-@@ -1299,9 +_,12 @@
+@@ -1315,9 +_,12 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
  		public static string WorldPath = Main.SavePath + Path.DirectorySeparatorChar + "Worlds";
@@ -65,8 +65,8 @@
 +		public static string SettingPath = Main.TerraCustomSavePath;
  		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
  		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
- 		public static string[] itemName = new string[3797];
-@@ -1982,14 +_,14 @@
+ 		public static string[] itemName = new string[3884];
+@@ -2033,14 +_,14 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
@@ -85,7 +85,7 @@
  		public static int menuSkip = 0;
  		private static Item cpItem = new Item();
  		public int textBlinkerCount;
-@@ -2063,6 +_,12 @@
+@@ -2117,6 +_,12 @@
  		private float cTop;
  		private static SlotVector<ActiveSound> _trackedSounds = new SlotVector<ActiveSound>(4096);
  
@@ -98,7 +98,7 @@
  		public static event Action OnEnginePreload;
  		public static event Action OnEngineLoad;
  		public static event Action OnTick;
-@@ -2287,12 +_,14 @@
+@@ -2403,12 +_,14 @@
  				Main.anglerQuest = Main.rand.Next(Main.anglerQuestItemNetIDs.Length);
  				int num = Main.anglerQuestItemNetIDs[Main.anglerQuest];
  				//patch file: num, flag2
@@ -108,48 +108,44 @@
  				{
  					flag2 = true;
  				}
-  
+ 
 -				if (num == 2457 && WorldGen.crimson)
 +				//if (num == 2457 && WorldGen.crimson)
 +				if (num == 2457 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2299,8 +_,9 @@
- 				{
+@@ -2418,7 +_,8 @@
  					flag2 = true;
  				}
-  
+ 
 -				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				//if (num == 2463 && (!Main.hardMode || !WorldGen.crimson))
 +				if (num == 2463 && (!Main.hardMode || !WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2319,8 +_,9 @@
- 				{
+@@ -2443,7 +_,8 @@
  					flag2 = true;
  				}
-  
+ 
 -				if (num == 2477 && !WorldGen.crimson)
 +				//if (num == 2477 && !WorldGen.crimson)
 +				if (num == 2477 && (!WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2335,8 +_,9 @@
- 				{
+@@ -2463,7 +_,8 @@
  					flag2 = true;
  				}
-  
+ 
 -				if (num == 2485 && WorldGen.crimson)
 +				//if (num == 2485 && WorldGen.crimson)
 +				if (num == 2485 && (WorldGen.crimson || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption != 4))
  				{
  					flag2 = true;
  				}
-@@ -2366,7 +_,8 @@
- 					Main.WorldList.Add(WorldFileData.FromInvalidWorld(files[i], false));
+@@ -2498,6 +_,7 @@
  				}
  			}
  
@@ -157,7 +153,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudWorldPath) + "/.+\\.wld");
-@@ -2382,7 +_,8 @@
+@@ -2514,6 +_,7 @@
  					}
  				}
  			}
@@ -165,9 +161,7 @@
  
  			Main.WorldList.Sort(new Comparison<WorldFileData>(Main.WorldListSortMethod));
  		}
- 
-@@ -2404,7 +_,8 @@
- 					Main.PlayerList.Add(fileData);
+@@ -2538,6 +_,7 @@
  				}
  			}
  
@@ -175,8 +169,7 @@
  			if (SocialAPI.Cloud != null)
  			{
  				List<string> files2 = SocialAPI.Cloud.GetFiles(Regex.Escape(Main.CloudPlayerPath) + "/.+\\.plr");
-@@ -2416,7 +_,8 @@
- 					}
+@@ -2551,6 +_,7 @@
  				}
  			}
  
@@ -184,16 +177,16 @@
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
  
-@@ -2558,7 +_,7 @@
- 					}
- 				});
+@@ -2705,7 +_,7 @@
+ 				}
+ 			});
  			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
 -			ModLoader.ModLoader.SaveConfiguration();
 +			//ModLoader.ModLoader.SaveConfiguration();
  			bool flag = Main.Configuration.Save(true);
  			return flag && PlayerInput.Save();
  		}
-@@ -2657,7 +_,7 @@
+@@ -2823,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
  			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
@@ -202,17 +195,16 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -2857,8 +_,8 @@
- 					Main.cMapAlphaDown
+@@ -3038,7 +_,7 @@
  				};
  			}
-
+ 
 -			ModLoader.ModLoader.LoadConfiguration();
 +			//ModLoader.ModLoader.LoadConfiguration();
  			PlayerInput.Load();
  			if (num2 < 165)
  			{
-@@ -3059,12 +_,12 @@
+@@ -3259,10 +_,10 @@
  					File.Delete(Main.WorldList[i].Path + ".bak");
  					#endif
  				}
@@ -220,37 +212,33 @@
 -				{
 -					SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 -				}
--
--				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
 +				//else if (SocialAPI.Cloud != null)
 +				//{
 +				//	SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
 +				//}
-+
-+				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
+ 
+ 				WorldIO.EraseWorld(Main.WorldList[i].Path, Main.WorldList[i].IsCloudSave);
  				Main.LoadWorlds();
- 			}
- 			catch
-@@ -3157,7 +_,8 @@
+@@ -3365,7 +_,8 @@
  				text += str;
  			}
-
+ 
 -			string text3 = cloudSave ? Main.CloudWorldPath : Main.WorldPath;
 +			//string text3 = cloudSave ? Main.CloudWorldPath : (Main.setting.SaveInTModFolder ? Main.TModLoaderWorldPath : Main.WorldPath);
 +			string text3 = (Main.setting.SaveInTModFolder || Main.tModLoaderModsLoaded) ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
  			string path = string.Concat(new object[]
- 				{
- 					text3,
-@@ -3492,7 +_,7 @@
+ 			{
+ 				text3,
+@@ -3722,7 +_,7 @@
  			}
  			else
  			{
 -				Console.Title = "Terraria Server " + Main.versionNumber2 + " - " + ModLoader.ModLoader.versionedName;
 +				Console.Title = "Terraria Server " + Main.versionNumber2;
  			}
+ 
  			Main.dedServ = true;
- 			Main.showSplash = false;
-@@ -3510,7 +_,7 @@
+@@ -3741,7 +_,7 @@
  				while (flag)
  				{
  					Main.LoadWorlds();
@@ -259,38 +247,39 @@
  					Console.WriteLine("");
  					for (int i = 0; i < Main.WorldList.Count; i++)
  					{
-@@ -3762,7 +_,7 @@
+@@ -4046,7 +_,7 @@
  					}
- 					else if (text2 == "m" || text2 == "M")
+ 					else if (text4 == "m" || text4 == "M")
  					{
 -						Interface.ServerModMenu();
 +						ModLoader.Interface.ServerModMenu();
  						continue;
  					}
  					else
-@@ -3961,8 +_,8 @@
+@@ -4263,8 +_,8 @@
  					if (target < now) //can't catch up, reset target
  					{
  						target = now + delta;
 -					}
-
+-
++
 +				}
  					Thread.Sleep(Math.Max((int)remaining, 0));
  				}
  			}
-@@ -4140,7 +_,7 @@
+@@ -4398,7 +_,7 @@
  					{
  						WorldFile.saveWorld();
  						Netplay.disconnect = true;
 -						SocialAPI.Shutdown();
 +						//SocialAPI.Shutdown();
  					}
- 					else if (text == "fps")
+ 					else if (text == Language.GetTextValue("CLI.FPS_Command"))
  					{
-@@ -4414,12 +_,23 @@
+@@ -4695,12 +_,23 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
-			#endif
+ 			#endif
 +			// Terraria.app/Contents/MacOS/Terraria.exe
 +			// Terraria.app/Contents/MacOS/Content/
 +#if MAC
@@ -306,13 +295,13 @@
  
  		protected void SetTitle()
  		{
-			#if CLIENT
+ 			#if CLIENT
 -			Main._cachedTitle = Lang.title();
 +			Main._cachedTitle = "TerraCustom -- " + Lang.title();
  			base.Window.Title = Main._cachedTitle;
-			#endif
+ 			#endif
  		}
-@@ -7751,8 +_,13 @@
+@@ -8069,8 +_,13 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -328,7 +317,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -40533,11 +_,11 @@
+@@ -45933,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -336,13 +325,22 @@
 +		public void QuitGame()
  		{
  			Main.SaveSettings();
-			#if CLIENT
+ 			#if CLIENT
 -			SocialAPI.Shutdown();
 +			//SocialAPI.Shutdown();
-			#endif
+ 			#endif
  			base.Exit();
-			#if MAC
-@@ -40777,16 +_,16 @@
+ 			#if MAC
+@@ -46210,13 +_,14 @@
+ 				Main.ActiveWorldFileData.SetSeed(text);
+ 			}
+ 
+-			Main.menuMode = 10;
+-			WorldGen.CreateNewWorld(null);
++			Main.menuMode = (int)MenuModes.Settings;
++			//Main.menuMode = 10;
++			//WorldGen.CreateNewWorld(null);
+ 		}
  
  		private void OnWorldNamed(string text)
  		{
@@ -351,19 +349,18 @@
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
  			if (Main.UseSeedUI)
- 			{
- 				Main.menuMode = 5000;
+@@ -46225,7 +_,7 @@
  				return;
  			}
- 			
+ 
 -			WorldGen.CreateNewWorld(null);
 +			//WorldGen.CreateNewWorld(null);
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -40911,9 +_,9 @@
- 				}
+@@ -46369,9 +_,9 @@
  			}
+ 
  			int num2 = 250;
 -			int num3 = Main.screenWidth / 2;
 +			int num3 = Main.screenWidth / 2; // screenHorizontalCenter
@@ -373,7 +370,7 @@
  			int num6 = Main.menuMode;
  			int num7 = 0;
  			int num8 = 0;
-@@ -40927,7 +_,7 @@
+@@ -46385,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -382,7 +379,7 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
-@@ -40939,11 +_,15 @@
+@@ -46398,10 +_,14 @@
  				array7[j] = 1f;
  			}
  
@@ -398,9 +395,8 @@
  			}
  
  			bool loadedEverything = Program.LoadedEverything;
- 			if (loadedEverything)
-@@ -41221,10 +_,10 @@
- 						Main.PlaySound(11, -1, -1, 1);
+@@ -46694,10 +_,10 @@
+ 						Main.PlaySound(11, -1, -1, 1, 1f, 0f);
  						Main.menuMode = 0;
  						Main.netMode = 0;
 -						if (SocialAPI.Network != null)
@@ -414,8 +410,8 @@
  					}
  				}
  				else if (Main.menuMode == 30)
-@@ -41485,7 +_,7 @@
- 						Main.PlaySound(11, -1, -1, 1);
+@@ -46974,7 +_,7 @@
+ 						Main.PlaySound(11, -1, -1, 1, 1f, 0f);
  						if (WorldIO.customDataFail == null)
  						{
 -							Main.menuMode = 0;
@@ -423,16 +419,16 @@
  						}
  						else
  						{
-@@ -41643,7 +_,7 @@
- 						Main.menuMode = 888;
+@@ -47146,7 +_,7 @@
  					}
+ 
  					num10++;
 -					Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num2, ref num4, ref num10, ref num5);
 +					ModLoader.Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num2, ref num4, ref num10, ref num5);
  					array9[num10] = Lang.menu[14];
  					if (this.selectedMenu == num10)
  					{
-@@ -42122,7 +_,7 @@
+@@ -47649,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -441,7 +437,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -42154,27 +_,36 @@
+@@ -47682,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
@@ -476,9 +472,9 @@
  							Main.menuMode = 16;
 +							*/
  						}
- 						
+ 
  						Main.clrInput();
-@@ -42225,9 +_,9 @@
+@@ -47758,14 +_,14 @@
  						num15++;
  						Main.clrInput();
  					}
@@ -491,7 +487,22 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 5000)
-@@ -43497,7 +_,8 @@
+ 					{
+-						Main.MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnSeedSelected), Main.CreateGoToMenuEvent(7), 0, true));
++						Main.MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnSeedSelected), Main.CreateGoToMenuEvent((int)MenuModes.EnterWorldName), 0, true));
+ 						Main.menuMode = 888;
+ 					}
+ 					else if (Main.menuMode == 8)
+@@ -47936,7 +_,7 @@
+ 						if (this.selectedMenu == num19)
+ 						{
+ 							Main.PlaySound(10, -1, -1, 1);
+-							Main.menuMode = Interface.tModLoaderSettingsID;
++							Main.menuMode = ModLoader.Interface.tModLoaderSettingsID;
+ 						}
+ 
+ 						num19++;
+@@ -49217,7 +_,8 @@
  					}
  					else
  					{
@@ -501,7 +512,7 @@
  					}
  				}
  			}
-@@ -44362,7 +_,7 @@
+@@ -50197,7 +_,7 @@
  					num108 = 2;
  				}
  

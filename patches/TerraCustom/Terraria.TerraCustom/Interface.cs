@@ -14,6 +14,7 @@ namespace Terraria.TerraCustom
 		// Vanilla
 		SelectDifficulty = 1000,
 		EnterWorldName,
+		EnterWorldSeed = 5000,
 		// Custom
 		Settings,
 		ChooseWorldSize,
@@ -52,8 +53,10 @@ namespace Terraria.TerraCustom
 		};
 		*/
 
+		//static string seedlabel = "Set Seed: ";
 		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset All", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
+			//new ActionLabel(seedlabel, () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
 			new ActionLabel("Reload tModLoader mods", () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
 			new ActionLabel("Terrain", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
 			new ActionLabel("Ores", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
@@ -99,6 +102,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Found Wizard : No", "Found Wizard : Yes" }, () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Mechanic: No", "Found Mechanic: Yes" }, () => Main.setting.savedMechanic? 1 : 0, x => Main.setting.savedMechanic = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Angler : No", "Found Angler : Yes" }, () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
+			new OptionLabel(new string[] { "Found Bartender : No", "Found Bartender : Yes" }, () => Main.setting.savedBartender? 1 : 0, x => Main.setting.savedBartender = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes" }, () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
@@ -156,7 +160,7 @@ namespace Terraria.TerraCustom
 
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset Miscellaneous Settings", Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: Corruption with Crimson chasms","Corruption/Crimson: Crimson with Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
+			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: (Both) Corruption plus Crimson chasms","Corruption/Crimson: (Both) Crimson plus Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Separate Sides: No","Force Corruption/Crimson Separate Sides: Yes"}, () => Main.setting.CrimsonCorruptionAvoidEachOther ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidEachOther = x > 0 ? true : false),
 			new SliderItem("Corruption Biomes:", 5f, () => Main.setting.CorruptionMultiplier, x => Main.setting.CorruptionMultiplier = x, x => (Main.setting.IsCorruption == 0 || Main.setting.IsCorruption == 1 || Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4 ? Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling(Main.maxTilesX * 0.00045 * x) : "Disabled")),

@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader\ModLoader.cs
 +++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
-@@ -31,8 +_,8 @@
+@@ -29,8 +_,8 @@
  #endif
  		//change Terraria.Main.SavePath and cloud fields to use "ModLoader" folder
  		public static string ModPath => modPath;
@@ -11,7 +11,7 @@
  		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
  		internal const int earliestRelease = 149;
  		internal static string modToBuild;
-@@ -157,7 +_,24 @@
+@@ -156,7 +_,24 @@
  			}
  			else
  			{

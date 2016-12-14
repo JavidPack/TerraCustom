@@ -486,6 +486,7 @@ namespace Terraria.TerraCustom
 		[JsonProperty]
 		public bool NoUnderworld { get; internal set; } = false;
 
+		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SkyIslandMultiplier { get; internal set; } = 1f;
 		
@@ -565,6 +566,9 @@ namespace Terraria.TerraCustom
 		
 		[JsonProperty]
 		public bool savedAngler { get; internal set; }
+
+		[JsonProperty]
+		public bool savedBartender { get; internal set; }
 		
 		[JsonProperty]
 		public bool savedTaxCollector { get; internal set; }

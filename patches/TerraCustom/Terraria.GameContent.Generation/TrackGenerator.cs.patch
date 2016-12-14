@@ -26,7 +26,7 @@
  
  		public void Generate(int trackCount, int minimumLength)
  		{
-@@ -68,6 +_,8 @@
+@@ -67,6 +_,8 @@
  					if (this.FindPath(x, num, minimumLength, false))
  					{
  						i--;
@@ -35,7 +35,7 @@
  					}
  				}
  			}
-@@ -121,7 +_,7 @@
+@@ -120,7 +_,7 @@
  			{
  				if (flag)
  				{
@@ -44,7 +44,7 @@
  					if (history[i].Y >= history[num].Y)
  					{
  						int num2 = i + 1;
-@@ -160,11 +_,11 @@
+@@ -159,11 +_,11 @@
  			}
  			int num3 = 1;
  			int num4 = 0;
@@ -59,7 +59,7 @@
  			while (num8 > 0 && flag && num < historyCache.Length - 1)
  			{
  				num8--;
-@@ -313,9 +_,9 @@
+@@ -312,9 +_,9 @@
  			return false;
  		}
  
