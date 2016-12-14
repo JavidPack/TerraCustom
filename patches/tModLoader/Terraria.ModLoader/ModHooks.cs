@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Audio;
 
 namespace Terraria.ModLoader
 {
@@ -76,6 +77,7 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		// Pretty much deprecated. 
 		internal static void HotKeyPressed()
 		{
 			foreach (var modHotkey in ModLoader.modHotKeys)
@@ -84,16 +86,6 @@ namespace Terraria.ModLoader
 				{
 					modHotkey.Value.mod.HotKeyPressed(modHotkey.Value.name);
 				}
-				// TODO - Restructure - ModHotKey class? - KeyDown, KeyUp, Down?
-				//if (PlayerInput.Triggers.JustPressed.KeyStatus[modHotkey.Value.name])
-				//{
-				//}
-				//if (PlayerInput.Triggers.JustReleased.KeyStatus[modHotkey.Value.name])
-				//{
-				//}
-				//if (PlayerInput.Triggers.Old.KeyStatus[modHotkey.Value.name])
-				//{
-				//}
 			}
 		}
 

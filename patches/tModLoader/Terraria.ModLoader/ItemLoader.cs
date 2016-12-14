@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,7 @@ namespace Terraria.ModLoader
 		private static int nextItem = ItemID.Count;
 		internal static readonly IList<ModItem> items = new List<ModItem>();
 		internal static readonly IList<GlobalItem> globalItems = new List<GlobalItem>();
+		internal static GlobalItem[] NetGlobals;
 		internal static readonly IList<ItemInfo> infoList = new List<ItemInfo>();
 		internal static readonly IDictionary<string, int> infoIndexes = new Dictionary<string, int>();
 		internal static readonly IList<int> animations = new List<int>();
@@ -103,7 +105,8 @@ namespace Terraria.ModLoader
 		private static DelegateAnglerChat[] HookAnglerChat;
 		private static Action<Item, Recipe>[] HookOnCraft;
 		private static Action<Item, List<TooltipLine>>[] HookModifyTooltips;
-		private static Func<Item, bool>[] HookNeedsCustomSaving;
+		private static Func<Item, bool>[] HookNeedsSaving;
+		private static Action<Item>[] HookPreSaveCustomData;
 
 		static ItemLoader()
 		{
@@ -144,6 +147,9 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Item.itemCaches, nextItem);
 			Array.Resize(ref Item.staff, nextItem);
 			Array.Resize(ref Item.claw, nextItem);
+			Array.Resize(ref ItemID.Sets.BannerStrength, nextItem);
+			Array.Resize(ref ItemID.Sets.KillsToBanner, nextItem);
+			Array.Resize(ref ItemID.Sets.CanFishInLava, nextItem);
 			//Array.Resize(ref ItemID.Sets.TextureCopyLoad, nextItem); //not needed?
 			Array.Resize(ref ItemID.Sets.TrapSigned, nextItem);
 			Array.Resize(ref ItemID.Sets.Deprecated, nextItem);
@@ -174,6 +180,8 @@ namespace Terraria.ModLoader
 			Array.Resize(ref ItemID.Sets.SingleUseInGamepad, nextItem);
 			for (int k = ItemID.Count; k < nextItem; k++)
 			{
+				ItemID.Sets.BannerStrength[k] = new ItemID.BannerEffect(1f);
+				ItemID.Sets.KillsToBanner[k] = 50;
 				Item.itemCaches[k] = -1;
 				//ItemID.Sets.TextureCopyLoad[k] = -1;
 				ItemID.Sets.ExtractinatorMode[k] = -1;
@@ -192,6 +200,8 @@ namespace Terraria.ModLoader
 				Main.anglerQuestItemNetIDs[vanillaQuestFishCount + k] = questFish[k];
 			}
 			
+			NetGlobals = ModLoader.BuildGlobalHook<GlobalItem, Action<Item, BinaryWriter>>(globalItems, g => g.NetSend);
+
 			ModLoader.BuildGlobalHook(ref HookSetDefaults, globalItems, g => g.SetDefaults);
 			ModLoader.BuildGlobalHook(ref HookCanUseItem, globalItems, g => g.CanUseItem);
 			ModLoader.BuildGlobalHook(ref HookCanUseItem, globalItems, g => g.CanUseItem);
@@ -258,7 +268,7 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookAnglerChat, globalItems, g => g.AnglerChat);
 			ModLoader.BuildGlobalHook(ref HookOnCraft, globalItems, g => g.OnCraft);
 			ModLoader.BuildGlobalHook(ref HookModifyTooltips, globalItems, g => g.ModifyTooltips);
-			ModLoader.BuildGlobalHook(ref HookNeedsCustomSaving, globalItems, g => g.NeedsCustomSaving);
+			ModLoader.BuildGlobalHook(ref HookNeedsSaving, globalItems, g => g.NeedsSaving);
 		}
 
 		internal static void Unload()
@@ -363,7 +373,8 @@ namespace Terraria.ModLoader
 		//in Terraria.Player.ItemCheck
 		//  inside block if (this.controlUseItem && this.itemAnimation == 0 && this.releaseUseItem && item.useStyle > 0)
 		//  set initial flag2 to ItemLoader.CanUseItem(item, this)
-		public static bool CanUseItem(Item item, Player player) {
+		public static bool CanUseItem(Item item, Player player)
+		{
 			bool flag = true;
 			if (item.modItem != null)
 			{
@@ -542,7 +553,8 @@ namespace Terraria.ModLoader
 			}
 		}
 		//in Terraria.Player.ItemCheck add to beginning of pvp collision check
-		public static bool CanHitPvp(Item item, Player player, Player target) {
+		public static bool CanHitPvp(Item item, Player player, Player target)
+		{
 			foreach (var hook in HookCanHitPvp)
 			{
 				if (!hook(item, player, target))
@@ -781,30 +793,30 @@ namespace Terraria.ModLoader
 			}
 		}
 		//in Terraria.Main.DrawPlayers after armor combinations setting flags call
-		//  ItemLoader.ArmorSetShadows(player, ref flag, ref flag2, ref flag3, ref flag4);
-		public static void ArmorSetShadows(Player player, ref bool longTrail, ref bool smallPulse, ref bool largePulse, ref bool shortTrail)
+		//  ItemLoader.ArmorSetShadows(player);
+		public static void ArmorSetShadows(Player player)
 		{
 			EquipTexture headTexture = EquipLoader.GetEquipTexture(EquipType.Head, player.head);
 			EquipTexture bodyTexture = EquipLoader.GetEquipTexture(EquipType.Body, player.body);
 			EquipTexture legTexture = EquipLoader.GetEquipTexture(EquipType.Legs, player.legs);
 			if (headTexture != null && headTexture.IsVanitySet(player.head, player.body, player.legs))
 			{
-				headTexture.ArmorSetShadows(player, ref longTrail, ref smallPulse, ref largePulse, ref shortTrail);
+				headTexture.ArmorSetShadows(player);
 			}
 			if (bodyTexture != null && bodyTexture.IsVanitySet(player.head, player.body, player.legs))
 			{
-				bodyTexture.ArmorSetShadows(player, ref longTrail, ref smallPulse, ref largePulse, ref shortTrail);
+				bodyTexture.ArmorSetShadows(player);
 			}
 			if (legTexture != null && legTexture.IsVanitySet(player.head, player.body, player.legs))
 			{
-				legTexture.ArmorSetShadows(player, ref longTrail, ref smallPulse, ref largePulse, ref shortTrail);
+				legTexture.ArmorSetShadows(player);
 			}
 			foreach (GlobalItem globalItem in HookArmorSetShadows)
 			{
 				string set = globalItem.IsVanitySet(player.head, player.body, player.legs);
 				if (!string.IsNullOrEmpty(set))
 				{
-					globalItem.ArmorSetShadows(player, set, ref longTrail, ref smallPulse, ref largePulse, ref shortTrail);
+					globalItem.ArmorSetShadows(player, set);
 				}
 			}
 		}
@@ -829,7 +841,8 @@ namespace Terraria.ModLoader
 		}
 		//in Terraria.UI.ItemSlot.RightClick in end of item-opening if/else chain before final else
 		//  make else if(ItemLoader.CanRightClick(inv[slot]))
-		public static bool CanRightClick(Item item) {
+		public static bool CanRightClick(Item item)
+		{
 			if (!Main.mouseRight)
 			{
 				return false;
@@ -848,7 +861,8 @@ namespace Terraria.ModLoader
 			return false;
 		}
 		//in Terraria.UI.ItemSlot in block from CanRightClick call ItemLoader.RightClick(inv[slot], player)
-		public static void RightClick(Item item, Player player) {
+		public static void RightClick(Item item, Player player)
+		{
 			if (Main.mouseRightRelease)
 			{
 				item.modItem?.RightClick(player);
@@ -1446,26 +1460,27 @@ namespace Terraria.ModLoader
 			}
 		}
 
-		public static int NeedsGlobalCustomSaving(Item item)
-		{
-			if (item.type == 0)
-			{
-				return 0;
-			}
-			int numGlobalData = 0;
-			foreach (var hook in HookNeedsCustomSaving)
-			{
-				if (hook(item))
-				{
-					numGlobalData++;
-				}
-			}
-			return numGlobalData;
-		}
-
 		public static bool NeedsModSaving(Item item)
 		{
-			return IsModItem(item) || NeedsGlobalCustomSaving(item) > 0;
+			return item.type != 0 && (IsModItem(item) || HookNeedsSaving.Count(hook => hook(item)) > 0);
+		}
+
+		internal static void WriteNetGlobalOrder(BinaryWriter w)
+		{
+			w.Write((short)NetGlobals.Length);
+			foreach (var globalItem in NetGlobals)
+			{
+				w.Write(globalItem.mod.netID);
+				w.Write(globalItem.Name);
+			}
+		}
+
+		internal static void ReadNetGlobalOrder(BinaryReader r)
+		{
+			short n = r.ReadInt16();
+			NetGlobals = new GlobalItem[n];
+			for (short i = 0; i < n; i++)
+				NetGlobals[i] = ModNet.GetMod(r.ReadInt16()).GetGlobalItem(r.ReadString());
 		}
 	}
 }

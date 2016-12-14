@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Terraria;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.ModLoader.IO;
+using Terraria.DataStructures;
+using Terraria.GameInput;
 
 namespace Terraria.ModLoader
 {
@@ -61,11 +63,20 @@ namespace Terraria.ModLoader
 		{
 		}
 
-		public virtual void SaveCustomData(BinaryWriter writer)
+		public virtual void PreSaveCustomData()
 		{
 		}
 
-		public virtual void LoadCustomData(BinaryReader reader)
+		public virtual TagCompound Save()
+		{
+			return null;
+		}
+
+		public virtual void Load(TagCompound tag)
+		{
+		}
+
+		public virtual void LoadLegacy(BinaryReader reader)
 		{
 		}
 
@@ -172,7 +183,7 @@ namespace Terraria.ModLoader
 		}
 
 		public virtual bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit,
-			ref bool customDamage, ref bool playSound, ref bool genGore, ref string deathText)
+			ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
 		{
 			return true;
 		}
@@ -186,12 +197,12 @@ namespace Terraria.ModLoader
 		}
 
 		public virtual bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore,
-			ref string deathText)
+			ref PlayerDeathReason damageSource)
 		{
 			return true;
 		}
 
-		public virtual void Kill(double damage, int hitDirection, bool pvp, string deathText)
+		public virtual void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
 		{
 		}
 
@@ -248,7 +259,7 @@ namespace Terraria.ModLoader
 			return null;
 		}
 
-		public virtual void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit)
+		public virtual void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 		}
 
@@ -345,6 +356,22 @@ namespace Terraria.ModLoader
 		}
 
 		public virtual void ModifyZoom(ref float zoom)
+		{
+		}
+
+		public virtual void PlayerConnect(Player player)
+		{
+		}
+
+		public virtual void PlayerDisconnect(Player player)
+		{
+		}
+
+		public virtual void OnEnterWorld(Player player)
+		{
+		}
+
+		public virtual void ProcessTriggers(TriggersSet triggersSet)
 		{
 		}
 	}

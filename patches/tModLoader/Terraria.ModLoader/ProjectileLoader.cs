@@ -24,12 +24,13 @@ namespace Terraria.ModLoader
 		private delegate void DelegateTileCollideStyle(Projectile projectile, ref int width, ref int height, ref bool fallThrough);
 		private static DelegateTileCollideStyle[] HookTileCollideStyle;
 		private static Func<Projectile, Vector2, bool>[] HookOnTileCollide;
+		private static Func<Projectile, bool?>[] HookCanCutTiles;
 		private static Func<Projectile, int, bool>[] HookPreKill;
 		private static Action<Projectile, int>[] HookKill;
 		private static Func<Projectile, bool>[] HookCanDamage;
 		private static Func<Projectile, bool>[] HookMinionContactDamage;
 		private static Func<Projectile, NPC, bool?>[] HookCanHitNPC;
-		private delegate void DelegateModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit);
+		private delegate void DelegateModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection);
 		private static DelegateModifyHitNPC[] HookModifyHitNPC;
 		private static Action<Projectile, NPC, int, float, bool>[] HookOnHitNPC;
 		private static Func<Projectile, Player, bool>[] HookCanHitPvp;
@@ -52,7 +53,7 @@ namespace Terraria.ModLoader
 		private static DelegateNumGrappleHooks[] HookNumGrappleHooks;
 		private delegate void DelegateGrappleRetreatSpeed(Projectile projectile, Player player, ref float speed);
 		private static DelegateGrappleRetreatSpeed[] HookGrappleRetreatSpeed;
-		private static Action<Projectile, int, List<int>, List<int>, List<int>>[] HookDrawBehind;
+		private static Action<Projectile, int, List<int>, List<int>, List<int>, List<int>>[] HookDrawBehind;
 
 		internal static int ReserveProjectileID()
 		{
@@ -78,21 +79,40 @@ namespace Terraria.ModLoader
 			Array.Resize(ref Main.projHook, nextProjectile);
 			Array.Resize(ref Main.projFrames, nextProjectile);
 			Array.Resize(ref Main.projPet, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.YoyosLifeTimeMultiplier, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.YoyosMaximumRange, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.YoyosTopSpeed, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.CanDistortWater, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.MinionShot, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.SentryShot, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.ForcePlateDetection, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.TrailingMode, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.TrailCacheLength, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.LightPet, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.Homing, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.IsADD2Turret, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.TurretFeature, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.MinionTargettingFeature, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.MinionSacrificable, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.DontAttachHideToAlpha, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.NeedsUUID, nextProjectile);
 			Array.Resize(ref ProjectileID.Sets.StardustDragon, nextProjectile);
+			Array.Resize(ref ProjectileID.Sets.NoLiquidDistortion, nextProjectile);
 			for (int k = ProjectileID.Count; k < nextProjectile; k++)
 			{
+				ProjectileID.Sets.YoyosLifeTimeMultiplier[k] = -1;
+				ProjectileID.Sets.YoyosMaximumRange[k] = 200f;
+				ProjectileID.Sets.YoyosTopSpeed[k] = 10f;
+				ProjectileID.Sets.CanDistortWater[k] = true;
 				Main.projectileLoaded[k] = true;
 				Main.projFrames[k] = 1;
 				ProjectileID.Sets.TrailingMode[k] = -1;
 				ProjectileID.Sets.TrailCacheLength[k] = 10;
+			}
+			Array.Resize(ref Projectile.perIDStaticNPCImmunity, nextProjectile);
+			for (int i = 0; i < nextProjectile; i++)
+			{
+				Projectile.perIDStaticNPCImmunity[i] = new int[200];
 			}
 
 			ModLoader.BuildGlobalHook(ref HookSetDefaults, globalProjectiles, g => g.SetDefaults);
@@ -102,6 +122,7 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookShouldUpdatePosition, globalProjectiles, g => g.ShouldUpdatePosition);
 			ModLoader.BuildGlobalHook(ref HookTileCollideStyle, globalProjectiles, g => g.TileCollideStyle);
 			ModLoader.BuildGlobalHook(ref HookOnTileCollide, globalProjectiles, g => g.OnTileCollide);
+			ModLoader.BuildGlobalHook(ref HookCanCutTiles, globalProjectiles, g => g.CanCutTiles);
 			ModLoader.BuildGlobalHook(ref HookPreKill, globalProjectiles, g => g.PreKill);
 			ModLoader.BuildGlobalHook(ref HookKill, globalProjectiles, g => g.Kill);
 			ModLoader.BuildGlobalHook(ref HookCanDamage, globalProjectiles, g => g.CanDamage);
@@ -315,6 +336,27 @@ namespace Terraria.ModLoader
 			}
 			return true;
 		}
+
+		//in Terraria.Projectile.CanCutTiles, change to
+		//    if (!ProjectileLoader.CanCutTiles(this).HasValue)
+		//    {
+		//        return (this.aiStyle != 45 && this.aiStyle != 92 && this.aiStyle != 105 && this.aiStyle != 106 && this.type != 463 && this.type != 69 && this.type != 70 && this.type != 621 && this.type != 10 && this.type != 11 && this.type != 379 && this.type != 407 && this.type != 476 && this.type != 623 && (this.type< 625 || this.type> 628));
+		//    }
+		//    else return (ProjectileLoader.CanCutTiles(this).Value);
+		//when it returns null, it does the vanilla check
+		public static bool? CanCutTiles(Projectile projectile)
+		{
+			foreach (var hook in HookCanCutTiles)
+			{
+				bool? canCutTiles = hook(projectile);
+				if (canCutTiles.HasValue)
+				{
+					return canCutTiles.Value;
+				}
+			}
+			return projectile.modProjectile?.CanCutTiles();
+		}
+
 		//in Terraria.Projectile.Kill before if statements determining kill behavior add
 		//  if(!ProjectileLoader.PreKill(this, num)) { this.active = false; return; }
 		public static bool PreKill(Projectile projectile, int timeLeft)
@@ -406,13 +448,13 @@ namespace Terraria.ModLoader
 			return flag;
 		}
 		//in Terraria.Projectile.Damage before calling StatusNPC call this and add local knockback variable
-		public static void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit)
+		public static void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			projectile.modProjectile?.ModifyHitNPC(target, ref damage, ref knockback, ref crit);
+			projectile.modProjectile?.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 
 			foreach (var hook in HookModifyHitNPC)
 			{
-				hook(projectile, target, ref damage, ref knockback, ref crit);
+				hook(projectile, target, ref damage, ref knockback, ref crit, ref hitDirection);
 			}
 		}
 		//in Terraria.Projectile.Damage before penetration check for NPCs call this
@@ -657,13 +699,13 @@ namespace Terraria.ModLoader
 			}
 		}
 
-		internal static void DrawBehind(Projectile projectile, int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles)
+		internal static void DrawBehind(Projectile projectile, int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
 		{
-			projectile.modProjectile?.DrawBehind(index, drawCacheProjsBehindNPCsAndTiles, drawCacheProjsBehindNPCs, drawCacheProjsBehindProjectiles);
+			projectile.modProjectile?.DrawBehind(index, drawCacheProjsBehindNPCsAndTiles, drawCacheProjsBehindNPCs, drawCacheProjsBehindProjectiles, drawCacheProjsOverWiresUI);
 
 			foreach (var hook in HookDrawBehind)
 			{
-				hook(projectile, index, drawCacheProjsBehindNPCsAndTiles, drawCacheProjsBehindNPCs, drawCacheProjsBehindProjectiles);
+				hook(projectile, index, drawCacheProjsBehindNPCsAndTiles, drawCacheProjsBehindNPCs, drawCacheProjsBehindProjectiles, drawCacheProjsOverWiresUI);
 			}
 		}
 	}

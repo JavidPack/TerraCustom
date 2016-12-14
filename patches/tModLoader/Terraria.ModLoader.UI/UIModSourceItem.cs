@@ -18,10 +18,12 @@ namespace Terraria.ModLoader.UI
 		private string mod;
 		private Texture2D dividerTexture;
 		private UIText modName;
+		private DateTime lastBuildTime;
 
-		public UIModSourceItem(string mod, bool publishable)
+		public UIModSourceItem(string mod, bool publishable, DateTime lastBuildTime)
 		{
 			this.mod = mod;
+			this.lastBuildTime = lastBuildTime;
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
 			this.dividerTexture = TextureManager.Load("Images/UI/Divider");
 			this.Height.Set(90f, 0f);
@@ -31,7 +33,7 @@ namespace Terraria.ModLoader.UI
 			this.modName.Left.Set(10f, 0f);
 			this.modName.Top.Set(5f, 0f);
 			base.Append(this.modName);
-			UITextPanel button = new UITextPanel("Build", 1f, false);
+			UITextPanel<string> button = new UITextPanel<string>("Build", 1f, false);
 			button.Width.Set(100f, 0f);
 			button.Height.Set(30f, 0f);
 			button.Left.Set(10f, 0f);
@@ -42,7 +44,7 @@ namespace Terraria.ModLoader.UI
 			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			button.OnClick += new UIElement.MouseEvent(this.BuildMod);
 			base.Append(button);
-			UITextPanel button2 = new UITextPanel("Build + Reload", 1f, false);
+			UITextPanel<string> button2 = new UITextPanel<string>("Build + Reload", 1f, false);
 			button2.CopyStyle(button);
 			button2.Width.Set(200f, 0f);
 			button2.Left.Set(150f, 0f);
@@ -52,7 +54,7 @@ namespace Terraria.ModLoader.UI
 			base.Append(button2);
 			if (publishable)
 			{
-				UITextPanel button3 = new UITextPanel("Publish", 1f, false);
+				UITextPanel<string> button3 = new UITextPanel<string>("Publish", 1f, false);
 				button3.CopyStyle(button2);
 				button3.Width.Set(100f, 0f);
 				button3.Left.Set(390f, 0f);
@@ -95,6 +97,16 @@ namespace Terraria.ModLoader.UI
 		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
 		{
 			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
+		}
+
+		public override int CompareTo(object obj)
+		{
+			UIModSourceItem uIModSourceItem = obj as UIModSourceItem;
+			if (uIModSourceItem == null)
+			{
+				return base.CompareTo(obj);
+			}
+			return uIModSourceItem.lastBuildTime.CompareTo(lastBuildTime);
 		}
 
 		private void BuildMod(UIMouseEvent evt, UIElement listeningElement)
@@ -166,6 +178,7 @@ namespace Terraria.ModLoader.UI
 						{ "author", bp.author },
 						{ "homepage", bp.homepage },
 						{ "description", bp.description },
+						// TODO: If GOG version, use ModLoader.steamID64. Should Steam users also have this option?
 						{ "steamid64", Steamworks.SteamUser.GetSteamID().ToString() },
 						{ "modloaderversion", "tModLoader v"+theTModFile.tModLoaderVersion },
 						{ "passphrase", ModLoader.modBrowserPassphrase }

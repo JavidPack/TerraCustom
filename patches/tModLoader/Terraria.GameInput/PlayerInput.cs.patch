@@ -1,6 +1,6 @@
 --- src/Terraria\Terraria.GameInput\PlayerInput.cs
 +++ src/tModLoader\Terraria.GameInput\PlayerInput.cs
-@@ -307,6 +_,43 @@
+@@ -307,6 +_,42 @@
  			}
  		}
  
@@ -36,15 +36,30 @@
 +			playerInputProfile = new PlayerInputProfile("Console (Xbox)");
 +			playerInputProfile.Initialize(PresetProfiles.ConsoleXBox);
 +			PlayerInput.OriginalProfiles.Add(playerInputProfile.Name, playerInputProfile);
-+			PlayerInput.SetSelectedProfile("Custom");
-+			PlayerInput.Triggers.Initialize();
-+			PlayerInput.Load();
++			PlayerInput.Triggers.Initialize(); // Populates triggers with known hotkeys
++			PlayerInput.Load(); // Loads the JSON into the Profiles above
 +		}
 +
  		public static void Initialize()
  		{
  			Main.InputProfiles.OnProcessText += new Preferences.TextProcessAction(PlayerInput.PrettyPrintProfiles);
-@@ -1450,6 +_,10 @@
+@@ -487,7 +_,14 @@
+ 			PlayerInput.VerifyBuildingMode();
+ 			PlayerInput.MouseInput();
+ 			PlayerInput.KeyboardInput();
+-			PlayerInput.GamePadInput();
++			// ugly hack: While reloading,  Main.player[Main.myPlayer]'s Selected item might be a mod item, so
++			// bool flag4 = ItemID.Sets.GamepadWholeScreenUseRange[player.inventory[player.selectedItem].type] || player.scope;
++			// Will thrown an index out of range.
++			try
++			{
++				PlayerInput.GamePadInput();
++			}
++			catch { }
+ 			PlayerInput.Triggers.Update();
+ 			PlayerInput.PostInput();
+ 			PlayerInput.ScrollWheelDelta = PlayerInput.ScrollWheelValue - PlayerInput.ScrollWheelValueOld;
+@@ -1462,6 +_,10 @@
  							c.KeyStatus["Hotbar8"].Add("D8");
  							c.KeyStatus["Hotbar9"].Add("D9");
  							c.KeyStatus["Hotbar10"].Add("D0");

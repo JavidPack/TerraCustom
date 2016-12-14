@@ -1,6 +1,6 @@
---- src/decompiled\Terraria.Utilities\PlatformUtilties.cs
-+++ src/merged\Terraria.Utilities\PlatformUtilties.cs
-@@ -1,14 +_,51 @@
+--- src/decompiled\Terraria.Utilities\PlatformUtilities.cs
++++ src/merged\Terraria.Utilities\PlatformUtilities.cs
+@@ -1,24 +_,77 @@
 +#if !WINDOWS
 +using SDL2;
 +#endif
@@ -15,12 +15,11 @@
  
  namespace Terraria.Utilities
  {
- 	public static class PlatformUtilties
+ 	public static class PlatformUtilities
  	{
--		public static string GetClipboard()
 +#if !WINDOWS
 +		private struct SDL_Surface
- 		{
++		{
 +			private uint flags;
 +
 +			public IntPtr format;
@@ -46,14 +45,41 @@
 +			private int refcount;
 +		}
 +#endif
++#if WINDOWS
+ 		public const bool IsXNA = true;
+ 
+ 		public const bool IsFNA = false;
+ 
+ 		public const bool IsWindows = true;
++#else
++		public const bool IsXNA = false;
+ 
++		public const bool IsFNA = true;
++
++		public const bool IsWindows = false;
++#endif
++
++#if MAC
++		public const bool IsOSX = true;
++#else
+ 		public const bool IsOSX = false;
++#endif
+ 
++#if LINUX
++		public const bool IsLinux = true;
++#else
+ 		public const bool IsLinux = false;
++#endif
+ 
+-		public static string GetClipboard()
 +
 +        public static string GetClipboard()
-+		{
+ 		{
 +#if WINDOWS
  			string clipboardText = "";
  			Thread thread = new Thread(delegate
  			{
-@@ -26,11 +_,24 @@
+@@ -36,11 +_,24 @@
  					array[length++] = clipboardText[i];
  				}
  			}
@@ -80,7 +106,7 @@
  			Thread thread = new Thread(delegate
  			{
  				if (text.Length > 0)
-@@ -41,12 +_,62 @@
+@@ -51,12 +_,62 @@
  			thread.SetApartmentState(ApartmentState.STA);
  			thread.Start();
  			thread.Join();
@@ -124,7 +150,7 @@
 +		{
 +			IntPtr intPtr = SDL.SDL_CreateRGBSurface(0u, imgWidth, imgHeight, 32, 255u, 65280u, 16711680u, 4278190080u);
 +			SDL.SDL_LockSurface(intPtr);
-+			PlatformUtilties.SDL_Surface* ptr = (PlatformUtilties.SDL_Surface*)((void*)intPtr);
++			PlatformUtilities.SDL_Surface* ptr = (PlatformUtilities.SDL_Surface*)((void*)intPtr);
 +			Marshal.Copy(data, 0, ptr->pixels, width * height * 4);
 +			SDL.SDL_UnlockSurface(intPtr);
 +			data = null;

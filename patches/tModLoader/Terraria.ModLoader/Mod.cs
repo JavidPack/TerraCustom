@@ -10,6 +10,8 @@ using Terraria.GameContent.Liquid;
 using Terraria.ID;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
+using Terraria.Utilities;
+using Terraria.Audio;
 
 namespace Terraria.ModLoader
 {
@@ -30,6 +32,7 @@ namespace Terraria.ModLoader
 
 		internal readonly IDictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 		internal readonly IDictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
+		internal readonly IDictionary<string, SpriteFont> fonts = new Dictionary<string, SpriteFont>();
 		internal readonly IList<ModRecipe> recipes = new List<ModRecipe>();
 		internal readonly IDictionary<string, ModItem> items = new Dictionary<string, ModItem>();
 		internal readonly IDictionary<string, GlobalItem> globalItems = new Dictionary<string, GlobalItem>();
@@ -123,7 +126,27 @@ namespace Terraria.ModLoader
 								sounds[mp3Path] = null;
 							}
 							break;
-
+						case ".xnb":
+							string xnbPath = Path.ChangeExtension(path, null);
+							if (xnbPath.StartsWith("Fonts/"))
+							{
+								string fontFilenameNoExtension = Name + "_" + xnbPath.Replace('/', '_') + "_" + Version;
+								string fontFilename = fontFilenameNoExtension + ".xnb";
+								FontCacheIO.DeleteIfOlder(File.path, fontFilename);
+								if (!FontCacheIO.FontCacheAvailable(fontFilename))
+								{
+									FileUtilities.WriteAllBytes(FontCacheIO.FontCachePath + Path.DirectorySeparatorChar + fontFilename, data, false);
+								}
+								try
+								{
+									fonts[xnbPath] = Main.instance.Content.Load<SpriteFont>("Fonts" + Path.DirectorySeparatorChar + "ModFonts" + Path.DirectorySeparatorChar + fontFilenameNoExtension);
+								}
+								catch
+								{
+									fonts[xnbPath] = null;
+								}
+							}
+							break;
 					}
 				}
 			}
@@ -313,6 +336,11 @@ namespace Terraria.ModLoader
 				return 0;
 			}
 			return item.item.type;
+		}
+
+		public int ItemType<T>() where T : ModItem
+		{
+			return ItemType(typeof(T).Name);
 		}
 
 		public void AddGlobalItem(string name, GlobalItem globalItem)
@@ -512,6 +540,11 @@ namespace Terraria.ModLoader
 			return dust.Type;
 		}
 
+		public int DustType<T>() where T : ModDust
+		{
+			return DustType(typeof(T).Name);
+		}
+
 		private void AutoloadDust(Type type)
 		{
 			ModDust dust = (ModDust)Activator.CreateInstance(type);
@@ -555,6 +588,11 @@ namespace Terraria.ModLoader
 				return 0;
 			}
 			return (int)tile.Type;
+		}
+
+		public int TileType<T>() where T : ModTile
+		{
+			return TileType(typeof(T).Name);
 		}
 
 		public void AddGlobalTile(string name, GlobalTile globalTile)
@@ -633,6 +671,11 @@ namespace Terraria.ModLoader
 			return (int)wall.Type;
 		}
 
+		public int WallType<T>() where T : ModWall
+		{
+			return WallType(typeof(T).Name);
+		}
+
 		public void AddGlobalWall(string name, GlobalWall globalWall)
 		{
 			globalWall.mod = this;
@@ -708,6 +751,11 @@ namespace Terraria.ModLoader
 				return 0;
 			}
 			return projectile.projectile.type;
+		}
+		
+		public int ProjectileType<T>() where T : ModProjectile
+		{
+			return ProjectileType(typeof(T).Name);
 		}
 
 		public void AddGlobalProjectile(string name, GlobalProjectile globalProjectile)
@@ -804,6 +852,11 @@ namespace Terraria.ModLoader
 				return 0;
 			}
 			return npc.npc.type;
+		}
+		
+		public int NPCType<T>() where T : ModNPC
+		{
+			return NPCType(typeof(T).Name);
 		}
 
 		public void AddGlobalNPC(string name, GlobalNPC globalNPC)
@@ -965,6 +1018,11 @@ namespace Terraria.ModLoader
 			return buff.Type;
 		}
 
+		public int BuffType<T>() where T : ModBuff
+		{
+			return BuffType(typeof(T).Name);
+		}
+
 		public void AddGlobalBuff(string name, GlobalBuff globalBuff)
 		{
 			globalBuff.mod = this;
@@ -1101,6 +1159,11 @@ namespace Terraria.ModLoader
 			return mountData.Type;
 		}
 
+		public int MountType<T>() where T : ModMountData
+		{
+			return MountType(typeof(T).Name);
+		}
+
 		public void AddModWorld(string name, ModWorld modWorld)
 		{
 			modWorld.Name = name;
@@ -1130,6 +1193,11 @@ namespace Terraria.ModLoader
 			{
 				return null;
 			}
+		}
+		
+		public T GetModWorld<T>() where T : ModWorld
+		{
+			return (T)GetModWorld(typeof(T).Name);
 		}
 
 		public void AddUgBgStyle(string name, ModUgBgStyle ugBgStyle)
@@ -1328,6 +1396,11 @@ namespace Terraria.ModLoader
 			return ModGore.GetGoreSlot(Name + '/' + name);
 		}
 
+		public int GetGoreSlot<T>() where T : ModGore
+		{
+			return GetGoreSlot(typeof(T).Name);
+		}
+
 		private void AutoloadGores(IList<Type> modGores)
 		{
 			var modGoreNames = modGores.ToDictionary(t => t.Namespace + "." + t.Name);
@@ -1358,6 +1431,11 @@ namespace Terraria.ModLoader
 			return SoundLoader.GetSoundSlot(type, Name + '/' + name);
 		}
 
+		public LegacySoundStyle GetLegacySoundSlot(SoundType type, string name)
+		{
+			return SoundLoader.GetLegacySoundSlot(type, Name + '/' + name);
+		}
+
 		private void AutoloadSounds(IList<Type> modSounds)
 		{
 			var modSoundNames = modSounds.ToDictionary(t => t.Namespace + "." + t.Name);
@@ -1383,7 +1461,7 @@ namespace Terraria.ModLoader
 				}
 				ModSound modSound = null;
 				Type t;
-				if (modSoundNames.TryGetValue(sound.Replace('/', '.'), out t))
+				if (modSoundNames.TryGetValue((Name + '/' + sound).Replace('/', '.'), out t))
 					modSound = (ModSound)Activator.CreateInstance(t);
 
 				AddSound(soundType, Name + '/' + sound, modSound);
@@ -1493,9 +1571,9 @@ namespace Terraria.ModLoader
 			SoundLoader.tileToMusic[tileType][tileFrameY] = musicSlot;
 		}
 
-		public void RegisterHotKey(string name, string defaultKey)
+		public ModHotKey RegisterHotKey(string name, string defaultKey)
 		{
-			ModLoader.RegisterHotKey(this, name, defaultKey);
+			return ModLoader.RegisterHotKey(this, name, defaultKey);
 		}
 
 		internal void SetupContent()
@@ -1559,8 +1637,13 @@ namespace Terraria.ModLoader
 			{
 				Main.npcTexture[npc.npc.type] = ModLoader.GetTexture(npc.texture);
 				Main.npcName[npc.npc.type] = npc.npc.name;
+				Main.npcNameEnglish[npc.npc.type] = npc.npc.name;
 				NPCLoader.SetupNPCInfo(npc.npc);
 				npc.SetDefaults();
+				if(npc.banner !=0)
+				{
+					NPCLoader.bannerToItem[npc.banner] = npc.bannerItem;
+				}
 				if (npc.npc.lifeMax > 32767 || npc.npc.boss)
 				{
 					Main.npcLifeBytes[npc.npc.type] = 4;
@@ -1680,6 +1763,20 @@ namespace Terraria.ModLoader
 		public bool SoundExists(string name)
 		{
 			return sounds.ContainsKey(name);
+		}
+
+		public SpriteFont GetFont(string name)
+		{
+			SpriteFont font;
+			if (!fonts.TryGetValue(name, out font))
+				throw new MissingResourceException(name);
+
+			return font;
+		}
+
+		public bool FontExists(string name)
+		{
+			return fonts.ContainsKey(name);
 		}
 
 		/// <summary>

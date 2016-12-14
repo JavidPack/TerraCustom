@@ -20,7 +20,7 @@ namespace Terraria.ModLoader.UI
 		// More info? see list of mods.
 		// user will reload if needed (added)
 
-			// TODO update this list, delete this list buttons.
+		// TODO update this list button.
 
 		private Texture2D dividerTexture;
 		private Texture2D innerPanelTexture;
@@ -31,11 +31,14 @@ namespace Terraria.ModLoader.UI
 		private int numModsEnabled;
 		private int numModsDisabled;
 		private int numModsMissing;
-		UITextPanel enableListButton;
-		UITextPanel enableListOnlyButton;
+		UITextPanel<string> enableListButton;
+		UITextPanel<string> enableListOnlyButton;
+		private UIImageButton deleteButton;
+		private string filename;
 
 		public UIModPackItem(string name, string[] mods)
 		{
+			this.filename = name;
 			this.mods = mods;
 			this.numMods = mods.Length;
 			modMissing = new bool[mods.Length];
@@ -81,7 +84,7 @@ namespace Terraria.ModLoader.UI
 			this.modName.Top.Set(5f, 0f);
 			base.Append(this.modName);
 
-			UITextPanel viewListButton = new UITextPanel("View List", 1f, false);
+			UITextPanel<string> viewListButton = new UITextPanel<string>("View List", 1f, false);
 			viewListButton.Width.Set(100f, 0f);
 			viewListButton.Height.Set(30f, 0f);
 			viewListButton.Left.Set(430f, 0f);
@@ -93,7 +96,7 @@ namespace Terraria.ModLoader.UI
 			viewListButton.OnClick += new UIElement.MouseEvent(ViewListInfo);
 			base.Append(viewListButton);
 
-			enableListButton = new UITextPanel("Enable this List", 1f, false);
+			enableListButton = new UITextPanel<string>("Enable this List", 1f, false);
 			enableListButton.Width.Set(100f, 0f);
 			enableListButton.Height.Set(30f, 0f);
 			enableListButton.Left.Set(275f, 0f);
@@ -105,7 +108,7 @@ namespace Terraria.ModLoader.UI
 			enableListButton.OnClick += new UIElement.MouseEvent(EnableList);
 			base.Append(enableListButton);
 
-			enableListOnlyButton = new UITextPanel("Enable only this List", 1f, false);
+			enableListOnlyButton = new UITextPanel<string>("Enable only this List", 1f, false);
 			enableListOnlyButton.Width.Set(100f, 0f);
 			enableListOnlyButton.Height.Set(30f, 0f);
 			enableListOnlyButton.Left.Set(75f, 0f);
@@ -116,6 +119,11 @@ namespace Terraria.ModLoader.UI
 			enableListOnlyButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			enableListOnlyButton.OnClick += new UIElement.MouseEvent(EnableListOnly);
 			base.Append(enableListOnlyButton);
+
+			deleteButton = new UIImageButton(TextureManager.Load("Images/UI/ButtonDelete"));
+			deleteButton.Top.Set(40f, 0f);
+			deleteButton.OnClick += new UIElement.MouseEvent(this.DeleteButtonClick);
+			base.Append(deleteButton);
 		}
 
 		private void DrawPanel(SpriteBatch spriteBatch, Vector2 position, float width)
@@ -175,6 +183,18 @@ namespace Terraria.ModLoader.UI
 		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
 		{
 			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
+		}
+
+		private void DeleteButtonClick(UIMouseEvent evt, UIElement listeningElement)
+		{
+			UIModPackItem modPackItem = ((UIModPackItem)listeningElement.Parent);
+			Directory.CreateDirectory(UIModPacks.ModListSaveDirectory);
+			string path = UIModPacks.ModListSaveDirectory + Path.DirectorySeparatorChar + modPackItem.filename + ".json";
+			if (File.Exists(path))
+			{
+				File.Delete(path);
+			}
+			Main.menuMode = Interface.modPacksMenuID;// should reload
 		}
 
 		private static void EnableList(UIMouseEvent evt, UIElement listeningElement)

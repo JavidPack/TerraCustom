@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,6 @@ using System.Text;
 using System.Threading;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Mono.Cecil;
 using Terraria.ModLoader.Default;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
@@ -21,7 +19,7 @@ namespace Terraria.ModLoader
 	public static class ModLoader
 	{
 		//change Terraria.Main.DrawMenu change drawn version number string to include this
-		public static readonly Version version = new Version(0, 8, 3, 5);
+		public static readonly Version version = new Version(0, 9, 0, 2);
 		public static readonly string versionedName = "tModLoader v" + version;
 #if WINDOWS
 		public const bool windows = true;
@@ -41,9 +39,10 @@ namespace Terraria.ModLoader
 		private static readonly Stack<string> loadOrder = new Stack<string>();
 		private static Mod[] loadedMods;
 		internal static readonly IDictionary<string, Mod> mods = new Dictionary<string, Mod>();
-		internal static readonly IDictionary<string, ModHotkey> modHotKeys = new Dictionary<string, ModHotkey>();
+		internal static readonly IDictionary<string, ModHotKey> modHotKeys = new Dictionary<string, ModHotKey>();
 		internal static readonly string modBrowserPublicKey = "<RSAKeyValue><Modulus>oCZObovrqLjlgTXY/BKy72dRZhoaA6nWRSGuA+aAIzlvtcxkBK5uKev3DZzIj0X51dE/qgRS3OHkcrukqvrdKdsuluu0JmQXCv+m7sDYjPQ0E6rN4nYQhgfRn2kfSvKYWGefp+kqmMF9xoAq666YNGVoERPm3j99vA+6EIwKaeqLB24MrNMO/TIf9ysb0SSxoV8pC/5P/N6ViIOk3adSnrgGbXnFkNQwD0qsgOWDks8jbYyrxUFMc4rFmZ8lZKhikVR+AisQtPGUs3ruVh4EWbiZGM2NOkhOCOM4k1hsdBOyX2gUliD0yjK5tiU3LBqkxoi2t342hWAkNNb4ZxLotw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
 		internal static string modBrowserPassphrase = "";
+		internal static string steamID64 = "";
 		internal static Action PostLoad;
 
 		internal static bool ModLoaded(string name)
@@ -65,7 +64,7 @@ namespace Terraria.ModLoader
 			return index >= 0 && index < loadedMods.Length ? loadedMods[index] : null;
 		}
 
-		public static Mod[] LoadedMods => (Mod[]) loadedMods.Clone();
+		public static Mod[] LoadedMods => (Mod[])loadedMods.Clone();
 
 		public static string[] GetLoadedMods()
 		{
@@ -132,7 +131,7 @@ namespace Terraria.ModLoader
 
 			MapLoader.SetupModMap();
 			ItemSorting.SetupWhiteLists();
-			
+
 			Interface.loadMods.SetProgressRecipes();
 			for (int k = 0; k < Recipe.maxRecipes; k++)
 			{
@@ -183,6 +182,7 @@ namespace Terraria.ModLoader
 			GlobalBgStyleLoader.ResizeAndFillArrays(unloading);
 			WaterStyleLoader.ResizeArrays();
 			WaterfallStyleLoader.ResizeArrays();
+			WorldHooks.ResizeArrays();
 		}
 
 		internal static TmodFile[] FindMods()
@@ -309,7 +309,7 @@ namespace Terraria.ModLoader
 					if (nameMap.TryGetValue(dep.mod, out inst) && inst.properties.version < dep.target)
 					{
 						errored.Add(mod);
-						errorLog.AppendLine(mod.Name + " requires version " + dep.target + "+ of " + dep.mod + 
+						errorLog.AppendLine(mod.Name + " requires version " + dep.target + "+ of " + dep.mod +
 							" but version " + inst.properties.version + " is installed");
 					}
 				}
@@ -568,45 +568,49 @@ namespace Terraria.ModLoader
 			return mod != null && mod.SoundExists(subName);
 		}
 
-		public static void RegisterHotKey(Mod mod, string name, string defaultKey)
+		public static ModHotKey RegisterHotKey(Mod mod, string name, string defaultKey)
 		{
-			//string configurationString = mod.Name + "_" + "HotKey" + "_" + name.Replace(' ', '_');
-			//string keyFromConfigutation = Main.Configuration.Get<string>(configurationString, defaultKey);
-			modHotKeys[name] = new ModHotkey(name, mod, defaultKey);
+			modHotKeys[name] = new ModHotKey(mod, name, defaultKey);
+			return modHotKeys[name];
 		}
-		// example: ExampleMod_HotKey_Random_Buff="P"
+
 		internal static void SaveConfiguration()
 		{
 			Main.Configuration.Put("ModBrowserPassphrase", ModLoader.modBrowserPassphrase);
-			//foreach (KeyValuePair<string, Tuple<Mod, string, string>> hotKey in modHotKeys)
-			//{
-			//	string name = hotKey.Value.Item1.Name + "_" + "HotKey" + "_" + hotKey.Key.Replace(' ', '_');
-			//	Main.Configuration.Put(name, hotKey.Value.Item2);
-			//}
+			Main.Configuration.Put("SteamID64", ModLoader.steamID64);
+			Main.Configuration.Put("DownloadModsFromServers", ModNet.downloadModsFromServers);
+			Main.Configuration.Put("OnlyDownloadSignedModsFromServers", ModNet.onlyDownloadSignedMods);
 		}
-		
+
 		internal static void LoadConfiguration()
 		{
 			Main.Configuration.Get<string>("ModBrowserPassphrase", ref ModLoader.modBrowserPassphrase);
+			Main.Configuration.Get<string>("SteamID64", ref ModLoader.steamID64);
+			Main.Configuration.Get<bool>("DownloadModsFromServers", ref ModNet.downloadModsFromServers);
+			Main.Configuration.Get<bool>("OnlyDownloadSignedModsFromServers", ref ModNet.onlyDownloadSignedMods);
 		}
 
 		/// <summary>
 		/// Allows type inference on T and F
 		/// </summary>
-		internal static void BuildGlobalHook<T, F>(ref F[] list, IList<T> providers, Expression<Func<T, F>> expr) {
+		internal static void BuildGlobalHook<T, F>(ref F[] list, IList<T> providers, Expression<Func<T, F>> expr)
+		{
 			list = BuildGlobalHook(providers, expr).Select(expr.Compile()).ToArray();
 		}
 
-		internal static T[] BuildGlobalHook<T, F>(IList<T> providers, Expression<Func<T, F>> expr) {
+		internal static T[] BuildGlobalHook<T, F>(IList<T> providers, Expression<Func<T, F>> expr)
+		{
 			MethodInfo method;
-			try {
+			try
+			{
 				var convert = expr.Body as UnaryExpression;
 				var makeDelegate = convert.Operand as MethodCallExpression;
 				var methodArg = makeDelegate.Arguments[2] as ConstantExpression;
 				method = methodArg.Value as MethodInfo;
 				if (method == null) throw new NullReferenceException();
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				throw new ArgumentException("Invalid hook expression " + expr, e);
 			}
 

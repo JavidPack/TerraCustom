@@ -1,12 +1,49 @@
 --- src/Terraria\Terraria.csproj
 +++ src/tModLoader\Terraria.csproj
-@@ -46,11 +_,15 @@
+@@ -17,40 +_,52 @@
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsRelease|x86'">
+     <OutputPath>bin\x86\WindowsRelease\</OutputPath>
+     <DefineConstants>CLIENT; WINDOWS</DefineConstants>
++    <PlatformTarget>x86</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsServerRelease|x86'">
+     <OutputPath>bin\x86\WindowsServerRelease\</OutputPath>
+     <DefineConstants>SERVER; WINDOWS</DefineConstants>
++    <PlatformTarget>x86</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsDebug|x86'">
+     <OutputPath>bin\x86\WindowsDebug\</OutputPath>
+     <DefineConstants>DEBUG;CLIENT; WINDOWS</DefineConstants>
++    <PlatformTarget>x86</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'WindowsServerDebug|x86' ">
+     <DefineConstants>DEBUG;SERVER; WINDOWS</DefineConstants>
+     <OutputPath>bin\x86\WindowsServerDebug\</OutputPath>
++    <PlatformTarget>x86</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MacRelease|x86'">
+     <OutputPath>bin\x86\MacRelease\</OutputPath>
+     <DefineConstants>CLIENT; MAC</DefineConstants>
++    <PlatformTarget>x64</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MacServerRelease|x86'">
+     <OutputPath>bin\x86\MacServerRelease\</OutputPath>
+     <DefineConstants>SERVER; MAC</DefineConstants>
++    <PlatformTarget>x64</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LinuxRelease|x86'">
+     <OutputPath>bin\x86\LinuxRelease\</OutputPath>
+     <DefineConstants>CLIENT; LINUX</DefineConstants>
++    <PlatformTarget>x64</PlatformTarget>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LinuxServerRelease|x86'">
      <OutputPath>bin\x86\LinuxServerRelease\</OutputPath>
      <DefineConstants>SERVER; LINUX</DefineConstants>
-   </PropertyGroup>
++    <PlatformTarget>x64</PlatformTarget>
++  </PropertyGroup>
 +  <PropertyGroup>
 +    <ApplicationIcon>Icon.ico</ApplicationIcon>
-+  </PropertyGroup>
+   </PropertyGroup>
    <Choose>
      <When Condition="$(DefineConstants.Contains('DEBUG'))">
        <PropertyGroup>
@@ -16,18 +53,7 @@
        </PropertyGroup>
      </When>
      <Otherwise>
-@@ -78,7 +_,9 @@
-     <Reference Include="Microsoft.Xna.Framework" Condition="$(DefineConstants.Contains('WINDOWS'))" />
-     <Reference Include="Microsoft.Xna.Framework.Graphics" Condition="$(DefineConstants.Contains('WINDOWS'))" />
-     <Reference Include="System" />
--    <Reference Include="Steamworks.NET">
-+    <Reference Include="System.XML" />
-+    <Reference Include="Steamworks.NET, Version=7.0.0.0, Culture=neutral, processorArchitecture=x86">
-+      <SpecificVersion>False</SpecificVersion>
-       <HintPath>Terraria.Libraries\Steamworks.NET\Steamworks.NET.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Drawing" />
-@@ -88,8 +_,18 @@
+@@ -82,12 +_,24 @@
        <SpecificVersion>False</SpecificVersion>
        <HintPath>Terraria.Libraries\JSON.NET\Newtonsoft.Json.dll</HintPath>
      </Reference>
@@ -46,9 +72,16 @@
 +    <Reference Include="MP3Sharp">
 +      <HintPath>..\..\references\MP3Sharp.dll</HintPath>
      </Reference>
-     <Reference Include="WindowsBase" />
-   </ItemGroup>
-@@ -286,6 +_,7 @@
+     <Reference Include="System.Core" />
+     <Reference Include="System.Drawing" />
+-    <Reference Include="Steamworks.NET">
++    <Reference Include="System.XML" />
++    <Reference Include="Steamworks.NET, Version=7.0.0.0, Culture=neutral, processorArchitecture=x86">
++      <SpecificVersion>False</SpecificVersion>
+       <HintPath>Terraria.Libraries\Steamworks.NET\Steamworks.NET.dll</HintPath>
+     </Reference>
+     <Reference Include="Microsoft.Xna.Framework.Xact" Condition="$(DefineConstants.Contains('WINDOWS'))" />
+@@ -308,6 +_,7 @@
      <Compile Include="Terraria.ID\ItemID.cs" />
      <Compile Include="Terraria.ID\MessageID.cs" />
      <Compile Include="Terraria.ID\MountID.cs" />
@@ -56,13 +89,14 @@
      <Compile Include="Terraria.ID\NPCID.cs" />
      <Compile Include="Terraria.ID\PlayerTextureID.cs" />
      <Compile Include="Terraria.ID\PlayerVariantID.cs" />
-@@ -315,6 +_,122 @@
+@@ -344,6 +_,128 @@
      <Compile Include="Terraria.Map\MapHelper.cs" />
      <Compile Include="Terraria.Map\MapTile.cs" />
      <Compile Include="Terraria.Map\WorldMap.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\AprilFools.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\ModLoaderMod.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryItem.cs" />
++    <Compile Include="Terraria.ModLoader.Default\MysteryGlobalItem.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryTile.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryTilesWorld.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryWorld.cs" />
@@ -75,6 +109,9 @@
 +    <Compile Include="Terraria.ModLoader.Exceptions\ModSortingException.cs" />
 +    <Compile Include="Terraria.ModLoader.Exceptions\OldHookException.cs" />
 +    <Compile Include="Terraria.ModLoader.Exceptions\RecipeException.cs" />
++    <Compile Include="Terraria.ModLoader.IO\BigEndian.cs" />
++    <Compile Include="Terraria.ModLoader.IO\BinaryIO.cs" />
++    <Compile Include="Terraria.ModLoader.IO\FontCacheIO.cs" />
 +    <Compile Include="Terraria.ModLoader.IO\ItemIO.cs" />
 +    <Compile Include="Terraria.ModLoader.IO\MapIO.cs" />
 +    <Compile Include="Terraria.ModLoader.IO\TileIO.cs" />
@@ -82,6 +119,8 @@
 +    <Compile Include="Terraria.ModLoader.IO\UploadFile.cs" />
 +    <Compile Include="Terraria.ModLoader.IO\WAVCacheIO.cs" />
 +    <Compile Include="Terraria.ModLoader.IO\WorldIO.cs" />
++    <Compile Include="Terraria.ModLoader.IO\TagCompound.cs" />
++    <Compile Include="Terraria.ModLoader.IO\TagIO.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIBuildMod.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIColorTextPanel.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIEnterPassphraseMenu.cs" />
@@ -179,7 +218,7 @@
      <Compile Include="Terraria.Modules\AnchorDataModule.cs" />
      <Compile Include="Terraria.Modules\AnchorTypesModule.cs" />
      <Compile Include="Terraria.Modules\LiquidDeathModule.cs" />
-@@ -476,9 +_,56 @@
+@@ -511,11 +_,58 @@
    </ItemGroup>
    <ItemGroup>
      <EmbeddedResource Include="Microsoft.Xna.Framework.RuntimeProfile" />
@@ -187,6 +226,8 @@
 +    <EmbeddedResource Include="..\..\references\Ionic.Zip.Reduced.dll" />
      <EmbeddedResource Include="Terraria.Libraries\JSON.NET\Newtonsoft.Json.dll" />
      <EmbeddedResource Include="Terraria.Libraries\Steamworks.NET\Steamworks.NET.dll" />
+     <EmbeddedResource Include="Terraria.Localization.Content.English.json" />
+     <EmbeddedResource Include="Terraria.Localization.Content.English.Town.json" />
 +    <EmbeddedResource Include="..\..\references\MP3Sharp.dll" />
 +    <EmbeddedResource Include="..\..\references\Mono.Cecil.dll" />
 +  </ItemGroup>
@@ -204,6 +245,7 @@
 +    </None>
    </ItemGroup>
    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+-</Project>
 +  <PropertyGroup>
 +    <PostBuildEvent>SET CONFIGNAME=$(ConfigurationName)
 +
@@ -236,5 +278,4 @@
 +    <PreBuildEvent>
 +    </PreBuildEvent>
 +  </PropertyGroup>
- </Project>
-
++</Project>

@@ -99,6 +99,11 @@ namespace Terraria.ModLoader
 			return true;
 		}
 
+		public virtual bool? CanCutTiles()
+		{
+			return null;
+		}
+
 		public virtual bool PreKill(int timeLeft)
 		{
 			return true;
@@ -123,7 +128,7 @@ namespace Terraria.ModLoader
 			return null;
 		}
 
-		public virtual void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit)
+		public virtual void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 		}
 
@@ -208,7 +213,7 @@ namespace Terraria.ModLoader
 		{
 		}
 
-		public virtual void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles)
+		public virtual void DrawBehind(int index, List<int> drawCacheProjsBehindNPCsAndTiles, List<int> drawCacheProjsBehindNPCs, List<int> drawCacheProjsBehindProjectiles, List<int> drawCacheProjsOverWiresUI)
 		{
 		}
 	}

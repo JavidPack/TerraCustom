@@ -7,7 +7,23 @@
 +			}
 +			foreach (var current in ModLoader.ModLoader.modHotKeys)
 +			{
-+				this.KeyStatus.Add(current.Value.displayName, new List<string>() /*{current.Value.defaultKey}*/);
++				this.KeyStatus.Add(current.Value.displayName, new List<string>());
+ 			}
+ 		}
+ 
+@@ -63,6 +_,15 @@
+ 						this.KeyStatus[current.Key].Add(current2);
+ 					}
+ 				}
++				else if (current.Key.Contains(":")) // This preserves unloaded mod hotkey values
++				{
++					this.KeyStatus.Add(current.Key, new List<string>());
++					this.KeyStatus[current.Key].Clear();
++					foreach (string current2 in current.Value)
++					{
++						this.KeyStatus[current.Key].Add(current2);
++					}
++				}
  			}
  		}
  

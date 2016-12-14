@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader.Default;
+using Terraria.DataStructures;
+using Terraria.GameInput;
 
 namespace Terraria.ModLoader
 {
@@ -15,7 +17,7 @@ namespace Terraria.ModLoader
 
 		internal static void Add(ModPlayer player)
 		{
-			indexes[player.mod.Name + ':'+player.Name] = players.Count;
+			indexes[player.mod.Name + ':' + player.Name] = players.Count;
 			players.Add(player);
 		}
 
@@ -402,13 +404,13 @@ namespace Terraria.ModLoader
 		}
 
 		public static bool PreHurt(Player player, bool pvp, bool quiet, ref int damage, ref int hitDirection,
-			ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref string deathText)
+			ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
 		{
 			bool flag = true;
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
 				if (!modPlayer.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage,
-						ref playSound, ref genGore, ref deathText))
+						ref playSound, ref genGore, ref damageSource))
 				{
 					flag = false;
 				}
@@ -433,12 +435,12 @@ namespace Terraria.ModLoader
 		}
 
 		public static bool PreKill(Player player, double damage, int hitDirection, bool pvp, ref bool playSound,
-			ref bool genGore, ref string deathText)
+			ref bool genGore, ref PlayerDeathReason damageSource)
 		{
 			bool flag = true;
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
-				if (!modPlayer.PreKill(damage, hitDirection, pvp, ref playSound, ref genGore, ref deathText))
+				if (!modPlayer.PreKill(damage, hitDirection, pvp, ref playSound, ref genGore, ref damageSource))
 				{
 					flag = false;
 				}
@@ -446,11 +448,11 @@ namespace Terraria.ModLoader
 			return flag;
 		}
 
-		public static void Kill(Player player, double damage, int hitDirection, bool pvp, string deathText)
+		public static void Kill(Player player, double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
 		{
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
-				modPlayer.Kill(damage, hitDirection, pvp, deathText);
+				modPlayer.Kill(damage, hitDirection, pvp, damageSource);
 			}
 		}
 
@@ -479,6 +481,14 @@ namespace Terraria.ModLoader
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
 				modPlayer.GetWeaponDamage(item, ref damage);
+			}
+		}
+
+		public static void ProcessTriggers(Player player, TriggersSet triggersSet)
+		{
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.ProcessTriggers(triggersSet);
 			}
 		}
 
@@ -587,7 +597,7 @@ namespace Terraria.ModLoader
 			return flag;
 		}
 
-		public static void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit)
+		public static void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			if (proj.npcProj || proj.trap)
 			{
@@ -596,7 +606,7 @@ namespace Terraria.ModLoader
 			Player player = Main.player[proj.owner];
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
-				modPlayer.ModifyHitNPCWithProj(proj, target, ref damage, ref knockback, ref crit);
+				modPlayer.ModifyHitNPCWithProj(proj, target, ref damage, ref knockback, ref crit, ref hitDirection);
 			}
 		}
 
@@ -874,6 +884,34 @@ namespace Terraria.ModLoader
 			foreach (ModPlayer modPlayer in player.modPlayers)
 			{
 				modPlayer.ModifyZoom(ref zoom);
+			}
+		}
+
+		public static void PlayerConnect(int playerIndex)
+		{
+			var player = Main.player[playerIndex];
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.PlayerConnect(player);
+			}
+		}
+
+		public static void PlayerDisconnect(int playerIndex)
+		{
+			var player = Main.player[playerIndex];
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.PlayerDisconnect(player);
+			}
+		}
+
+		// Do NOT hook into the Player.Hooks.OnEnterWorld event
+		public static void OnEnterWorld(int playerIndex)
+		{
+			var player = Main.player[playerIndex];
+			foreach (ModPlayer modPlayer in player.modPlayers)
+			{
+				modPlayer.OnEnterWorld(player);
 			}
 		}
 	}

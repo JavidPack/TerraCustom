@@ -1,12 +1,12 @@
 --- src/merged\Terraria\Projectile.cs
 +++ src/Terraria\Terraria\Projectile.cs
-@@ -12376,100 +_,34 @@
+@@ -13310,100 +_,34 @@
  			string name;
  			if (Main.player[this.owner].active && (name = Main.player[this.owner].name) != null)
  			{
--				if (<PrivateImplementationDetails>{E28F23CB-C45E-48C8-B6D8-427CF868CC54}.$$method0x6000a3f-1 == null)
+-				if (<PrivateImplementationDetails>{DEE50102-BCC2-472F-987B-153E892583F1}.$$method0x6000b57-1 == null)
 -				{
--					<PrivateImplementationDetails>{E28F23CB-C45E-48C8-B6D8-427CF868CC54}.$$method0x6000a3f-1 = new Dictionary<string, int>(14)
+-					<PrivateImplementationDetails>{DEE50102-BCC2-472F-987B-153E892583F1}.$$method0x6000b57-1 = new Dictionary<string, int>(14)
 -					{
 -						{
 -							"Tsuki",
@@ -67,7 +67,7 @@
 -					};
 -				}
 -				int num;
--				if (<PrivateImplementationDetails>{E28F23CB-C45E-48C8-B6D8-427CF868CC54}.$$method0x6000a3f-1.TryGetValue(name, out num))
+-				if (<PrivateImplementationDetails>{DEE50102-BCC2-472F-987B-153E892583F1}.$$method0x6000b57-1.TryGetValue(name, out num))
 -				{
 -					switch (num)
 -					{
@@ -129,22 +129,30 @@
  				}
  			}
  			return (float)((int)indexing) / 6f;
-@@ -21268,7 +_,7 @@
- 																int num689 = (int)(this.position.Y + (float)this.height) / 16;
- 																if (WorldGen.SolidTile(num688, num689) || Main.tile[num688, num689].halfBrick() || Main.tile[num688, num689].slope() > 0)
+@@ -21988,7 +_,7 @@
+ 																int num677 = (int)(this.position.Y + (float)this.height) / 16;
+ 																if (WorldGen.SolidTile(num676, num677) || Main.tile[num676, num677].halfBrick() || Main.tile[num676, num677].slope() > 0)
  																{
--																	goto IL_1C754;
-+																	goto Block_1971;
+-																	goto IL_1BA49;
++																	goto Block_1935;
  																}
- 																if (TileID.Sets.Platforms[(int)Main.tile[num688, num689].type] && Main.tile[num688, num689].active() && !Main.tile[num688, num689].inActive())
+ 																if (TileID.Sets.Platforms[(int)Main.tile[num676, num677].type] && Main.tile[num676, num677].active() && !Main.tile[num676, num677].inActive())
  																{
-@@ -35234,7 +_,7 @@
+@@ -37267,7 +_,7 @@
  							for (int n = 0; n < 5; n++)
  							{
- 								int num29 = this.width / 4;
+ 								int num31 = this.width / 4;
 -								((float)Main.rand.NextDouble() * 6.28318548f).ToRotationVector2() * (float)Main.rand.Next(24, 41) / 8f;
 +								Vector2 _ = ((float)Main.rand.NextDouble() * 6.28318548f).ToRotationVector2() * (float)Main.rand.Next(24, 41) / 8f;
- 								int num30 = Dust.NewDust(base.Center - Vector2.One * (float)num29, num29 * 2, num29 * 2, 88, 0f, 0f, 0, default(Color), 1f);
- 								Dust dust5 = Main.dust[num30];
+ 								int num32 = Dust.NewDust(base.Center - Vector2.One * (float)num31, num31 * 2, num31 * 2, 88, 0f, 0f, 0, default(Color), 1f);
+ 								Dust dust5 = Main.dust[num32];
  								Vector2 value3 = Vector2.Normalize(dust5.position - base.Center);
+@@ -39816,7 +_,6 @@
+ 				{
+ 					Vector2 mouseWorld3 = Main.MouseWorld;
+ 					Vector2 value3 = player.DirectionTo(mouseWorld3);
+-					value3 * 0f;
+ 				}
+ 				float num13 = this.rotation - 0.7853982f * (float)num10;
+ 				value2 = (num13 + ((num10 == -1) ? 3.14159274f : 0f)).ToRotationVector2() * (this.ai[0] / num) * scaleFactor;
 
