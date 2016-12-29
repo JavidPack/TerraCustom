@@ -177,15 +177,19 @@
  			Main.PlayerList.Sort(new Comparison<PlayerFileData>(Main.PlayerListSortMethod));
  		}
  
-@@ -2705,7 +_,7 @@
+@@ -2705,9 +_,10 @@
  				}
  			});
  			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
 -			ModLoader.ModLoader.SaveConfiguration();
-+			//ModLoader.ModLoader.SaveConfiguration();
++			/*ModLoader.ModLoader.SaveConfiguration();
  			bool flag = Main.Configuration.Save(true);
- 			return flag && PlayerInput.Save();
+-			return flag && PlayerInput.Save();
++			return flag && PlayerInput.Save();*/
++			return false;
  		}
+ 
+ 		protected void CheckBunny()
 @@ -2823,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
