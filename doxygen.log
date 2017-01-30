@@ -35,8 +35,205 @@ warning: ignoring unsupported tag `DIAFILE_DIRS           =' at line 2414, file 
 warning: ignoring unsupported tag `PLANTUML_JAR_PATH      =' at line 2422, file /home/travis/build/JavidPack/TerraCustom/Doxyfile
 warning: ignoring unsupported tag `PLANTUML_CFG_FILE      =' at line 2427, file /home/travis/build/JavidPack/TerraCustom/Doxyfile
 warning: ignoring unsupported tag `PLANTUML_INCLUDE_PATH  =' at line 2432, file /home/travis/build/JavidPack/TerraCustom/Doxyfile
-warning: tag INPUT: input source `/home/travis/build/JavidPack/TerraCustom\patches\TerraCustom\Terraria.TerraCustom' does not exist
-warning: source /home/travis/build/JavidPack/TerraCustom\patches\TerraCustom\Terraria.TerraCustom is not a readable file or directory... skipping.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:860: warning: Compound Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:917: warning: Compound Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:894: warning: Compound Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:12: warning: Compound Terraria::TerraCustom::SettingSaver is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:748: warning: Compound Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:803: warning: Compound Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:44: warning: Compound Terraria::TerraCustom::Interface is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:766: warning: Compound Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:15: warning: Compound Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/TerraCustomUtils.cs:7: warning: Compound Terraria::TerraCustom::TerraCustomUtils is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:13: warning: Member MenuModes (enumeration) of namespace Terraria::TerraCustom is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:306: warning: Member keyboardSliderAdjustment (variable) of class Terraria::TerraCustom::Interface is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:17: warning: Member initializeAll() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:37: warning: Member initializeTerrain() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:66: warning: Member initializeOres() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:77: warning: Member initializeOreAmount() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:90: warning: Member initializeMicroBiomesAmount() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:107: warning: Member initializeTrapsAmount() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:118: warning: Member initializeVariousSpawnsAmount() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:129: warning: Member initializeChallenge() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:146: warning: Member initializeGraphic() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:166: warning: Member initializeMiscellaneous() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:181: warning: Member initializeBGs() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:193: warning: Member initializeChests() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:205: warning: Member initializeUGBGs() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:216: warning: Member initializeDowned() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:233: warning: Member initializeFound() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:243: warning: Member initializeDebug() (function) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:734: warning: Member ShadowChestMultiplierDelegate (variable) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:256: warning: Member HardMode (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:258: warning: Member WorldWidth (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:260: warning: Member WorldHeight (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:261: warning: Member ExpertMode (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:264: warning: Member generateLeveledRPGSave (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:267: warning: Member LeveledRPGCriticalMode (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:270: warning: Member PreSmashAltar (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:273: warning: Member PreSmashAltarOreAlternates (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:277: warning: Member PreSmashAltarPreventPatches (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:281: warning: Member SelectTreeStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:284: warning: Member SelectTreeStyle0 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:286: warning: Member SelectTreeStyle1 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:288: warning: Member SelectTreeStyle2 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:290: warning: Member SelectTreeStyle3 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:294: warning: Member SelectMossType (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:297: warning: Member SelectMossType0 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:299: warning: Member SelectMossType1 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:301: warning: Member SelectMossType2 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:305: warning: Member IsCopper (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:309: warning: Member IsIron (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:313: warning: Member IsSilver (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:317: warning: Member IsGold (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:321: warning: Member IsCobalt (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:325: warning: Member IsMythril (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:329: warning: Member IsAdaman (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:332: warning: Member IsCorruption (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:336: warning: Member IsPyramid (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:340: warning: Member IsGiantTree (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:343: warning: Member ForceEnchantedSwordShrineReal (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:348: warning: Member MoonStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:351: warning: Member DungeonStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:355: warning: Member ForestStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:359: warning: Member CorruptStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:363: warning: Member JungleStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:367: warning: Member SnowStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:371: warning: Member HallowStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:375: warning: Member CrimsonStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:379: warning: Member DesertStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:383: warning: Member OceanStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:386: warning: Member NoTree (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:389: warning: Member NoDungeon (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:392: warning: Member NoTemple (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:395: warning: Member NoSnow (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:398: warning: Member NoJungle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:402: warning: Member PercCopp (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:406: warning: Member PercIron (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:410: warning: Member PercSilv (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:414: warning: Member PercGold (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:418: warning: Member PercDemonite (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:422: warning: Member PercHellstone (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:426: warning: Member SelectDungeon (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:429: warning: Member NoSpiderCave (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:432: warning: Member NoHive (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:435: warning: Member NoPot (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:438: warning: Member NoChest (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:441: warning: Member NoAltar (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:444: warning: Member NoOrbHeart (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:447: warning: Member ShrineType (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:451: warning: Member EnchantedSwordBiomeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:455: warning: Member ThinIceBiomeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:459: warning: Member CampsiteBiomeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:463: warning: Member MushroomBiomeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:467: warning: Member MiningExplosiveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:471: warning: Member TrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:474: warning: Member AdditionalDartTrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:478: warning: Member AdditionalBoulderTrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:481: warning: Member AdditionalExplosiveTrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:484: warning: Member AdditionalGeyserTrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:487: warning: Member NoUnderworld (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:491: warning: Member SkyIslandMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:494: warning: Member DungeonSide (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:497: warning: Member CrimsonCorruptionAvoidJungle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:500: warning: Member CrimsonCorruptionAvoidEachOther (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:504: warning: Member CrimsonMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:508: warning: Member CorruptionMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:511: warning: Member NoAnthill (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:514: warning: Member NoBeach (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:517: warning: Member downedSlimeKing (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:520: warning: Member downedQueenBee (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:523: warning: Member downedEyeOfCthulu (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:526: warning: Member downedEaterBrain (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:529: warning: Member downedSkeletron (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:532: warning: Member downedTwins (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:535: warning: Member downedDestroyer (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:538: warning: Member downedSkeletronPrime (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:541: warning: Member downedPlantera (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:544: warning: Member downedGolem (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:547: warning: Member downedFishron (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:550: warning: Member downedAncientCultist (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:553: warning: Member downedMoonlord (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:556: warning: Member savedStylist (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:559: warning: Member savedGoblin (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:562: warning: Member savedWizard (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:565: warning: Member savedMechanic (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:568: warning: Member savedAngler (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:571: warning: Member savedBartender (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:574: warning: Member savedTaxCollector (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:578: warning: Member MineCartMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:582: warning: Member GemMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:586: warning: Member GemCaveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:590: warning: Member GemCaveSizeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:594: warning: Member HiveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:598: warning: Member SpiderCaveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:602: warning: Member GraniteCaveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:606: warning: Member MarbleCaveMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:610: warning: Member CrystalHeartMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:614: warning: Member StatueMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:618: warning: Member SurfaceTerrainHeightMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:622: warning: Member SurfaceTerrainHeightMax (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:626: warning: Member SurfaceTerrainHeightMin (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:629: warning: Member BypassSpawnAreaFlatness (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:633: warning: Member DungeonSizeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:637: warning: Member BeachSizeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:640: warning: Member PreDropMeteor (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:644: warning: Member UndergroundCabinMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:648: warning: Member TempleTrapMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:652: warning: Member TempleSizeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:655: warning: Member IceBackStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:658: warning: Member HellBackStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:661: warning: Member JungleBackStyle (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:664: warning: Member CaveBackStyle1 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:667: warning: Member CaveBackStyle2 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:670: warning: Member CaveBackStyle3 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:673: warning: Member CaveBackStyle4 (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:677: warning: Member TreeLowerBound (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:681: warning: Member TreeUpperBound (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:685: warning: Member SurfaceHorizontalTunnelsMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:689: warning: Member LakeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:693: warning: Member BiomeChestSets (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:697: warning: Member JungleShrineMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:701: warning: Member PotsMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:705: warning: Member HardmodeStripes (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:709: warning: Member MahoganyTreeMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:713: warning: Member WaterChestMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:717: warning: Member SurfaceChestMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:721: warning: Member TempleChestMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:725: warning: Member ShadowChestMultiplier (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:739: warning: Member GenerateWldEachStep (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:742: warning: Member SaveInTModFolder (property) of class Terraria::TerraCustom::Setting is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:756: warning: Member SettingDelegate(string label, float ratio, Func< float > getter, Action< float > setter, Func< float, string > estimationString) (function) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:749: warning: Member label (variable) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:750: warning: Member ratio (variable) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:751: warning: Member getter (variable) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:752: warning: Member setter (variable) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:753: warning: Member estimationString (variable) of class Terraria::TerraCustom::SettingDelegate is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:792: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:797: warning: Member HandleMeAdditional(ref bool isPlainWhiteLabel) (function) of class Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:767: warning: Member labelScale (variable) of class Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:768: warning: Member isLabel (variable) of class Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:789: warning: Member Height (property) of class Terraria::TerraCustom::TerraCustomMenuItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:813: warning: Member SliderItem(string label, float ratio, Func< float > getter, Action< float > setter, Func< float, string > estimationString) (function) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:823: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:804: warning: Member label (variable) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:805: warning: Member ratio (variable) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:806: warning: Member getter (variable) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:807: warning: Member setter (variable) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:808: warning: Member estimationString (variable) of class Terraria::TerraCustom::SliderItem is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:865: warning: Member PlainLabel(Func< string > stringFunction) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:870: warning: Member PlainLabel(string label) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:875: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:888: warning: Member HandleMeAdditional(ref bool isPlainWhiteLabel) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:899: warning: Member ActionLabel(string label, Action action) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:906: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:923: warning: Member OptionLabel(string[] v, Func< int > getter, Action< int > setter) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:931: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:14: warning: Member saveSetting(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:33: warning: Member loadSetting(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:71: warning: Member settingExists(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:84: warning: Member deleteSetting(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/TerraCustomUtils.cs:14: warning: Member findBackgrounds(int bg, int style) (function) of class Terraria::TerraCustom::TerraCustomUtils is not documented.
 Searching for include files...
 Searching for example files...
 Searching for images...
@@ -44,7 +241,16 @@ Searching for dot files...
 Searching for msc files...
 Searching for files to exclude
 Searching for files to process...
+Searching for files in directory /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom
 Reading and parsing tag files
+Preprocessing /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs...
+Parsing file /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs...
+Preprocessing /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs...
+Parsing file /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs...
+Preprocessing /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs...
+Parsing file /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs...
+Preprocessing /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/TerraCustomUtils.cs...
+Parsing file /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/TerraCustomUtils.cs...
 Building group list...
 Building directory list...
 Building namespace list...
@@ -99,6 +305,17 @@ Generating page documentation...
 Generating group documentation...
 Generating class documentation...
 Generating namespace index...
+Generating docs for namespace Terraria::TerraCustom
+Generating docs for compound Terraria::TerraCustom::Interface...
+Generating docs for compound Terraria::TerraCustom::Setting...
+Generating docs for compound Terraria::TerraCustom::SettingDelegate...
+Generating docs for compound Terraria::TerraCustom::TerraCustomMenuItem...
+Generating docs for compound Terraria::TerraCustom::SliderItem...
+Generating docs for compound Terraria::TerraCustom::PlainLabel...
+Generating docs for compound Terraria::TerraCustom::ActionLabel...
+Generating docs for compound Terraria::TerraCustom::OptionLabel...
+Generating docs for compound Terraria::TerraCustom::SettingSaver...
+Generating docs for compound Terraria::TerraCustom::TerraCustomUtils...
 Generating graph info page...
 Generating index page...
 Generating page index...
@@ -113,6 +330,6 @@ Generating file index...
 Generating file member index...
 Generating example index...
 finalizing index lists...
-symbol cache used 0/65536 hits=0 misses=0
-lookup cache used 0/65536 hits=0 misses=0
+symbol cache used 251/65536 hits=4997 misses=251
+lookup cache used 37/65536 hits=218 misses=44
 finished...
