@@ -12,7 +12,7 @@ branches:
 env:
   global:
     - GH_REPO_NAME: TerraCustom
-    - DOXYFILE: $TRAVIS_BUILD_DIR/DOXYFILE
+    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
     - GH_REPO_REF: github.com/JavidPack/TerraCustom.git
 
 # Install dependencies
@@ -27,6 +27,7 @@ addons:
 
 # Build your code e.g. by calling make
 script:
+  - pwd
   - ls
 
 # Generate and deploy documentation
