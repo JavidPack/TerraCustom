@@ -20,7 +20,7 @@ If you want to contribute to this project, you'll want to clone the repository o
 
 **Warning:** decompiling will probably freeze your computer for a couple of hours. So you'll need to find something to do in real life until that's done.
 
-When that's all done, you should have the TerraCustom source in the src folder. Open the solutions folder then open the TerraCustom solution.
+When that's all done, you should have the TerraCustom source in the src folder. Open the solutions folder then open the TerraCustom solution. Look at how other sliders and settings are coded up and follow the same pattern.
 
 ### Committing changes
 
