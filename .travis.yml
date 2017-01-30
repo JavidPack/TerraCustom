@@ -1,6 +1,8 @@
 # This will run on Travis' 'new' container-based infrastructure
 sudo: false
 
+language: csharp
+
 # Blacklist
 branches:
   except:
