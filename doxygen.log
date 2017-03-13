@@ -36,17 +36,17 @@ warning: ignoring unsupported tag `PLANTUML_JAR_PATH      =' at line 2422, file 
 warning: ignoring unsupported tag `PLANTUML_CFG_FILE      =' at line 2427, file /home/travis/build/JavidPack/TerraCustom/Doxyfile
 warning: ignoring unsupported tag `PLANTUML_INCLUDE_PATH  =' at line 2432, file /home/travis/build/JavidPack/TerraCustom/Doxyfile
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:860: warning: Compound Terraria::TerraCustom::PlainLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:917: warning: Compound Terraria::TerraCustom::OptionLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:894: warning: Compound Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:922: warning: Compound Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:899: warning: Compound Terraria::TerraCustom::ActionLabel is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:12: warning: Compound Terraria::TerraCustom::SettingSaver is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:748: warning: Compound Terraria::TerraCustom::SettingDelegate is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:803: warning: Compound Terraria::TerraCustom::SliderItem is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:44: warning: Compound Terraria::TerraCustom::Interface is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:45: warning: Compound Terraria::TerraCustom::Interface is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:766: warning: Compound Terraria::TerraCustom::TerraCustomMenuItem is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:15: warning: Compound Terraria::TerraCustom::Setting is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/TerraCustomUtils.cs:7: warning: Compound Terraria::TerraCustom::TerraCustomUtils is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:13: warning: Member MenuModes (enumeration) of namespace Terraria::TerraCustom is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:306: warning: Member keyboardSliderAdjustment (variable) of class Terraria::TerraCustom::Interface is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:14: warning: Member MenuModes (enumeration) of namespace Terraria::TerraCustom is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Interface.cs:322: warning: Member keyboardSliderAdjustment (variable) of class Terraria::TerraCustom::Interface is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:17: warning: Member initializeAll() (function) of class Terraria::TerraCustom::Setting is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:37: warning: Member initializeTerrain() (function) of class Terraria::TerraCustom::Setting is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:66: warning: Member initializeOres() (function) of class Terraria::TerraCustom::Setting is not documented.
@@ -223,12 +223,13 @@ warning: ignoring unsupported tag `PLANTUML_INCLUDE_PATH  =' at line 2432, file 
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:808: warning: Member estimationString (variable) of class Terraria::TerraCustom::SliderItem is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:865: warning: Member PlainLabel(Func< string > stringFunction) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:870: warning: Member PlainLabel(string label) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:875: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:888: warning: Member HandleMeAdditional(ref bool isPlainWhiteLabel) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:899: warning: Member ActionLabel(string label, Action action) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:906: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:923: warning: Member OptionLabel(string[] v, Func< int > getter, Action< int > setter) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
-/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:931: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:875: warning: Member SetLabel(string label) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:880: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:893: warning: Member HandleMeAdditional(ref bool isPlainWhiteLabel) (function) of class Terraria::TerraCustom::PlainLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:904: warning: Member ActionLabel(string label, Action action) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:911: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::ActionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:928: warning: Member OptionLabel(string[] v, Func< int > getter, Action< int > setter) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
+/home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/Setting.cs:936: warning: Member HandleMe(ref string label, bool clicked, ref int yPosition, int index) (function) of class Terraria::TerraCustom::OptionLabel is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:14: warning: Member saveSetting(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:33: warning: Member loadSetting(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
 /home/travis/build/JavidPack/TerraCustom/patches/TerraCustom/Terraria.TerraCustom/SettingSaver.cs:71: warning: Member settingExists(string settingName) (function) of class Terraria::TerraCustom::SettingSaver is not documented.
@@ -330,6 +331,6 @@ Generating file index...
 Generating file member index...
 Generating example index...
 finalizing index lists...
-symbol cache used 251/65536 hits=4997 misses=251
-lookup cache used 37/65536 hits=218 misses=44
+symbol cache used 255/65536 hits=5080 misses=255
+lookup cache used 39/65536 hits=229 misses=48
 finished...
