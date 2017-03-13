@@ -50,26 +50,26 @@ namespace Terraria.ModLoader.UI
 			button.Height.Set(25f, 0f);
 			button.VAlign = 1f;
 			button.Top.Set(-65f, 0f);
-			button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button.OnClick += new UIElement.MouseEvent(BackClick);
+			button.OnMouseOver += UICommon.FadedMouseOver;
+			button.OnMouseOut += UICommon.FadedMouseOut;
+			button.OnClick += BackClick;
 			uIElement.Append(button);
 
 			UITextPanel<string> button2 = new UITextPanel<string>("Submit", 1f, false);
 			button2.CopyStyle(button);
 			button2.HAlign = 1f;
-			button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button2.OnClick += new UIElement.MouseEvent(OKClick);
+			button2.OnMouseOver += UICommon.FadedMouseOver;
+			button2.OnMouseOut += UICommon.FadedMouseOut;
+			button2.OnClick += OKClick;
 			uIElement.Append(button2);
 
 			UITextPanel<string> button3 = new UITextPanel<string>("Visit Website to Generate Passphrase", 1f, false);
 			button3.CopyStyle(button);
 			button3.Width.Set(0f, 1f);
 			button3.Top.Set(-20f, 0f);
-			button3.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button3.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button3.OnClick += new UIElement.MouseEvent(VisitRegisterWebpage);
+			button3.OnMouseOver += UICommon.FadedMouseOver;
+			button3.OnMouseOut += UICommon.FadedMouseOut;
+			button3.OnClick += VisitRegisterWebpage;
 			uIElement.Append(button3);
 
 			passcodeTextField = new UIInputTextField("Paste Passphrase (ctrl-v)");
@@ -87,7 +87,12 @@ namespace Terraria.ModLoader.UI
 			Main.PlaySound(10, -1, -1, 1);
 			ModLoader.modBrowserPassphrase = passcodeTextField.currentString.Trim();
 			Main.SaveSettings();
+#if GOG
+			Main.menuMode = Interface.enterSteamIDMenuID;
+			Interface.enterSteamIDMenu.SetGotoMenu(this.gotoMenu);
+#else
 			Main.menuMode = this.gotoMenu;
+#endif
 		}
 
 		private void BackClick(UIMouseEvent evt, UIElement listeningElement)
@@ -104,17 +109,6 @@ namespace Terraria.ModLoader.UI
 
 		private void OnTextChange(object sender, EventArgs e)
 		{
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		internal void SetGotoMenu(int gotoMenu)

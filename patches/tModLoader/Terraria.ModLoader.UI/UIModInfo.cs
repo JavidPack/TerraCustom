@@ -4,8 +4,10 @@ using System.IO;
 using System.Xml;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using Terraria.UI.Gamepad;
 using Terraria.ModLoader.IO;
 
 namespace Terraria.ModLoader.UI
@@ -55,18 +57,18 @@ namespace Terraria.ModLoader.UI
 			modHomepageButton.Height.Set(25f, 0f);
 			modHomepageButton.VAlign = 1f;
 			modHomepageButton.Top.Set(-65f, 0f);
-			modHomepageButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			modHomepageButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			modHomepageButton.OnClick += new UIElement.MouseEvent(VisitModHomePage);
+			modHomepageButton.OnMouseOver += UICommon.FadedMouseOver;
+			modHomepageButton.OnMouseOut += UICommon.FadedMouseOut;
+			modHomepageButton.OnClick += VisitModHomePage;
 			uIElement.Append(modHomepageButton);
 			UITextPanel<string> backButton = new UITextPanel<string>("Back", 1f, false);
 			backButton.Width.Set(-10f, 0.5f);
 			backButton.Height.Set(25f, 0f);
 			backButton.VAlign = 1f;
 			backButton.Top.Set(-20f, 0f);
-			backButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			backButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			backButton.OnClick += new UIElement.MouseEvent(BackClick);
+			backButton.OnMouseOver += UICommon.FadedMouseOver;
+			backButton.OnMouseOut += UICommon.FadedMouseOut;
+			backButton.OnClick += BackClick;
 			uIElement.Append(backButton);
 			base.Append(uIElement);
 		}
@@ -95,17 +97,6 @@ namespace Terraria.ModLoader.UI
 			this.url = url;
 		}
 
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
-		}
-
 		private void BackClick(UIMouseEvent evt, UIElement listeningElement)
 		{
 			Main.PlaySound(11, -1, -1, 1);
@@ -116,6 +107,13 @@ namespace Terraria.ModLoader.UI
 		{
 			Main.PlaySound(10, -1, -1, 1);
 			Process.Start(url);
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			base.Draw(spriteBatch);
+			UILinkPointNavigator.Shortcuts.BackButtonCommand = 100;
+			UILinkPointNavigator.Shortcuts.BackButtonGoto = this.gotoMenu;
 		}
 
 		public override void OnActivate()

@@ -2,12 +2,12 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
-using System.Xml;
 using System.Net;
-using System.Web;
-using System.IO;
 using System.Collections.Specialized;
-using System.Text;
+using Terraria.ID;
+using Terraria.UI.Gamepad;
+using Newtonsoft.Json.Linq;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Terraria.ModLoader.UI
 {
@@ -46,40 +46,36 @@ namespace Terraria.ModLoader.UI
 			uITextPanel.SetPadding(15f);
 			uITextPanel.BackgroundColor = new Color(73, 94, 171);
 			uIElement.Append(uITextPanel);
-			UITextPanel<string> button3 = new UITextPanel<string>("Back", 1f, false);
-			button3.VAlign = 1f;
-			button3.Height.Set(25f, 0f);
-			button3.Width.Set(-10f, 1f / 2f);
-			button3.Top.Set(-20f, 0f);
-			button3.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button3.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button3.OnClick += new UIElement.MouseEvent(BackClick);
-			uIElement.Append(button3);
+			UITextPanel<string> backButton = new UITextPanel<string>("Back", 1f, false);
+			backButton.VAlign = 1f;
+			backButton.Height.Set(25f, 0f);
+			backButton.Width.Set(-10f, 1f / 2f);
+			backButton.Top.Set(-20f, 0f);
+			backButton.OnMouseOver += UICommon.FadedMouseOver;
+			backButton.OnMouseOut += UICommon.FadedMouseOut;
+			backButton.OnClick += BackClick;
+			uIElement.Append(backButton);
 			base.Append(uIElement);
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		private static void BackClick(UIMouseEvent evt, UIElement listeningElement)
 		{
-			Main.PlaySound(11, -1, -1, 1);
+			Main.PlaySound(SoundID.MenuClose);
 			Main.menuMode = Interface.modSourcesID;
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			base.Draw(spriteBatch);
+			UILinkPointNavigator.Shortcuts.BackButtonCommand = 100;
+			UILinkPointNavigator.Shortcuts.BackButtonGoto = Interface.modSourcesID;
 		}
 
 		public override void OnActivate()
 		{
 			myPublishedMods.Clear();
 			uITextPanel.SetText("My Published Mods", 0.8f, true);
-			String xmlText = "";
+			string response = "";
 			try
 			{
 				System.Net.ServicePointManager.Expect100Continue = false;
@@ -87,12 +83,12 @@ namespace Terraria.ModLoader.UI
 				IO.UploadFile[] files = new IO.UploadFile[0];
 				var values = new NameValueCollection
 				{
-					{ "steamid64", Steamworks.SteamUser.GetSteamID().ToString() },
+					{ "steamid64", ModLoader.SteamID64 },
 					{ "modloaderversion", ModLoader.versionedName },
 					{ "passphrase", ModLoader.modBrowserPassphrase },
 				};
 				byte[] result = IO.UploadFile.UploadFiles(url, files, values);
-				xmlText = System.Text.Encoding.UTF8.GetString(result, 0, result.Length);
+				response = System.Text.Encoding.UTF8.GetString(result);
 			}
 			catch (WebException e)
 			{
@@ -111,18 +107,19 @@ namespace Terraria.ModLoader.UI
 			}
 			try
 			{
-				XmlDocument xmlDoc = new XmlDocument();
-				xmlDoc.LoadXml(xmlText);
-				foreach (XmlNode xmlNode in xmlDoc.DocumentElement)
+				JArray a = JArray.Parse(response);
+
+				foreach (JObject o in a.Children<JObject>())
 				{
-					string displayname = xmlNode.SelectSingleNode("displayname").InnerText;
-					string name = xmlNode.SelectSingleNode("name").InnerText;
-					string version = xmlNode.SelectSingleNode("version").InnerText;
-					string author = xmlNode.SelectSingleNode("author").InnerText;
-					string downloads = xmlNode.SelectSingleNode("downloads").InnerText;
-					string downloadsversion = xmlNode.SelectSingleNode("downloadsversion").InnerText;
-					string modloaderversion = xmlNode.SelectSingleNode("modloaderversion").InnerText;
-					UIModManageItem modItem = new UIModManageItem(displayname, name, version, author, downloads, downloadsversion, modloaderversion);
+					UIModManageItem modItem = new UIModManageItem(
+						(string)o["displayname"],
+						(string)o["name"],
+						(string)o["version"],
+						(string)o["author"],
+						(string)o["downloads"],
+						(string)o["downloadsversion"],
+						(string)o["modloaderversion"]
+					);
 					myPublishedMods.Add(modItem);
 				}
 			}

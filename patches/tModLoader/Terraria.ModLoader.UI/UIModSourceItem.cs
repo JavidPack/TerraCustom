@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.Specialized;
 using Terraria.ModLoader.IO;
+using System.Linq;
 
 namespace Terraria.ModLoader.UI
 {
@@ -40,17 +41,17 @@ namespace Terraria.ModLoader.UI
 			button.Top.Set(40f, 0f);
 			button.PaddingTop -= 2f;
 			button.PaddingBottom -= 2f;
-			button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button.OnClick += new UIElement.MouseEvent(this.BuildMod);
+			button.OnMouseOver += UICommon.FadedMouseOver;
+			button.OnMouseOut += UICommon.FadedMouseOut;
+			button.OnClick += this.BuildMod;
 			base.Append(button);
 			UITextPanel<string> button2 = new UITextPanel<string>("Build + Reload", 1f, false);
 			button2.CopyStyle(button);
 			button2.Width.Set(200f, 0f);
 			button2.Left.Set(150f, 0f);
-			button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button2.OnClick += new UIElement.MouseEvent(this.BuildAndReload);
+			button2.OnMouseOver += UICommon.FadedMouseOver;
+			button2.OnMouseOut += UICommon.FadedMouseOut;
+			button2.OnClick += this.BuildAndReload;
 			base.Append(button2);
 			if (publishable)
 			{
@@ -58,12 +59,12 @@ namespace Terraria.ModLoader.UI
 				button3.CopyStyle(button2);
 				button3.Width.Set(100f, 0f);
 				button3.Left.Set(390f, 0f);
-				button3.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-				button3.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-				button3.OnClick += new UIElement.MouseEvent(this.Publish);
+				button3.OnMouseOver += UICommon.FadedMouseOver;
+				button3.OnMouseOut += UICommon.FadedMouseOut;
+				button3.OnClick += this.Publish;
 				base.Append(button3);
 			}
-			base.OnDoubleClick += new UIElement.MouseEvent(this.BuildAndReload);
+			base.OnDoubleClick += this.BuildAndReload;
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -86,17 +87,6 @@ namespace Terraria.ModLoader.UI
 			base.MouseOut(evt);
 			this.BackgroundColor = new Color(63, 82, 151) * 0.7f;
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		public override int CompareTo(object obj)
@@ -178,10 +168,11 @@ namespace Terraria.ModLoader.UI
 						{ "author", bp.author },
 						{ "homepage", bp.homepage },
 						{ "description", bp.description },
-						// TODO: If GOG version, use ModLoader.steamID64. Should Steam users also have this option?
-						{ "steamid64", Steamworks.SteamUser.GetSteamID().ToString() },
+						{ "steamid64", ModLoader.SteamID64 },
 						{ "modloaderversion", "tModLoader v"+theTModFile.tModLoaderVersion },
-						{ "passphrase", ModLoader.modBrowserPassphrase }
+						{ "passphrase", ModLoader.modBrowserPassphrase },
+						{ "modreferences", String.Join(", ", bp.modReferences.Select(x => x.mod)) },
+						{ "modside", bp.side.ToFriendlyString() },
 					};
 					result = IO.UploadFile.UploadFiles(url, files, values);
 				}

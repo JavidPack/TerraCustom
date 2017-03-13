@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Terraria.ModLoader
 {
+	//todo: further documentation
+	/// <summary>
+	/// This serves as the central class from which ModUgBgStyle functions are supported and carried out.
+	/// </summary>
 	public static class UgBgStyleLoader
 	{
 		public const int vanillaUgBgStyleCount = 18;
@@ -20,6 +24,9 @@ namespace Terraria.ModLoader
 			return reserve;
 		}
 
+		/// <summary>
+		/// Returns the ModUgBgStyle object with the given ID.
+		/// </summary>
 		public static ModUgBgStyle GetUgBgStyle(int style)
 		{
 			return style >= vanillaUgBgStyleCount && style < nextUgBgStyle
@@ -88,6 +95,9 @@ namespace Terraria.ModLoader
 			return reserve;
 		}
 
+		/// <summary>
+		/// Returns the ModSurfaceBgStyle object with the given ID.
+		/// </summary>
 		public static ModSurfaceBgStyle GetSurfaceBgStyle(int style)
 		{
 			return style >= vanillaSurfaceBgStyleCount && style < nextSurfaceBgStyle
@@ -144,6 +154,10 @@ namespace Terraria.ModLoader
 
 		public static void DrawFarTexture()
 		{
+			if (!GlobalBgStyleLoader.loaded)
+			{
+				return;
+			}
 			// TODO: Causes background to flicker during load because Main.bgAlpha2 is resized after surfaceBgStyles is added to in AutoLoad.
 			foreach (var style in surfaceBgStyles)
 			{
@@ -173,6 +187,10 @@ namespace Terraria.ModLoader
 
 		public static void DrawMiddleTexture()
 		{
+			if (!GlobalBgStyleLoader.loaded)
+			{
+				return;
+			}
 			foreach (var style in surfaceBgStyles)
 			{
 				int slot = style.Slot;
@@ -201,6 +219,10 @@ namespace Terraria.ModLoader
 
 		public static void DrawCloseBackground(int style)
 		{
+			if (!GlobalBgStyleLoader.loaded)
+			{
+				return;
+			}
 			if (Main.bgAlpha[style] <= 0f)
 			{
 				return;

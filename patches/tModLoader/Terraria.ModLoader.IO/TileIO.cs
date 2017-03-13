@@ -7,6 +7,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader.Default;
+using Terraria.ModLoader.Exceptions;
 
 namespace Terraria.ModLoader.IO
 {
@@ -37,49 +38,55 @@ namespace Terraria.ModLoader.IO
 		{
 			var hasTile = new bool[TileLoader.TileCount];
 			var hasWall = new bool[WallLoader.WallCount];
-			var ms = new MemoryStream();
-			WriteTileData(new BinaryWriter(ms), hasTile, hasWall);
-			
-			var tileList = new List<TagCompound>();
-			for (int type = TileID.Count; type < hasTile.Length; type++)
+			using (var ms = new MemoryStream())
+			using (var writer = new BinaryWriter(ms))
 			{
-				if (!hasTile[type])
-					continue;
-				
-				var modTile = TileLoader.GetTile(type);
-				tileList.Add(new TagCompound {
-					["value"] = (short)type,
-					["mod"] = modTile.mod.Name,
-					["name"] = modTile.Name,
-					["framed"] = Main.tileFrameImportant[type],
-				});
-			}
-			var wallList = new List<TagCompound>();
-			for (int wall = WallID.Count; wall < hasWall.Length; wall++)
-			{
-				if (!hasWall[wall])
-					continue;
-				
-				var modWall = WallLoader.GetWall(wall);
-				wallList.Add(new TagCompound {
-					["value"] = (short)wall,
-					["mod"] = modWall.mod.Name,
-					["name"] = modWall.Name,
-				});
-			}
-			if (tileList.Count == 0 && wallList.Count == 0)
-				return null;
+				WriteTileData(writer, hasTile, hasWall);
 
-			return new TagCompound {
-				["tileMap"] = tileList,
-				["wallMap"] = wallList,
-				["data"] = ms.ToArray()
-			};
+				var tileList = new List<TagCompound>();
+				for (int type = TileID.Count; type < hasTile.Length; type++)
+				{
+					if (!hasTile[type])
+						continue;
+
+					var modTile = TileLoader.GetTile(type);
+					tileList.Add(new TagCompound
+					{
+						["value"] = (short) type,
+						["mod"] = modTile.mod.Name,
+						["name"] = modTile.Name,
+						["framed"] = Main.tileFrameImportant[type],
+					});
+				}
+				var wallList = new List<TagCompound>();
+				for (int wall = WallID.Count; wall < hasWall.Length; wall++)
+				{
+					if (!hasWall[wall])
+						continue;
+
+					var modWall = WallLoader.GetWall(wall);
+					wallList.Add(new TagCompound
+					{
+						["value"] = (short) wall,
+						["mod"] = modWall.mod.Name,
+						["name"] = modWall.Name,
+					});
+				}
+				if (tileList.Count == 0 && wallList.Count == 0)
+					return null;
+
+				return new TagCompound
+				{
+					["tileMap"] = tileList,
+					["wallMap"] = wallList,
+					["data"] = ms.ToArray()
+				};
+			}
 		}
 
 		internal static void LoadTiles(TagCompound tag)
 		{
-			if (!tag.HasTag("data"))
+			if (!tag.ContainsKey("data"))
 				return;
 
 			var tables = TileTables.Create();
@@ -106,7 +113,9 @@ namespace Terraria.ModLoader.IO
 				Mod mod = ModLoader.GetMod(modName);
 				tables.walls[wall] = mod == null ? (ushort)0 : (ushort)mod.WallType(name);
 			}
-			ReadTileData(new BinaryReader(new MemoryStream(tag.GetByteArray("data"))), tables);
+			using (var memoryStream = new MemoryStream(tag.GetByteArray("data")))
+			using (var reader = new BinaryReader(memoryStream))
+				ReadTileData(reader, tables);
 		}
 
 		internal static void LoadLegacyTiles(BinaryReader reader)
@@ -530,23 +539,23 @@ namespace Terraria.ModLoader.IO
 				WriteContainerData(writer);
 			}
 			var tag = new TagCompound();
-			tag.SetTag("data", ms.ToArray());
+			tag.Set("data", ms.ToArray());
 
 			if (itemFrames.Count > 0)
 			{
-				tag.SetTag("itemFrames", itemFrames.Select(entry =>
+				tag.Set("itemFrames", itemFrames.Select(entry =>
 					new TagCompound {
 						["id"] = entry.Value,
 						["item"] = ItemIO.Save(((TEItemFrame)TileEntity.ByID[entry.Key]).item)
 					}
-				));
+				).ToList());
 			}
 			return tag;
 		}
 
 		internal static void LoadContainers(TagCompound tag)
 		{
-			if (tag.HasTag("data"))
+			if (tag.ContainsKey("data"))
 				ReadContainers(new BinaryReader(new MemoryStream(tag.GetByteArray("data"))));
 
 			foreach (var frameTag in tag.GetList<TagCompound>("itemFrames"))
@@ -677,6 +686,78 @@ namespace Terraria.ModLoader.IO
 				return slot >= Main.numArmorLegs;
 			}
 			return false;
+		}
+
+		internal static List<TagCompound> SaveTileEntities()
+		{
+			List<TagCompound> list = new List<TagCompound>();
+			foreach (KeyValuePair<int, TileEntity> pair in TileEntity.ByID)
+			{
+				if (pair.Value.type >= ModTileEntity.numVanilla)
+				{
+					ModTileEntity tileEntity = (ModTileEntity)pair.Value;
+					list.Add(new TagCompound
+					{
+						["mod"] = tileEntity.mod.Name,
+						["name"] = tileEntity.Name,
+						["X"] = tileEntity.Position.X,
+						["Y"] = tileEntity.Position.Y,
+						["data"] = tileEntity.Save()
+					});
+				}
+			}
+			return list;
+		}
+
+		internal static void LoadTileEntities(IList<TagCompound> list)
+		{
+			foreach (TagCompound tag in list)
+			{
+				Mod mod = ModLoader.GetMod(tag.GetString("mod"));
+				ModTileEntity tileEntity = mod?.GetTileEntity(tag.GetString("name"));
+				ModTileEntity newEntity;
+				if (tileEntity != null)
+				{
+					newEntity = ModTileEntity.ConstructFromBase(tileEntity);
+					newEntity.type = (byte)tileEntity.Type;
+					newEntity.Position = new Point16(tag.GetShort("X"), tag.GetShort("Y"));
+					if (tag.ContainsKey("data"))
+					{
+						try
+						{
+							newEntity.Load(tag.GetCompound("data"));
+							if (newEntity is MysteryTileEntity)
+							{
+								((MysteryTileEntity)newEntity).TryRestore(ref newEntity);
+							}
+						}
+						catch (Exception e)
+						{
+							throw new CustomModDataException(mod,
+							"Error in reading " + tileEntity.Name + " tile entity data for " + mod.Name, e);
+						}
+					}
+				}
+				else
+				{
+					tileEntity = ModLoader.GetMod("ModLoader").GetTileEntity("MysteryTileEntity");
+					newEntity = ModTileEntity.ConstructFromBase(tileEntity);
+					newEntity.type = (byte)tileEntity.Type;
+					newEntity.Position = new Point16(tag.GetShort("X"), tag.GetShort("Y"));
+					((MysteryTileEntity)newEntity).SetData(tag);
+				}
+				if (tileEntity.ValidTile(newEntity.Position.X, newEntity.Position.Y))
+				{
+					newEntity.ID = TileEntity.AssignNewID();
+					TileEntity.ByID[newEntity.ID] = newEntity;
+					TileEntity other;
+					if (TileEntity.ByPosition.TryGetValue(newEntity.Position, out other))
+					{
+						TileEntity.ByID.Remove(other.ID);
+					}
+					TileEntity.ByPosition[newEntity.Position] = newEntity;
+				}
+			}
 		}
 	}
 }

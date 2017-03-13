@@ -6,6 +6,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.Graphics;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+using System.Linq;
 
 namespace Terraria.ModLoader.UI
 {
@@ -29,7 +30,7 @@ namespace Terraria.ModLoader.UI
 			this.Height.Set(90f, 0f);
 			this.Width.Set(0f, 1f);
 			base.SetPadding(6f);
-			//base.OnClick += new UIElement.MouseEvent(this.ToggleEnabled);
+			//base.OnClick += this.ToggleEnabled;
 			properties = BuildProperties.ReadModFile(mod);
 			string text = properties.displayName.Length > 0 ? properties.displayName : mod.name;
 			text += " v" + mod.version;
@@ -49,9 +50,9 @@ namespace Terraria.ModLoader.UI
 			button.Top.Set(40f, 0f);
 			button.PaddingTop -= 2f;
 			button.PaddingBottom -= 2f;
-			button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button.OnClick += new UIElement.MouseEvent(this.Moreinfo);
+			button.OnMouseOver += UICommon.FadedMouseOver;
+			button.OnMouseOut += UICommon.FadedMouseOut;
+			button.OnClick += this.Moreinfo;
 			base.Append(button);
 			button2 = new UITextPanel<string>(this.enabled ? "Click to Disable" : "Click to Enable", 1f, false);
 			button2.Width.Set(100f, 0f);
@@ -60,10 +61,18 @@ namespace Terraria.ModLoader.UI
 			button2.Top.Set(40f, 0f);
 			button2.PaddingTop -= 2f;
 			button2.PaddingBottom -= 2f;
-			button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button2.OnClick += new UIElement.MouseEvent(this.ToggleEnabled);
+			button2.OnMouseOver += UICommon.FadedMouseOver;
+			button2.OnMouseOut += UICommon.FadedMouseOut;
+			button2.OnClick += this.ToggleEnabled;
 			base.Append(button2);
+			if (properties.modReferences.Length > 0 && !enabled)
+			{
+				string refs = String.Join(", ", properties.modReferences.Select(x => x.mod));
+				UIHoverImage modReferenceIcon = new UIHoverImage(Main.quicksIconTexture, "This mod depends on: " + refs);
+				modReferenceIcon.Left.Set(265, 0f);
+				modReferenceIcon.Top.Set(50f, 0f);
+				base.Append(modReferenceIcon);
+			}
 			if (mod.ValidModBrowserSignature)
 			{
 				keyImage = new UIHoverImage(Main.itemTexture[ID.ItemID.GoldenKey], "This mod originated from the Mod Browser");
@@ -73,14 +82,14 @@ namespace Terraria.ModLoader.UI
 			if (ModLoader.ModLoaded(mod.name))
 			{
 				Mod loadedMod = ModLoader.GetMod(mod.name);
-				int[] values = { loadedMod.items.Count, loadedMod.npcs.Count, loadedMod.tiles.Count, loadedMod.walls.Count, loadedMod.buffs.Count, loadedMod.mountDatas.Count	};
-				string[] strings = { " items", " NPCs", " tiles", " walls", " buffs", " mounts"};
+				int[] values = { loadedMod.items.Count, loadedMod.npcs.Count, loadedMod.tiles.Count, loadedMod.walls.Count, loadedMod.buffs.Count, loadedMod.mountDatas.Count };
+				string[] strings = { " items", " NPCs", " tiles", " walls", " buffs", " mounts" };
 				int xOffset = -40;
 				for (int i = 0; i < values.Length; i++)
 				{
-					if(values[i] > 0)
+					if (values[i] > 0)
 					{
-						Texture2D iconTexture = ModLoader.GetTexture("Terraria/UI" + Path.DirectorySeparatorChar + "InfoIcon_" + i);
+						Texture2D iconTexture = Main.instance.infoIconTexture[i];
 						keyImage = new UIHoverImage(iconTexture, values[i] + strings[i]);
 						keyImage.Left.Set(xOffset, 1f);
 						base.Append(keyImage);
@@ -135,17 +144,6 @@ namespace Terraria.ModLoader.UI
 			base.MouseOut(evt);
 			this.BackgroundColor = new Color(63, 82, 151) * 0.7f;
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		internal void ToggleEnabled(UIMouseEvent evt, UIElement listeningElement)

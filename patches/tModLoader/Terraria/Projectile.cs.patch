@@ -315,7 +315,14 @@
  						}
  						bool flag9 = true;
  						if (flag9)
-@@ -10006,6 +_,11 @@
+@@ -10000,12 +_,18 @@
+ 					DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+ 					Utils.PlotTileLine(base.Center + f.ToRotationVector2() * -num5, base.Center + f.ToRotationVector2() * num5, (float)this.width * this.scale, new Utils.PerLinePoint(DelegateMethods.CutTiles));
+ 				}
++				ProjectileLoader.CutTiles(this);
+ 				AchievementsHelper.CurrentlyMining = false;
+ 			}
+ 		}
  
  		private bool CanCutTiles()
  		{
@@ -339,12 +346,15 @@
  			if (myRect.Intersects(targetRect))
  			{
  				return true;
-@@ -11415,12 +_,14 @@
+@@ -11415,12 +_,16 @@
  					overrideWidth = (int)(20f * this.scale);
  					overrideHeight = (int)(20f * this.scale);
  				}
-+				ProjectileLoader.TileCollideStyle(this, ref overrideWidth, ref overrideHeight, ref flag6);
- 				if (((this.type != 440 && this.type != 449 && this.type != 606) || this.ai[1] != 1f) && (this.type != 466 || this.localAI[1] != 1f) && (this.type != 580 || this.localAI[1] <= 0f) && (this.type != 640 || this.localAI[1] <= 0f))
+-				if (((this.type != 440 && this.type != 449 && this.type != 606) || this.ai[1] != 1f) && (this.type != 466 || this.localAI[1] != 1f) && (this.type != 580 || this.localAI[1] <= 0f) && (this.type != 640 || this.localAI[1] <= 0f))
++				if (!ProjectileLoader.TileCollideStyle(this, ref overrideWidth, ref overrideHeight, ref flag6))
++				{
++				}
++				else if (((this.type != 440 && this.type != 449 && this.type != 606) || this.ai[1] != 1f) && (this.type != 466 || this.localAI[1] != 1f) && (this.type != 580 || this.localAI[1] <= 0f) && (this.type != 640 || this.localAI[1] <= 0f))
  				{
  					if (this.aiStyle == 10)
  					{
@@ -553,6 +563,15 @@
  									{
  										flag4 = false;
  									}
+@@ -45795,7 +_,7 @@
+ 									{
+ 										for (int num830 = num825 - 1; num830 <= num825 + 1; num830++)
+ 										{
+-											if (Main.tile[num829, num830] != null && Main.tile[num829, num830].wall > 0 && flag3)
++											if (Main.tile[num829, num830] != null && Main.tile[num829, num830].wall > 0 && flag3 && WallLoader.CanExplode(num829, num830, Main.tile[num829, num830].wall))
+ 											{
+ 												WorldGen.KillWall(num829, num830, false);
+ 												if (Main.tile[num829, num830].wall == 0 && Main.netMode != 0)
 @@ -46142,11 +_,17 @@
  					}
  				}

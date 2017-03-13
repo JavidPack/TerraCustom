@@ -44,16 +44,16 @@ namespace Terraria.ModLoader.UI
 			button.Top.Set(40f, 0f);
 			button.PaddingTop -= 2f;
 			button.PaddingBottom -= 2f;
-			//	button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			//	button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
+			//	button.OnMouseOver += UICommon.FadedMouseOver;
+			//	button.OnMouseOut += UICommon.FadedMouseOut;
 			base.Append(button);
 			button2 = new UITextPanel<string>("Unpublish", 1f, false);
 			button2.CopyStyle(button);
 			button2.Width.Set(150f, 0f);
 			button2.Left.Set(360f, 0f);
-			button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button2.OnClick += new UIElement.MouseEvent(this.Unpublish);
+			button2.OnMouseOver += UICommon.FadedMouseOver;
+			button2.OnMouseOut += UICommon.FadedMouseOut;
+			button2.OnClick += this.Unpublish;
 			base.Append(button2);
 		}
 
@@ -79,17 +79,6 @@ namespace Terraria.ModLoader.UI
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
 		}
 
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
-		}
-
 		internal void Unpublish(UIMouseEvent evt, UIElement listeningElement)
 		{
 			if (ModLoader.modBrowserPassphrase == "")
@@ -107,7 +96,7 @@ namespace Terraria.ModLoader.UI
 				var values = new NameValueCollection
 				{
 					{ "name", this.name },
-					{ "steamid64", Steamworks.SteamUser.GetSteamID().ToString() },
+					{ "steamid64", ModLoader.SteamID64 },
 					{ "modloaderversion", ModLoader.versionedName },
 					{ "passphrase", ModLoader.modBrowserPassphrase },
 				};

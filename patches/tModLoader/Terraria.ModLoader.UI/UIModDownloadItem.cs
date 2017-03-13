@@ -8,6 +8,12 @@ using Terraria.ModLoader.IO;
 using Terraria.UI;
 using System.Net;
 using System.Net.Security;
+using System.Collections.Specialized;
+using System.Xml;
+using System.Text;
+using Terraria.ID;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Terraria.ModLoader.UI
 {
@@ -17,30 +23,34 @@ namespace Terraria.ModLoader.UI
 		public string displayname;
 		public string version;
 		public string author;
-		public string description;
-		public string homepage;
 		public string download;
 		public string timeStamp;
+		public string modreferences;
+		public ModSide modside;
 		public int downloads;
+		public int hot;
 		private Texture2D dividerTexture;
 		private Texture2D innerPanelTexture;
 		private UIText modName;
 		UITextPanel<string> button2;
 		public bool update = false;
+		public bool updateIsDowngrade = false;
 		public bool exists = false;
 
-		public UIModDownloadItem(string displayname, string name, string version, string author, string description, string homepage, string download, int downloads, string timeStamp, bool update, bool exists)
+		public UIModDownloadItem(string displayname, string name, string version, string author, string modreferences, ModSide modside, string download, int downloads, int hot, string timeStamp, bool update, bool updateIsDowngrade, bool exists)
 		{
 			this.displayname = displayname;
 			this.mod = name;
 			this.version = version;
 			this.author = author;
-			this.description = description;
-			this.homepage = homepage;
+			this.modreferences = modreferences;
+			this.modside = modside;
 			this.download = download;
 			this.downloads = downloads;
+			this.hot = hot;
 			this.timeStamp = timeStamp;
 			this.update = update;
+			this.updateIsDowngrade = updateIsDowngrade;
 			this.exists = exists;
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
 			this.dividerTexture = TextureManager.Load("Images/UI/Divider");
@@ -60,22 +70,38 @@ namespace Terraria.ModLoader.UI
 			button.Top.Set(40f, 0f);
 			button.PaddingTop -= 2f;
 			button.PaddingBottom -= 2f;
-			button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button.OnClick += new UIElement.MouseEvent(this.Moreinfo);
+			button.OnMouseOver += UICommon.FadedMouseOver;
+			button.OnMouseOut += UICommon.FadedMouseOut;
+			button.OnClick += RequestMoreinfo;
 			base.Append(button);
 			if (update || !exists)
 			{
-				button2 = new UITextPanel<string>(this.update ? "Update" : "Download", 1f, false);
+				button2 = new UITextPanel<string>(this.update ? (updateIsDowngrade ? "Downgrade" : "Update") : "Download", 1f, false);
 				button2.CopyStyle(button);
 				button2.Width.Set(200f, 0f);
 				button2.Left.Set(150f, 0f);
-				button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-				button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-				button2.OnClick += new UIElement.MouseEvent(this.DownloadMod);
+				button2.OnMouseOver += UICommon.FadedMouseOver;
+				button2.OnMouseOut += UICommon.FadedMouseOut;
+				button2.OnClick += this.DownloadMod;
 				base.Append(button2);
 			}
-			base.OnDoubleClick += new UIElement.MouseEvent(this.Moreinfo);
+			if (modreferences.Length > 0)
+			{
+				UIHoverImage modReferenceIcon = new UIHoverImage(Main.quicksIconTexture, "This mod depends on: " + modreferences);
+				modReferenceIcon.Left.Set(115, 0f);
+				modReferenceIcon.Top.Set(50f, 0f);
+				modReferenceIcon.OnClick += (s, e) =>
+				{
+					UIModDownloadItem modListItem = ((UIModDownloadItem)e.Parent);
+					Interface.modBrowser.SpecialModPackFilter = modListItem.modreferences.Split(',').ToList();
+					Interface.modBrowser.SpecialModPackFilterTitle = "Dependencies";// Toolong of \n" + modListItem.modName.Text;
+					Interface.modBrowser.filterTextBox.currentString = "";
+					Interface.modBrowser.SortList();
+					Main.PlaySound(SoundID.MenuOpen);
+				};
+				Append(modReferenceIcon);
+			}
+			base.OnDoubleClick += RequestMoreinfo;
 		}
 
 		public override int CompareTo(object obj)
@@ -92,12 +118,18 @@ namespace Terraria.ModLoader.UI
 					return -1 * this.downloads.CompareTo((obj as UIModDownloadItem).downloads);
 				case SortModes.RecentlyUpdated:
 					return -1 * this.timeStamp.CompareTo((obj as UIModDownloadItem).timeStamp);
+				case SortModes.Hot:
+					return -1 * this.hot.CompareTo((obj as UIModDownloadItem).hot);
 			}
 			return base.CompareTo(obj);
 		}
 
 		public override bool PassFilters()
 		{
+			if (Interface.modBrowser.SpecialModPackFilter != null && !Interface.modBrowser.SpecialModPackFilter.Contains(mod))
+			{
+				return false;
+			}
 			if (Interface.modBrowser.filter.Length > 0)
 			{
 				if (Interface.modBrowser.searchFilterMode == SearchFilter.Author)
@@ -177,17 +209,6 @@ namespace Terraria.ModLoader.UI
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
 		}
 
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
-		}
-
 		internal void DownloadMod(UIMouseEvent evt, UIElement listeningElement)
 		{
 			Main.PlaySound(12, -1, -1, 1);
@@ -265,13 +286,47 @@ namespace Terraria.ModLoader.UI
 			}
 		}
 
-		internal void Moreinfo(UIMouseEvent evt, UIElement listeningElement)
+		internal void RequestMoreinfo(UIMouseEvent evt, UIElement listeningElement)
 		{
-			Main.PlaySound(10, -1, -1, 1);
+			Main.PlaySound(SoundID.MenuOpen);
+			try
+			{
+				ServicePointManager.Expect100Continue = false;
+				string url = "http://javid.ddns.net/tModLoader/moddescription.php";
+				var values = new NameValueCollection
+					{
+						{ "modname", mod },
+					};
+				using (WebClient client = new WebClient())
+				{
+					ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback((sender, certificate, chain, policyErrors) => { return true; });
+					client.UploadValuesCompleted += new UploadValuesCompletedEventHandler(Moreinfo);
+					client.UploadValuesAsync(new Uri(url), "POST", values);
+				}
+			}
+			catch (Exception e)
+			{
+				ErrorLogger.LogModBrowserException(e);
+				return;
+			}
+		}
+
+		internal void Moreinfo(Object sender, UploadValuesCompletedEventArgs e)
+		{
+			string description = "There was a problem, try again";
+			string homepage = "";
+			if (!e.Cancelled)
+			{
+				string response = Encoding.UTF8.GetString(e.Result);
+				JObject joResponse = JObject.Parse(response);
+				description = (string)joResponse["description"];
+				homepage = (string)joResponse["homepage"];
+			}
+
 			Interface.modInfo.SetModName(this.displayname);
-			Interface.modInfo.SetModInfo(this.description);
+			Interface.modInfo.SetModInfo(description);
 			Interface.modInfo.SetGotoMenu(Interface.modBrowserID);
-			Interface.modInfo.SetURL(this.homepage);
+			Interface.modInfo.SetURL(homepage);
 			Main.menuMode = Interface.modInfoID;
 		}
 

@@ -2,8 +2,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
+using Terraria.UI.Gamepad;
 using Terraria.ModLoader.IO;
 
 namespace Terraria.ModLoader.UI
@@ -47,38 +49,38 @@ namespace Terraria.ModLoader.UI
 			button.Height.Set(25f, 0f);
 			button.VAlign = 1f;
 			button.Top.Set(-65f, 0f);
-			button.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button.OnClick += new UIElement.MouseEvent(BuildMods);
+			button.OnMouseOver += UICommon.FadedMouseOver;
+			button.OnMouseOut += UICommon.FadedMouseOut;
+			button.OnClick += BuildMods;
 			uIElement.Append(button);
 			UITextPanel<string> button2 = new UITextPanel<string>("Build + Reload All", 1f, false);
 			button2.CopyStyle(button);
 			button2.HAlign = 1f;
-			button2.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button2.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button2.OnClick += new UIElement.MouseEvent(BuildAndReload);
+			button2.OnMouseOver += UICommon.FadedMouseOver;
+			button2.OnMouseOut += UICommon.FadedMouseOut;
+			button2.OnClick += BuildAndReload;
 			uIElement.Append(button2);
 			UITextPanel<string> button3 = new UITextPanel<string>("Back", 1f, false);
 			button3.CopyStyle(button);
 			button3.Width.Set(-10f, 1f / 3f);
 			button3.Top.Set(-20f, 0f);
-			button3.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button3.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button3.OnClick += new UIElement.MouseEvent(BackClick);
+			button3.OnMouseOver += UICommon.FadedMouseOver;
+			button3.OnMouseOut += UICommon.FadedMouseOut;
+			button3.OnClick += BackClick;
 			uIElement.Append(button3);
 			UITextPanel<string> button4 = new UITextPanel<string>("Open Sources", 1f, false);
 			button4.CopyStyle(button3);
 			button4.HAlign = .5f;
-			button4.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button4.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button4.OnClick += new UIElement.MouseEvent(OpenSources);
+			button4.OnMouseOver += UICommon.FadedMouseOver;
+			button4.OnMouseOut += UICommon.FadedMouseOut;
+			button4.OnClick += OpenSources;
 			uIElement.Append(button4);
 			UITextPanel<string> button5 = new UITextPanel<string>("Manage Published", 1f, false);
 			button5.CopyStyle(button3);
 			button5.HAlign = 1f;
-			button5.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			button5.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			button5.OnClick += new UIElement.MouseEvent(ManagePublished);
+			button5.OnMouseOver += UICommon.FadedMouseOver;
+			button5.OnMouseOut += UICommon.FadedMouseOut;
+			button5.OnClick += ManagePublished;
 			uIElement.Append(button5);
 			base.Append(uIElement);
 		}
@@ -87,17 +89,6 @@ namespace Terraria.ModLoader.UI
 		{
 			Main.PlaySound(11, -1, -1, 1);
 			Main.menuMode = Interface.managePublishedID;
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		private static void BackClick(UIMouseEvent evt, UIElement listeningElement)
@@ -127,6 +118,12 @@ namespace Terraria.ModLoader.UI
 			ModLoader.reloadAfterBuild = true;
 			ModLoader.buildAll = true;
 			Main.menuMode = Interface.buildAllModsID;
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			base.Draw(spriteBatch);
+			UILinkPointNavigator.Shortcuts.BackButtonCommand = 1;
 		}
 
 		public override void OnActivate()

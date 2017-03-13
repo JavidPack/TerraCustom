@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+using Terraria.UI.Gamepad;
 using Terraria.GameContent.UI.States;
 using Newtonsoft.Json;
 
@@ -58,17 +60,17 @@ namespace Terraria.ModLoader.UI
 			backButton.Height.Set(25f, 0f);
 			backButton.VAlign = 1f;
 			backButton.Top.Set(-20f, 0f);
-			backButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			backButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			backButton.OnClick += new UIElement.MouseEvent(BackClick);
+			backButton.OnMouseOver += UICommon.FadedMouseOver;
+			backButton.OnMouseOut += UICommon.FadedMouseOut;
+			backButton.OnClick += BackClick;
 			uIElement.Append(backButton);
 
 			UIColorTextPanel saveNewButton = new UIColorTextPanel("Save Enabled as New Mod Pack", Color.Green, 1f, false);
 			saveNewButton.CopyStyle(backButton);
 			saveNewButton.HAlign = 1f;
-			saveNewButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			saveNewButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
-			saveNewButton.OnClick += new UIElement.MouseEvent(SaveNewModList);
+			saveNewButton.OnMouseOver += UICommon.FadedMouseOver;
+			saveNewButton.OnMouseOut += UICommon.FadedMouseOut;
+			saveNewButton.OnClick += SaveNewModList;
 			uIElement.Append(saveNewButton);
 
 			base.Append(uIElement);
@@ -108,15 +110,11 @@ namespace Terraria.ModLoader.UI
 			Main.menuMode = Interface.modsMenuID;
 		}
 
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
+		public override void Draw(SpriteBatch spriteBatch)
 		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
+			base.Draw(spriteBatch);
+			UILinkPointNavigator.Shortcuts.BackButtonCommand = 100;
+			UILinkPointNavigator.Shortcuts.BackButtonGoto = Interface.modsMenuID;
 		}
 
 		public override void OnActivate()

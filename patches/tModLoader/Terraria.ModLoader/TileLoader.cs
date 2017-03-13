@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.ID;
 using Terraria.ObjectData;
 
 namespace Terraria.ModLoader
 {
+	//todo: further documentation
+	/// <summary>
+	/// This serves as the central class from which tile-related functions are supported and carried out.
+	/// </summary>
 	public static class TileLoader
 	{
 		//make Terraria.ObjectData.TileObjectData._data internal
@@ -57,9 +62,12 @@ namespace Terraria.ModLoader
 		private static DelegateSetSpriteEffects[] HookSetSpriteEffects;
 		private static Action[] HookAnimateTile;
 		private static Func<int, int, int, SpriteBatch, bool>[] HookPreDraw;
-		private delegate void DelegateDrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor);
+		private delegate void DelegateDrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex);
 		private static DelegateDrawEffects[] HookDrawEffects;
+		private delegate void DelegateLegacyDrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor);
+		private static DelegateLegacyDrawEffects[] LegacyHookDrawEffects;
 		private static Action<int, int, int, SpriteBatch>[] HookPostDraw;
+		private static Action<int, int, int, SpriteBatch>[] HookSpecialDraw;
 		private static Action<int, int, int>[] HookRandomUpdate;
 		private delegate bool DelegateTileFrame(int i, int j, int type, ref bool resetFrame, ref bool noBreak);
 		private static DelegateTileFrame[] HookTileFrame;
@@ -69,12 +77,15 @@ namespace Terraria.ModLoader
 		private static Action<int, int, int>[] HookMouseOver;
 		private static Action<int, int, int>[] HookMouseOverFar;
 		private static Func<int, int, int, Item, bool>[] HookAutoSelect;
+		private static Func<int, int, int, bool>[] HookPreHitWire;
 		private static Action<int, int, int>[] HookHitWire;
 		private static Func<int, int, int, bool>[] HookSlope;
+		private static Action<int, Player>[] HookFloorVisuals;
 		private delegate void DelegateChangeWaterfallStyle(int type, ref int style);
 		private static DelegateChangeWaterfallStyle[] HookChangeWaterfallStyle;
 		private delegate int DelegateSaplingGrowthType(int type, ref int style);
 		private static DelegateSaplingGrowthType[] HookSaplingGrowthType;
+		private static Action<int, int, Item>[] HookPlaceInWorld;
 
 		internal static int ReserveTileID()
 		{
@@ -87,6 +98,11 @@ namespace Terraria.ModLoader
 
 		internal static int TileCount => nextTile;
 
+		/// <summary>
+		/// Gets the ModTile instance with the given type. If no ModTile with the given type exists, returns null.
+		/// </summary>
+		/// <param name="type">The type of the ModTile</param>
+		/// <returns>The ModTile instance in the tiles array, null if not found.</returns>
 		public static ModTile GetTile(int type)
 		{
 			return type >= TileID.Count && type < TileCount ? tiles[type - TileID.Count] : null;
@@ -184,6 +200,8 @@ namespace Terraria.ModLoader
 			Array.Resize(ref TileID.Sets.TileInteractRead, nextTile);
 			Array.Resize(ref TileID.Sets.HasOutlines, nextTile);
 			Array.Resize(ref TileID.Sets.AllTiles, nextTile);
+			Array.Resize(ref TileID.Sets.Stone, nextTile);
+			Array.Resize(ref TileID.Sets.Grass, nextTile);
 			Array.Resize(ref TileID.Sets.Mud, nextTile);
 			Array.Resize(ref TileID.Sets.Snow, nextTile);
 			Array.Resize(ref TileID.Sets.Ices, nextTile);
@@ -240,7 +258,9 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookAnimateTile, globalTiles, g => g.AnimateTile);
 			ModLoader.BuildGlobalHook(ref HookPreDraw, globalTiles, g => g.PreDraw);
 			ModLoader.BuildGlobalHook(ref HookDrawEffects, globalTiles, g => g.DrawEffects);
+			ModLoader.BuildGlobalHook(ref LegacyHookDrawEffects, globalTiles, g => g.DrawEffects);
 			ModLoader.BuildGlobalHook(ref HookPostDraw, globalTiles, g => g.PostDraw);
+			ModLoader.BuildGlobalHook(ref HookSpecialDraw, globalTiles, g => g.SpecialDraw);
 			ModLoader.BuildGlobalHook(ref HookRandomUpdate, globalTiles, g => g.RandomUpdate);
 			ModLoader.BuildGlobalHook(ref HookTileFrame, globalTiles, g => g.TileFrame);
 			ModLoader.BuildGlobalHook(ref HookCanPlace, globalTiles, g => g.CanPlace);
@@ -249,10 +269,13 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookMouseOver, globalTiles, g => g.MouseOver);
 			ModLoader.BuildGlobalHook(ref HookMouseOverFar, globalTiles, g => g.MouseOverFar);
 			ModLoader.BuildGlobalHook(ref HookAutoSelect, globalTiles, g => g.AutoSelect);
+			ModLoader.BuildGlobalHook(ref HookPreHitWire, globalTiles, g => g.PreHitWire);
 			ModLoader.BuildGlobalHook(ref HookHitWire, globalTiles, g => g.HitWire);
 			ModLoader.BuildGlobalHook(ref HookSlope, globalTiles, g => g.Slope);
+			ModLoader.BuildGlobalHook(ref HookFloorVisuals, globalTiles, g => g.FloorVisuals);
 			ModLoader.BuildGlobalHook(ref HookChangeWaterfallStyle, globalTiles, g => g.ChangeWaterfallStyle);
 			ModLoader.BuildGlobalHook(ref HookSaplingGrowthType, globalTiles, g => g.SaplingGrowthType);
+			ModLoader.BuildGlobalHook(ref HookPlaceInWorld, globalTiles, g => g.PlaceInWorld);
 
 			if (!unloading)
 			{
@@ -729,16 +752,27 @@ namespace Terraria.ModLoader
 				}
 			}
 		}
+
 		//in Terraria.Main.Draw after small if statements setting num15 call
 		//  TileLoader.SetAnimationFrame(type, ref num15);
-		public static void SetAnimationFrame(int type, ref int frameY)
+		/// <summary>
+		/// Sets the animation frame. Sets frameYOffset = modTile.animationFrameHeight * Main.tileFrame[type]; and then calls ModTile.AnimateIndividualTile
+		/// </summary>
+		/// <param name="type">The tile type.</param>
+		/// <param name="i">The x position in tile coordinates.</param>
+		/// <param name="j">The y position in tile coordinates.</param>
+		/// <param name="frameXOffset">The offset to frameX.</param>
+		/// <param name="frameYOffset">The offset to frameY.</param>
+		public static void SetAnimationFrame(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
 		{
 			ModTile modTile = GetTile(type);
 			if (modTile != null)
 			{
-				frameY = modTile.animationFrameHeight * Main.tileFrame[type];
+				frameYOffset = modTile.animationFrameHeight * Main.tileFrame[type];
+				modTile.AnimateIndividualTile(type, i, j, ref frameXOffset, ref frameYOffset);
 			}
 		}
+
 		//in Terraria.Main.Draw after calling SetAnimationFrame call
 		//  if(!TileLoader.PreDraw(j, i, type, Main.spriteBatch))
 		//  { TileLoader.PostDraw(j, i, type, Main.spriteBatch); continue; }
@@ -754,10 +788,14 @@ namespace Terraria.ModLoader
 			return GetTile(type)?.PreDraw(i, j, spriteBatch) ?? true;
 		}
 
-		public static void DrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor)
+		public static void DrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex)
 		{
-			GetTile(type)?.DrawEffects(i, j, spriteBatch, ref drawColor);
+			GetTile(type)?.DrawEffects(i, j, spriteBatch, ref drawColor, ref nextSpecialDrawIndex);
 			foreach (var hook in HookDrawEffects)
+			{
+				hook(i, j, type, spriteBatch, ref drawColor, ref nextSpecialDrawIndex);
+			}
+			foreach (var hook in LegacyHookDrawEffects)
 			{
 				hook(i, j, type, spriteBatch, ref drawColor);
 			}
@@ -773,6 +811,20 @@ namespace Terraria.ModLoader
 				hook(i, j, type, spriteBatch);
 			}
 		}
+
+		/// <summary>
+		/// Special Draw calls ModTile and GlobalTile SpecialDraw methods. Special Draw is called from DrawTiles after the draw loop, allowing for basically another layer above tiles.  Main.specX and Main.specY are used to specify tiles to call SpecialDraw on. Use DrawEffects hook to queue for SpecialDraw. 
+		/// </summary>
+		public static void SpecialDraw(int type, int specX, int specY, SpriteBatch spriteBatch)
+		{
+			GetTile(type)?.SpecialDraw(specX, specY, spriteBatch);
+
+			foreach (var hook in HookSpecialDraw)
+			{
+				hook(specX, specY, type, spriteBatch);
+			}
+		}
+
 		//in Terraria.WorldGen.UpdateWorld in the while loops updating certain numbers of tiles at end of null check if statements
 		//  add TileLoader.RandomUpdate(num7, num8, Main.tile[num7, num8].type; for the first loop
 		//  add TileLoader.RandomUpdate(num64, num65, Main.tile[num64, num65].type; for the second loop
@@ -925,6 +977,18 @@ namespace Terraria.ModLoader
 			}
 			return -1;
 		}
+
+		public static bool PreHitWire(int i, int j, int type)
+		{
+			foreach (var hook in HookPreHitWire)
+			{
+				if (!hook(i, j, type))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 		//in Terraria.Wiring make the following public:
 		//  _wireList, _toProcess, _teleport, _inPumpX, _inPumpY, _numInPump, _outPumpX, _outPumpY, _numOutPump CheckMech, TripWire
 		//at end of Terraria.Wiring.HitWireSingle inside if statement checking for tile active add
@@ -936,6 +1000,16 @@ namespace Terraria.ModLoader
 			foreach (var hook in HookHitWire)
 			{
 				hook(i, j, type);
+			}
+		}
+
+		public static void FloorVisuals(int type, Player player)
+		{
+			GetTile(type)?.FloorVisuals(player);
+
+			foreach (var hook in HookFloorVisuals)
+			{
+				hook(type, player);
 			}
 		}
 		//in Terraria.Player.ItemCheck in poundRelease if statement before sloping if statements add
@@ -1108,6 +1182,20 @@ namespace Terraria.ModLoader
 		public static Texture2D GetCactusTexture(int type)
 		{
 			return cacti.ContainsKey(type) ? cacti[type].GetTexture() : null;
+		}
+
+		public static void PlaceInWorld(int i, int j, Item item)
+		{
+			int type = item.createTile;
+			if(type < 0)
+				return;
+
+			foreach (var hook in HookPlaceInWorld)
+			{
+				hook(i, j, item);
+			}
+
+			GetTile(type)?.PlaceInWorld(i, j, item);
 		}
 	}
 }

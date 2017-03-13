@@ -6,8 +6,15 @@ using Terraria.ModLoader.IO;
 
 namespace Terraria.ModLoader
 {
+	//todo: further documentation
+	/// <summary>
+	/// This class consists of functions that write error messages to text files for you to read. It also lets you write logs to text files.
+	/// </summary>
 	public static class ErrorLogger
 	{
+		/// <summary>
+		/// The file path to which logs are written and stored.
+		/// </summary>
 		public static readonly string LogPath = Path.Combine(Main.SavePath, "Logs");
 		internal static string CompileErrorPath = Path.Combine(LogPath, "Compile Errors.txt");
 		private static readonly string[] buildDllLines =
@@ -28,10 +35,15 @@ namespace Terraria.ModLoader
 			Interface.errorMessage.SetFile(CompileErrorPath);
 		}
 
-		internal static void LogCompileErrors(CompilerErrorCollection errors)
+		internal static void LogCompileErrors(CompilerErrorCollection errors, bool forWindows)
 		{
 			string errorHeader = "An error ocurred while compiling a mod." + Environment.NewLine + Environment.NewLine;
-			Console.WriteLine(errorHeader);
+			string badInstallHint = "";
+			if(!forWindows && ModLoader.windows)
+			{
+				badInstallHint = "It is likely that you didn't install correctly. Make sure you installed the ModCompile folder as well." + Environment.NewLine + Environment.NewLine;
+			}
+			Console.WriteLine(errorHeader + badInstallHint);
 			Directory.CreateDirectory(LogPath);
 			CompilerError displayError = null;
 			using (var writer = File.CreateText(CompileErrorPath))
@@ -44,7 +56,7 @@ namespace Terraria.ModLoader
 						displayError = error;
 				}
 			}
-			Interface.errorMessage.SetMessage(errorHeader + displayError);
+			Interface.errorMessage.SetMessage(errorHeader + badInstallHint + displayError);
 			Interface.errorMessage.SetGotoMenu(Interface.modSourcesID);
 			Interface.errorMessage.SetFile(CompileErrorPath);
 		}
@@ -189,6 +201,9 @@ namespace Terraria.ModLoader
 			Main.menuMode = Interface.errorMessageID;
 		}
 
+		/// <summary>
+		/// You can use this method for your own testing purposes. The message will be added to the Logs.txt file in the Logs folder.
+		/// </summary>
 		public static void Log(string message)
 		{
 			Directory.CreateDirectory(LogPath);
@@ -198,6 +213,9 @@ namespace Terraria.ModLoader
 			}
 		}
 
+		/// <summary>
+		/// Deletes all text in the Logs.txt file.
+		/// </summary>
 		public static void ClearLog()
 		{
 			Directory.CreateDirectory(LogPath);
