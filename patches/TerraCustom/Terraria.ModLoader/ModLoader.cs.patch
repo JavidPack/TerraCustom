@@ -1,17 +1,18 @@
 --- src/tModLoader\Terraria.ModLoader\ModLoader.cs
 +++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
-@@ -29,8 +_,8 @@
- #endif
+@@ -50,9 +_,9 @@
  		//change Terraria.Main.SavePath and cloud fields to use "ModLoader" folder
+ 		/// <summary>The file path in which mods are stored.</summary>
  		public static string ModPath => modPath;
 -		internal static string modPath = Main.SavePath + Path.DirectorySeparatorChar + "Mods";
--		public static readonly string ModSourcePath = Main.SavePath + Path.DirectorySeparatorChar + "Mod Sources";
 +		internal static string modPath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Mods";
+ 		/// <summary>The file path in which mod sources are stored. Mod sources are the code and images that developers work with.</summary>
+-		public static readonly string ModSourcePath = Main.SavePath + Path.DirectorySeparatorChar + "Mod Sources";
 +		public static readonly string ModSourcePath = Main.TModLoaderSavePath + Path.DirectorySeparatorChar + "Mod Sources";
  		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
  		internal const int earliestRelease = 149;
  		internal static string modToBuild;
-@@ -156,7 +_,24 @@
+@@ -203,7 +_,24 @@
  			}
  			else
  			{

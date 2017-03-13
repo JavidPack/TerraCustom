@@ -871,6 +871,11 @@ namespace Terraria.TerraCustom
 			this.label = label;
 		}
 
+		public void SetLabel(string label)
+		{
+			this.label = label;
+		}
+
 		public override void HandleMe(ref string label, bool clicked, ref int yPosition, int index)
 		{
 			base.HandleMe(ref label, clicked, ref yPosition, index);

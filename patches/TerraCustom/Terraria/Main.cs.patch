@@ -251,7 +251,7 @@
  					Console.WriteLine("");
  					for (int i = 0; i < Main.WorldList.Count; i++)
  					{
-@@ -4046,7 +_,7 @@
+@@ -4047,12 +_,12 @@
  					}
  					else if (text4 == "m" || text4 == "M")
  					{
@@ -259,8 +259,14 @@
 +						ModLoader.Interface.ServerModMenu();
  						continue;
  					}
+ 					else if (text4 == "b" || text4 == "b")
+ 					{
+-						Interface.ServerModBrowserMenu();
++						ModLoader.Interface.ServerModBrowserMenu();
+ 						continue;
+ 					}
  					else
-@@ -4263,8 +_,8 @@
+@@ -4269,8 +_,8 @@
  					if (target < now) //can't catch up, reset target
  					{
  						target = now + delta;
@@ -271,7 +277,7 @@
  					Thread.Sleep(Math.Max((int)remaining, 0));
  				}
  			}
-@@ -4398,7 +_,7 @@
+@@ -4413,7 +_,7 @@
  					{
  						WorldFile.saveWorld();
  						Netplay.disconnect = true;
@@ -280,7 +286,7 @@
  					}
  					else if (text == Language.GetTextValue("CLI.FPS_Command"))
  					{
-@@ -4695,12 +_,23 @@
+@@ -4710,12 +_,23 @@
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
  			#endif
@@ -305,7 +311,7 @@
  			base.Window.Title = Main._cachedTitle;
  			#endif
  		}
-@@ -8069,8 +_,13 @@
+@@ -8084,8 +_,13 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -321,7 +327,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -45933,11 +_,11 @@
+@@ -45960,11 +_,11 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -8f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -335,7 +341,7 @@
  			#endif
  			base.Exit();
  			#if MAC
-@@ -46210,13 +_,14 @@
+@@ -46237,13 +_,14 @@
  				Main.ActiveWorldFileData.SetSeed(text);
  			}
  
@@ -353,7 +359,7 @@
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
  			if (Main.UseSeedUI)
-@@ -46225,7 +_,7 @@
+@@ -46252,7 +_,7 @@
  				return;
  			}
  
@@ -362,7 +368,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -46369,9 +_,9 @@
+@@ -46396,9 +_,9 @@
  			}
  
  			int num2 = 250;
@@ -374,7 +380,7 @@
  			int num6 = Main.menuMode;
  			int num7 = 0;
  			int num8 = 0;
-@@ -46385,7 +_,7 @@
+@@ -46412,7 +_,7 @@
  			int[] array4 = new int[Main.maxMenuItems];
  			int[] array5 = new int[Main.maxMenuItems];
  			byte[] array6 = new byte[Main.maxMenuItems];
@@ -383,7 +389,7 @@
  			bool[] array8 = new bool[Main.maxMenuItems];
  			bool flag4 = false;
  			bool flag5 = UILinkPointNavigator.Shortcuts.BackButtonInUse && !UILinkPointNavigator.Shortcuts.BackButtonLock;
-@@ -46398,10 +_,14 @@
+@@ -46425,10 +_,14 @@
  				array7[j] = 1f;
  			}
  
@@ -399,7 +405,7 @@
  			}
  
  			bool loadedEverything = Program.LoadedEverything;
-@@ -46694,10 +_,10 @@
+@@ -46721,10 +_,10 @@
  						Main.PlaySound(11, -1, -1, 1, 1f, 0f);
  						Main.menuMode = 0;
  						Main.netMode = 0;
@@ -414,7 +420,7 @@
  					}
  				}
  				else if (Main.menuMode == 30)
-@@ -46974,7 +_,7 @@
+@@ -47004,7 +_,7 @@
  						Main.PlaySound(11, -1, -1, 1, 1f, 0f);
  						if (WorldIO.customDataFail == null)
  						{
@@ -423,7 +429,7 @@
  						}
  						else
  						{
-@@ -47146,7 +_,7 @@
+@@ -47176,7 +_,7 @@
  					}
  
  					num10++;
@@ -432,7 +438,7 @@
  					array9[num10] = Lang.menu[14];
  					if (this.selectedMenu == num10)
  					{
-@@ -47649,7 +_,7 @@
+@@ -47679,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -441,7 +447,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -47682,27 +_,36 @@
+@@ -47712,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
@@ -478,7 +484,7 @@
  						}
  
  						Main.clrInput();
-@@ -47758,14 +_,14 @@
+@@ -47788,14 +_,14 @@
  						num15++;
  						Main.clrInput();
  					}
@@ -497,7 +503,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -47936,7 +_,7 @@
+@@ -47966,7 +_,7 @@
  						if (this.selectedMenu == num19)
  						{
  							Main.PlaySound(10, -1, -1, 1);
@@ -506,7 +512,7 @@
  						}
  
  						num19++;
-@@ -49217,7 +_,8 @@
+@@ -49247,7 +_,8 @@
  					}
  					else
  					{
@@ -516,12 +522,12 @@
  					}
  				}
  			}
-@@ -50197,7 +_,7 @@
+@@ -50227,7 +_,7 @@
  					num108 = 2;
  				}
  
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.3.9";
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.4";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;

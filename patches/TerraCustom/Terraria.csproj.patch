@@ -1,0 +1,57 @@
+--- src/tModLoader\Terraria.csproj
++++ src/TerraCustom\Terraria.csproj
+@@ -363,6 +_,7 @@
+     <Compile Include="Terraria.IO\Preferences.cs" />
+     <Compile Include="Terraria.IO\WorldFile.cs" />
+     <Compile Include="Terraria.IO\WorldFileData.cs" />
++    <Compile Include="Terraria.LeveledRPGMod\LeveledRPGModUtilities.cs" />
+     <Compile Include="Terraria.Localization\Language.cs" />
+     <Compile Include="Terraria.Localization\LanguageChangedCallback.cs" />
+     <Compile Include="Terraria.Localization\LanguageManager.cs" />
+@@ -554,6 +_,10 @@
+     <Compile Include="Terraria.Social\ISocialModule.cs" />
+     <Compile Include="Terraria.Social\SocialAPI.cs" />
+     <Compile Include="Terraria.Social\SocialMode.cs" />
++    <Compile Include="Terraria.TerraCustom.UI\UISettingsItem.cs" />
++    <Compile Include="Terraria.TerraCustom.UI\UISettingsView.cs" />
++    <Compile Include="Terraria.TerraCustom\Interface.cs" />
++    <Compile Include="Terraria.TerraCustom\TerraCustomUtils.cs" />
+     <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
+     <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
+     <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
+@@ -656,6 +_,8 @@
+     <Compile Include="Terraria\RemoteClient.cs" />
+     <Compile Include="Terraria\RemoteServer.cs" />
+     <Compile Include="Terraria\ResolutionChangeEvent.cs" />
++    <Compile Include="Terraria.TerraCustom\Setting.cs" />
++    <Compile Include="Terraria.TerraCustom\SettingSaver.cs" />
+     <Compile Include="Terraria\Sign.cs" />
+     <Compile Include="Terraria\Star.cs" />
+     <Compile Include="Terraria\StrayMethods.cs" />
+@@ -689,6 +_,10 @@
+     <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
+     <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
+     <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
++    <EmbeddedResource Include="Terraria.TerraCustom\DungeonColors.png" />
++    <EmbeddedResource Include="Terraria.TerraCustom\Logo.png" />
++    <EmbeddedResource Include="Terraria.TerraCustom\MossColors.png" />
++    <EmbeddedResource Include="Terraria.TerraCustom\TreeTops.png" />
+   </ItemGroup>
+   <ItemGroup>
+     <None Include="App.config">
+@@ -705,11 +_,11 @@
+ 
+ SET RELEASEFILE=""
+ 
+-IF $(ConfigurationName) == MacRelease SET RELEASEFILE=ModCompile/tModLoaderMac
++IF $(ConfigurationName) == MacRelease SET RELEASEFILE=ModCompile/TerraCustomMac
+ IF $(ConfigurationName) == WindowsServerDebug SET RELEASEFILE=tModLoaderServerDebug
+ IF $(ConfigurationName) == WindowsServerRelease SET RELEASEFILE=tModLoaderServer
+-IF $(ConfigurationName) == WindowsDebug SET RELEASEFILE=tModLoaderDebug
+-IF $(ConfigurationName) == WindowsRelease SET RELEASEFILE=tModLoader
++IF $(ConfigurationName) == WindowsDebug SET RELEASEFILE=TerraCustomDebug
++IF $(ConfigurationName) == WindowsRelease SET RELEASEFILE=TerraCustom
+ 
+ for /f "tokens=* delims=" %25%25i in ('"$(ProjectDir)..\..\setup\bin\setup" --steamdir') do set TERRARIASTEAMDIR=%25%25i
+ 
+

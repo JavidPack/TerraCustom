@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 using Terraria;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.TerraCustom.UI;
 
@@ -53,6 +54,8 @@ namespace Terraria.TerraCustom
 		};
 		*/
 
+		static PlainLabel InfoMessageLabel = new PlainLabel("");
+
 		//static string seedlabel = "Set Seed: ";
 		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Reset All", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
@@ -73,15 +76,28 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
-			new ActionLabel(Lang.menu[28], () => {
-				Main.settingSaver.saveSetting("Autosave-LastUsed");
-				Main.menuMode = 10;
-				//Main.worldName = Main.newWorldName;
-				if(Main.setting.LeveledRPGCriticalMode) Main.expertMode = true;
-				Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
-				WorldGen.CreateNewWorld(null);
-			}) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
+			new ActionLabel(Lang.menu[28], CreateClicked) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
+			InfoMessageLabel, // message
 		};
+
+		static void CreateClicked()
+		{
+			Main.player[Main.myPlayer] = new Player();
+			InfoMessageLabel.SetLabel("");
+			if (ChestEstimate() >= 1000)
+			{
+				InfoMessageLabel.SetLabel("Estimated chest count too high, it will crash, please fix.");
+				Main.PlaySound(SoundID.MenuClose);
+				return;
+			}
+
+			Main.settingSaver.saveSetting("Autosave-LastUsed");
+			Main.menuMode = 10;
+			//Main.worldName = Main.newWorldName;
+			if (Main.setting.LeveledRPGCriticalMode) Main.expertMode = true;
+			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, false, Main.expertMode);
+			WorldGen.CreateNewWorld(null);
+		}
 
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
@@ -1530,6 +1546,23 @@ namespace Terraria.TerraCustom
 
 		private static string ChestEstimateString()
 		{
+			int chests = ChestEstimate();
+
+			string retVal = "Estimated " + chests + " chests.";
+
+			if (chests > 1000)
+			{
+				retVal += " Failure very likely.";
+			}
+			else if (chests > 900)
+			{
+				retVal += " Failure likely.";
+			}
+			return retVal;
+		}
+
+		private static int ChestEstimate()
+		{
 			int chests = 0;
 
 			// Lihzahrd
@@ -1575,17 +1608,7 @@ namespace Terraria.TerraCustom
 			// until I do the others
 			//chests += Main.maxTilesX == 4200 ? 73 : Main.maxTilesX == 6400 ? 117 : 161;
 
-			string retVal = "Estimated " + chests + " chests.";
-
-			if (chests > 1000)
-			{
-				retVal += " Failure very likely.";
-			}
-			else if (chests > 900)
-			{
-				retVal += " Failure likely.";
-			}
-			return retVal;
+			return chests;
 		}
 	}
 }
