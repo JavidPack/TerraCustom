@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using Terraria.ModLoader.IO;
+using System.Reflection;
 
 namespace Terraria.ModLoader
 {
@@ -25,7 +26,8 @@ namespace Terraria.ModLoader
 			"Mono.dll must reference a non-windows Terraria.exe and FNA.dll"
 		};
 
-		internal static void LogBuildError(string errorText) {
+		internal static void LogBuildError(string errorText)
+		{
 			Directory.CreateDirectory(LogPath);
 			File.WriteAllText(CompileErrorPath, errorText);
 			Console.WriteLine(errorText);
@@ -39,7 +41,7 @@ namespace Terraria.ModLoader
 		{
 			string errorHeader = "An error ocurred while compiling a mod." + Environment.NewLine + Environment.NewLine;
 			string badInstallHint = "";
-			if(!forWindows && ModLoader.windows)
+			if (!forWindows && ModLoader.windows)
 			{
 				badInstallHint = "It is likely that you didn't install correctly. Make sure you installed the ModCompile folder as well." + Environment.NewLine + Environment.NewLine;
 			}
@@ -118,7 +120,7 @@ namespace Terraria.ModLoader
 				message += "\nIt has been detected that this mod was built for tModLoader v" + modBuildVersion;
 				message += "\nHowever, you are using " + ModLoader.versionedName;
 			}
-			message += "\nThis mod has automatically been disabled.";
+			message += "\nThis mod has automatically been disabled. See below for actual error:";
 			message += "\n\n" + e.Message + "\n" + e.StackTrace;
 			if (Main.dedServ)
 			{
@@ -127,6 +129,10 @@ namespace Terraria.ModLoader
 			Interface.errorMessage.SetMessage(message);
 			Interface.errorMessage.SetGotoMenu(Interface.reloadModsID);
 			Interface.errorMessage.SetFile(file);
+			if (!string.IsNullOrEmpty(e.HelpLink))
+			{
+				Interface.errorMessage.SetWebHelpURL(e.HelpLink);
+			}
 		}
 		//add try catch to Terraria.WorldGen.worldGenCallBack
 		//add try catch to Terraria.WorldGen.playWorldCallBack
@@ -210,6 +216,49 @@ namespace Terraria.ModLoader
 			using (StreamWriter writer = File.AppendText(LogPath + Path.DirectorySeparatorChar + "Logs.txt"))
 			{
 				writer.WriteLine(message);
+			}
+		}
+
+		/// <summary>
+		/// Allows you to log an object for your own testing purposes. The message will be added to the Logs.txt file in the Logs folder. 
+		/// </summary>
+		/// <param name="param">The object to be logged.</param>
+		/// <param name="alternateOutput">If true, the object's data will be manually retrieved and logged. If false, the object's ToString method is logged.</param>
+		public static void Log(object param, bool alternateOutput = false)
+		{
+			Directory.CreateDirectory(LogPath);
+			using (StreamWriter writer = File.AppendText(LogPath + Path.DirectorySeparatorChar + "Logs.txt"))
+			{
+				if (!alternateOutput)
+				{
+					writer.WriteLine(param.ToString());
+				}
+				else
+				{
+					writer.WriteLine("Object type: " + param.GetType());
+					foreach (PropertyInfo property in param.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+					{
+						writer.Write("PROPERTY " + property.Name + " = " + property.GetValue(param, null) + "\n");
+					}
+
+					foreach (FieldInfo field in param.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+					{
+						writer.Write("FIELD " + field.Name + " = " + (field.GetValue(param).ToString() != "" ? field.GetValue(param) : "(Field value not found)") + "\n");
+					}
+
+					foreach (MethodInfo method in param.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+					{
+						writer.Write("METHOD " + method.Name + "\n");
+					}
+
+					int temp = 0;
+
+					foreach (ConstructorInfo constructor in param.GetType().GetConstructors(BindingFlags.Public | BindingFlags.NonPublic))
+					{
+						temp++;
+						writer.Write("CONSTRUCTOR " + temp + " : " + constructor.Name + "\n");
+					}
+				}
 			}
 		}
 

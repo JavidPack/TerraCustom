@@ -1,0 +1,3 @@
+i'm unsure if this was addressed before or not, but, there seems to be a bug with presmash alters, regardless of having "both spawn" disabled, it still spawns both, or only the weakest variants being cobalt and co. setting palladium/orichalcum/titanium would only effect post-smash as well.
+
+https://forums.terraria.org/index.php?threads/terracustom-for-1-3.35346/page-51#post-1366793

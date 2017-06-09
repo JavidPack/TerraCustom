@@ -7,7 +7,7 @@ using Terraria.ModLoader.IO;
 namespace Terraria.ModLoader
 {
 	/// <summary>
-	/// Tile Entities are Entities tightly coupled with tiles, allowing the possibility of tiles to exhibit cool behavior.
+	/// Tile Entities are Entities tightly coupled with tiles, allowing the possibility of tiles to exhibit cool behavior. TileEntitry.Update is called in SP and on Server, not on Clients.
 	/// </summary>
 	/// <seealso cref="Terraria.DataStructures.TileEntity" />
 	public abstract class ModTileEntity : TileEntity
@@ -15,6 +15,7 @@ namespace Terraria.ModLoader
 		public const int numVanilla = 3;
 		private static int nextTileEntity = numVanilla;
 		internal static readonly List<ModTileEntity> tileEntities = new List<ModTileEntity>();
+		// TODO: public bool netUpdate;
 
 		/// <summary>
 		/// The mod that added this ModTileEntity.
@@ -129,7 +130,7 @@ namespace Terraria.ModLoader
 			int id = tileEntity.Place(i, j);
 			ModTileEntity newEntity = (ModTileEntity)ByID[id];
 			newEntity.OnNetPlace();
-			NetMessage.SendData(86, -1, -1, "", id, i, j, 0f, 0, 0, 0);
+			NetMessage.SendData(86, -1, -1, null, id, i, j, 0f, 0, 0, 0);
 		}
 
 		/// <summary>
@@ -209,23 +210,17 @@ namespace Terraria.ModLoader
 		/// <summary>
 		/// Don't use this. It is included only for completion's sake.
 		/// </summary>
-		public override sealed void WriteExtraData(BinaryWriter writer, bool networkSend)
+		public sealed override void WriteExtraData(BinaryWriter writer, bool networkSend)
 		{
-			if (networkSend)
-			{
-				NetSend(writer);
-			}
+			NetSend(writer, networkSend);
 		}
 
 		/// <summary>
 		/// Don't use this. It is included only for completion's sake.
 		/// </summary>
-		public override sealed void ReadExtraData(BinaryReader reader, bool networkSend)
+		public sealed override void ReadExtraData(BinaryReader reader, bool networkSend)
 		{
-			if (networkSend)
-			{
-				NetReceive(reader);
-			}
+			NetReceive(reader, networkSend);
 		}
 
 		/// <summary>
@@ -253,16 +248,20 @@ namespace Terraria.ModLoader
 		}
 
 		/// <summary>
-		/// Allows you to send custom data for this tile entity between client and server.
+		/// Allows you to send custom data for this tile entity between client and server. This is called on the server while sending tile data (!lightSend) and when a MessageID.TileEntitySharing message is sent (lightSend)
 		/// </summary>
-		public virtual void NetSend(BinaryWriter writer)
+		/// <param name="writer">The writer.</param>
+		/// <param name="lightSend">If true, send only data that can change. Otherwise, send the full information.</param>
+		public virtual void NetSend(BinaryWriter writer, bool lightSend)
 		{
 		}
 
 		/// <summary>
-		/// Receives the data sent in the NetSend hook.
+		/// Receives the data sent in the NetSend hook. Called on MP Client when receiving tile data (!lightReceive) and when a MessageID.TileEntitySharing message is sent (lightReceive)
 		/// </summary>
-		public virtual void NetReceive(BinaryReader reader)
+		/// <param name="reader">The reader.</param>
+		/// <param name="lightReceive">If true, read only data that can change. Otherwise, read the full information.</param>
+		public virtual void NetReceive(BinaryReader reader, bool lightReceive)
 		{
 		}
 
@@ -280,7 +279,7 @@ namespace Terraria.ModLoader
 		}
 
 		/// <summary>
-		/// Code that should be run when this tile entity is placed by means of server-syncing.
+		/// Code that should be run when this tile entity is placed by means of server-syncing. Called on Server only.
 		/// </summary>
 		public virtual void OnNetPlace()
 		{

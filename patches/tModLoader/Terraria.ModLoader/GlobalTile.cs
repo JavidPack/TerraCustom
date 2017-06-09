@@ -137,12 +137,8 @@ namespace Terraria.ModLoader
 		}
 
 		/// <summary>
-		/// Allows you to customize which items the tile at the given coordinates drops. Return false to stop the game from dropping the tile's default item. Returns true by default. Please note that this hook currently only works for 1x1 tiles.
+		/// Allows you to customize which items the tile at the given coordinates drops. Return false to stop the game from dropping the tile's default item. Returns true by default.
 		/// </summary>
-		/// <param name="i"></param>
-		/// <param name="j"></param>
-		/// <param name="type"></param>
-		/// <returns></returns>
 		public virtual bool Drop(int i, int j, int type)
 		{
 			return true;
@@ -252,14 +248,6 @@ namespace Terraria.ModLoader
 		public virtual bool PreDraw(int i, int j, int type, SpriteBatch spriteBatch)
 		{
 			return true;
-		}
-
-		/// <summary>
-		/// Obsolete Use the overloaded method with the ref int parameter
-		/// </summary>
-		[method: Obsolete("Use the overloaded method with the ref int parameter.")]
-		public virtual void DrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor)
-		{
 		}
 
 		/// <summary>

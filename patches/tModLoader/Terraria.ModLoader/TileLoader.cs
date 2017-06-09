@@ -64,8 +64,6 @@ namespace Terraria.ModLoader
 		private static Func<int, int, int, SpriteBatch, bool>[] HookPreDraw;
 		private delegate void DelegateDrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor, ref int nextSpecialDrawIndex);
 		private static DelegateDrawEffects[] HookDrawEffects;
-		private delegate void DelegateLegacyDrawEffects(int i, int j, int type, SpriteBatch spriteBatch, ref Color drawColor);
-		private static DelegateLegacyDrawEffects[] LegacyHookDrawEffects;
 		private static Action<int, int, int, SpriteBatch>[] HookPostDraw;
 		private static Action<int, int, int, SpriteBatch>[] HookSpecialDraw;
 		private static Action<int, int, int>[] HookRandomUpdate;
@@ -96,7 +94,7 @@ namespace Terraria.ModLoader
 			return reserveID;
 		}
 
-		internal static int TileCount => nextTile;
+		public static int TileCount => nextTile;
 
 		/// <summary>
 		/// Gets the ModTile instance with the given type. If no ModTile with the given type exists, returns null.
@@ -212,13 +210,18 @@ namespace Terraria.ModLoader
 			Array.Resize(ref TileID.Sets.HellSpecial, nextTile);
 			Array.Resize(ref TileID.Sets.Leaves, nextTile);
 			Array.Resize(ref TileID.Sets.GeneralPlacementTiles, nextTile);
+			Array.Resize(ref TileID.Sets.BasicChest, nextTile);
+			Array.Resize(ref TileID.Sets.BasicChestFake, nextTile);
 			Array.Resize(ref TileID.Sets.CanBeClearedDuringGeneration, nextTile);
+			Array.Resize(ref TileID.Sets.CanBeClearedDuringOreRunner, nextTile);
 			Array.Resize(ref TileID.Sets.Corrupt, nextTile);
 			Array.Resize(ref TileID.Sets.Hallow, nextTile);
 			Array.Resize(ref TileID.Sets.Crimson, nextTile);
 			Array.Resize(ref TileID.Sets.BlocksStairs, nextTile);
 			Array.Resize(ref TileID.Sets.BlocksStairsAbove, nextTile);
 			Array.Resize(ref TileID.Sets.NotReallySolid, nextTile);
+			Array.Resize(ref TileID.Sets.NeedsGrassFraming, nextTile);
+			Array.Resize(ref TileID.Sets.NeedsGrassFramingDirt, nextTile);
 			Array.Resize(ref TileID.Sets.ChecksForMerge, nextTile);
 			Array.Resize(ref TileID.Sets.FramesOnKillWall, nextTile);
 			Array.Resize(ref TileID.Sets.AvoidedByNPCs, nextTile);
@@ -258,7 +261,6 @@ namespace Terraria.ModLoader
 			ModLoader.BuildGlobalHook(ref HookAnimateTile, globalTiles, g => g.AnimateTile);
 			ModLoader.BuildGlobalHook(ref HookPreDraw, globalTiles, g => g.PreDraw);
 			ModLoader.BuildGlobalHook(ref HookDrawEffects, globalTiles, g => g.DrawEffects);
-			ModLoader.BuildGlobalHook(ref LegacyHookDrawEffects, globalTiles, g => g.DrawEffects);
 			ModLoader.BuildGlobalHook(ref HookPostDraw, globalTiles, g => g.PostDraw);
 			ModLoader.BuildGlobalHook(ref HookSpecialDraw, globalTiles, g => g.SpecialDraw);
 			ModLoader.BuildGlobalHook(ref HookRandomUpdate, globalTiles, g => g.RandomUpdate);
@@ -414,7 +416,7 @@ namespace Terraria.ModLoader
 			{
 				return modTile.openDoorID;
 			}
-			if (tile.type == TileID.ClosedDoor && (tile.frameY < 594 || tile.frameY > 646))
+			if (tile.type == TileID.ClosedDoor && (tile.frameY < 594 || tile.frameY > 646 || tile.frameX >= 54))
 			{
 				return TileID.OpenDoor;
 			}
@@ -436,15 +438,6 @@ namespace Terraria.ModLoader
 				return TileID.ClosedDoor;
 			}
 			return -1;
-		}
-		//replace chest checks (type == 21) with this
-		public static bool IsChest(int type)
-		{
-			if (type == TileID.Containers)
-			{
-				return true;
-			}
-			return ModChestName(type).Length > 0;
 		}
 		//in Terraria.UI.ChestUI add this to Lang lookups
 		public static string ModChestName(int type)
@@ -795,10 +788,6 @@ namespace Terraria.ModLoader
 			{
 				hook(i, j, type, spriteBatch, ref drawColor, ref nextSpecialDrawIndex);
 			}
-			foreach (var hook in LegacyHookDrawEffects)
-			{
-				hook(i, j, type, spriteBatch, ref drawColor);
-			}
 		}
 		//in Terraria.Main.Draw after if statement checking whether texture2D is null call
 		//  TileLoader.PostDraw(j, i, type, Main.spriteBatch);
@@ -865,7 +854,7 @@ namespace Terraria.ModLoader
 		{
 			Tile target = Main.tile[Player.tileTargetX, Player.tileTargetY];
 			ModTile modTile = GetTile(target.type);
-			damage += modTile != null ? (int) (minePower/modTile.mineResist) : minePower;
+			damage += modTile != null ? (int)(minePower / modTile.mineResist) : minePower;
 		}
 		//in Terraria.Player.ItemCheck at end of else if chain setting num to 0 add
 		//  else { TileLoader.PickPowerCheck(tile, pickPower, ref num); }
@@ -879,9 +868,8 @@ namespace Terraria.ModLoader
 		}
 		//in Terraria.Player.PlaceThing after tileObject is initalized add else to if statement and before add
 		//  if(!TileLoader.CanPlace(Player.tileTargetX, Player.tileTargetY)) { }
-		public static bool CanPlace(int i, int j)
+		public static bool CanPlace(int i, int j, int type)
 		{
-			int type = Main.tile[i, j].type;
 			foreach (var hook in HookCanPlace)
 			{
 				if (!hook(i, j, type))
@@ -1187,7 +1175,7 @@ namespace Terraria.ModLoader
 		public static void PlaceInWorld(int i, int j, Item item)
 		{
 			int type = item.createTile;
-			if(type < 0)
+			if (type < 0)
 				return;
 
 			foreach (var hook in HookPlaceInWorld)

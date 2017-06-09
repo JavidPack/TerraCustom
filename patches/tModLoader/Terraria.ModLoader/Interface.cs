@@ -24,10 +24,12 @@ namespace Terraria.ModLoader
 		internal const int managePublishedID = 10011;
 		internal const int updateMessageID = 10012;
 		internal const int infoMessageID = 10013;
-		internal const int enterPassphraseMenuID = 10014;
-		internal const int modPacksMenuID = 10015;
-		internal const int tModLoaderSettingsID = 10016;
-		internal const int enterSteamIDMenuID = 10017;
+		internal const int advancedInfoMessageID = 10014;
+		internal const int enterPassphraseMenuID = 10015;
+		internal const int modPacksMenuID = 10016;
+		internal const int tModLoaderSettingsID = 10017;
+		internal const int enterSteamIDMenuID = 10018;
+		internal const int extractModID = 10019;
 		internal static UIMods modsMenu = new UIMods();
 		internal static UILoadMods loadMods = new UILoadMods();
 		private static UIModSources modSources = new UIModSources();
@@ -39,9 +41,11 @@ namespace Terraria.ModLoader
 		internal static UIManagePublished managePublished = new UIManagePublished();
 		internal static UIUpdateMessage updateMessage = new UIUpdateMessage();
 		internal static UIInfoMessage infoMessage = new UIInfoMessage();
+		internal static UIAdvancedInfoMessage advancedInfoMessage = new UIAdvancedInfoMessage();
 		internal static UIEnterPassphraseMenu enterPassphraseMenu = new UIEnterPassphraseMenu();
 		internal static UIModPacks modPacksMenu = new UIModPacks();
 		internal static UIEnterSteamIDMenu enterSteamIDMenu = new UIEnterSteamIDMenu();
+		internal static UIExtractMod extractMod = new UIExtractMod();
 		//add to Terraria.Main.DrawMenu in Main.menuMode == 0 after achievements
 		//Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num10, ref num5);
 		internal static void AddMenuButtons(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, ref int offY, ref int spacing, ref int buttonIndex, ref int numButtons)
@@ -76,6 +80,24 @@ namespace Terraria.ModLoader
 				buttonScales[k] = 0.82f;
 			}
 			spacing = 45;
+		}
+
+		internal static void ResetData()
+		{
+			modBrowser.modList?.Clear();
+			modBrowser.modListAll?.Clear();
+			modBrowser.sortMode = ModBrowserSortMode.RecentlyUpdated;
+			modBrowser.updateFilterMode = UpdateFilter.Available;
+			modBrowser.searchFilterMode = SearchFilter.Name;
+			modBrowser.SearchFilterToggle?.setCurrentState(0);
+			if (modBrowser._categoryButtons.Count == 2)
+			{
+				modBrowser._categoryButtons[0].setCurrentState(4);
+				modBrowser._categoryButtons[1].setCurrentState(1);
+			}
+			modBrowser.loading = false;
+			ModLoader.findModsCache.Clear();
+			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
 		}
 
 		//internal static void AddSettingsMenuButtons(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, int[] virticalSpacing, ref int offY, ref int spacing, ref int buttonIndex, ref int numButtons)
@@ -171,6 +193,11 @@ namespace Terraria.ModLoader
 				Main.MenuUI.SetState(infoMessage);
 				Main.menuMode = 888;
 			}
+			else if (Main.menuMode == advancedInfoMessageID)
+			{
+				Main.MenuUI.SetState(advancedInfoMessage);
+				Main.menuMode = 888;
+			}
 			else if (Main.menuMode == enterPassphraseMenuID)
 			{
 				Main.MenuUI.SetState(enterPassphraseMenu);
@@ -185,7 +212,11 @@ namespace Terraria.ModLoader
 			{
 				Main.MenuUI.SetState(modPacksMenu);
 				Main.menuMode = 888;
-			}
+			} 
+			else if (Main.menuMode == extractModID) {
+				Main.MenuUI.SetState(extractMod);
+				Main.menuMode = 888;
+			} 
 			else if (Main.menuMode == tModLoaderSettingsID)
 			{
 				offY = 210;
@@ -230,7 +261,7 @@ namespace Terraria.ModLoader
 				}
 
 				buttonIndex++;
-				buttonNames[buttonIndex] = Lang.menu[5];
+				buttonNames[buttonIndex] = Lang.menu[5].Value;
 				if (selectedMenu == buttonIndex || backButtonDown)
 				{
 					backButtonDown = false;
@@ -256,6 +287,12 @@ namespace Terraria.ModLoader
 					string line = (k + 1) + "\t\t" + name + "(";
 					line += (ModLoader.IsEnabled(mods[k]) ? "enabled" : "disabled") + ")";
 					Console.WriteLine(line);
+				}
+				if(mods.Length == 0)
+				{
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.WriteLine($"No mods were found in: \"{ModLoader.ModPath}\"\nIf you are running a dedicated server, you may wish to use the 'modpath' command line switch or server config setting to specify a custom mods directory.\n");
+					Console.ResetColor();
 				}
 				Console.WriteLine("e\t\tEnable All");
 				Console.WriteLine("d\t\tDisable All");

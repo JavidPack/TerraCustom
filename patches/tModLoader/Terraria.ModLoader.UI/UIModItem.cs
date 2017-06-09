@@ -12,14 +12,14 @@ namespace Terraria.ModLoader.UI
 {
 	internal class UIModItem : UIPanel
 	{
-		private TmodFile mod;
-		private Texture2D dividerTexture;
-		private Texture2D innerPanelTexture;
-		private UIText modName;
+		private readonly TmodFile mod;
+		private readonly Texture2D dividerTexture;
+		private readonly Texture2D innerPanelTexture;
+		private readonly UIText modName;
 		internal bool enabled;
-		BuildProperties properties;
-		UITextPanel<string> button2;
-		UIHoverImage keyImage;
+		private readonly BuildProperties properties;
+		private readonly UITextPanel<string> button2;
+		readonly UIHoverImage keyImage;
 
 		public UIModItem(TmodFile mod)
 		{
@@ -34,9 +34,9 @@ namespace Terraria.ModLoader.UI
 			properties = BuildProperties.ReadModFile(mod);
 			string text = properties.displayName.Length > 0 ? properties.displayName : mod.name;
 			text += " v" + mod.version;
-			if (properties.author.Length > 0)
+			if(mod.tModLoaderVersion < new Version(0, 10))
 			{
-				text += " - by " + properties.author;
+				text += " [c/FF0000:(Old mod, enable at own risk)]";
 			}
 			this.modName = new UIText(text, 1f, false);
 			this.modName.Left.Set(10f, 0f);
@@ -54,10 +54,10 @@ namespace Terraria.ModLoader.UI
 			button.OnMouseOut += UICommon.FadedMouseOut;
 			button.OnClick += this.Moreinfo;
 			base.Append(button);
-			button2 = new UITextPanel<string>(this.enabled ? "Click to Disable" : "Click to Enable", 1f, false);
+			button2 = new UITextPanel<string>(this.enabled ? "Disable" : "Enable", 1f, false);
 			button2.Width.Set(100f, 0f);
 			button2.Height.Set(30f, 0f);
-			button2.Left.Set(275f, 0f);
+			button2.Left.Set(button.Left.Pixels - button2.Width.Pixels - 5f, 0f);
 			button2.Top.Set(40f, 0f);
 			button2.PaddingTop -= 2f;
 			button2.PaddingBottom -= 2f;
@@ -69,7 +69,7 @@ namespace Terraria.ModLoader.UI
 			{
 				string refs = String.Join(", ", properties.modReferences.Select(x => x.mod));
 				UIHoverImage modReferenceIcon = new UIHoverImage(Main.quicksIconTexture, "This mod depends on: " + refs);
-				modReferenceIcon.Left.Set(265, 0f);
+				modReferenceIcon.Left.Set(button2.Left.Pixels - 10f, 0f);
 				modReferenceIcon.Top.Set(50f, 0f);
 				base.Append(modReferenceIcon);
 			}
@@ -132,6 +132,29 @@ namespace Terraria.ModLoader.UI
 			//Utils.DrawBorderString(spriteBatch, text, drawPos, Color.White, 1f, 0f, 0f, -1);
 		}
 
+		protected override void DrawChildren(SpriteBatch spriteBatch)
+		{
+			base.DrawChildren(spriteBatch);
+
+			// show authors on mod title hover, after everything else
+			// main.hoverItemName isn't drawn in UI
+			if (this.modName.IsMouseHovering && properties.author.Length > 0)
+			{
+				string text = "By: " + properties.author;
+				float x = Main.fontMouseText.MeasureString(text).X;
+				Vector2 vector = Main.MouseScreen + new Vector2(16f);
+				if (vector.Y > (float)(Main.screenHeight - 30))
+				{
+					vector.Y = (float)(Main.screenHeight - 30);
+				}
+				if (vector.X > (float)Main.screenWidth - x)
+				{
+					vector.X = (float)(Main.screenWidth - x - 30);
+				}
+				Utils.DrawBorderStringFourWay(spriteBatch, Main.fontMouseText, text, vector.X, vector.Y, new Color((int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor, (int)Main.mouseTextColor), Color.Black, Vector2.Zero, 1f);
+			}
+		}
+
 		public override void MouseOver(UIMouseEvent evt)
 		{
 			base.MouseOver(evt);
@@ -150,7 +173,7 @@ namespace Terraria.ModLoader.UI
 		{
 			Main.PlaySound(12, -1, -1, 1);
 			this.enabled = !this.enabled;
-			button2.SetText(this.enabled ? "Click to Disable" : "Click to Enable", 1f, false);
+			button2.SetText(this.enabled ? "Disable" : "Enable", 1f, false);
 			ModLoader.SetModActive(this.mod, this.enabled);
 		}
 
@@ -159,9 +182,28 @@ namespace Terraria.ModLoader.UI
 			Main.PlaySound(10, -1, -1, 1);
 			Interface.modInfo.SetModName(properties.displayName);
 			Interface.modInfo.SetModInfo(properties.description);
+			Interface.modInfo.SetMod(mod);
 			Interface.modInfo.SetGotoMenu(Interface.modsMenuID);
 			Interface.modInfo.SetURL(properties.homepage);
 			Main.menuMode = Interface.modInfoID;
+		}
+
+		public override int CompareTo(object obj)
+		{
+			var item = obj as UIModItem;
+			string name = properties.displayName.Length > 0 ? properties.displayName : mod.name;
+			string othername = item.properties.displayName.Length > 0 ? item.properties.displayName : item.mod.name;
+			switch (Interface.modsMenu.sortMode)
+			{
+				default:
+					return base.CompareTo(obj);
+				case ModsMenuSortMode.RecentlyUpdated:
+					return -1 * mod.lastModifiedTime.CompareTo(item?.mod.lastModifiedTime);
+				case ModsMenuSortMode.DisplayNameAtoZ:
+					return string.Compare(name, othername, StringComparison.Ordinal);
+				case ModsMenuSortMode.DisplayNameZtoA:
+					return -1 * string.Compare(name, othername, StringComparison.Ordinal);
+			}
 		}
 
 		public override bool PassFilters()
@@ -169,12 +211,31 @@ namespace Terraria.ModLoader.UI
 			if (Interface.modsMenu.filter.Length > 0)
 			{
 				string name = properties.displayName.Length > 0 ? properties.displayName : mod.name;
-				if (name.IndexOf(Interface.modsMenu.filter, StringComparison.OrdinalIgnoreCase) == -1)
+				if (Interface.modsMenu.searchFilterMode == SearchFilter.Author)
 				{
-					return false;
+					if (properties.author.IndexOf(Interface.modsMenu.filter, StringComparison.OrdinalIgnoreCase) == -1)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (name.IndexOf(Interface.modsMenu.filter, StringComparison.OrdinalIgnoreCase) == -1)
+					{
+						return false;
+					}
 				}
 			}
-			return true;
+			switch (Interface.modsMenu.enabledFilterMode)
+			{
+				default:
+				case EnabledFilter.All:
+					return true;
+				case EnabledFilter.EnabledOnly:
+					return enabled;
+				case EnabledFilter.DisabledOnly:
+					return !enabled;
+			}
 		}
 	}
 }

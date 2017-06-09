@@ -13,6 +13,8 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Security;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.UI.Gamepad;
 using Newtonsoft.Json.Linq;
@@ -24,15 +26,19 @@ namespace Terraria.ModLoader.UI
 		public UIList modList;
 		public UIList modListAll;
 		public UIModDownloadItem selectedItem;
-		UIElement uIElement;
-		UIPanel uIPanel;
-		public UITextPanel<string> uITextPanel;
+		private UIElement uIElement;
+		private UIPanel uIPanel;
+		private UILoaderAnimatedImage uILoader;
+		public UITextPanel<string> uIHeaderTextPanel;
 		internal UIInputTextField filterTextBox;
-		private List<UICycleImage> _categoryButtons = new List<UICycleImage>();
-		UITextPanel<string> reloadButton;
-		UITextPanel<string> clearButton;
+		internal readonly List<UICycleImage> _categoryButtons = new List<UICycleImage>();
+		private UITextPanel<string> reloadButton;
+		private UITextPanel<string> clearButton;
+		public UICycleImage uIToggleImage;
+		public UICycleImage SearchFilterToggle;
 		public bool loading;
-		public SortModes sortMode = SortModes.RecentlyUpdated;
+		private bool needToRemoveLoading;
+		public ModBrowserSortMode sortMode = ModBrowserSortMode.RecentlyUpdated;
 		public UpdateFilter updateFilterMode = UpdateFilter.Available;
 		public SearchFilter searchFilterMode = SearchFilter.Name;
 		internal string filter;
@@ -80,12 +86,16 @@ namespace Terraria.ModLoader.UI
 			uIElement.Top.Set(220f, 0f);
 			uIElement.Height.Set(-220f, 1f);
 			uIElement.HAlign = 0.5f;
+
 			uIPanel = new UIPanel();
 			uIPanel.Width.Set(0f, 1f);
 			uIPanel.Height.Set(-110f, 1f);
 			uIPanel.BackgroundColor = new Color(33, 43, 79) * 0.8f;
 			uIPanel.PaddingTop = 0f;
 			uIElement.Append(uIPanel);
+
+			uILoader = new UILoaderAnimatedImage(0.5f, 0.5f, 1f);
+
 			modListAll = new UIList();
 			modList = new UIList();
 			modList.Width.Set(-25f, 1f);
@@ -93,20 +103,23 @@ namespace Terraria.ModLoader.UI
 			modList.Top.Set(50f, 0f);
 			modList.ListPadding = 5f;
 			uIPanel.Append(modList);
+
 			UIScrollbar uIScrollbar = new UIScrollbar();
 			uIScrollbar.SetView(100f, 1000f);
 			uIScrollbar.Height.Set(-50f, 1f);
 			uIScrollbar.Top.Set(50f, 0f);
 			uIScrollbar.HAlign = 1f;
 			uIPanel.Append(uIScrollbar);
+
 			modList.SetScrollbar(uIScrollbar);
-			uITextPanel = new UITextPanel<string>("Mod Browser", 0.8f, true);
-			uITextPanel.HAlign = 0.5f;
-			uITextPanel.Top.Set(-35f, 0f);
-			uITextPanel.SetPadding(15f);
-			uITextPanel.BackgroundColor = new Color(73, 94, 171);
-			uIElement.Append(uITextPanel);
-			reloadButton = new UITextPanel<string>("Loading...", 1f, false);
+			uIHeaderTextPanel = new UITextPanel<string>("Mod Browser", 0.8f, true);
+			uIHeaderTextPanel.HAlign = 0.5f;
+			uIHeaderTextPanel.Top.Set(-35f, 0f);
+			uIHeaderTextPanel.SetPadding(15f);
+			uIHeaderTextPanel.BackgroundColor = new Color(73, 94, 171);
+			uIElement.Append(uIHeaderTextPanel);
+
+			reloadButton = new UITextPanel<string>("Getting data...", 1f, false);
 			reloadButton.Width.Set(-10f, 0.5f);
 			reloadButton.Height.Set(25f, 0f);
 			reloadButton.VAlign = 1f;
@@ -115,6 +128,7 @@ namespace Terraria.ModLoader.UI
 			reloadButton.OnMouseOut += UICommon.FadedMouseOut;
 			reloadButton.OnClick += ReloadList;
 			uIElement.Append(reloadButton);
+
 			UITextPanel<string> backButton = new UITextPanel<string>("Back", 1f, false);
 			backButton.Width.Set(-10f, 0.5f);
 			backButton.Height.Set(25f, 0f);
@@ -141,14 +155,14 @@ namespace Terraria.ModLoader.UI
 				Interface.modBrowser.SortList();
 				Main.PlaySound(SoundID.MenuTick);
 			};
-			base.Append(uIElement);
 
-			UIElement uIElement2 = new UIElement();
-			uIElement2.Width.Set(0f, 1f);
-			uIElement2.Height.Set(32f, 0f);
-			uIElement2.Top.Set(10f, 0f);
+			Append(uIElement);
+
+			UIElement upperMenuContainer = new UIElement();
+			upperMenuContainer.Width.Set(0f, 1f);
+			upperMenuContainer.Height.Set(32f, 0f);
+			upperMenuContainer.Top.Set(10f, 0f);
 			Texture2D texture = Texture2D.FromStream(Main.instance.GraphicsDevice, Assembly.GetExecutingAssembly().GetManifestResourceStream("Terraria.ModLoader.UI.UIModBrowserIcons.png"));
-			UICycleImage uIToggleImage;
 			for (int j = 0; j < 2; j++)
 			{
 				if (j == 0)
@@ -183,14 +197,22 @@ namespace Terraria.ModLoader.UI
 				}
 				uIToggleImage.Left.Set((float)(j * 36 + 8), 0f);
 				_categoryButtons.Add(uIToggleImage);
-				uIElement2.Append(uIToggleImage);
+				upperMenuContainer.Append(uIToggleImage);
 			}
+			UIPanel filterTextBoxBackground = new UIPanel();
+			filterTextBoxBackground.Top.Set(0f, 0f);
+			filterTextBoxBackground.Left.Set(-170, 1f);
+			filterTextBoxBackground.Width.Set(135f, 0f);
+			filterTextBoxBackground.Height.Set(40f, 0f);
+			upperMenuContainer.Append(filterTextBoxBackground);
+
 			filterTextBox = new UIInputTextField("Type to search");
 			filterTextBox.Top.Set(5, 0f);
-			filterTextBox.Left.Set(-150, 1f);
+			filterTextBox.Left.Set(-160, 1f);
 			filterTextBox.OnTextChange += (sender, e) => SortList();
-			uIElement2.Append(filterTextBox);
-			UICycleImage SearchFilterToggle = new UICycleImage(texture, 2, 32, 32, 68, 0);
+			upperMenuContainer.Append(filterTextBox);
+
+			SearchFilterToggle = new UICycleImage(texture, 2, 32, 32, 68, 0);
 			SearchFilterToggle.setCurrentState((int)searchFilterMode);
 			SearchFilterToggle.OnClick += (a, b) =>
 			{
@@ -204,15 +226,14 @@ namespace Terraria.ModLoader.UI
 			};
 			SearchFilterToggle.Left.Set(545f, 0f);
 			_categoryButtons.Add(SearchFilterToggle);
-			uIElement2.Append(SearchFilterToggle);
-			uIPanel.Append(uIElement2);
-
-			PopulateModBrowser();
+			upperMenuContainer.Append(SearchFilterToggle);
+			uIPanel.Append(upperMenuContainer);
 		}
 
 		internal void SortList()
 		{
 			filter = filterTextBox.currentString;
+			needToRemoveLoading = true;
 			modList.Clear();
 			modList.AddRange(modListAll._items.Where(item => item.PassFilters()));
 			modList.UpdateOrder();
@@ -229,13 +250,13 @@ namespace Terraria.ModLoader.UI
 					switch (i)
 					{
 						case 0:
-							text = Interface.modBrowser.sortMode.ToFriendlyString();
+							text = sortMode.ToFriendlyString();
 							break;
 						case 1:
-							text = Interface.modBrowser.updateFilterMode.ToFriendlyString();
+							text = updateFilterMode.ToFriendlyString();
 							break;
 						case 2:
-							text = Interface.modBrowser.searchFilterMode.ToFriendlyString();
+							text = searchFilterMode.ToFriendlyString();
 							break;
 						default:
 							text = "None";
@@ -270,17 +291,21 @@ namespace Terraria.ModLoader.UI
 		{
 			Main.PlaySound(SoundID.MenuClose);
 			Main.menuMode = 0;
-			if (Interface.modBrowser.aModUpdated)
+			if (Interface.modBrowser.aModUpdated && !ModLoader.dontRemindModBrowserUpdateReload)
 			{
-				Interface.infoMessage.SetMessage("You have updated a mod. Remember to reload mods for it to take effect.");
-				Interface.infoMessage.SetGotoMenu(0);
-				Main.menuMode = Interface.infoMessageID;
+				Interface.advancedInfoMessage.SetMessage("You have updated a mod. Remember to reload mods for it to take effect.");
+				Interface.advancedInfoMessage.SetGotoMenu(0);
+				Interface.advancedInfoMessage.SetAltMessage("Don't show again");
+				Interface.advancedInfoMessage.SetAltAction(() => { ModLoader.dontRemindModBrowserUpdateReload = true; Main.SaveSettings(); });
+				Main.menuMode = Interface.advancedInfoMessageID;
 			}
-			else if (Interface.modBrowser.aNewModDownloaded)
+			else if (Interface.modBrowser.aNewModDownloaded && !ModLoader.dontRemindModBrowserDownloadEnable)
 			{
-				Interface.infoMessage.SetMessage("Your recently downloaded mods are currently disabled. Remember to enable and reload if you intend to use them.");
-				Interface.infoMessage.SetGotoMenu(0);
-				Main.menuMode = Interface.infoMessageID;
+				Interface.advancedInfoMessage.SetMessage("Your recently downloaded mods are currently disabled. Remember to enable and reload if you intend to use them.");
+				Interface.advancedInfoMessage.SetGotoMenu(0);
+				Interface.advancedInfoMessage.SetAltMessage("Don't show again");
+				Interface.advancedInfoMessage.SetAltAction(() => { ModLoader.dontRemindModBrowserDownloadEnable = true; Main.SaveSettings(); });
+				Main.menuMode = Interface.advancedInfoMessageID;
 			}
 			Interface.modBrowser.aModUpdated = false;
 			Interface.modBrowser.aNewModDownloaded = false;
@@ -288,26 +313,45 @@ namespace Terraria.ModLoader.UI
 
 		private void ReloadList(UIMouseEvent evt, UIElement listeningElement)
 		{
-			if (loading)
-				return;
+			if (!loading)
+			{
+				Main.PlaySound(SoundID.MenuOpen);
+				PopulateModBrowser();
+			}
+		}
 
-			Main.PlaySound(SoundID.MenuOpen);
-			SpecialModPackFilter = null;
-			SpecialModPackFilterTitle = null;
-			reloadButton.SetText("Reloading...");
-			PopulateModBrowser();
+		public override void Update(GameTime gameTime)
+		{
+			// Due to collection modified exceptions, we need to do this here.
+			if (needToRemoveLoading)
+			{
+				uIPanel.RemoveChild(uILoader);
+				needToRemoveLoading = false;
+			}
+			foreach (UIElement current in this.Elements)
+			{
+				current.Update(gameTime);
+			}
 		}
 
 		public override void OnActivate()
 		{
 			Main.clrInput();
+			if (!loading && modListAll.Count <= 0)
+				PopulateModBrowser();
 		}
 
 		private void PopulateModBrowser()
 		{
 			loading = true;
+			SpecialModPackFilter = null;
+			SpecialModPackFilterTitle = null;
+			reloadButton.SetText("Getting data...");
 			SetHeading("Mod Browser");
+			uIPanel.Append(uILoader);
+			modList.Clear();
 			modListAll.Clear();
+			modList.Deactivate();
 			try
 			{
 				ServicePointManager.Expect100Continue = false;
@@ -350,7 +394,7 @@ namespace Terraria.ModLoader.UI
 			}
 		}
 
-		public void UploadComplete(Object sender, UploadValuesCompletedEventArgs e)
+		public void UploadComplete(object sender, UploadValuesCompletedEventArgs e)
 		{
 			if (e.Error != null)
 			{
@@ -369,26 +413,28 @@ namespace Terraria.ModLoader.UI
 						SetHeading("Mod Browser OFFLINE (Unknown)");
 					}
 				}
+				loading = false;
+				reloadButton.SetText("Reload browser");
 			}
 			else if (!e.Cancelled)
 			{
+				reloadButton.SetText("Populating browser...");
 				byte[] result = e.Result;
-				string response = System.Text.Encoding.UTF8.GetString(result);
-
-				// TODO: UI will still be unresponsive here
-				TmodFile[] modFiles = ModLoader.FindMods();
-				List<BuildProperties> modBuildProperties = new List<BuildProperties>();
-				foreach (TmodFile tmodfile in modFiles)
-				{
-					modBuildProperties.Add(BuildProperties.ReadModFile(tmodfile));
-				}
-				PopulateFromJSON(modBuildProperties, response);
+				string response = Encoding.UTF8.GetString(result);
+				if (SynchronizationContext.Current == null)
+					SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+				Task.Factory
+					.StartNew(ModLoader.FindMods)
+					.ContinueWith(task =>
+					{
+						PopulateFromJSON(task.Result, response);
+						loading = false;
+						reloadButton.SetText("Reload browser");
+					}, TaskScheduler.FromCurrentSynchronizationContext());
 			}
-			loading = false;
-			reloadButton.SetText("Reload Mods");
 		}
 
-		private void PopulateFromJSON(List<BuildProperties> modBuildProperties, string json)
+		private void PopulateFromJSON(TmodFile[] installedMods, string json)
 		{
 			try
 			{
@@ -404,6 +450,7 @@ namespace Terraria.ModLoader.UI
 				foreach (JObject mod in modlist.Children<JObject>())
 				{
 					string displayname = (string)mod["displayname"];
+					//reloadButton.SetText("Adding " + displayname + "...");
 					string name = (string)mod["name"];
 					string version = (string)mod["version"];
 					string author = (string)mod["author"];
@@ -414,6 +461,7 @@ namespace Terraria.ModLoader.UI
 					//string[] modreferences = ((string)mod["modreferences"]).Split(',');
 					string modreferences = (string)mod["modreferences"];
 					ModSide modside = ModSide.Both; // TODO: add filter option for modside.
+					string modIconURL = (string)mod["iconurl"];
 					string modsideString = (string)mod["modside"];
 					if (modsideString == "Client") modside = ModSide.Client;
 					if (modsideString == "Server") modside = ModSide.Server;
@@ -421,22 +469,17 @@ namespace Terraria.ModLoader.UI
 					bool exists = false;
 					bool update = false;
 					bool updateIsDowngrade = false;
-					foreach (BuildProperties bp in modBuildProperties)
+					var installed = installedMods.SingleOrDefault(m => m.name == name);
+					if (installed != null)
 					{
-						if (bp.displayName.Equals(displayname))
-						{
-							exists = true;
-							if (!bp.version.Equals(new Version(version.Substring(1))))
-							{
-								update = true;
-								if (bp.version > new Version(version.Substring(1)))
-								{
-									updateIsDowngrade = true;
-								}
-							}
-						}
+						exists = true;
+						var cVersion = new Version(version.Substring(1));
+						if (cVersion > installed.version)
+							update = true;
+						else if (cVersion < installed.version)
+							update = updateIsDowngrade = true;
 					}
-					UIModDownloadItem modItem = new UIModDownloadItem(displayname, name, version, author, modreferences, modside, download, downloads, hot, timeStamp, update, updateIsDowngrade, exists);
+					UIModDownloadItem modItem = new UIModDownloadItem(displayname, name, version, author, modreferences, modside, modIconURL, download, downloads, hot, timeStamp, update, updateIsDowngrade, installed);
 					modListAll._items.Add(modItem); //add directly to the underlying, SortList will repopulate it anyway
 				}
 				SortList();
@@ -450,25 +493,26 @@ namespace Terraria.ModLoader.UI
 
 		private void SetHeading(string heading)
 		{
-			uITextPanel.SetText(heading, 0.8f, true);
-			uITextPanel.Recalculate();
+			uIHeaderTextPanel.SetText(heading, 0.8f, true);
+			uIHeaderTextPanel.Recalculate();
 		}
 
-		public XmlDocument GetDataFromUrl(string url)
-		{
-			XmlDocument urlData = new XmlDocument();
-			HttpWebRequest rq = (HttpWebRequest)WebRequest.Create(url);
-			rq.Timeout = 5000;
-			HttpWebResponse response = rq.GetResponse() as HttpWebResponse;
-			using (Stream responseStream = response.GetResponseStream())
-			{
-				XmlTextReader reader = new XmlTextReader(responseStream);
-				urlData.Load(reader);
-			}
-			return urlData;
-		}
+		//unused
+		//public XmlDocument GetDataFromUrl(string url)
+		//{
+		//	XmlDocument urlData = new XmlDocument();
+		//	HttpWebRequest rq = (HttpWebRequest)WebRequest.Create(url);
+		//	rq.Timeout = 5000;
+		//	HttpWebResponse response = rq.GetResponse() as HttpWebResponse;
+		//	using (Stream responseStream = response.GetResponseStream())
+		//	{
+		//		XmlTextReader reader = new XmlTextReader(responseStream);
+		//		urlData.Load(reader);
+		//	}
+		//	return urlData;
+		//}
 
-		HttpStatusCode GetHttpStatusCode(System.Exception err)
+		private HttpStatusCode GetHttpStatusCode(System.Exception err)
 		{
 			if (err is WebException)
 			{
@@ -483,23 +527,23 @@ namespace Terraria.ModLoader.UI
 		}
 	}
 
-	public static class SortModesExtensions
+	public static class ModBrowserSortModesExtensions
 	{
-		public static string ToFriendlyString(this SortModes sortmode)
+		public static string ToFriendlyString(this ModBrowserSortMode sortmode)
 		{
 			switch (sortmode)
 			{
-				case SortModes.DisplayNameAtoZ:
+				case ModBrowserSortMode.DisplayNameAtoZ:
 					return "Sort mod names alphabetically";
-				case SortModes.DisplayNameZtoA:
+				case ModBrowserSortMode.DisplayNameZtoA:
 					return "Sort mod names reverse-alphabetically";
-				case SortModes.DownloadsDescending:
+				case ModBrowserSortMode.DownloadsDescending:
 					return "Sort by downloads descending";
-				case SortModes.DownloadsAscending:
+				case ModBrowserSortMode.DownloadsAscending:
 					return "Sort by downloads ascending";
-				case SortModes.RecentlyUpdated:
+				case ModBrowserSortMode.RecentlyUpdated:
 					return "Sort by recently updated";
-				case SortModes.Hot:
+				case ModBrowserSortMode.Hot:
 					return "Sort by popularity";
 			}
 			return "Unknown Sort";
@@ -538,7 +582,7 @@ namespace Terraria.ModLoader.UI
 		}
 	}
 
-	public enum SortModes
+	public enum ModBrowserSortMode
 	{
 		DisplayNameAtoZ,
 		DisplayNameZtoA,
