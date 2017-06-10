@@ -97,8 +97,8 @@ namespace Terraria.ModLoader.Setup
 			this.buttonSetup.Size = new System.Drawing.Size(129, 23);
 			this.buttonSetup.TabIndex = 0;
 			this.buttonSetup.Text = "Setup";
-			this.toolTipButtons.SetToolTip(this.buttonSetup, "Complete environment setup for working on tModLoader source\r\nEquivalent to Decomp" +
-        "ile+Patch+SetupDebug\r\nEdit the source in src/tModLoader then run Diff tModLoader" +
+			this.toolTipButtons.SetToolTip(this.buttonSetup, "Complete environment setup for working on TerraCustom source\r\nEquivalent to Decomp" +
+        "ile+Patch+SetupDebug\r\nEdit the source in src/TerraCustom then run Diff TerraCustom" +
         " and commit the /patches folder");
 			this.buttonSetup.UseVisualStyleBackColor = true;
 			this.buttonSetup.Click += new System.EventHandler(this.buttonTask_Click);
@@ -359,7 +359,7 @@ namespace Terraria.ModLoader.Setup
 			this.Controls.Add(this.mainMenuStrip);
 			this.MainMenuStrip = this.mainMenuStrip;
 			this.Name = "MainForm";
-			this.Text = "tModLoader Dev Setup";
+			this.Text = "TerraCustom Dev Setup";
 			this.mainMenuStrip.ResumeLayout(false);
 			this.mainMenuStrip.PerformLayout();
 			this.ResumeLayout(false);

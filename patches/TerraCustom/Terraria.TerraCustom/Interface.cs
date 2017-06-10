@@ -75,8 +75,8 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
 			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
-			new ActionLabel(Lang.menu[28], CreateClicked) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
+			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
+			new ActionLabel(Lang.menu[28].Value, CreateClicked) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
 			InfoMessageLabel, // message
 		};
 
@@ -102,13 +102,13 @@ namespace Terraria.TerraCustom
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
 			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] BackgroundsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel("Surface Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SurfaceBackgrounds; }),
 			new ActionLabel("Underground Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.UndergroundBackgrounds; }),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
@@ -120,7 +120,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Found Angler : No", "Found Angler : Yes" }, () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Bartender : No", "Found Bartender : Yes" }, () => Main.setting.savedBartender? 1 : 0, x => Main.setting.savedBartender = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes" }, () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] DownedMenuItems = new TerraCustomMenuItem[] {
@@ -138,7 +138,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] {"Downed Fishron : No", "Downed Fishron : Yes"},() => Main.setting.downedFishron? 1 : 0,x => Main.setting.downedFishron = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},() => Main.setting.downedAncientCultist? 1 : 0,x => Main.setting.downedAncientCultist = x > 0 ? true : false),
 			new OptionLabel(new string[] {"Downed Moonlord: No", "Downed Moonlord: Yes"},() => Main.setting.downedMoonlord? 1 : 0,x => Main.setting.downedMoonlord = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], () => { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 
@@ -158,7 +158,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] {"No altar: Disabled","No altar: Enabled"}, () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"}, () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
 			new OptionLabel(new string[] {"No underworld: Disabled","No underworld: Enabled"}, () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
@@ -171,7 +171,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"}, () => Main.setting.IsCobalt, x => Main.setting.IsCobalt = x),
 			new OptionLabel(new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"}, () => Main.setting.IsMythril, x => Main.setting.IsMythril = x),
 			new OptionLabel(new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"}, () => Main.setting.IsAdaman, x => Main.setting.IsAdaman = x),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
@@ -187,7 +187,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"}, () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
 			new OptionLabel(new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" }, () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
 			new OptionLabel(new string[] { "Force Enchanted Sword Shrine Real: No","Force Enchanted Sword Shrine Real: Yes" }, () => Main.setting.ForceEnchantedSwordShrineReal ? 1 : 0, x => Main.setting.ForceEnchantedSwordShrineReal = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] VariousSpawnsMenuItems = new TerraCustomMenuItem[] {
@@ -199,7 +199,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Tree Upper Bound",150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
 			new SliderItem("Mushroom Biomes:",10f,() => Main.setting.MushroomBiomeMultiplier, x => Main.setting.MushroomBiomeMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((Main.maxTilesX / 500) * x)),
 			new SliderItem("Statues:",10f,() => Main.setting.StatueMultiplier, x => Main.setting.StatueMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((WorldGen.statueList.Length * 2 * (float)Main.maxTilesX / 4200) * x)),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems1 = new TerraCustomMenuItem[] {
@@ -215,7 +215,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Marble Caves:", 10f, () => Main.setting.MarbleCaveMultiplier, x => Main.setting.MarbleCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x)),
 			new SliderItem("Underground Cabins:", 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
@@ -226,7 +226,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Gemstone Cave Size:", 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
 			new SliderItem("Hives:", 10f, () => Main.setting.HiveMultiplier, x => Main.setting.HiveMultiplier = x, x => Math.Round((double)(x * 100f)) + "% -> " + (int)(x*(1 + (int)(5f * Main.maxTilesX / 4200f))) + "-" + (int)(x*(1 + (int)(8f * Main.maxTilesX / 4200f))) +" hives"),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes1; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] TrapsMenuItems = new TerraCustomMenuItem[] {
@@ -238,7 +238,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Additional Explosive Traps:", 10f, () => Main.setting.AdditionalExplosiveTrapMultiplier, x => Main.setting.AdditionalExplosiveTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.05 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalExplosiveTrapMultiplier))),
 			new SliderItem("Additional Geyser Traps:", 10f, () => Main.setting.AdditionalGeyserTrapMultiplier, x => Main.setting.AdditionalGeyserTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.25 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier))),
 			new SliderItem("Temple Traps:", 10f, () => Main.setting.TempleTrapMultiplier, x => Main.setting.TempleTrapMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] TerrainMenuItems = new TerraCustomMenuItem[] {
@@ -255,7 +255,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Lakes",20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
 			new SliderItem("World Width", 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)(x/200) * 200, x => x +" tiles wide" +  (x<4200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>8400?" Warning: Will not Load in Vanilla":"")),
 			new SliderItem("World Height", 4800f ,() => Main.maxTilesY, x => Main.maxTilesY = (int)(x/150) *150, x => x +" tiles tall" + (x<1200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>2400?" Warning: Will not Load in Vanilla":"")),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
@@ -270,7 +270,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("Surface Chests:", 5f, () => Main.setting.SurfaceChestMultiplier, x => Main.setting.SurfaceChestMultiplier = x, x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests"),
 			new SliderItem("Temple Chests:", 5f, () => Main.setting.TempleChestMultiplier, x => Main.setting.TempleChestMultiplier = x, x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests"),
 			new SliderItem(Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/, Main.setting.ShadowChestMultiplierDelegate.ratio/*5f*/, Main.setting.ShadowChestMultiplierDelegate.getter, Main.setting.ShadowChestMultiplierDelegate.setter, Main.setting.ShadowChestMultiplierDelegate.estimationString),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] OreAmountMenuItems = new TerraCustomMenuItem[] {
@@ -304,7 +304,7 @@ namespace Terraria.TerraCustom
 			new SliderItem("",0,() => 0f, x=> { }, x => "(Same amount as smashing " + Math.Round((double)(Main.setting.PreSmashAltar * 50f)) + " altars)") { secondStringOnly = true, noSlider = true},
 			new OptionLabel(new string[] { "PreSmash Altars generates both sets of ores : Disabled", "PreSmash Altars generates both sets of ores : Enabled" }, () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
 			new OptionLabel(new string[] { "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Disabled",  "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Enabled"}, () => Main.setting.PreSmashAltarPreventPatches? 1 : 0, x => Main.setting.PreSmashAltarPreventPatches = x > 0 ? true : false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
@@ -313,7 +313,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
 			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = (x > 0) ? true : false),
-			new ActionLabel(Lang.menu[5], ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		internal static Color color = Color.White;
@@ -440,7 +440,7 @@ namespace Terraria.TerraCustom
 			{
 				{
 					string[][] optionStrings = { };
-					if (WorldGen.worldSize == 0)
+					if (TerraCustomUtils.WorldSize == 0)
 					{
 						optionStrings = new string[][]
 						{
@@ -451,7 +451,7 @@ namespace Terraria.TerraCustom
 							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
 						};
 					}
-					if (WorldGen.worldSize == 1)
+					if (TerraCustomUtils.WorldSize == 1)
 					{
 						optionStrings = new string[][]
 						{
@@ -463,7 +463,7 @@ namespace Terraria.TerraCustom
 							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
 						};
 					}
-					if (WorldGen.worldSize == 2)
+					if (TerraCustomUtils.WorldSize == 2)
 					{
 						optionStrings = new string[][]
 						{
@@ -529,7 +529,7 @@ namespace Terraria.TerraCustom
 
 					buttonIndex++;
 					array4[buttonIndex] = 30;
-					clickableLabelText[buttonIndex] = Lang.menu[5];
+					clickableLabelText[buttonIndex] = Lang.menu[5].Value;
 					if (main.selectedMenu == buttonIndex)
 					{
 						Main.menuMode = (int)MenuModes.Backgrounds;
@@ -566,7 +566,7 @@ namespace Terraria.TerraCustom
 					}
 
 					//Caves todo 8 for 4
-					if (main.lastSelectedMenu >= 4 && main.lastSelectedMenu <= 5 + WorldGen.worldSize)
+					if (main.lastSelectedMenu >= 4 && main.lastSelectedMenu <= 5 + TerraCustomUtils.WorldSize)
 					{
 						int[][] backgrounds = new int[][] { new int[] { },
 								 new int[] {68,67,68,69,128+ (Main.setting.HellBackStyle > 0 ? Main.setting.HellBackStyle  -1:0) },
@@ -605,8 +605,8 @@ namespace Terraria.TerraCustom
 				array[0] = true;
 				array4[1] = 20;
 				array4[2] = 20;
-				clickableLabelText[1] = Lang.menu[4];
-				clickableLabelText[2] = Lang.menu[6];
+				clickableLabelText[1] = Lang.menu[4].Value;
+				clickableLabelText[2] = Lang.menu[6].Value;
 				numberClickableLabels = 4;
 				// click accept
 				if (main.selectedMenu == 1)
@@ -679,11 +679,11 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectTreeStyle[0] == 6)
 				{
-					clickableLabelText[num48] = "Tree Style " + (WorldGen.worldSize < 2 ? "Left" : "Far Left") + ":  Random";
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize < 2 ? "Left" : "Far Left") + ":  Random";
 				}
 				else
 				{
-					clickableLabelText[num48] = "Tree Style " + (WorldGen.worldSize < 2 ? "Left" : "Far Left") + ": " + (Main.setting.SelectTreeStyle[0]);
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize < 2 ? "Left" : "Far Left") + ": " + (Main.setting.SelectTreeStyle[0]);
 				}
 				if (main.selectedMenu == num48)
 				{
@@ -699,11 +699,11 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectTreeStyle[1] == 6)
 				{
-					clickableLabelText[num48] = "Tree Style " + (WorldGen.worldSize == 0 ? "Right" : WorldGen.worldSize == 1 ? "Middle" : "Left") + ":  Random";
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize == 0 ? "Right" : TerraCustomUtils.WorldSize == 1 ? "Middle" : "Left") + ":  Random";
 				}
 				else
 				{
-					clickableLabelText[num48] = "Tree Style " + (WorldGen.worldSize == 0 ? "Right" : WorldGen.worldSize == 1 ? "Middle" : "Left") + ": " + (Main.setting.SelectTreeStyle[1]);
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize == 0 ? "Right" : TerraCustomUtils.WorldSize == 1 ? "Middle" : "Left") + ": " + (Main.setting.SelectTreeStyle[1]);
 				}
 				if (main.selectedMenu == num48)
 				{
@@ -717,7 +717,7 @@ namespace Terraria.TerraCustom
 					}
 				}
 				num48++;
-				if (WorldGen.worldSize > 0)
+				if (TerraCustomUtils.WorldSize > 0)
 				{
 					if (Main.setting.SelectTreeStyle[2] == 6)
 					{
@@ -740,7 +740,7 @@ namespace Terraria.TerraCustom
 					}
 					num48++;
 				}
-				if (WorldGen.worldSize > 1)
+				if (TerraCustomUtils.WorldSize > 1)
 				{
 					if (Main.setting.SelectTreeStyle[3] == 6)
 					{
@@ -892,7 +892,7 @@ namespace Terraria.TerraCustom
 				}
 				num48++;
 				array4[num48] = 10;
-				clickableLabelText[num48] = Lang.menu[5];
+				clickableLabelText[num48] = Lang.menu[5].Value;
 				if (main.selectedMenu == num48)
 				{
 					main.lastSelectedMenu = -1;
@@ -909,11 +909,11 @@ namespace Terraria.TerraCustom
 					Main.spriteBatch.Draw(Main.moonTexture[Main.moonType], new Vector2(0, Main.screenHeight - Main.moonTexture[Main.moonType].Height), Color.White);
 				}
 
-				if (main.lastSelectedMenu == 2 || main.lastSelectedMenu == 3 || (WorldGen.worldSize > 0 && main.lastSelectedMenu == 4) || (WorldGen.worldSize > 1 && main.lastSelectedMenu == 5))
+				if (main.lastSelectedMenu == 2 || main.lastSelectedMenu == 3 || (TerraCustomUtils.WorldSize > 0 && main.lastSelectedMenu == 4) || (TerraCustomUtils.WorldSize > 1 && main.lastSelectedMenu == 5))
 				{
 					Main.spriteBatch.Draw(Main.TCTreeTops, new Vector2(0, Main.screenHeight - Main.TCTreeTops.Height), Color.White);
 				}
-				if (WorldGen.worldSize == 0)
+				if (TerraCustomUtils.WorldSize == 0)
 				{
 					if (main.lastSelectedMenu == 5 || main.lastSelectedMenu == 6 || main.lastSelectedMenu == 7)
 					{
@@ -921,7 +921,7 @@ namespace Terraria.TerraCustom
 
 					}
 				}
-				else if (WorldGen.worldSize == 1)
+				else if (TerraCustomUtils.WorldSize == 1)
 				{
 					if (main.lastSelectedMenu == 6 || main.lastSelectedMenu == 7 || main.lastSelectedMenu == 8)
 					{
@@ -938,7 +938,7 @@ namespace Terraria.TerraCustom
 					}
 				}
 
-				if (main.lastSelectedMenu == 4 + WorldGen.worldSize)
+				if (main.lastSelectedMenu == 4 + TerraCustomUtils.WorldSize)
 				{
 					Main.spriteBatch.Draw(Main.TCDungeonColors, new Vector2(0, Main.screenHeight - Main.TCDungeonColors.Height), Color.White);
 				}
@@ -1310,7 +1310,7 @@ namespace Terraria.TerraCustom
 					}
 					num50++;
 					array4[num50] = 10;
-					clickableLabelText[num50] = Lang.menu[5];
+					clickableLabelText[num50] = Lang.menu[5].Value;
 					if (main.selectedMenu == num50)
 					{
 						Main.menuMode = (int)MenuModes.Backgrounds;
@@ -1348,15 +1348,15 @@ namespace Terraria.TerraCustom
 				//array4[5] = 20;
 				array4[5] = 20;
 				array4[6] = 60;
-				clickableLabelText[0] = Lang.menu[91];
+				clickableLabelText[0] = Lang.menu[91].Value;
 				array[0] = true;
-				clickableLabelText[1] = Lang.menu[92];
-				clickableLabelText[2] = Lang.menu[93];
-				clickableLabelText[3] = Lang.menu[94];
+				clickableLabelText[1] = Lang.menu[92].Value;
+				clickableLabelText[2] = Lang.menu[93].Value;
+				clickableLabelText[3] = Lang.menu[94].Value;
 				//	clickableLabelText[4] = Lang.menu[5];
 				clickableLabelText[4] = "Keep Previous Custom Size";
 				clickableLabelText[5] = "Load Autosaved Config";
-				clickableLabelText[6] = Lang.menu[15];
+				clickableLabelText[6] = Lang.menu[15].Value;
 				numberClickableLabels = 7;
 				if (main.selectedMenu == 6)
 				{
@@ -1367,18 +1367,6 @@ namespace Terraria.TerraCustom
 					if (Main.settingSaver.settingExists("Autosave-LastUsed"))
 					{
 						Main.settingSaver.loadSetting("Autosave-LastUsed");
-						if (Main.maxTilesX <= 4200)
-						{
-							WorldGen.worldSize = 0;
-						}
-						else if (Main.maxTilesX <= 6400)
-						{
-							WorldGen.worldSize = 1;
-						}
-						else// (Main.maxTilesX <= 8400)
-						{
-							WorldGen.worldSize = 2;
-						}
 						Main.clrInput();
 						Main.menuMode = (int)MenuModes.EnterWorldName;
 						WorldGen.setWorldSize();
@@ -1388,21 +1376,18 @@ namespace Terraria.TerraCustom
 				{
 					if (main.selectedMenu == 1)
 					{
-						Main.maxTilesX = /*8400;// */4200;
-						Main.maxTilesY = /*600;//*/1200;
-						WorldGen.worldSize = 0;
+						Main.maxTilesX = 4200;
+						Main.maxTilesY = 1200;
 					}
 					else if (main.selectedMenu == 2)
 					{
 						Main.maxTilesX = 6400;
 						Main.maxTilesY = 1800;
-						WorldGen.worldSize = 1;
 					}
 					else if (main.selectedMenu == 3)
 					{
 						Main.maxTilesX = 8400;
 						Main.maxTilesY = 2400;
-						WorldGen.worldSize = 2;
 					}
 					else if (main.selectedMenu == 4)
 					{
@@ -1410,7 +1395,6 @@ namespace Terraria.TerraCustom
 						{
 							Main.maxTilesX = 4200;
 							Main.maxTilesY = 1200;
-							WorldGen.worldSize = 0;
 						}
 					}
 					Main.clrInput();

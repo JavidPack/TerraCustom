@@ -52,18 +52,6 @@ namespace Terraria.TerraCustom
 
 					// "Members with a default value but no JSON will be set to their default value when deserializing."
 				}
-				if (Main.maxTilesX <= 4200)
-				{
-					WorldGen.worldSize = 0;
-				}
-				else if (Main.maxTilesX <= 6400)
-				{
-					WorldGen.worldSize = 1;
-				}
-				else if (Main.maxTilesX <= 8400)
-				{
-					WorldGen.worldSize = 2;
-				}
 			}
 		}
 

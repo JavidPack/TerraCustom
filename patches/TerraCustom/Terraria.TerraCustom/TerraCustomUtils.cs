@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
+using System;
 
 namespace Terraria.TerraCustom
 {
@@ -330,6 +331,55 @@ namespace Terraria.TerraCustom
 				Main.desertBG[1] = 20;
 				return;
 			}
+		}
+
+		public static int WorldSize
+		{
+			get
+			{
+				if (Main.maxTilesX <= 4200)
+				{
+					return 0;
+				}
+				else if (Main.maxTilesX <= 6400)
+				{
+					return 1;
+				}
+				else// (Main.maxTilesX <= 8400)
+				{
+					return 2;
+				}
+			}
+		}
+
+		internal static void FixTreeStyles()
+		{
+			if (Main.setting.SelectTreeStyle[0] != 6)
+				Main.treeStyle[0] = Main.setting.SelectTreeStyle[0];
+
+			if (Main.setting.SelectTreeStyle[1] != 6)
+				Main.treeStyle[1] = Main.setting.SelectTreeStyle[1];
+
+			if (WorldSize > 1)
+			{
+				if (Main.setting.SelectTreeStyle[2] != 6)
+					Main.treeStyle[2] = Main.setting.SelectTreeStyle[2];
+			}
+			if (WorldSize > 2)
+			{
+				if (Main.setting.SelectTreeStyle[0] != 6)
+					Main.treeStyle[3] = Main.setting.SelectTreeStyle[3];
+			}
+		}
+
+		internal static void FixMossStyles()
+		{
+			if (Main.setting.SelectMossType0 != 5)
+				WorldGen.mossType[0] = Main.setting.SelectMossType0;
+			if (Main.setting.SelectMossType1 != 5)
+				WorldGen.mossType[1] = Main.setting.SelectMossType1;
+			if (Main.setting.SelectMossType2 != 5)
+				WorldGen.mossType[2] = Main.setting.SelectMossType2;
 		}
 	}
 }

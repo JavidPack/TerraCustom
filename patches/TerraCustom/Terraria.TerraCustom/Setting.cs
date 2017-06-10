@@ -45,17 +45,17 @@ namespace Terraria.TerraCustom
 			Main.setting.SurfaceHorizontalTunnelsMultiplier = 1f;
 			Main.setting.LakeMultiplier = 1f;
 			// Reset tile width/height
-			if (WorldGen.worldSize == 0)
+			if (TerraCustomUtils.WorldSize == 0)
 			{
 				Main.maxTilesX = 4200;
 				Main.maxTilesY = 1200;
 			}
-			else if (WorldGen.worldSize == 1)
+			else if (TerraCustomUtils.WorldSize == 1)
 			{
 				Main.maxTilesX = 6400;
 				Main.maxTilesY = 1800;
 			}
-			else if (WorldGen.worldSize == 2)
+			else if (TerraCustomUtils.WorldSize == 2)
 			{
 				Main.maxTilesX = 8400;
 				Main.maxTilesY = 2400;

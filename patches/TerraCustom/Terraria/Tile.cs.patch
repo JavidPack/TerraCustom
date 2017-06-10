@@ -1,26 +1,30 @@
 --- src/tModLoader\Terraria\Tile.cs
 +++ src/TerraCustom\Terraria\Tile.cs
-@@ -405,6 +_,22 @@
- 				return;
- 			}
- 			this.bTileHeader3 &= 239;
-+		}
-+
-+		public void wire(bool wi, int type)
-+		{
-+			if (type == 0)
-+			{
-+				wire(wi);
-+			}
-+			else if (type == 1)
-+			{
-+				wire2(wi);
-+			}
-+			else
-+			{
-+				wire3(wi);
-+			}
- 		}
+@@ -28,6 +_,7 @@
+ 		public byte bTileHeader3;
+ 		public short frameX;
+ 		public short frameY;
++		internal static int WireTypeOverride = -1;
  
- 		public byte color()
+ 		public int collisionType
+ 		{
+@@ -458,6 +_,18 @@
+ 
+ 		public void wire(bool wire)
+ 		{
++			if(WireTypeOverride > 0) // -1 is rand, 0 is 0
++			{
++				if (WireTypeOverride == 1)
++				{
++					wire2(wire);
++				}
++				else
++				{
++					wire3(wire);
++				}
++				return;
++			}
+ 			if (wire)
+ 			{
+ 				this.sTileHeader |= 128;
 
