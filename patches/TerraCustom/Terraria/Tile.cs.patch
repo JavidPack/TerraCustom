@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria\Tile.cs
 +++ src/TerraCustom\Terraria\Tile.cs
-@@ -404,6 +_,22 @@
+@@ -405,6 +_,22 @@
  				return;
  			}
  			this.bTileHeader3 &= 239;
