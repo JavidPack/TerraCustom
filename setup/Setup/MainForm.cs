@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using static Terraria.TerraCustom.Setup.Settings;
+using Terraria.ModLoader.Properties;
+using static Terraria.ModLoader.Setup.Program;
 
-namespace Terraria.TerraCustom.Setup
+namespace Terraria.ModLoader.Setup
 {
 	public partial class MainForm : Form, ITaskInterface
 	{
@@ -20,27 +21,26 @@ namespace Terraria.TerraCustom.Setup
 			InitializeComponent();
 
 			taskButtons[buttonDecompile] = () => new DecompileTask(this, "src/decompiled");
-			taskButtons[buttonDiffMerged] = () => new DiffTask(this, "src/decompiled", "src/merged", "patches/merged", MergedDiffCutoff);
-			taskButtons[buttonPatchMerged] = () => new PatchTask(this, "src/decompiled", "src/merged", "patches/merged", MergedDiffCutoff);
-			taskButtons[buttonDiffTerraria] = () => new DiffTask(this, "src/merged", "src/Terraria", "patches/Terraria", TerrariaDiffCutoff);
-			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/merged", "src/Terraria", "patches/Terraria", TerrariaDiffCutoff);
-			taskButtons[buttonDiffModLoader] = () => new DiffTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", tModLoaderDiffCutoff, FormatTask.TerraCustomFormat);
-			taskButtons[buttonPatchModLoader] = () => new PatchTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", tModLoaderDiffCutoff, FormatTask.TerraCustomFormat);
-			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", TerraCustomDiffCutoff/*, FormatTask.TerraCustomFormat*/);
-			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", TerraCustomDiffCutoff/*, FormatTask.TerraCustomFormat*/);
-			//taskButtons[buttonSetupDebugging] = () => new SetupDebugTask(this);
-			taskButtons[buttonFormat] = () => new FormatTask(this, FormatTask.TerraCustomFormat);
+			taskButtons[buttonDiffMerged] = () => new DiffTask(this, "src/decompiled", "src/merged", "patches/merged", new ProgramSetting<DateTime>("MergedDiffCutoff"));
+			taskButtons[buttonPatchMerged] = () => new PatchTask(this, "src/decompiled", "src/merged", "patches/merged", new ProgramSetting<DateTime>("MergedDiffCutoff"));
+			taskButtons[buttonDiffTerraria] = () => new DiffTask(this, "src/merged", "src/Terraria", "patches/Terraria", new ProgramSetting<DateTime>("TerrariaDiffCutoff"));
+			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/merged", "src/Terraria", "patches/Terraria", new ProgramSetting<DateTime>("TerrariaDiffCutoff"));
+			taskButtons[buttonDiffModLoader] = () => new DiffTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", new ProgramSetting<DateTime>("tModLoaderDiffCutoff"), FormatTask.tModLoaderFormat);
+			taskButtons[buttonPatchModLoader] = () => new PatchTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", new ProgramSetting<DateTime>("tModLoaderDiffCutoff"), FormatTask.tModLoaderFormat);
+			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
+			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
+			taskButtons[buttonSetupDebugging] = () => new SetupDebugTask(this);
 
 			taskButtons[buttonRegenSource] = () =>
-				new RegenSourceTask(this, new[] { buttonPatchMerged, buttonPatchTerraria, buttonPatchModLoader, buttonPatchTerraCustom/*, buttonSetupDebugging*/ }
+				new RegenSourceTask(this, new[] { buttonPatchMerged, buttonPatchTerraria, buttonPatchModLoader, buttonPatchTerraCustom, buttonSetupDebugging }
 					.Select(b => taskButtons[b]()).ToArray());
 
 			taskButtons[buttonSetup] = () =>
-				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchModLoader, buttonPatchTerraCustom/*, buttonSetupDebugging*/ }
+				new SetupTask(this, new[] { buttonDecompile, buttonPatchMerged, buttonPatchTerraria, buttonPatchModLoader, buttonPatchTerraCustom, buttonSetupDebugging }
 					.Select(b => taskButtons[b]()).ToArray());
 
-			menuItemWarnings.Checked = Program.SuppressWarnings.Get();
-			menuItemSingleDecompileThread.Checked = SingleDecompileThread.Get();
+			menuItemWarnings.Checked = Settings.Default.SuppressWarnings;
+			menuItemSingleDecompileThread.Checked = Settings.Default.SingleDecompileThread;
 
 			Closing += (sender, args) =>
 			{
@@ -94,20 +94,30 @@ namespace Terraria.TerraCustom.Setup
 
 		private void menuItemWarnings_Click(object sender, EventArgs e)
 		{
-			Program.SuppressWarnings.Set(menuItemWarnings.Checked);
+			Settings.Default.SuppressWarnings = menuItemWarnings.Checked;
+			Settings.Default.Save();
 		}
 
 		private void menuItemSingleDecompileThread_Click(object sender, EventArgs e)
 		{
-			SingleDecompileThread.Set(menuItemSingleDecompileThread.Checked);
+			Settings.Default.SingleDecompileThread = menuItemSingleDecompileThread.Checked;
+			Settings.Default.Save();
 		}
 
 		private void menuItemResetTimeStampOptmizations_Click(object sender, EventArgs e)
 		{
-			MergedDiffCutoff.Set(new DateTime(2015, 1, 1));
-			TerrariaDiffCutoff.Set(new DateTime(2015, 1, 1));
-			tModLoaderDiffCutoff.Set(new DateTime(2015, 1, 1));
-			TerraCustomDiffCutoff.Set(new DateTime(2015, 1, 1));
+			Settings.Default.MergedDiffCutoff = new DateTime(2015, 1, 1);
+			Settings.Default.TerrariaDiffCutoff = new DateTime(2015, 1, 1);
+			Settings.Default.tModLoaderDiffCutoff = new DateTime(2015, 1, 1);
+			Settings.Default.Save();
+		}
+
+		private void menuItemDecompileServer_Click(object sender, EventArgs e) {
+			RunTask(new DecompileTask(this, "src/decompiled_server", true));
+		}
+
+		private void menuItemFormatCode_Click(object sender, EventArgs e) {
+			RunTask(new FormatTask(this, FormatTask.tModLoaderFormat));
 		}
 
 		private void buttonTask_Click(object sender, EventArgs e)
@@ -135,7 +145,7 @@ namespace Terraria.TerraCustom.Setup
 				if (!task.ConfigurationDialog())
 					return;
 
-				if (!Program.SuppressWarnings.Get() && !task.StartupWarning())
+				if (!Settings.Default.SuppressWarnings && !task.StartupWarning())
 					return;
 
 				try
@@ -156,7 +166,7 @@ namespace Terraria.TerraCustom.Setup
 					return;
 				}
 
-				if ((task.Failed() || task.Warnings() && !Program.SuppressWarnings.Get()))
+				if ((task.Failed() || task.Warnings() && !Settings.Default.SuppressWarnings))
 					task.FinishedDialog();
 
 				Invoke(new Action(() =>
@@ -188,7 +198,7 @@ namespace Terraria.TerraCustom.Setup
 			}
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void buttonPatchTerraCustom_Click(object sender, EventArgs e)
 		{
 
 		}

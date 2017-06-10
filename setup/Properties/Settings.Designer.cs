@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Terraria.TerraCustom.Properties {
+namespace Terraria.ModLoader.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -86,24 +86,42 @@ namespace Terraria.TerraCustom.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2015-01-01")]
-        public global::System.DateTime TerraCustomDiffCutoff {
-            get {
-                return ((global::System.DateTime)(this["TerraCustomDiffCutoff"]));
-            }
-            set {
-                this["TerraCustomDiffCutoff"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2015-01-01")]
         public global::System.DateTime tModLoaderDiffCutoff {
             get {
                 return ((global::System.DateTime)(this["tModLoaderDiffCutoff"]));
             }
             set {
                 this["tModLoaderDiffCutoff"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.3.5.1")]
+        public string ClientVersion {
+            get {
+                return ((string)(this["ClientVersion"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.3.5.1")]
+        public string ServerVersion {
+            get {
+                return ((string)(this["ServerVersion"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2015-01-01")]
+        public global::System.DateTime TerraCustomDiffCutoff {
+            get {
+                return ((global::System.DateTime)(this["TerraCustomDiffCutoff"]));
+            }
+            set {
+                this["TerraCustomDiffCutoff"] = value;
             }
         }
     }
