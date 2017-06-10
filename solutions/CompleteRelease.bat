@@ -1,7 +1,7 @@
 :: After Pulling, Patching, and making sure the version number is changed in src, this bat will compile and create zips for all release.
 :: It will also create a zip for ExampleMod
 
-set version=v0.4
+set version=v0.5
 set exeFile=TerraCustom %version%.exe
 set destinationFolder=.\TerraCustom %version% Release
 
@@ -22,6 +22,7 @@ mkdir "%destinationFolder%\TerraCustom Linux %version%"
 
 :: Windows release
 copy ..\src\TerraCustom\bin\x86\WindowsRelease\Terraria.exe "%destinationFolder%\TerraCustom Windows %version%\%exeFile%" /y
+copy ReleaseExtras\README_Windows.txt "%destinationFolder%\TerraCustom Windows %version%\README.txt" /y
 
 call zipjs.bat zipDirItems -source "%destinationFolder%\TerraCustom Windows %version%" -destination "%destinationFolder%\TerraCustom Windows %version%.zip" -keep yes -force yes
 
@@ -31,6 +32,7 @@ copy ..\src\TerraCustom\bin\x86\MacRelease\Terraria.exe "%destinationFolder%\Ter
 copy ..\references\MP3Sharp.dll "%destinationFolder%\TerraCustom Mac %version%\MP3Sharp.dll" /y
 copy ..\references\Ionic.Zip.Reduced.dll "%destinationFolder%\TerraCustom Mac %version%\Ionic.Zip.Reduced.dll" /y
 copy ..\references\Mono.Cecil.dll "%destinationFolder%\TerraCustom Mac %version%\Mono.Cecil.dll" /y
+copy ReleaseExtras\README_Mac.txt "%destinationFolder%\TerraCustom Mac %version%\README.txt" /y
 
 call zipjs.bat zipDirItems -source "%destinationFolder%\TerraCustom Mac %version%" -destination "%destinationFolder%\TerraCustom Mac %version%.zip" -keep yes -force yes
 
@@ -40,6 +42,7 @@ copy ..\src\TerraCustom\bin\x86\LinuxRelease\Terraria.exe "%destinationFolder%\T
 copy ..\references\MP3Sharp.dll "%destinationFolder%\TerraCustom Linux %version%\MP3Sharp.dll" /y
 copy ..\references\Ionic.Zip.Reduced.dll "%destinationFolder%\TerraCustom Linux %version%\Ionic.Zip.Reduced.dll" /y
 copy ..\references\Mono.Cecil.dll "%destinationFolder%\TerraCustom Linux %version%\Mono.Cecil.dll" /y
+copy ReleaseExtras\README_Linux.txt "%destinationFolder%\TerraCustom Linux %version%\README.txt" /y
 
 call zipjs.bat zipDirItems -source "%destinationFolder%\TerraCustom Linux %version%" -destination "%destinationFolder%\TerraCustom Linux %version%.zip" -keep yes -force yes
 
@@ -47,11 +50,6 @@ call zipjs.bat zipDirItems -source "%destinationFolder%\TerraCustom Linux %versi
 rmdir "%destinationFolder%\TerraCustom Windows %version%" /S /Q
 rmdir "%destinationFolder%\TerraCustom Mac %version%" /S /Q
 rmdir "%destinationFolder%\TerraCustom Linux %version%" /S /Q
-
-:: Copy to public DropBox Folder
-copy "%destinationFolder%\TerraCustom Windows %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Windows %version%.zip"
-copy "%destinationFolder%\TerraCustom Mac %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Mac %version%.zip"
-copy "%destinationFolder%\TerraCustom Linux %version%.zip" "D:\Dropbox\Public\TerrariaModding\TerraCustomReleases\TerraCustom Linux %version%.zip"
 
 echo(
 echo(
