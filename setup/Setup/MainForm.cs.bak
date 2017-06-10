@@ -109,7 +109,6 @@ namespace Terraria.ModLoader.Setup
 			Settings.Default.MergedDiffCutoff = new DateTime(2015, 1, 1);
 			Settings.Default.TerrariaDiffCutoff = new DateTime(2015, 1, 1);
 			Settings.Default.tModLoaderDiffCutoff = new DateTime(2015, 1, 1);
-			Settings.Default.TerraCustomDiffCutoff = new DateTime(2015, 1, 1);
 			Settings.Default.Save();
 		}
 
@@ -197,6 +196,11 @@ namespace Terraria.ModLoader.Setup
 					if (closeOnCancel) Close();
 				}));
 			}
+		}
+
+		private void buttonPatchTerraCustom_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
