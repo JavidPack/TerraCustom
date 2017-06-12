@@ -1442,11 +1442,15 @@
  						int num2 = 0;
  						while ((float)num2 < num)
  						{
-@@ -7202,6 +_,46 @@
+@@ -7201,7 +_,49 @@
+ 									if (num3 >= 250)
  									{
  										num2--;
- 										WorldGen.Pyramid(num, num2);
-+										if (Main.setting.IsPyramid != 0) WorldGen.Pyramid(num, num2);
+-										WorldGen.Pyramid(num, num2);
++										if (Main.setting.IsPyramid != 0)
++										{
++											WorldGen.Pyramid(num, num2);
++										}
 +									}
 +								}
 +							}
@@ -2016,7 +2020,7 @@
  					{
  						if (Biomes<MahoganyTreeBiome>.Place(WorldGen.RandomWorldPoint((int)Main.worldSurface + 50, 50, 500, 50), structures))
  						{
-@@ -10569,15 +_,16 @@
+@@ -10569,15 +_,17 @@
  						}
  						num9++;
  					}
@@ -2024,7 +2028,8 @@
  					progress.Message = Lang.gen[76] + "..Corruption Pits";
  					progress.Set(0.4f);
 -					if (!WorldGen.crimson)
-+					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
++					// Additional check to make sure Corruption pits were desired.
++					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5 && ((int)Math.Ceiling(Main.maxTilesX * 0.00045 * Main.setting.CorruptionMultiplier) > 0))
  					{
  						int num10 = (int)((float)WorldGen.genRand.Next(1, 3) * num);
  						int num11 = 0;
