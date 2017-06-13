@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria\Program.cs
++++ src/TerraCustom\Terraria\Program.cs
+@@ -234,7 +_,7 @@
+ 			Program.LaunchParameters = Utils.ParseArguements(args);
+ 			if (Program.LaunchParameters.ContainsKey("-savedirectory"))
+ 			{
+-				Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
++				//Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
+ 			}
+ 			if (LaunchParameters.ContainsKey("-build"))
+ 			{
+

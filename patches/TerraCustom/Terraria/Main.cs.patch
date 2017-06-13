@@ -15,8 +15,8 @@
 +		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
 +		// Above: Revert SavePath and CloudFavoritesData back to vanilla
 +		// TerraCustom Start: TModLoaderSavePath tModLoader's SavePath, TerraCustomSavePath is for settings
-+		public static string TModLoaderSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : Platform.Current.GetStoragePath("Terraria/ModLoader");
-+		public static string TerraCustomSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : Platform.Current.GetStoragePath("Terraria/TerraCustom");
++		public static string TModLoaderSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader") : Platform.Current.GetStoragePath("Terraria/ModLoader");
++		public static string TerraCustomSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(Program.LaunchParameters["-savedirectory"], "TerraCustom") : Platform.Current.GetStoragePath("Terraria/TerraCustom");
 +		public static TerraCustom.Setting setting = new TerraCustom.Setting();
 +		public static TerraCustom.SettingSaver settingSaver = new TerraCustom.SettingSaver();
 +		public static int bgStylePreview = 1;
@@ -41,7 +41,7 @@
 +		public static string CloudPlayerPath = "players";
 +		// Above, revert to pre tModLoader paths
 +		public static string TModLoaderWorldPath = Path.Combine(Main.TModLoaderSavePath, "Worlds");
-+		public static string LeveledWorldPath = Main.SavePath.Substring(0, Main.SavePath.Length - 8) + "Terraria Leveled" + Path.DirectorySeparatorChar + "Worlds";
++		public static string LeveledWorldPath = Path.Combine(Main.SavePath, "Terraria Leveled", "Worlds");
 +		public static string SettingPath = Main.TerraCustomSavePath;
  		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
  		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
@@ -260,7 +260,7 @@
  					num111 = 2;
  				}
  				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
-+				drawVersion = drawVersion + Environment.NewLine + "jopojelly's TerraCustom v0.5.1"; // TODO, more accessable version string?
++				drawVersion = drawVersion + Environment.NewLine + "jopojelly's TerraCustom v0.5.1.1"; // TODO, more accessable version string?
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
