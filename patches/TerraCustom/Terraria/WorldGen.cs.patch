@@ -1375,6 +1375,15 @@
  							}
  							if (num20 > num24 - num25 && num20 < num24 + num25)
  							{
+@@ -6618,7 +_,7 @@
+ 						{
+ 							for (int num38 = 0; num38 < Main.maxTilesY - 50; num38++)
+ 							{
+-								if (Main.tile[num37, num38].active() && Main.tile[num37, num38].type == 31)
++								if (Main.tile[num37, num38].active() && Main.tile[num37, num38].type == 31 && Main.tile[num37, num38].frameX < 36) // Add check to prevent ebonstone around crimson hearts.
+ 								{
+ 									int num39 = num37 - 13;
+ 									int num40 = num37 + 13;
 @@ -6651,6 +_,7 @@
  						}
  						num19++;
@@ -1941,11 +1950,11 @@
  							WorldGen.PlaceTile(num, num2, 178, true, false, -1, style);
  						}
  					}
-@@ -10241,6 +_,7 @@
+@@ -10240,7 +_,6 @@
+ 								int num7 = 0;
  								int num8 = k;
  								num7 += num6 / 2;
- 								num7 = (WorldGen.crimson ? 1 : 0);
-+								// TODO fix shadow orbs to be correct
+-								num7 = (WorldGen.crimson ? 1 : 0);
  								num6 %= 2;
  								num8 -= num6;
  								int num9 = (int)(Main.tile[k, l].frameY / 18);
