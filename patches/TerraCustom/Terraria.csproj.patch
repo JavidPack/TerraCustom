@@ -8,7 +8,7 @@
      <Compile Include="Terraria.Localization\GameCulture.cs" />
      <Compile Include="Terraria.Localization\Language.cs" />
      <Compile Include="Terraria.Localization\LanguageChangeCallback.cs" />
-@@ -601,6 +_,10 @@
+@@ -603,6 +_,10 @@
      <Compile Include="Terraria.Social\ISocialModule.cs" />
      <Compile Include="Terraria.Social\SocialAPI.cs" />
      <Compile Include="Terraria.Social\SocialMode.cs" />
@@ -19,7 +19,7 @@
      <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
      <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
      <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
-@@ -705,6 +_,8 @@
+@@ -707,6 +_,8 @@
      <Compile Include="Terraria\RemoteClient.cs" />
      <Compile Include="Terraria\RemoteServer.cs" />
      <Compile Include="Terraria\ResolutionChangeEvent.cs" />
@@ -28,7 +28,7 @@
      <Compile Include="Terraria\Sign.cs" />
      <Compile Include="Terraria\Star.cs" />
      <Compile Include="Terraria\StrayMethods.cs" />
-@@ -815,6 +_,10 @@
+@@ -817,6 +_,10 @@
      <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
      <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
      <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
@@ -39,7 +39,7 @@
    </ItemGroup>
    <ItemGroup>
      <None Include="App.config">
-@@ -832,11 +_,11 @@
+@@ -838,11 +_,11 @@
  
  SET RELEASEFILE=""
  

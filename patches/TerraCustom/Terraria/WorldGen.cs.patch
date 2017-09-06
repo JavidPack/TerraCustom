@@ -1299,7 +1299,7 @@
 +						//return;
 +					}
 +					if ((!WorldGen.crimson || Main.setting.IsCorruption == 4) && Main.setting.IsCorruption != 5)
-+					{ 
++					{
 +					// Making the world evil -- corruption
  					progress.Message = Lang.gen[20].Value;
  					int num19 = 0;
