@@ -39,6 +39,15 @@
    </ItemGroup>
    <ItemGroup>
      <None Include="App.config">
+@@ -826,6 +_,8 @@
+     <EmbeddedResource Include="Terraria.Localization.Content.ru-RU.tModLoader.json" />
+     <EmbeddedResource Include="Terraria.Localization.Content.pt-BR.tModLoader.json" />
+     <EmbeddedResource Include="Terraria.Localization.Content.pl-PL.tModLoader.json" />
++    <EmbeddedResource Include="Terraria.Localization.Content.en-US.TerraCustom.json" />
++    <EmbeddedResource Include="Terraria.Localization.Content.es-ES.TerraCustom.json" />
+   </ItemGroup>
+   <ItemGroup />
+   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 @@ -838,11 +_,11 @@
  
  SET RELEASEFILE=""
@@ -54,4 +63,9 @@
  
  for /f "tokens=* delims=" %25%25i in ('"$(ProjectDir)..\..\setup\bin\setup" --steamdir') do set TERRARIASTEAMDIR=%25%25i
  
-
+@@ -861,4 +_,4 @@
+     <PreBuildEvent>
+     </PreBuildEvent>
+   </PropertyGroup>
+-</Project>
++</Project>

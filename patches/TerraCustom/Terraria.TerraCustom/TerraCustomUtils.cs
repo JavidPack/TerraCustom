@@ -1,11 +1,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 using System;
+using Terraria.Localization;
 
 namespace Terraria.TerraCustom
 {
 	class TerraCustomUtils
 	{
+		internal static string TCText(string key)
+		{
+			return Language.GetTextValue("TerraCustom." + key);
+		}
+
 		internal static Texture2D GetEmbeddedTexture2D(string name)
 		{
 			return Texture2D.FromStream(Main.instance.GraphicsDevice, Assembly.GetExecutingAssembly().GetManifestResourceStream(name));

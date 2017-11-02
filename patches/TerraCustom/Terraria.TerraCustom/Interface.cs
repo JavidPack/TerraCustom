@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.TerraCustom.UI;
+using static Terraria.TerraCustom.TerraCustomUtils;
 
 namespace Terraria.TerraCustom
 {
@@ -69,10 +70,10 @@ namespace Terraria.TerraCustom
 			new ActionLabel("Miscellaneous", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Miscellaneous; }),
 			new ActionLabel("Challenge options", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ChallengeOption; }),
 			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes1; }),
-			new ActionLabel("Traps", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
+			new ActionLabel(TCText("MainTraps"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
 			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
 			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
-			new ActionLabel("Chests", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
+			new ActionLabel(TCText("MainChests"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
 			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
 			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
