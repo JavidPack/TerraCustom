@@ -6,6 +6,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
+using Terraria.Localization;
 using Terraria.TerraCustom.UI;
 using static Terraria.TerraCustom.TerraCustomUtils;
 
@@ -59,23 +60,23 @@ namespace Terraria.TerraCustom
 
 		//static string seedlabel = "Set Seed: ";
 		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset All", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
+			new ActionLabel(TCText("ResetAll"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
 			//new ActionLabel(seedlabel, () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
-			new ActionLabel("Reload tModLoader mods", () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
-			new ActionLabel("Terrain", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
-			new ActionLabel("Ores", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
-			new ActionLabel("Ore Amount", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.OreAmount; }),
-			new ActionLabel("Graphic Styles", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.GraphicStyles; }),
-			new ActionLabel("Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Backgrounds; }),
-			new ActionLabel("Miscellaneous", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Miscellaneous; }),
-			new ActionLabel("Challenge options", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ChallengeOption; }),
-			new ActionLabel("Micro Biomes", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes1; }),
-			new ActionLabel(TCText("MainTraps"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
-			new ActionLabel("Various Spawns", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
-			new ActionLabel("Downed Bosses/Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
-			new ActionLabel(TCText("MainChests"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
-			new ActionLabel("Save/Load Settings", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
-			new ActionLabel("Debug", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
+			new ActionLabel(TCText("ReloadtModLoaderMods"), () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
+			new ActionLabel(TCText("Terrain"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
+			new ActionLabel(TCText("Ores"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
+			new ActionLabel(TCText("OreAmount"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.OreAmount; }),
+			new ActionLabel(TCText("GraphicStyles"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.GraphicStyles; }),
+			new ActionLabel(TCText("Backgrounds"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Backgrounds; }),
+			new ActionLabel(TCText("Miscellaneous"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Miscellaneous; }),
+			new ActionLabel(TCText("ChallengeOptions"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ChallengeOption; }),
+			new ActionLabel(TCText("MicroBiomes"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.MicroBiomes1; }),
+			new ActionLabel(TCText("Traps"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Traps; }),
+			new ActionLabel(TCText("VariousSpawns"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.VariousSpawns; }),
+			new ActionLabel(TCText("DownedBossesFoundNPCs"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.DownedFound; }),
+			new ActionLabel(TCText("Chests"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Chests; }),
+			new ActionLabel(TCText("SaveLoadSettings"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SettingsView; }),
+			new ActionLabel(TCText("Debug"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Debug; }),
 			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.ChooseWorldSize; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 20 }, // Back 
 			new ActionLabel(Lang.menu[28].Value, CreateClicked) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 }, // Generate
 			InfoMessageLabel, // message
@@ -101,69 +102,88 @@ namespace Terraria.TerraCustom
 		}
 
 		static TerraCustomMenuItem[] DownedFoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Downed Bosses", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
-			new ActionLabel("Found NPCs", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
+			new ActionLabel(TCText("DownedBosses"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Downed; }),
+			new ActionLabel(TCText("FoundNPCs"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Found; }),
 			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] BackgroundsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Surface Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SurfaceBackgrounds; }),
-			new ActionLabel("Underground Backgrounds", () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.UndergroundBackgrounds; }),
+			new ActionLabel(TCText("SurfaceBackgrounds"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.SurfaceBackgrounds; }),
+			new ActionLabel(TCText("UndergroundBackgrounds"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.UndergroundBackgrounds; }),
 			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static string[] CreateFoundYesNoArray(string value)
+		{
+			return new string[] { $"{TCText("Found")} {value}: {Language.GetTextValue("CLI.No")}", $"{TCText("Found")} {value}: {Language.GetTextValue("CLI.Yes")}" };
+		}
+
 		static TerraCustomMenuItem[] FoundMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", Setting.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] { "Found Stylist: No", "Found Stylist: Yes" }, () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Goblin : No", "Found Goblin : Yes" }, () => Main.setting.savedGoblin? 1 : 0, x => Main.setting.savedGoblin = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Wizard : No", "Found Wizard : Yes" }, () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Mechanic: No", "Found Mechanic: Yes" }, () => Main.setting.savedMechanic? 1 : 0, x => Main.setting.savedMechanic = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Angler : No", "Found Angler : Yes" }, () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Bartender : No", "Found Bartender : Yes" }, () => Main.setting.savedBartender? 1 : 0, x => Main.setting.savedBartender = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Found Tax Collector: No", "Found Tax Collector: Yes" }, () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
+			new ActionLabel(ResetMenu(TCText("FoundNPCs")), Setting.initializeFound) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.Stylist")), () => Main.setting.savedStylist ? 1 : 0, x => Main.setting.savedStylist = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.GoblinTinkerer")), () => Main.setting.savedGoblin? 1 : 0, x => Main.setting.savedGoblin = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.Wizard")), () => Main.setting.savedWizard? 1 : 0, x => Main.setting.savedWizard = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.Mechanic")), () => Main.setting.savedMechanic? 1 : 0, x => Main.setting.savedMechanic = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.Angler")), () => Main.setting.savedAngler? 1 : 0, x => Main.setting.savedAngler = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.DD2Bartender")), () => Main.setting.savedBartender? 1 : 0, x => Main.setting.savedBartender = x > 0 ? true : false),
+			new OptionLabel(CreateFoundYesNoArray(Language.GetTextValue("NPCName.TaxCollector")), () => Main.setting.savedTaxCollector? 1 : 0, x => Main.setting.savedTaxCollector = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static string[] CreateDownedYesNoArray(string value)
+		{
+			return new string[] { $"{TCText("Downed")} {value}: {Language.GetTextValue("CLI.No")}", $"{TCText("Downed")} {value}: {Language.GetTextValue("CLI.Yes")}" };
+		}
+
 		static TerraCustomMenuItem[] DownedMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Found NPC Settings", Setting.initializeDowned) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] {"Downed Slime King: No", "Downed Slime King: Yes"},() => Main.setting.downedSlimeKing ? 1 : 0, x => Main.setting.downedSlimeKing = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Queen Bee : No", "Downed Queen Bee : Yes"},() => Main.setting.downedQueenBee? 1 : 0,x =>  Main.setting.downedQueenBee = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Eye of Cthulu : No", "Downed Eye of Cthulu : Yes"},() => Main.setting.downedEyeOfCthulu? 1 : 0,x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Eater of Worlds / Brain of Cthulu: No", "Downed Eater of Worlds / Brain of Cthulu: Yes"},() => Main.setting.downedEaterBrain? 1 : 0,x =>  Main.setting.downedEaterBrain = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Skeletron : No", "Downed Skeletron : Yes"},() => Main.setting.downedSkeletron? 1 : 0,x => Main.setting.downedSkeletron  = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Twins: No", "Downed Twins: Yes"},() => Main.setting.downedTwins? 1 : 0,x => Main.setting.downedTwins = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Destroyer: No", "Downed Destroyer: Yes"},() => Main.setting.downedDestroyer? 1 : 0,x => Main.setting.downedDestroyer = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Skeletron Prime: No", "Downed Skeletron Prime: Yes"},() => Main.setting.downedSkeletronPrime? 1 : 0,x => Main.setting.downedSkeletronPrime = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Plantera: No", "Downed Plantera: Yes"},() => Main.setting.downedPlantera? 1 : 0,x => Main.setting.downedPlantera = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Golem: No", "Downed Golem: Yes"},() => Main.setting.downedGolem? 1 : 0,x => Main.setting.downedGolem = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Fishron : No", "Downed Fishron : Yes"},() => Main.setting.downedFishron? 1 : 0,x => Main.setting.downedFishron = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Lunatic Cultist: No", "Downed Lunatic Cultist: Yes"},() => Main.setting.downedAncientCultist? 1 : 0,x => Main.setting.downedAncientCultist = x > 0 ? true : false),
-			new OptionLabel(new string[] {"Downed Moonlord: No", "Downed Moonlord: Yes"},() => Main.setting.downedMoonlord? 1 : 0,x => Main.setting.downedMoonlord = x > 0 ? true : false),
+			new ActionLabel(ResetMenu(TCText("DownedBosses")), Setting.initializeDowned) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.KingSlime")),() => Main.setting.downedSlimeKing ? 1 : 0, x => Main.setting.downedSlimeKing = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.QueenBee")),() => Main.setting.downedQueenBee? 1 : 0,x =>  Main.setting.downedQueenBee = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.EyeofCthulhu")),() => Main.setting.downedEyeOfCthulu? 1 : 0,x => Main.setting.downedEyeOfCthulu = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.EaterofWorldsHead") + "/" + Language.GetTextValue("NPCName.BrainofCthulhu")),() => Main.setting.downedEaterBrain? 1 : 0,x =>  Main.setting.downedEaterBrain = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.SkeletronHead")),() => Main.setting.downedSkeletron? 1 : 0,x => Main.setting.downedSkeletron  = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("Enemies.TheTwins")),() => Main.setting.downedTwins? 1 : 0,x => Main.setting.downedTwins = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.TheDestroyer")),() => Main.setting.downedDestroyer? 1 : 0,x => Main.setting.downedDestroyer = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.SkeletronPrime")),() => Main.setting.downedSkeletronPrime? 1 : 0,x => Main.setting.downedSkeletronPrime = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.Plantera")),() => Main.setting.downedPlantera? 1 : 0,x => Main.setting.downedPlantera = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.Golem")),() => Main.setting.downedGolem? 1 : 0,x => Main.setting.downedGolem = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.DukeFishron")),() => Main.setting.downedFishron? 1 : 0,x => Main.setting.downedFishron = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.CultistBoss")),() => Main.setting.downedAncientCultist? 1 : 0,x => Main.setting.downedAncientCultist = x > 0 ? true : false),
+			new OptionLabel(CreateDownedYesNoArray(Language.GetTextValue("NPCName.MoonLordHead")),() => Main.setting.downedMoonlord? 1 : 0,x => Main.setting.downedMoonlord = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5].Value, () => { Main.menuMode = (int)MenuModes.DownedFound; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static string[] CreateDisabledEnabledArray(string value)
+		{
+			return new string[] { $"{value}: {Language.GetTextValue("GameUI.Disabled")}", $"{value}: {Language.GetTextValue("GameUI.Enabled")}" };
+		}
+
+		static string ResetMenu(string menu)
+		{
+			return $"{Language.GetTextValue("TerraCustom.Reset")} {menu} {Language.GetTextValue("LegacyMenu.14")}";
+		}
 
 		static TerraCustomMenuItem[] ChallengeOptionMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Challenge Settings", Setting.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] {"No tree: Disabled","No tree: Enabled"}, () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No dungeon: Disabled","No dungeon: Enabled"}, () => Main.setting.NoDungeon ? 1 : 0, x => Main.setting.NoDungeon = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No temple: Disabled","No temple: Enabled"}, () => Main.setting.NoTemple ? 1 : 0, x => Main.setting.NoTemple= x > 0 ? true :false),
-			new OptionLabel(new string[] {"No spider cave: Disabled","No spider cave: Enabled"}, () => Main.setting.NoSpiderCave ? 1 : 0, x => Main.setting.NoSpiderCave = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No hive: Disabled","No hive: Enabled"}, () => Main.setting.NoHive ? 1 : 0, x => Main.setting.NoHive = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No snow: Disabled","No snow: Enabled"}, () => Main.setting.NoSnow ? 1 : 0, x => Main.setting.NoSnow = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No jungle: Disabled","No jungle: Enabled"}, () => Main.setting.NoJungle ? 1 : 0, x => Main.setting.NoJungle = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No anthill: Disabled","No anthill: Enabled"}, () => Main.setting.NoAnthill ? 1 : 0, x => Main.setting.NoAnthill = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No beaches: Disabled","No beaches: Enabled"}, () => Main.setting.NoBeach ? 1 : 0, x => Main.setting.NoBeach = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No pot: Disabled","No pot: Enabled"}, () => Main.setting.NoPot ? 1 : 0, x => Main.setting.NoPot = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No chest: Disabled","No chest: Enabled"}, () => Main.setting.NoChest ? 1 : 0, x => Main.setting.NoChest = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No altar: Disabled","No altar: Enabled"}, () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No orb/heart: Disabled","No orb/heart: Enabled"}, () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
-			new OptionLabel(new string[] {"No underworld: Disabled","No underworld: Enabled"}, () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
+			new ActionLabel(ResetMenu(TCText("ChallengeOptions")), Setting.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoTree")), () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoDungeon")), () => Main.setting.NoDungeon ? 1 : 0, x => Main.setting.NoDungeon = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoTemple")), () => Main.setting.NoTemple ? 1 : 0, x => Main.setting.NoTemple= x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoSpiderCave")), () => Main.setting.NoSpiderCave ? 1 : 0, x => Main.setting.NoSpiderCave = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoHive")), () => Main.setting.NoHive ? 1 : 0, x => Main.setting.NoHive = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoSnow")), () => Main.setting.NoSnow ? 1 : 0, x => Main.setting.NoSnow = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoJungle")), () => Main.setting.NoJungle ? 1 : 0, x => Main.setting.NoJungle = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoAnthill")), () => Main.setting.NoAnthill ? 1 : 0, x => Main.setting.NoAnthill = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoBeaches")), () => Main.setting.NoBeach ? 1 : 0, x => Main.setting.NoBeach = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoPot")), () => Main.setting.NoPot ? 1 : 0, x => Main.setting.NoPot = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoChest")), () => Main.setting.NoChest ? 1 : 0, x => Main.setting.NoChest = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoAltar")), () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoOrbOrHeart")), () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoUnderworld")), () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Ore Settings", Setting.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Ore")), Setting.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("Also check 'Ore Amount' option to get both hardmode ores") {labelScale = 0.6f},
 			new OptionLabel(new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"}, () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
 			new OptionLabel(new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"}, () => Main.setting.IsIron, x => Main.setting.IsIron = x),
@@ -176,7 +196,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Miscellaneous Settings", Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Miscellaneous")), Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: (Both) Corruption plus Crimson chasms","Corruption/Crimson: (Both) Crimson plus Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
 			new OptionLabel(new string[] { "Force Corruption/Crimson Separate Sides: No","Force Corruption/Crimson Separate Sides: Yes"}, () => Main.setting.CrimsonCorruptionAvoidEachOther ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidEachOther = x > 0 ? true : false),
@@ -192,7 +212,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] VariousSpawnsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Various Spawns Amounts", Setting.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("VariousSpawns")), Setting.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount") {labelScale = 0.6f},
 			new SliderItem("Crystal Hearts:",10f,() => Main.setting.CrystalHeartMultiplier, x => Main.setting.CrystalHeartMultiplier = x,x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x)),
 			new SliderItem("Pre-Drop Meteor",100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
@@ -204,7 +224,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems1 = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Micro Biomes Amounts", Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("MicroBiomes")), Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
 			new SliderItem("Campsite:", 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
@@ -220,7 +240,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Micro Biomes Amounts", Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("MicroBiomes")), Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
 			new SliderItem("Gemstones (non-cave):", 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
 			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
@@ -231,7 +251,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] TrapsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Traps Amounts", Setting.initializeTrapsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Traps")), Setting.initializeTrapsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
 			new SliderItem("Additional Dart Traps:", 10f, () => Main.setting.AdditionalDartTrapMultiplier, x => Main.setting.AdditionalDartTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier))),
@@ -243,7 +263,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] TerrainMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Terrain", Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Terrain")), Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
 			new SliderItem("Surface Height Variance:", 10f,() => Main.setting.SurfaceTerrainHeightMultiplier,x => Main.setting.SurfaceTerrainHeightMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + (x == 0 ? " Flat" : "")),
 			new SliderItem("Surface Upper Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMax - .1f /*.1 to .17*/, x => Main.setting.SurfaceTerrainHeightMax = x + .1f > Main.setting.SurfaceTerrainHeightMin ? Main.setting.SurfaceTerrainHeightMin : x + .1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":"")),
@@ -260,7 +280,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Chests", Setting.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Chests")), Setting.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
 			new PlainLabel(ChestEstimateString),
 			new SliderItem("Biome Chest Sets:",10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
@@ -275,7 +295,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] OreAmountMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Ore Amount", Setting.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
+			new ActionLabel(ResetMenu(TCText("OreAmount")), Setting.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
 			new PlainLabel("setting 100% will generate default amount of ores") {labelScale = 0.6f},
 			new SliderItem("Copper/Tin:",5f,() => Main.setting.PercCopp, x => Main.setting.PercCopp = x, x => Math.Round((double)(Main.setting.PercCopp * 100f)) + "%"),
 			new SliderItem("Iron/Lead:",5f,() => Main.setting.PercIron, x => Main.setting.PercIron = x, x => Math.Round((double)(Main.setting.PercIron * 100f)) + "%"),
@@ -309,7 +329,7 @@ namespace Terraria.TerraCustom
 		};
 
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
-			new ActionLabel("Reset Debug Settings", Setting.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new ActionLabel(ResetMenu(TCText("Debug")), Setting.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { "Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
 			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
@@ -485,7 +505,7 @@ namespace Terraria.TerraCustom
 						clickableLabelScale[num21] = 0.73f;
 					}
 					int buttonIndex = 0;
-					clickableLabelText[buttonIndex] = "Reset Underground Background Settings";
+					clickableLabelText[buttonIndex] = ResetMenu(TCText("UndergroundBackgrounds"));
 					if (main.selectedMenu == 0)
 					{
 						Setting.initializeUGBGs();
@@ -602,7 +622,7 @@ namespace Terraria.TerraCustom
 			}
 			else if (Main.menuMode == (int)MenuModes.ResetAllSettings)
 			{
-				clickableLabelText[0] = "Are you sure you will reset all the settings?";
+				clickableLabelText[0] = TCText("AreYouSureResetAllSettings");
 				array[0] = true;
 				array4[1] = 20;
 				array4[2] = 20;
@@ -631,7 +651,7 @@ namespace Terraria.TerraCustom
 					clickableLabelScale[num47] = 0.73f;
 				}
 				int num48 = 0;
-				clickableLabelText[num48] = "Reset Graphic Styles";
+				clickableLabelText[num48] = ResetMenu(TCText("GraphicStyles"));
 				if (main.selectedMenu == 0)
 				{
 					Setting.initializeGraphic();
@@ -955,7 +975,7 @@ namespace Terraria.TerraCustom
 						clickableLabelScale[num49] = 0.73f;
 					}
 					int num50 = 0;
-					clickableLabelText[num50] = "Reset Background Settings";
+					clickableLabelText[num50] = ResetMenu(TCText("Backgrounds"));
 					if (main.selectedMenu == 0)
 					{
 						Setting.initializeBGs();

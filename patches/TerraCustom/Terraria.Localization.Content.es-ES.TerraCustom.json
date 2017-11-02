@@ -1,6 +1,8 @@
 ﻿{
 	"TerraCustom": {
-		"MainChests": "Chests Spanish",
-		"MainTraps": "Traps Spanish",
+		"Reset": "Reinicializar",
+
+		"ChallengeOptions": "Opciones de desafío",
+		"Chests": "Cofre",
 	}
 }

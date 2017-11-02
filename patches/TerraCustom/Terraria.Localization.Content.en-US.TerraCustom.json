@@ -1,6 +1,63 @@
 ﻿{
 	"TerraCustom": {
-		"MainChests": "Chests",
-		"MainTraps": "Traps",
+		// Tips:
+		// use vanilla translations: {$GameUI.Enabled} Disabled, CLI.Yes, etc
+		// use {0} etc to interpolate values
+
+		// Common
+		"Reset": "Reset",
+		// "Settings": "{$LegacyMenu.14}",
+
+		// Main Menu
+		"ResetAll": "Reset All",
+		"ReloadtModLoaderMods": "Reload tModLoader mods",
+		"Terrain": "Terrain",
+		"Ores": "Ores",
+		"OreAmount": "Ore Amount",
+		"GraphicStyles": "Graphic Styles",
+		"Backgrounds": "Backgrounds",
+		"Miscellaneous": "Miscellaneous",
+		"ChallengeOptions": "Challenge Options",
+		"MicroBiomes": "Micro Biomes",
+		"Traps": "Traps",
+		"VariousSpawns": "Various Spawns",
+		"DownedBossesFoundNPCs": "Downed Bosses/Found NPCs",
+		"Chests": "Chests",
+		"SaveLoadSettings": "Save/Load Settings",
+		"Debug": "Debug",
+		"AreYouSureResetAllSettings": "Are you sure you will reset all the settings?",
+
+
+		// Downed Found Menu
+		"DownedBosses": "Downed Bosses",
+		"FoundNPCs": "Found NPCs",
+		"Downed": "Downed",
+		"Found": "Found",
+
+		// Backgrounds Menu
+		"SurfaceBackgrounds": "Surface Backgrounds",
+		"UndergroundBackgrounds": "Underground Backgrounds",
+
+		// Challenge Option Menu
+		"NoTree": "No tree",
+		"NoDungeon": "No dungeon",
+		"NoTemple": "No temple",
+		"NoSpiderCave": "No spider cave",
+		"NoHive": "No hive",
+		"NoSnow": "No snow",
+		"NoJungle": "No jungle",
+		"NoAnthill": "No anthill",
+		"NoBeaches": "No beaches",
+		"NoPot": "No pot",
+		"NoChest": "No chest",
+		"NoAltar": "No altar",
+		"NoOrbOrHeart": "No orb/heart",
+		"NoUnderworld": "No underworld",
+
+		// Not used. Unless we need different order than Reset + noun + Settings?
+		//"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
+		//"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
+
+		// TODO others
 	}
 }
