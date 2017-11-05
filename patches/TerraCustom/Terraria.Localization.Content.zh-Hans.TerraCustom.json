@@ -1,0 +1,63 @@
+﻿{
+	"TerraCustom": {
+		// Tips:
+		// use vanilla translations: {$GameUI.Enabled} Disabled, CLI.Yes, etc
+		// use {0} etc to interpolate values
+
+		// Common
+		"Reset": "重置",
+		// "Settings": "{$LegacyMenu.14}",
+
+		// Main Menu
+		"ResetAll": "重置所有设置",
+		"ReloadtModLoaderMods": "重新载入插件",
+		"Terrain": "地形设置",
+		"Ores": "矿物种类",
+		"OreAmount": "矿物含量",
+		"GraphicStyles": "图形设置",
+		"Backgrounds": "地形背景",
+		"Miscellaneous": "其他参数",
+		"ChallengeOptions": "挑战设置",
+		"MicroBiomes": "微生态设置",
+		"Traps": "陷阱设置",
+		"VariousSpawns": "特殊生成",
+		"DownedBossesFoundNPCs": "已击败BOSS/已发现NPC",
+		"Chests": "宝箱设置",
+		"SaveLoadSettings": "保存/加载设置",
+		"Debug": "调试",
+		"AreYouSureResetAllSettings": "确定重置所有设置?",
+
+
+		// Downed Found Menu
+		"DownedBosses": "已击败BOSS",
+		"FoundNPCs": "已发现NPC",
+		"Downed": "已击败",
+		"Found": "已发现",
+
+		// Backgrounds Menu
+		"SurfaceBackgrounds": "地表环境背景",
+		"UndergroundBackgrounds": "地下环境背景",
+
+		// Challenge Option Menu
+		"NoTree": "没有树木",
+		"NoDungeon": "没有地牢",
+		"NoTemple": "没有蜥蜴神庙",
+		"NoSpiderCave": "没有蜘蛛洞穴",
+		"NoHive": "没有蜂巢",
+		"NoSnow": "没有雪地",
+		"NoJungle": "没有丛林",
+		"NoAnthill": "没有蚁穴",
+		"NoBeaches": "没有海洋",
+		"NoPot": "没有陶罐",
+		"NoChest": "没有宝箱",
+		"NoAltar": "没有血腥/恶魔祭坛",
+		"NoOrbOrHeart": "没有血腥心脏/暗影球",
+		"NoUnderworld": "没有地狱",
+
+		// Not used. Unless we need different order than Reset + noun + Settings?
+		//"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
+		//"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
+
+		// TODO others
+	}
+}
