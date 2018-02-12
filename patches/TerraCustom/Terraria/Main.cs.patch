@@ -30,7 +30,7 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
-@@ -1344,9 +_,13 @@
+@@ -1350,9 +_,13 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
  		public static string WorldPath = Path.Combine(Main.SavePath, "Worlds");
@@ -46,7 +46,7 @@
  		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
  		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
  		public static KeyboardState inputText;
-@@ -2061,11 +_,12 @@
+@@ -2067,11 +_,12 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
@@ -62,7 +62,7 @@
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
  		public static int menuMode = Interface.loadModsID;
-@@ -2919,9 +_,12 @@
+@@ -2925,9 +_,12 @@
  			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
  			Main.Configuration.Put("Zoom", Main.GameZoomTarget);
  			Main.Configuration.Put("UIScale", Main._uiScaleWanted);
@@ -75,7 +75,7 @@
  		}
  
  		protected void CheckBunny()
-@@ -3040,7 +_,7 @@
+@@ -3046,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
  			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
@@ -84,7 +84,7 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -3242,7 +_,7 @@
+@@ -3248,7 +_,7 @@
  					Main.cMapAlphaDown
  				};
  			}
@@ -93,7 +93,7 @@
  			PlayerInput.Load();
  			if (num2 < 165)
  			{
-@@ -3543,7 +_,8 @@
+@@ -3549,7 +_,8 @@
  				}
  				text += c2;
  			}
@@ -103,7 +103,7 @@
  			string path = string.Concat(new object[]
  				{
  					text2,
-@@ -4807,13 +_,14 @@
+@@ -4813,13 +_,14 @@
  #if CLIENT
  			Main.graphics = new GraphicsDeviceManager((Game)this);
  			base.Content.RootDirectory = "Content";
@@ -119,7 +119,7 @@
  			Platform.Current.SetWindowUnicodeTitle(base.Window, Main._cachedTitle);
  #endif
  		}
-@@ -8093,8 +_,16 @@
+@@ -8099,8 +_,16 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -136,7 +136,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -43406,7 +_,8 @@
+@@ -43432,7 +_,8 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -146,7 +146,7 @@
  		{
  			Main.SaveSettings();
  #if CLIENT
-@@ -43659,13 +_,13 @@
+@@ -43685,13 +_,13 @@
  			{
  				Main.ActiveWorldFileData.SetSeed(text);
  			}
@@ -163,7 +163,7 @@
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
  			if (Main.UseSeedUI)
-@@ -43673,7 +_,7 @@
+@@ -43699,7 +_,7 @@
  				Main.menuMode = 5000;
  				return;
  			}
@@ -172,7 +172,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -43839,6 +_,10 @@
+@@ -43865,6 +_,10 @@
  			if (Main.menuMode == -1)
  			{
  				Main.menuMode = 0;
@@ -183,7 +183,7 @@
  			}
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -45005,7 +_,7 @@
+@@ -45031,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -192,7 +192,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -45037,27 +_,36 @@
+@@ -45063,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
@@ -229,7 +229,7 @@
  						}
  						Main.clrInput();
  					}
-@@ -45108,14 +_,14 @@
+@@ -45134,14 +_,14 @@
  						num17++;
  						Main.clrInput();
  					}
@@ -248,7 +248,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -46457,6 +_,7 @@
+@@ -46483,6 +_,7 @@
  					}
  					else
  					{
@@ -256,10 +256,10 @@
  						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  					}
  				}
-@@ -47344,6 +_,7 @@
- 					num111 = 2;
- 				}
- 				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName;
+@@ -47372,6 +_,7 @@
+ 				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
+ 				string patreonShortURL = @"patreon.com/tModLoader";
+ 				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + supportMessage;
 +				drawVersion = drawVersion + Environment.NewLine + "jopojelly's TerraCustom v0.5.2"; // TODO, more accessable version string?
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;

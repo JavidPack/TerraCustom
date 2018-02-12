@@ -7,6 +7,6 @@
 -				Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
 +				//Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
  			}
+ 			ErrorLogger.ClearLogs();
  			if (LaunchParameters.ContainsKey("-build"))
- 			{
 

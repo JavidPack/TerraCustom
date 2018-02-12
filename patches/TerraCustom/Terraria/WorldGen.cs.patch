@@ -2123,16 +2123,16 @@
  					int num5;
  					for (int j = num - num4; j < num; j++)
  					{
-@@ -13590,7 +_,7 @@
+@@ -13602,7 +_,7 @@
  			{
  				NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[15].Key, new object[0]), new Color(50, 255, 130), -1);
  			}
 -			AchievementsHelper.NotifyProgressionEvent(9);
 +			//AchievementsHelper.NotifyProgressionEvent(9);
- 			if (Main.netMode == 2)
- 			{
- 				Netplay.ResetSections();
-@@ -13803,7 +_,7 @@
+ 			}));
+ 			WorldHooks.ModifyHardmodeTasks(hardmodetasks);
+ 			foreach (GenPass task in hardmodetasks)
+@@ -13821,7 +_,7 @@
  			return false;
  		}
  
@@ -2141,7 +2141,7 @@
  		{
  			if (x < 10 || x > Main.maxTilesX - 10)
  			{
-@@ -13824,7 +_,7 @@
+@@ -13842,7 +_,7 @@
  				}
  			}
  			short num = 0;
@@ -2150,7 +2150,7 @@
  			{
  				num += 36;
  			}
-@@ -13876,7 +_,7 @@
+@@ -13894,7 +_,7 @@
  					}
  				}
  			}
@@ -2159,7 +2159,7 @@
  			int num5 = 0;
  			while ((float)num5 < 200f * num4)
  			{
-@@ -15059,8 +_,10 @@
+@@ -15077,8 +_,10 @@
  
  		public static void makeTemple(int x, int y)
  		{
@@ -2172,7 +2172,7 @@
  			int num2 = WorldGen.genRand.Next((int)(num * 10f), (int)(num * 16f));
  			int num3 = 1;
  			if (WorldGen.genRand.Next(2) == 0)
-@@ -15830,6 +_,7 @@
+@@ -15848,6 +_,7 @@
  			int num2 = WorldGen.tRooms;
  			float num3 = (float)num2 * 1.9f;
  			num3 *= 1f + (float)WorldGen.genRand.Next(-15, 16) * 0.01f;
@@ -2180,7 +2180,7 @@
  			int num4 = 0;
  			while (num3 > 0f)
  			{
-@@ -15858,7 +_,7 @@
+@@ -15876,7 +_,7 @@
  				}
  			}
  			Main.tileSolid[232] = false;
@@ -2189,7 +2189,7 @@
  			num7 *= 1f + (float)WorldGen.genRand.Next(-15, 16) * 0.01f;
  			int contain = 1293;
  			num4 = 0;
-@@ -16012,13 +_,17 @@
+@@ -16030,13 +_,17 @@
  			return false;
  		}
  
@@ -2210,7 +2210,7 @@
  			{
  				case 0:
  					num2 = 41;
-@@ -16045,7 +_,7 @@
+@@ -16063,7 +_,7 @@
  			WorldGen.dyStrength1 = (double)WorldGen.genRand.Next(20, 25);
  			WorldGen.dxStrength2 = (double)WorldGen.genRand.Next(35, 50);
  			WorldGen.dyStrength2 = (double)WorldGen.genRand.Next(10, 15);
@@ -2219,7 +2219,7 @@
  			num4 += (float)WorldGen.genRand.Next(0, (int)(num4 / 3f));
  			float num5 = num4;
  			int num6 = 5;
-@@ -16072,6 +_,7 @@
+@@ -16090,6 +_,7 @@
  						(int)((num5 - num4) / num5 * 60f),
  						"%"
  					});
@@ -2227,7 +2227,7 @@
  				if (num6 > 0)
  				{
  					num6--;
-@@ -16490,7 +_,7 @@
+@@ -16508,7 +_,7 @@
  								float num57 = (float)Math.Abs(num53 - num55);
  								float num58 = (float)Math.Abs(num54 - num56);
  								double num59 = Math.Sqrt((double)(num57 * num57 + num58 * num58));
@@ -2236,7 +2236,7 @@
  								{
  									WorldGen.Spread.WallDungeon(num55, num56, array[num51]);
  								}
-@@ -16614,7 +_,12 @@
+@@ -16632,7 +_,12 @@
  					}
  				}
  			}
@@ -2250,7 +2250,7 @@
  			{
  				bool flag5 = false;
  				while (!flag5)
-@@ -16653,9 +_,23 @@
+@@ -16671,9 +_,23 @@
  							style2 = 27;
  							contain = 1572;
  						}
@@ -2274,7 +2274,7 @@
  			}
  			int[] array2 = new int[3];
  			array2[0] = WorldGen.genRand.Next(9, 13);
-@@ -16920,6 +_,7 @@
+@@ -16938,6 +_,7 @@
  					failCount = 0;
  				}
  			}
@@ -2282,7 +2282,7 @@
  		}
  
  		private static void MakeDungeon_Lights(ushort tileType, ref int failCount, int failMax, ref int numAdd, int[] roomWall)
-@@ -18347,7 +_,7 @@
+@@ -18365,7 +_,7 @@
  					flag9 = false;
  					for (int num4 = i; num4 < i + num3; num4++)
  					{
@@ -2291,7 +2291,7 @@
  						{
  							if (flag9)
  							{
-@@ -19658,10 +_,12 @@
+@@ -19676,10 +_,12 @@
  									int stack = WorldGen.genRand.Next(8) + 3;
  									if (num7 == 0)
  									{
@@ -2304,7 +2304,7 @@
  										Main.chest[num4].item[num5].SetDefaults(WorldGen.ironBar, false);
  									}
  									Main.chest[num4].item[num5].stack = stack;
-@@ -20049,10 +_,12 @@
+@@ -20067,10 +_,12 @@
  									int stack14 = WorldGen.genRand.Next(8) + 3;
  									if (num18 == 0)
  									{
@@ -2317,7 +2317,7 @@
  										Main.chest[num4].item[num5].SetDefaults(WorldGen.silverBar, false);
  									}
  									Main.chest[num4].item[num5].stack = stack14;
-@@ -20234,6 +_,7 @@
+@@ -20252,6 +_,7 @@
  									}
  									if (num25 == 1)
  									{
@@ -2325,7 +2325,7 @@
  										Main.chest[num4].item[num5].SetDefaults(WorldGen.goldBar, false);
  									}
  									Main.chest[num4].item[num5].stack = stack21;
-@@ -26701,8 +_,9 @@
+@@ -26719,8 +_,9 @@
  			}
  		}
  
@@ -2336,7 +2336,7 @@
  			if (Main.netMode == 1)
  			{
  				return;
-@@ -26719,9 +_,10 @@
+@@ -26737,9 +_,10 @@
  			{
  				return;
  			}
@@ -2348,7 +2348,7 @@
  			int num4 = 1 - num;
  			num3 = num3 * 310f - (float)(85 * num);
  			num3 *= 0.85f;
-@@ -26751,6 +_,11 @@
+@@ -26769,6 +_,11 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num5].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier1;
@@ -2360,7 +2360,7 @@
  				num3 *= 1.05f;
  			}
  			else if (num == 1)
-@@ -26778,6 +_,11 @@
+@@ -26796,6 +_,11 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num6].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier2;
@@ -2372,7 +2372,7 @@
  			}
  			else
  			{
-@@ -26804,6 +_,11 @@
+@@ -26822,6 +_,11 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num7].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier3;
@@ -2384,7 +2384,7 @@
  			}
  			int num8 = 0;
  			while ((float)num8 < num3)
-@@ -26824,7 +_,10 @@
+@@ -26842,7 +_,10 @@
  			}
  			int num10 = WorldGen.genRand.Next(3);
  			int num11 = 0;
@@ -2396,7 +2396,7 @@
  			{
  				int num12 = WorldGen.genRand.Next(100, Main.maxTilesX - 100);
  				int num13 = WorldGen.genRand.Next((int)Main.rockLayer + 50, Main.maxTilesY - 300);
-@@ -26853,16 +_,17 @@
+@@ -26871,16 +_,17 @@
  					break;
  				}
  			}
@@ -2416,7 +2416,7 @@
  		}
  
  		public static void Check3x1(int i, int j, int type)
-@@ -27149,7 +_,7 @@
+@@ -27167,7 +_,7 @@
  				{
  					if (!WorldGen.noTileActions && !WorldGen.IsGeneratingHardMode)
  					{
@@ -2425,7 +2425,7 @@
  					}
  				}
  				else if (type == 298)
-@@ -31137,6 +_,7 @@
+@@ -31155,6 +_,7 @@
  
  		public static bool PlacePot(int x, int y, ushort type = 28, int style = 0)
  		{
@@ -2433,7 +2433,7 @@
  			bool flag = true;
  			for (int i = x; i < x + 2; i++)
  			{
-@@ -34164,6 +_,7 @@
+@@ -34182,6 +_,7 @@
  					}
  					else if (type == 14 || type == 26 || type == 86 || type == 87 || TileLoader.IsDresser(type) || type == 89 || type == 114 || type == 186 || type == 187 || type == 215 || type == 217 || type == 218 || type == 377)
  					{
@@ -2441,7 +2441,7 @@
  						WorldGen.Place3x2(i, j, (ushort)type, style);
  						WorldGen.SquareTileFrame(i, j, true);
  					}
-@@ -44074,7 +_,7 @@
+@@ -44092,7 +_,7 @@
  		{
  			int crimDir = 1;
  			WorldGen.heartCount = 0;
@@ -2450,7 +2450,7 @@
  			int num = j;
  			if ((double)num > Main.worldSurface)
  			{
-@@ -44302,7 +_,7 @@
+@@ -44320,7 +_,7 @@
  			}
  			for (int num35 = 0; num35 < WorldGen.heartCount; num35++)
  			{
@@ -2459,7 +2459,7 @@
  			}
  			int num36 = Main.maxTilesX;
  			int num37 = 0;
-@@ -44600,10 +_,10 @@
+@@ -44618,10 +_,10 @@
  				}
  				if (num <= 0f)
  				{
@@ -2472,7 +2472,7 @@
  					}
  					else if (!flag3)
  					{
-@@ -44632,7 +_,14 @@
+@@ -44650,7 +_,14 @@
  							}
  							if ((double)num10 > Main.worldSurface)
  							{
@@ -2488,7 +2488,7 @@
  								if (Main.tile[num9, num10].type == 26)
  								{
  									flag4 = true;
-@@ -44828,7 +_,7 @@
+@@ -44846,7 +_,7 @@
  		public static void GERunner(int i, int j, float speedX = 0f, float speedY = 0f, bool good = true)
  		{
  			int num = WorldGen.genRand.Next(200, 250);
