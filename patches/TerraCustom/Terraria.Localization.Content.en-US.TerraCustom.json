@@ -3,10 +3,18 @@
 		// Tips:
 		// use vanilla translations: {$GameUI.Enabled} Disabled, CLI.Yes, etc
 		// use {0} etc to interpolate values
+		// Not used. Unless we need different order than Reset + noun + Settings?
+		//"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
+		//"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
 
 		// Common
 		"Reset": "Reset",
+		"Both": "Both",
 		// "Settings": "{$LegacyMenu.14}",
+		
+		// Choose world size Menu
+		"KeepPreviousCustomSize": "Keep Previous Custom Size",
+		"LoadAutosavedConfig": "Load Autosaved Config",
 
 		// Main Menu
 		"ResetAll": "Reset All",
@@ -27,16 +35,88 @@
 		"Debug": "Debug",
 		"AreYouSureResetAllSettings": "Are you sure you will reset all the settings?",
 
+		// Terrain Menu
+		"Use100ForDefaultBehaviorNote": "set to 100% for default behavior",
+		"SurfaceHeightVariance": "Surface Height Variance",
+		"SurfaceUpperLimit": "Surface Upper Limit",
+		"SurfaceLowerLimit": "Surface Lower Limit",
+		"BypassSpawnAreaFlatness": "Bypass Spawn Area Flatness",
+		"BeachSize": "Beach Size",
+		"DungeonSize": "Dungeon Size",
+		"TempleSize": "Temple Size",
+		"SurfaceTunnels": "Surface Tunnels",
+		"Lakes": "Lakes",
+		"WorldWidth": "World Width",
+		"WorldHeight": "World Height",
 
-		// Downed Found Menu
-		"DownedBosses": "Downed Bosses",
-		"FoundNPCs": "Found NPCs",
-		"Downed": "Downed",
-		"Found": "Found",
+		// Ores Menu
+		"AlsoCheckOreAmountNote": "Also check 'Ore Amount' option to get both hardmode ores",
+		
+		// OreAmount Menu
+		"Setting100ForDefaultAmountOfOresNote": "setting 100% will generate default amount of ores",
+		"OptionToGenerateAlternateHardmodeOres": "Option to generate alternate hardmode ores in the beginning",
+		"GenerateNone": "Generate none",
+		"GenerateLittle": "Generate a little",
+		"GenerateMedium": "Generate medium amount",
+		"GenerateLot": "Generate a lot",
+		"SameAmountAsSmashingXAltars": "(Same amount as smashing {0} altars)",
+		"PreSmashAltarsGeneratesBothSetsOfOres": "PreSmash Altars generates both sets of ores",
+		"PreSmashAltarsPreventRandomPatchSpawn": "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn",
+
+		// GraphicStyles Menu --- TODO: Rewrite these menus so I can localize them
+		"MoonStyle": "Moon Style",
+		"Tree Style Far Left": "Tree Style Far Left",
+		"Tree Style Left": "Tree Style Left",
+		"Tree Style Right": "Tree Style Right",
+		"Tree Style Far Right": "Tree Style Far Right",
+		"Dungeon Color": "Dungeon Color",
+		"Moss Color Left": "Moss Color Left",
+		"Moss Color Middle": "Moss Color Middle",
+		"Moss Color Right": "Moss Color Right",
+		"Jungle Shrines": "Jungle Shrines",
+		"Iridescent Bricks": "Iridescent Bricks",
+		"Mudstone Blocks": "Mudstone Blocks",
+		"Rich Mahogany": "Rich Mahogany",
+		"Tin Brick": "Tin Brick",
+		"Gold Brick": "Gold Brick",
+		"Mix": "Mix",
 
 		// Backgrounds Menu
 		"SurfaceBackgrounds": "Surface Backgrounds",
 		"UndergroundBackgrounds": "Underground Backgrounds",
+
+		// SurfaceBackgrounds Menu
+		"ForestBackground": "Forest Background",
+		"CorruptBackground": "Corrupt Background",
+		"JungleBackground": "Jungle Background",
+		"SnowBackground": "Snow Background",
+		"HallowBackground": "Hallow Background",
+		"CrimsonBackground": "Crimson Background",
+		"DesertBackground": "Desert Background",
+		"OceanBackground": "Ocean Background",
+		
+		// UnderBackgrounds Menu
+		"IceBackground": "Ice Background",
+		"HellBackground": "Hell Background",
+		"JungleBackground": "Jungle Background",
+		"CaveBackgroundFarLeft": "Cave Background Far Left",
+		"CaveBackgroundLeft": "Cave Background Left",
+		"CaveBackgroundMiddle": "Cave Background Middle",
+		"CaveBackgroundRight": "Cave Background Right",
+		"CaveBackgroundFarRight": "Cave Background Far Right",
+
+		// Miscellaneous Menu
+		"CorruptionCrimson": "Corruption/Crimson",
+		"ForceCorruptionCrimsonAvoidJungleSide": "Force Corruption/Crimson Avoid Jungle Side",
+		"ForceCorruptionCrimsonSeparateSides": "Force Corruption/Crimson Separate Sides",
+		"CorruptionBiomes": "Corruption Biomes",
+		"CrimsonBiomes": "Crimson Biomes",
+		"DungeonSide": "Dungeon Side",
+		"Hardmode": "Hardmode",
+		"SpawnHardmodeStripesIfHardmode": "Spawn Hardmode stripes(if Hardmode is Yes)",
+		"Pyramids": "Pyramids",
+		"GiantTrees": "Giant Trees",
+		"ForceEnchantedSwordShrineReal": "Force Enchanted Sword Shrine Real",
 
 		// Challenge Option Menu
 		"NoTree": "No tree",
@@ -53,11 +133,67 @@
 		"NoAltar": "No altar",
 		"NoOrbOrHeart": "No orb/heart",
 		"NoUnderworld": "No underworld",
+		
+		// MicroBiomes Menu
+		"Setting100ForDefaultAmountBiomesNote": "setting 100% will generate default amount of biomes",
+		"EnchantedSword": "Enchanted Sword",
+		"Campsite": "Campsite",
+		"ThinIce": "Thin Ice",
+		"SkyIslands": "Sky Islands",
+		"MinecartTracks": "Minecart Tracks",
+		"SpiderCaves": "Spider Caves",
+		"GraniteCaves": "Granite Caves",
+		"MarbleCaves": "Marble Caves",
+		"UndergroundCabins": "Underground Cabins",
+		"GemstonesNonCave": "Gemstones(non-cave)",
+		"GemstoneCaves": "Gemstone Caves",
+		"GemstoneCaveSize": "Gemstone Cave Size",
+		"Hives": "Hives",
 
-		// Not used. Unless we need different order than Reset + noun + Settings?
-		//"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
-		//"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
+		// Traps Menu
+		"MiningExplosiveDetonator": "Mining Explosive(Detonator)",
+		"TrapsDartExplosiveBoulder": "Traps(Dart,Explosive,Boulder)",
+		"AdditionalDartTraps": "Additional Dart Traps",
+		"AdditionalBoulderTraps": "Additional Boulder Traps",
+		"AdditionalExplosiveTraps": "Additional Explosive Traps",
+		"AdditionalGeyserTraps": "Additional Geyser Traps",
+		"TempleTraps": "Temple Traps",
 
-		// TODO others
+		// VariousSpawns Menu
+		"Setting100ForDefaultAmountNote": "setting 100% will generate default amount",
+		"CrystalHearts": "Crystal Hearts",
+		"PreDropMeteor": "Pre-Drop Meteor",
+		"TreeLowerBound": "Tree Lower Bound",
+		"TreeUpperBound": "Tree Upper Bound",
+		"MushroomBiomes": "Mushroom Biomes",
+		"Statues": "Statues",
+
+		// Downed Found Menu
+		"DownedBosses": "Downed Bosses",
+		"FoundNPCs": "Found NPCs",
+		"Downed": "Downed",
+		"Found": "Found",
+
+		// Chest Menu
+		"EsimatedXChests": "Esimated {0} chests.",
+		"BiomeChestSets": "Biome Chest Sets",
+		"Pots": "Pots",
+		"JungleShrines": "Jungle Shrines",
+		"LivingMahoganyTrees": "Living Mahogany Trees",
+		"WaterChests": "Water Chests",
+		"SurfaceChests": "Surface Chests",
+		"TempleChests": "Temple Chests",
+		"ShadowChests": "Shadow Chests",
+
+		// SaveLoadSettings Menu
+		"SavedSetings": "Saved Setings",
+		"EnableThisList": "Enable this List",
+		"DeleteThisList": "Delete this List",
+		"SaveCurrentSettingsAsNew": "Save Current Settings as New",
+		"EnterSettingsName": "Enter Settings name",
+
+		// Debug Menu
+		"SaveWorldAfterEachStep": "Save World After Each Step",
+		"SaveWorldIntModLoaderFolder": "Save World in tModLoader Folder",
 	}
 }

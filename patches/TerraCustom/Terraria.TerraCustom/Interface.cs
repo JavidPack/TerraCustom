@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -182,160 +183,186 @@ namespace Terraria.TerraCustom
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static string[] CreateABRandomBothArray(string a, string b)
+		{
+			return new string[] { $"{a}/{b}: {b}", $"{a}/{b}: {a}", $"{a}/{b}: {Language.GetTextValue("CLI.Random")}", $"{a}/{b}: {TCText("Both")}" };
+		}
+
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Ore")), Setting.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("Also check 'Ore Amount' option to get both hardmode ores") {labelScale = 0.6f},
-			new OptionLabel(new string[] { "Copper/Tin: Tin", "Copper/Tin: Copper", "Copper/Tin: Random", "Copper/Tin: Both"}, () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
-			new OptionLabel(new string[] { "Iron/Lead: Lead", "Iron/Lead: Iron", "Iron/Lead: Random", "Iron/Lead: Both"}, () => Main.setting.IsIron, x => Main.setting.IsIron = x),
-			new OptionLabel(new string[] { "Silver/Tungsten: Tungsten","Silver/Tungsten: Silver","Silver/Tungsten: Random","Silver/Tungsten: Both"}, () => Main.setting.IsSilver, x => Main.setting.IsSilver = x),
-			new OptionLabel(new string[] { "Gold/Platinum: Platinum", "Gold/Platinum: Gold","Gold/Platinum: Random","Gold/Platinum: Both"}, () => Main.setting.IsGold, x => Main.setting.IsGold = x),
-			new OptionLabel(new string[] { "Cobalt/Palladium: Palladium","Cobalt/Palladium: Cobalt", "Cobalt/Palladium: Random"}, () => Main.setting.IsCobalt, x => Main.setting.IsCobalt = x),
-			new OptionLabel(new string[] { "Mythril/Orichalcum: Orichalcum","Mythril/Orichalcum: Mythril","Mythril/Orichalcum: Random"}, () => Main.setting.IsMythril, x => Main.setting.IsMythril = x),
-			new OptionLabel(new string[] { "Adamantite/Titanium: Titanium","Adamantite/Titanium: Adamantite","Adamantite/Titanium: Random"}, () => Main.setting.IsAdaman, x => Main.setting.IsAdaman = x),
+			new PlainLabel(TCText("AlsoCheckOreAmountNote")) {labelScale = 0.6f},
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.CopperOre), Lang.GetItemNameValue(ItemID.TinOre)), () => Main.setting.IsCopper, x => Main.setting.IsCopper = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.IronOre), Lang.GetItemNameValue(ItemID.LeadOre)), () => Main.setting.IsIron, x => Main.setting.IsIron = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.SilverOre), Lang.GetItemNameValue(ItemID.TungstenOre)), () => Main.setting.IsSilver, x => Main.setting.IsSilver = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.GoldOre), Lang.GetItemNameValue(ItemID.PlatinumOre)), () => Main.setting.IsGold, x => Main.setting.IsGold = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.CobaltOre), Lang.GetItemNameValue(ItemID.PalladiumOre)), () => Main.setting.IsCobalt, x => Main.setting.IsCobalt = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.MythrilOre), Lang.GetItemNameValue(ItemID.OrichalcumOre)), () => Main.setting.IsMythril, x => Main.setting.IsMythril = x),
+			new OptionLabel(CreateABRandomBothArray(Lang.GetItemNameValue(ItemID.AdamantiteOre), Lang.GetItemNameValue(ItemID.TitaniumOre)), () => Main.setting.IsAdaman, x => Main.setting.IsAdaman = x),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
+		static string[] CreateNoYesArray(string value)
+		{
+			return new string[] { $"{value}: {Language.GetTextValue("CLI.No")}", $"{value}: {Language.GetTextValue("CLI.Yes")}" };
+		}
+
+		static string[] CreateNoYesRandomArray(string value)
+		{
+			return new string[] { $"{value}: {Language.GetTextValue("CLI.No")}", $"{value}: {Language.GetTextValue("CLI.Yes")}", $"{value}: {Language.GetTextValue("CLI.Random")}" };
+		}
+
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Miscellaneous")), Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] { "Corruption/Crimson: Random","Corruption/Crimson: Corruption","Corruption/Crimson: Crimson","Corruption/Crimson: (Both) Corruption plus Crimson chasms","Corruption/Crimson: (Both) Crimson plus Corruption chasms", "Corruption/Crimson: None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
-			new OptionLabel(new string[] { "Force Corruption/Crimson Avoid Jungle Side: No","Force Corruption/Crimson Avoid Jungle Side: Yes"}, () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Force Corruption/Crimson Separate Sides: No","Force Corruption/Crimson Separate Sides: Yes"}, () => Main.setting.CrimsonCorruptionAvoidEachOther ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidEachOther = x > 0 ? true : false),
-			new SliderItem("Corruption Biomes:", 5f, () => Main.setting.CorruptionMultiplier, x => Main.setting.CorruptionMultiplier = x, x => (Main.setting.IsCorruption == 0 || Main.setting.IsCorruption == 1 || Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4 ? Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling(Main.maxTilesX * 0.00045 * x) : "Disabled")),
-			new SliderItem("Crimson Biomes:", 5f, () => Main.setting.CrimsonMultiplier, x => Main.setting.CrimsonMultiplier = x, x => (Main.setting.IsCorruption == 0 || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4 ? Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling(Main.maxTilesX * 0.00045 * x) : "Disabled")),
-			new OptionLabel(new string[] { "Dungeon Side: Random","Dungeon Side: Left","Dungeon Side: Right"}, () => Main.setting.DungeonSide, x => Main.setting.DungeonSide = x),
-			new OptionLabel(new string[] { "Hardmode: No","Hardmode: Yes"}, () => Main.hardMode ? 1 : 0, x => Main.hardMode = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Spawn Hardmode stripes (if Hardmode is Yes): No","Spawn Hardmode stripes (if Hardmode is Yes): Yes"}, () => Main.setting.HardmodeStripes ? 1 : 0, x => Main.setting.HardmodeStripes = x > 0 ? true : false),
-			new OptionLabel(new string[] { "Pyramids: No","Pyramids: Yes","Pyramids: Random"}, () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
-			new OptionLabel(new string[] { "Giant Trees: No","Giant Trees: Yes","Giant Trees: Random" }, () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
-			new OptionLabel(new string[] { "Force Enchanted Sword Shrine Real: No","Force Enchanted Sword Shrine Real: Yes" }, () => Main.setting.ForceEnchantedSwordShrineReal ? 1 : 0, x => Main.setting.ForceEnchantedSwordShrineReal = x > 0 ? true : false),
+			new OptionLabel(new string[] { TCText("CorruptionCrimson") + ": Random",TCText("CorruptionCrimson") + ": Corruption",TCText("CorruptionCrimson") + ": Crimson",TCText("CorruptionCrimson") + ": (Both) Corruption plus Crimson chasms",TCText("CorruptionCrimson") + ": (Both) Crimson plus Corruption chasms", TCText("CorruptionCrimson") + ": None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
+			new OptionLabel(CreateNoYesArray(TCText("ForceCorruptionCrimsonAvoidJungleSide")), () => Main.setting.CrimsonCorruptionAvoidJungle ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidJungle = x > 0 ? true : false),
+			new OptionLabel(CreateNoYesArray(TCText("ForceCorruptionCrimsonSeparateSides")), () => Main.setting.CrimsonCorruptionAvoidEachOther ? 1 : 0, x => Main.setting.CrimsonCorruptionAvoidEachOther = x > 0 ? true : false),
+			new SliderItem(TCTextC("CorruptionBiomes"), 5f, () => Main.setting.CorruptionMultiplier, x => Main.setting.CorruptionMultiplier = x, x => (Main.setting.IsCorruption == 0 || Main.setting.IsCorruption == 1 || Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4 ? Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling(Main.maxTilesX * 0.00045 * x) : "Disabled")),
+			new SliderItem(TCTextC("CrimsonBiomes"), 5f, () => Main.setting.CrimsonMultiplier, x => Main.setting.CrimsonMultiplier = x, x => (Main.setting.IsCorruption == 0 || Main.setting.IsCorruption == 2 || Main.setting.IsCorruption == 3 || Main.setting.IsCorruption == 4 ? Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling(Main.maxTilesX * 0.00045 * x) : "Disabled")),
+			new OptionLabel(new string[] { TCText("DungeonSide") + ": Random",TCText("DungeonSide") + ": Left",TCText("DungeonSide") + ": Right"}, () => Main.setting.DungeonSide, x => Main.setting.DungeonSide = x),
+			new OptionLabel(CreateNoYesArray(TCText("Hardmode")), () => Main.hardMode ? 1 : 0, x => Main.hardMode = x > 0 ? true : false),
+			new OptionLabel(CreateNoYesArray(TCText("SpawnHardmodeStripesIfHardmode")), () => Main.setting.HardmodeStripes ? 1 : 0, x => Main.setting.HardmodeStripes = x > 0 ? true : false),
+			new OptionLabel(CreateNoYesRandomArray(TCText("Pyramids")), () => Main.setting.IsPyramid, x => Main.setting.IsPyramid = x),
+			new OptionLabel(CreateNoYesRandomArray(TCText("GiantTrees")), () => Main.setting.IsGiantTree, x => Main.setting.IsGiantTree = x),
+			new OptionLabel(CreateNoYesArray(TCText("ForceEnchantedSwordShrineReal")), () => Main.setting.ForceEnchantedSwordShrineReal ? 1 : 0, x => Main.setting.ForceEnchantedSwordShrineReal = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] VariousSpawnsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("VariousSpawns")), Setting.initializeVariousSpawnsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("setting 100% will generate default amount") {labelScale = 0.6f},
-			new SliderItem("Crystal Hearts:",10f,() => Main.setting.CrystalHeartMultiplier, x => Main.setting.CrystalHeartMultiplier = x,x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x)),
-			new SliderItem("Pre-Drop Meteor",100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
-			new SliderItem("Tree Lower Bound",150f,() => (float)Main.setting.TreeLowerBound,x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x),x => "Between " + (int)x ), // ratio * %
-			new SliderItem("Tree Upper Bound",150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
-			new SliderItem("Mushroom Biomes:",10f,() => Main.setting.MushroomBiomeMultiplier, x => Main.setting.MushroomBiomeMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((Main.maxTilesX / 500) * x)),
-			new SliderItem("Statues:",10f,() => Main.setting.StatueMultiplier, x => Main.setting.StatueMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((WorldGen.statueList.Length * 2 * (float)Main.maxTilesX / 4200) * x)),
+			new PlainLabel(TCText("Setting100ForDefaultAmountNote")) {labelScale = 0.6f},
+			new SliderItem(TCTextC("CrystalHearts"),10f,() => Main.setting.CrystalHeartMultiplier, x => Main.setting.CrystalHeartMultiplier = x,x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)((Main.maxTilesX * Main.maxTilesY) * 2E-05 * x)),
+			new SliderItem(TCTextC("PreDropMeteor"),100f,() => (float)Main.setting.PreDropMeteor,  x => Main.setting.PreDropMeteor = (int)x,x => "Drop " + (int)x + " meteors"),
+			new SliderItem(TCTextC("TreeLowerBound"),150f,() => (float)Main.setting.TreeLowerBound,x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x),x => "Between " + (int)x ), // ratio * %
+			new SliderItem(TCTextC("TreeUpperBound"),150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
+			new SliderItem(TCTextC("MushroomBiomes"),10f,() => Main.setting.MushroomBiomeMultiplier, x => Main.setting.MushroomBiomeMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((Main.maxTilesX / 500) * x)),
+			new SliderItem(TCTextC("Statues"),10f,() => Main.setting.StatueMultiplier, x => Main.setting.StatueMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((WorldGen.statueList.Length * 2 * (float)Main.maxTilesX / 4200) * x)),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems1 = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("MicroBiomes")), Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
-			new SliderItem("Enchanted Sword:", 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
-			new SliderItem("Campsite:", 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
-			new SliderItem("Thin Ice:", 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
-			new SliderItem("Sky Islands:", 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
-			new SliderItem("Minecart Tracks:", 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
-			new SliderItem("Spider Caves:", 5f, () => Main.setting.SpiderCaveMultiplier, x => Main.setting.SpiderCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x)),
-			new SliderItem("Granite Caves:", 10f, () => Main.setting.GraniteCaveMultiplier, x => Main.setting.GraniteCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x)),
-			new SliderItem("Marble Caves:", 10f, () => Main.setting.MarbleCaveMultiplier, x => Main.setting.MarbleCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x)),
-			new SliderItem("Underground Cabins:", 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
+			new PlainLabel(TCTextC("Setting100ForDefaultAmountBiomesNote")) {labelScale = 0.6f},
+			new SliderItem(TCTextC("EnchantedSword"), 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
+			new SliderItem(TCTextC("Campsite"), 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
+			new SliderItem(TCTextC("ThinIce"), 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
+			new SliderItem(TCTextC("SkyIslands"), 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
+			new SliderItem(TCTextC("MinecartTracks"), 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
+			new SliderItem(TCTextC("SpiderCaves"), 5f, () => Main.setting.SpiderCaveMultiplier, x => Main.setting.SpiderCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x)),
+			new SliderItem(TCTextC("GraniteCaves"), 10f, () => Main.setting.GraniteCaveMultiplier, x => Main.setting.GraniteCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x)),
+			new SliderItem(TCTextC("MarbleCaves"), 10f, () => Main.setting.MarbleCaveMultiplier, x => Main.setting.MarbleCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) * x) + "-" + (int)(14 * ((Main.maxTilesX * Main.maxTilesY) / 5040000f) *x)),
+			new SliderItem(TCTextC("UndergroundCabins"), 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("MicroBiomes")), Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("setting 100% will generate default amount of biomes") {labelScale = 0.6f},
-			new SliderItem("Gemstones (non-cave):", 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
-			new SliderItem("Gemstone Caves:", 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
-			new SliderItem("Gemstone Cave Size:", 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
-			new SliderItem("Hives:", 10f, () => Main.setting.HiveMultiplier, x => Main.setting.HiveMultiplier = x, x => Math.Round((double)(x * 100f)) + "% -> " + (int)(x*(1 + (int)(5f * Main.maxTilesX / 4200f))) + "-" + (int)(x*(1 + (int)(8f * Main.maxTilesX / 4200f))) +" hives"),
+			new PlainLabel(TCTextC("Setting100ForDefaultAmountBiomesNote")) {labelScale = 0.6f},
+			new SliderItem(TCTextC("GemstonesNonCave"), 100f, () => Main.setting.GemMultiplier, x => Main.setting.GemMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem(TCTextC("GemstoneCaves"), 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem(TCTextC("GemstoneCaveSize"), 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
+			new SliderItem(TCTextC("Hives"), 10f, () => Main.setting.HiveMultiplier, x => Main.setting.HiveMultiplier = x, x => Math.Round((double)(x * 100f)) + "% -> " + (int)(x*(1 + (int)(5f * Main.maxTilesX / 4200f))) + "-" + (int)(x*(1 + (int)(8f * Main.maxTilesX / 4200f))) +" hives"),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes1; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] TrapsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Traps")), Setting.initializeTrapsAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new SliderItem("Mining Explosive (Detonator):", 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
-			new SliderItem("Traps (Dart, Explosive, Boulder):", 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
-			new SliderItem("Additional Dart Traps:", 10f, () => Main.setting.AdditionalDartTrapMultiplier, x => Main.setting.AdditionalDartTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier))),
-			new SliderItem("Additional Boulder Traps:", 10f, () => Main.setting.AdditionalBoulderTrapMultiplier, x => Main.setting.AdditionalBoulderTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalBoulderTrapMultiplier))),
-			new SliderItem("Additional Explosive Traps:", 10f, () => Main.setting.AdditionalExplosiveTrapMultiplier, x => Main.setting.AdditionalExplosiveTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.05 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalExplosiveTrapMultiplier))),
-			new SliderItem("Additional Geyser Traps:", 10f, () => Main.setting.AdditionalGeyserTrapMultiplier, x => Main.setting.AdditionalGeyserTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.25 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier))),
-			new SliderItem("Temple Traps:", 10f, () => Main.setting.TempleTrapMultiplier, x => Main.setting.TempleTrapMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem(TCTextC("MiningExplosiveDetonator"), 50f, () => Main.setting.MiningExplosiveMultiplier, x => Main.setting.MiningExplosiveMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
+			new SliderItem(TCTextC("TrapsDartExplosiveBoulder"), 100f, () => Main.setting.TrapMultiplier, x => Main.setting.TrapMultiplier = x, x => "         "+Math.Round(x * 100f) + "%"),
+			new SliderItem(TCTextC("AdditionalDartTraps"), 10f, () => Main.setting.AdditionalDartTrapMultiplier, x => Main.setting.AdditionalDartTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalDartTrapMultiplier))),
+			new SliderItem(TCTextC("AdditionalBoulderTraps"), 10f, () => Main.setting.AdditionalBoulderTrapMultiplier, x => Main.setting.AdditionalBoulderTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.475 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalBoulderTrapMultiplier))),
+			new SliderItem(TCTextC("AdditionalExplosiveTraps"), 10f, () => Main.setting.AdditionalExplosiveTrapMultiplier, x => Main.setting.AdditionalExplosiveTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.05 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalExplosiveTrapMultiplier))),
+			new SliderItem(TCTextC("AdditionalGeyserTraps"), 10f, () => Main.setting.AdditionalGeyserTrapMultiplier, x => Main.setting.AdditionalGeyserTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.25 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier))),
+			new SliderItem(TCTextC("TempleTraps"), 10f, () => Main.setting.TempleTrapMultiplier, x => Main.setting.TempleTrapMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] TerrainMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Terrain")), Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
-			new SliderItem("Surface Height Variance:", 10f,() => Main.setting.SurfaceTerrainHeightMultiplier,x => Main.setting.SurfaceTerrainHeightMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + (x == 0 ? " Flat" : "")),
-			new SliderItem("Surface Upper Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMax - .1f /*.1 to .17*/, x => Main.setting.SurfaceTerrainHeightMax = x + .1f > Main.setting.SurfaceTerrainHeightMin ? Main.setting.SurfaceTerrainHeightMin : x + .1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":"")),
-			new SliderItem("Surface Lower Limit:",.35f,() => Main.setting.SurfaceTerrainHeightMin - .1f /*.3 to .45?*/, x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":"")),
-			new OptionLabel(new string[] {"Bypass Spawn Area Flatness: Disabled","Bypass Spawn Area Flatness: Enabled"}, () => Main.setting.BypassSpawnAreaFlatness ? 1 : 0, x => Main.setting.BypassSpawnAreaFlatness = x > 0 ? true :false),
-			new SliderItem("Beach Size",2f,() => Main.setting.BeachSizeMultiplier -.1f, x => Main.setting.BeachSizeMultiplier = x +.1f, x => Math.Round((double)(Main.setting.BeachSizeMultiplier * 100f)) + "% -> " + (int)(175*Main.setting.BeachSizeMultiplier)  + "-" +  (int)(250*Main.setting.BeachSizeMultiplier) +" tiles wide"),
-			new SliderItem("Dungeon Size",10f,() => Main.setting.DungeonSizeMultiplier- .01f, x => Main.setting.DungeonSizeMultiplier = x + .05f /*set called with 0 to 1.0f * ratio*/, x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways"),
-			new SliderItem("Temple Size",4f,() => Main.setting.TempleSizeMultiplier- .2f, x => Main.setting.TempleSizeMultiplier = x + .2f, x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":"")),
-			new SliderItem("Surface Tunnels", 50f,() => Main.setting.SurfaceHorizontalTunnelsMultiplier, x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x, x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%"),
-			new SliderItem("Lakes",20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
-			new SliderItem("World Width", 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)(x/200) * 200, x => x +" tiles wide" +  (x<4200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>8400?" Warning: Will not Load in Vanilla":"")),
-			new SliderItem("World Height", 4800f ,() => Main.maxTilesY, x => Main.maxTilesY = (int)(x/150) *150, x => x +" tiles tall" + (x<1200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>2400?" Warning: Will not Load in Vanilla":"")),
+			new PlainLabel(TCText("Use100ForDefaultBehaviorNote")) {labelScale = 0.6f},
+			new SliderItem(TCTextC("SurfaceHeightVariance"), 10f,() => Main.setting.SurfaceTerrainHeightMultiplier,x => Main.setting.SurfaceTerrainHeightMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + (x == 0 ? " Flat" : "")),
+			new SliderItem(TCTextC("SurfaceUpperLimit"),.35f,() => Main.setting.SurfaceTerrainHeightMax - .1f /*.1 to .17*/, x => Main.setting.SurfaceTerrainHeightMax = x + .1f > Main.setting.SurfaceTerrainHeightMin ? Main.setting.SurfaceTerrainHeightMin : x + .1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMax * 100f)) + "%" + " - Low% = High Mountains" + ( Main.setting.SurfaceTerrainHeightMax <.15f?" High Chance of Failure":"")),
+			new SliderItem(TCTextC("SurfaceLowerLimit"),.35f,() => Main.setting.SurfaceTerrainHeightMin - .1f /*.3 to .45?*/, x => Main.setting.SurfaceTerrainHeightMin = x+.1f < Main.setting.SurfaceTerrainHeightMax? Main.setting.SurfaceTerrainHeightMax : x+.1f, x => Math.Round((double)( Main.setting.SurfaceTerrainHeightMin * 100f)) + "%" + " - High% = Deep Valleys" + ( Main.setting.SurfaceTerrainHeightMin <.15f?" Low Chance of Sky Islands":"")),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("BypassSpawnAreaFlatness")), () => Main.setting.BypassSpawnAreaFlatness ? 1 : 0, x => Main.setting.BypassSpawnAreaFlatness = x > 0 ? true :false),
+			new SliderItem(TCText("BeachSize"),2f,() => Main.setting.BeachSizeMultiplier -.1f, x => Main.setting.BeachSizeMultiplier = x +.1f, x => Math.Round((double)(Main.setting.BeachSizeMultiplier * 100f)) + "% -> " + (int)(175*Main.setting.BeachSizeMultiplier)  + "-" +  (int)(250*Main.setting.BeachSizeMultiplier) +" tiles wide"),
+			new SliderItem(TCText("DungeonSize"),10f,() => Main.setting.DungeonSizeMultiplier- .01f, x => Main.setting.DungeonSizeMultiplier = x + .05f /*set called with 0 to 1.0f * ratio*/, x => Math.Round((double)(Main.setting.DungeonSizeMultiplier * 100f)) + "%" + " -> " + "~"+(2+(int)(x * Main.maxTilesX / 60)) + "-" + (int)(2+(int)(Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60)+(int)((Main.setting.DungeonSizeMultiplier * Main.maxTilesX / 60) / 3f)) + " rooms/hallways"),
+			new SliderItem(TCText("TempleSize"),4f,() => Main.setting.TempleSizeMultiplier- .2f, x => Main.setting.TempleSizeMultiplier = x + .2f, x => Math.Round((double)(Main.setting.TempleSizeMultiplier * 100f)) + "%" + (Main.setting.TempleSizeMultiplier>3?" Warning: Might Fail":"")),
+			new SliderItem(TCText("SurfaceTunnels"), 50f,() => Main.setting.SurfaceHorizontalTunnelsMultiplier, x => Main.setting.SurfaceHorizontalTunnelsMultiplier = x, x => Math.Round(Main.setting.SurfaceHorizontalTunnelsMultiplier * 100f) + "%"),
+			new SliderItem(TCText("Lakes"),20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
+			new SliderItem(TCText("WorldWidth"), 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)(x/200) * 200, x => x +" tiles wide" +  (x<4200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>8400?" Warning: Will not Load in Vanilla":"")),
+			new SliderItem(TCText("WorldHeight"), 4800f ,() => Main.maxTilesY, x => Main.maxTilesY = (int)(x/150) *150, x => x +" tiles tall" + (x<1200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>2400?" Warning: Will not Load in Vanilla":"")),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] ChestsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Chests")), Setting.initializeChests) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new PlainLabel("set to 100% for default behavior") {labelScale = 0.6f},
+			new PlainLabel(TCText("Use100ForDefaultBehaviorNote")) {labelScale = 0.6f},
 			new PlainLabel(ChestEstimateString),
-			new SliderItem("Biome Chest Sets:",10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
-			new SliderItem("Pots:", 2.5f, () => Main.setting.PotsMultiplier, x => Main.setting.PotsMultiplier = x, x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots"),
-			new SliderItem("Jungle Shrines:", 5f, () => Main.setting.JungleShrineMultiplier, x => Main.setting.JungleShrineMultiplier = x, x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines"),
-			new SliderItem("Living Mahogany Trees:", 2f, () => Main.setting.MahoganyTreeMultiplier, x => Main.setting.MahoganyTreeMultiplier = x, x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees"),
-			new SliderItem("Water Chests:", 5f, () => Main.setting.WaterChestMultiplier, x => Main.setting.WaterChestMultiplier = x, x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests"),
-			new SliderItem("Surface Chests:", 5f, () => Main.setting.SurfaceChestMultiplier, x => Main.setting.SurfaceChestMultiplier = x, x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests"),
-			new SliderItem("Temple Chests:", 5f, () => Main.setting.TempleChestMultiplier, x => Main.setting.TempleChestMultiplier = x, x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests"),
+			new SliderItem(TCTextC("BiomeChestSets"),10f,() => Main.setting.BiomeChestSets,   x => Main.setting.BiomeChestSets = (int) x,x => x + " sets"),
+			new SliderItem(TCTextC("Pots"), 2.5f, () => Main.setting.PotsMultiplier, x => Main.setting.PotsMultiplier = x, x => Math.Round((double)(Main.setting.PotsMultiplier * 100f)) + "%" + " -> " + (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0008 * Main.setting.PotsMultiplier) + " pots"),
+			new SliderItem(TCTextC("JungleShrines"), 5f, () => Main.setting.JungleShrineMultiplier, x => Main.setting.JungleShrineMultiplier = x, x => Math.Round((double)(Main.setting.JungleShrineMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*7*Main.maxTilesX / 4200)+ "-" + (int)Math.Ceiling(Main.setting.JungleShrineMultiplier*12*Main.maxTilesX / 4200)+" shrines"),
+			new SliderItem(TCTextC("LivingMahoganyTrees"), 2f, () => Main.setting.MahoganyTreeMultiplier, x => Main.setting.MahoganyTreeMultiplier = x, x => Math.Round((double)(Main.setting.MahoganyTreeMultiplier * 100f)) + "%" + " -> ~" + (int)(6 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ "-" +(int)(11 * (Main.maxTilesX / 4200f) * Main.setting.MahoganyTreeMultiplier)+ " trees"),
+			new SliderItem(TCTextC("WaterChests"), 5f, () => Main.setting.WaterChestMultiplier, x => Main.setting.WaterChestMultiplier = x, x => Math.Round((double)(Main.setting.WaterChestMultiplier * 100f)) + "%" + " -> " + (int)Math.Ceiling(Main.setting.WaterChestMultiplier * 2f * 9f* (Main.maxTilesX / 4200f))+ " chests"),
+			new SliderItem(TCTextC("SurfaceChests"), 5f, () => Main.setting.SurfaceChestMultiplier, x => Main.setting.SurfaceChestMultiplier = x, x => Math.Round((double)(Main.setting.SurfaceChestMultiplier * 100f)) + "%" + " -> " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.SurfaceChestMultiplier) + " chests"),
+			new SliderItem(TCTextC("TempleChests"), 5f, () => Main.setting.TempleChestMultiplier, x => Main.setting.TempleChestMultiplier = x, x => Math.Round((double)(Main.setting.TempleChestMultiplier * 100f)) + "%" + " -> " +(int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier *.85f) + "-" + (int)Math.Ceiling(Main.setting.TempleChestMultiplier * 0.35f * 13f * (Main.maxTilesX / 4200f) * Main.setting.TempleSizeMultiplier * 1.15f) + " chests"),
 			new SliderItem(Main.setting.ShadowChestMultiplierDelegate.label /*"Shadow Chests:"*/, Main.setting.ShadowChestMultiplierDelegate.ratio/*5f*/, Main.setting.ShadowChestMultiplierDelegate.getter, Main.setting.ShadowChestMultiplierDelegate.setter, Main.setting.ShadowChestMultiplierDelegate.estimationString),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] OreAmountMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("OreAmount")), Setting.initializeOreAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 }, // -17
-			new PlainLabel("setting 100% will generate default amount of ores") {labelScale = 0.6f},
-			new SliderItem("Copper/Tin:",5f,() => Main.setting.PercCopp, x => Main.setting.PercCopp = x, x => Math.Round((double)(Main.setting.PercCopp * 100f)) + "%"),
-			new SliderItem("Iron/Lead:",5f,() => Main.setting.PercIron, x => Main.setting.PercIron = x, x => Math.Round((double)(Main.setting.PercIron * 100f)) + "%"),
-			new SliderItem("Silver/Tungsten:",5f,() => Main.setting.PercSilv, x => Main.setting.PercSilv = x, x => Math.Round((double)(Main.setting.PercSilv * 100f)) + "%"),
-			new SliderItem("Gold/Platinum:",5f,() => Main.setting.PercGold, x => Main.setting.PercGold = x, x => Math.Round((double)(Main.setting.PercGold * 100f)) + "%"),
-			new SliderItem("Demonite/Crimtane:",5f,() => Main.setting.PercDemonite, x => Main.setting.PercDemonite = x, x => Math.Round((double)(Main.setting.PercDemonite * 100f)) + "%"),
-			new SliderItem("Hellstone:",5f,() => Main.setting.PercHellstone, x => Main.setting.PercHellstone= x, x => Math.Round((double)(Main.setting.PercHellstone * 100f)) + "%"),
-			new PlainLabel("Option to generate alternate hardmode ores in the beginning") {labelScale = 0.6f, additionalHorizontalSpacingPre = 10},
+			new PlainLabel(TCText("Setting100ForDefaultAmountOfOresNote")) {labelScale = 0.6f},
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.CopperOre)}/{Lang.GetItemNameValue(ItemID.TinOre)}:",5f,() => Main.setting.PercCopp, x => Main.setting.PercCopp = x, x => Math.Round((double)(Main.setting.PercCopp * 100f)) + "%"),
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.IronOre)}/{Lang.GetItemNameValue(ItemID.LeadOre)}:",5f,() => Main.setting.PercIron, x => Main.setting.PercIron = x, x => Math.Round((double)(Main.setting.PercIron * 100f)) + "%"),
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.SilverOre)}/{Lang.GetItemNameValue(ItemID.TungstenOre)}:",5f,() => Main.setting.PercSilv, x => Main.setting.PercSilv = x, x => Math.Round((double)(Main.setting.PercSilv * 100f)) + "%"),
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.GoldOre)}/{Lang.GetItemNameValue(ItemID.PlatinumOre)}:",5f,() => Main.setting.PercGold, x => Main.setting.PercGold = x, x => Math.Round((double)(Main.setting.PercGold * 100f)) + "%"),
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.DemoniteOre)}/{Lang.GetItemNameValue(ItemID.CrimtaneOre)}:",5f,() => Main.setting.PercDemonite, x => Main.setting.PercDemonite = x, x => Math.Round((double)(Main.setting.PercDemonite * 100f)) + "%"),
+			new SliderItem($"{Lang.GetItemNameValue(ItemID.Hellstone)}:",5f,() => Main.setting.PercHellstone, x => Main.setting.PercHellstone= x, x => Math.Round((double)(Main.setting.PercHellstone * 100f)) + "%"),
+			new PlainLabel(TCText("OptionToGenerateAlternateHardmodeOres")) {labelScale = 0.6f, additionalHorizontalSpacingPre = 10},
 			new SliderItem("",1f,() => Main.setting.PreSmashAltar, x => Main.setting.PreSmashAltar= x, x => {
 				if (Main.setting.PreSmashAltar > 0f && (double)Main.setting.PreSmashAltar < 0.3)
 				{
-					return "Generate a little";
+					return TCText("GenerateLittle");
 				}
 				else if ((double)Main.setting.PreSmashAltar >= 0.3 && (double)Main.setting.PreSmashAltar < 0.7)
 				{
-					return "Generate medium amount";
+					return TCText("GenerateMedium");
 				}
 				else if ((double)Main.setting.PreSmashAltar >= 0.7)
 				{
-					return "Generate a lot";
+					return TCText("GenerateLot");
 				}
 				else
 				{
-					return "Generate none";
+					return TCText("GenerateNone");
 				}
 			}) { secondStringOnly = true},
-			new SliderItem("",0,() => 0f, x=> { }, x => "(Same amount as smashing " + Math.Round((double)(Main.setting.PreSmashAltar * 50f)) + " altars)") { secondStringOnly = true, noSlider = true},
-			new OptionLabel(new string[] { "PreSmash Altars generates both sets of ores : Disabled", "PreSmash Altars generates both sets of ores : Enabled" }, () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
-			new OptionLabel(new string[] { "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Disabled",  "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn : Enabled"}, () => Main.setting.PreSmashAltarPreventPatches? 1 : 0, x => Main.setting.PreSmashAltarPreventPatches = x > 0 ? true : false),
+			new SliderItem("",0,() => 0f, x=> { }, x => TCText("SameAmountAsSmashingXAltars", Math.Round((double)(Main.setting.PreSmashAltar * 50f)))) { secondStringOnly = true, noSlider = true},
+			new OptionLabel(CreateDisabledEnabledArray(TCText("PreSmashAltarsGeneratesBothSetsOfOres")), () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("PreSmashAltarsPreventRandomPatchSpawn")), () => Main.setting.PreSmashAltarPreventPatches? 1 : 0, x => Main.setting.PreSmashAltarPreventPatches = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] DebugMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Debug")), Setting.initializeDebug) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
-			new OptionLabel(new string[] { "Save World After Each Step: Disabled","Save World After Each Step: Enabled"}, () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
-			new OptionLabel(new string[] { "Save World in tModLoader Folder: Disabled", "Save World in tModLoader Folder: Enabled"}, () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("SaveWorldAfterEachStep")), () => Main.setting.GenerateWldEachStep ? 1 : 0, x => Main.setting.GenerateWldEachStep = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("SaveWorldIntModLoaderFolder")), () => Main.setting.SaveInTModFolder ? 1 : 0, x => { if (x>0) { Main.setting.SaveInTModFolder = true; Main.setting.LeveledRPGCriticalMode = false; Main.setting.generateLeveledRPGSave = false; } else { Main.setting.SaveInTModFolder = false; }}),
 			new OptionLabel(new string[] { "Save World for the Terraria Leveled mod: Disabled", "Save World for the Terraria Leveled mod: Enabled"}, () => Main.setting.generateLeveledRPGSave ? 1 : 0, x => { if (x>0) { Main.setting.generateLeveledRPGSave = true; Main.setting.SaveInTModFolder = false; } else { Main.setting.generateLeveledRPGSave = false; }}),
 			new OptionLabel(new string[] { "Terraria Leveled mod Critical Mode: Disabled", "Terraria Leveled mod Critical Mode: Enabled"}, () => Main.setting.LeveledRPGCriticalMode ? 1 : 0, x => Main.setting.LeveledRPGCriticalMode = (x > 0) ? true : false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
+
+		static string[] CreateRandomPlusRangeArray(string value, int count)
+		{
+			var list = new List<string>();
+			list.Add($"{value}: {Language.GetTextValue("CLI.Random")}");
+			for (int i = 0; i < count; i++)
+			{
+				list.Add($"{value}: {count + 1}");
+			}
+			return list.ToArray();
+		}
 
 		internal static Color color = Color.White;
 		private static KeyboardState keyState;
@@ -465,36 +492,36 @@ namespace Terraria.TerraCustom
 					{
 						optionStrings = new string[][]
 						{
-							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
-							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
-							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
-							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
-							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
+							CreateRandomPlusRangeArray(TCText("IceBackground"), 4),
+							CreateRandomPlusRangeArray(TCText("HellBackground"), 3),
+							CreateRandomPlusRangeArray(TCText("JungleBackground"), 2),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundLeft"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundRight"), 8),
 						};
 					}
 					if (TerraCustomUtils.WorldSize == 1)
 					{
 						optionStrings = new string[][]
 						{
-							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
-							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
-							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
-							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
-							new string[] { "Cave Background Middle: Random", "Cave Background Middle: 1", "Cave Background Middle: 2", "Cave Background Middle: 3", "Cave Background Middle: 4", "Cave Background Middle: 5", "Cave Background Middle: 6", "Cave Background Middle: 7", "Cave Background Middle: 8" },
-							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
+							CreateRandomPlusRangeArray(TCText("IceBackground"), 4),
+							CreateRandomPlusRangeArray(TCText("HellBackground"), 3),
+							CreateRandomPlusRangeArray(TCText("JungleBackground"), 2),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundLeft"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundMiddle"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundRight"), 8),
 						};
 					}
 					if (TerraCustomUtils.WorldSize == 2)
 					{
 						optionStrings = new string[][]
 						{
-							new string[] { "Ice Background: Random", "Ice Background: 1", "Ice Background: 2", "Ice Background: 3", "Ice Background: 4"},
-							new string[] { "Hell Background: Random", "Hell Background: 1", "Hell Background: 2", "Hell Background: 3"},
-							new string[] { "Jungle Background: Random", "Jungle Background: 1", "Jungle Background: 2"},
-							new string[] { "Cave Background Far Left: Random", "Cave Background Far Left: 1", "Cave Background Far Left: 2", "Cave Background Far Left: 3", "Cave Background Far Left: 4", "Cave Background Far Left: 5", "Cave Background Far Left: 6", "Cave Background Far Left: 7", "Cave Background Far Left: 8"},
-							new string[] { "Cave Background Left: Random", "Cave Background Left: 1", "Cave Background Left: 2", "Cave Background Left: 3", "Cave Background Left: 4", "Cave Background Left: 5", "Cave Background Left: 6", "Cave Background Left: 7", "Cave Background Left: 8"},
-							new string[] { "Cave Background Right: Random", "Cave Background Right: 1", "Cave Background Right: 2", "Cave Background Right: 3", "Cave Background Right: 4", "Cave Background Right: 5", "Cave Background Right: 6", "Cave Background Right: 7", "Cave Background Right: 8"},
-							new string[] { "Cave Background Far Right: Random", "Cave Background Far Right: 1", "Cave Background Far Right: 2", "Cave Background Far Right: 3", "Cave Background Far Right: 4", "Cave Background Far Right: 5", "Cave Background Far Right: 6", "Cave Background Far Right: 7", "Cave Background Far Right: 8"},
+							CreateRandomPlusRangeArray(TCText("IceBackground"), 4),
+							CreateRandomPlusRangeArray(TCText("HellBackground"), 3),
+							CreateRandomPlusRangeArray(TCText("JungleBackground"), 2),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundFarLeft"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundLeft"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundRight"), 8),
+							CreateRandomPlusRangeArray(TCText("CaveBackgroundFarRight"), 8),
 						};
 					}
 
@@ -661,19 +688,19 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.MoonStyle == 0)
 				{
-					clickableLabelText[num48] = "Moon Style: 1";
+					clickableLabelText[num48] = TCText("MoonStyle") + ": 1";
 				}
 				else if (Main.setting.MoonStyle == 1)
 				{
-					clickableLabelText[num48] = "Moon Style: 2";
+					clickableLabelText[num48] = TCText("MoonStyle") + ": 2";
 				}
 				else if (Main.setting.MoonStyle == 2)
 				{
-					clickableLabelText[num48] = "Moon Style: 3";
+					clickableLabelText[num48] = TCText("MoonStyle") + ": 3";
 				}
 				else if (Main.setting.MoonStyle == 3)
 				{
-					clickableLabelText[num48] = "Moon Style: Random";
+					clickableLabelText[num48] = TCText("MoonStyle") + ": " + Language.GetTextValue("CLI.Random");
 				}
 				if (main.selectedMenu == num48)
 				{
@@ -700,7 +727,7 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectTreeStyle[0] == 6)
 				{
-					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize < 2 ? "Left" : "Far Left") + ":  Random";
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize < 2 ? "Left" : "Far Left") + ": " + Language.GetTextValue("CLI.Random");
 				}
 				else
 				{
@@ -720,7 +747,7 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectTreeStyle[1] == 6)
 				{
-					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize == 0 ? "Right" : TerraCustomUtils.WorldSize == 1 ? "Middle" : "Left") + ":  Random";
+					clickableLabelText[num48] = "Tree Style " + (TerraCustomUtils.WorldSize == 0 ? "Right" : TerraCustomUtils.WorldSize == 1 ? "Middle" : "Left") + ": " + Language.GetTextValue("CLI.Random");
 				}
 				else
 				{
@@ -742,7 +769,7 @@ namespace Terraria.TerraCustom
 				{
 					if (Main.setting.SelectTreeStyle[2] == 6)
 					{
-						clickableLabelText[num48] = "Tree Style Right:  Random";
+						clickableLabelText[num48] = "Tree Style Right: " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
@@ -765,7 +792,7 @@ namespace Terraria.TerraCustom
 				{
 					if (Main.setting.SelectTreeStyle[3] == 6)
 					{
-						clickableLabelText[num48] = "Tree Style Far Right:  Random";
+						clickableLabelText[num48] = "Tree Style Far Right: " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
@@ -798,7 +825,7 @@ namespace Terraria.TerraCustom
 				}
 				else if (Main.setting.SelectDungeon == 3)
 				{
-					clickableLabelText[num48] = "Dungeon Color: Random";
+					clickableLabelText[num48] = "Dungeon Color: " + Language.GetTextValue("CLI.Random");
 				}
 				if (main.selectedMenu == num48)
 				{
@@ -822,7 +849,7 @@ namespace Terraria.TerraCustom
 				};
 				if (Main.setting.SelectMossType[0] == 5)
 				{
-					clickableLabelText[num48] = "Moss Color Left: Random";
+					clickableLabelText[num48] = "Moss Color Left: " + Language.GetTextValue("CLI.Random");
 				}
 				else
 				{
@@ -842,7 +869,7 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectMossType[1] == 5)
 				{
-					clickableLabelText[num48] = "Moss Color Middle: Random";
+					clickableLabelText[num48] = "Moss Color Middle: " + Language.GetTextValue("CLI.Random");
 				}
 				else
 				{
@@ -862,7 +889,7 @@ namespace Terraria.TerraCustom
 				num48++;
 				if (Main.setting.SelectMossType[2] == 5)
 				{
-					clickableLabelText[num48] = "Moss Color Right: Random";
+					clickableLabelText[num48] = "Moss Color Right: " + Language.GetTextValue("CLI.Random");
 				}
 				else
 				{
@@ -890,7 +917,7 @@ namespace Terraria.TerraCustom
 				};
 				if (Main.setting.ShrineType == 0)
 				{
-					clickableLabelText[num48] = "Jungle Shrines: Random";
+					clickableLabelText[num48] = "Jungle Shrines: " + Language.GetTextValue("CLI.Random");
 				}
 				else if (Main.setting.ShrineType == 6)
 				{
@@ -985,12 +1012,12 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.ForestStyle == 14)
 					{
-						clickableLabelText[num50] = "Forest Background: Random";
+						clickableLabelText[num50] = TCText("ForestBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
 						// 0 to 13?
-						clickableLabelText[num50] = "Forest Background: " + (Main.setting.ForestStyle + 1);
+						clickableLabelText[num50] = TCText("ForestBackground") + ": " + (Main.setting.ForestStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1029,11 +1056,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.CorruptStyle == 2)
 					{
-						clickableLabelText[num50] = "Corrupt Background: Random";
+						clickableLabelText[num50] = TCText("CorruptBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Corrupt Background: " + (Main.setting.CorruptStyle + 1);
+						clickableLabelText[num50] = TCText("CorruptBackground") + ": " + (Main.setting.CorruptStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1072,11 +1099,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.JungleStyle == 2)
 					{
-						clickableLabelText[num50] = "Jungle Background: Random";
+						clickableLabelText[num50] = TCText("JungleBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Jungle Background: " + (Main.setting.JungleStyle + 1);
+						clickableLabelText[num50] = TCText("JungleBackground") + ": " + (Main.setting.JungleStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1115,11 +1142,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.SnowStyle == 11)
 					{
-						clickableLabelText[num50] = "Snow Background: Random";
+						clickableLabelText[num50] = TCText("SnowBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Snow Background: " + (Main.setting.SnowStyle + 1);
+						clickableLabelText[num50] = TCText("SnowBackground") + ": " + (Main.setting.SnowStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1158,11 +1185,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.HallowStyle == 2)
 					{
-						clickableLabelText[num50] = "Hallow Background: Random";
+						clickableLabelText[num50] = TCText("HallowBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Hallow Background: " + (Main.setting.HallowStyle + 1);
+						clickableLabelText[num50] = TCText("HallowBackground") + ": " + (Main.setting.HallowStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1201,11 +1228,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.CrimsonStyle == 3)
 					{
-						clickableLabelText[num50] = "Crimson Background: Random";
+						clickableLabelText[num50] = TCText("CrimsonBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Crimson Background: " + (Main.setting.CrimsonStyle + 1);
+						clickableLabelText[num50] = TCText("CrimsonBackground") + ": " + (Main.setting.CrimsonStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1244,11 +1271,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.DesertStyle == 2)
 					{
-						clickableLabelText[num50] = "Desert Background: Random";
+						clickableLabelText[num50] = TCText("DesertBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Desert Background: " + (Main.setting.DesertStyle + 1);
+						clickableLabelText[num50] = TCText("DesertBackground") + ": " + (Main.setting.DesertStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1289,11 +1316,11 @@ namespace Terraria.TerraCustom
 					num50++;
 					if (Main.setting.OceanStyle == 3)
 					{
-						clickableLabelText[num50] = "Ocean Background: Random";
+						clickableLabelText[num50] = TCText("OceanBackground") + ": " + Language.GetTextValue("CLI.Random");
 					}
 					else
 					{
-						clickableLabelText[num50] = "Ocean Background: " + (Main.setting.OceanStyle + 1);
+						clickableLabelText[num50] = TCText("OceanBackground") + ": " + (Main.setting.OceanStyle + 1);
 					}
 					if (main.selectedMenu == num50)
 					{
@@ -1375,8 +1402,8 @@ namespace Terraria.TerraCustom
 				clickableLabelText[2] = Lang.menu[93].Value;
 				clickableLabelText[3] = Lang.menu[94].Value;
 				//	clickableLabelText[4] = Lang.menu[5];
-				clickableLabelText[4] = "Keep Previous Custom Size";
-				clickableLabelText[5] = "Load Autosaved Config";
+				clickableLabelText[4] = TCText("KeepPreviousCustomSize");
+				clickableLabelText[5] = TCText("LoadAutosavedConfig");
 				clickableLabelText[6] = Lang.menu[15].Value;
 				numberClickableLabels = 7;
 				if (main.selectedMenu == 6)
@@ -1553,7 +1580,7 @@ namespace Terraria.TerraCustom
 		{
 			int chests = ChestEstimate();
 
-			string retVal = "Estimated " + chests + " chests.";
+			string retVal = TCText("EsimatedXChests", chests);
 
 			if (chests > 1000)
 			{

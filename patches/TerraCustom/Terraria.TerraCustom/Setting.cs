@@ -726,7 +726,7 @@ namespace Terraria.TerraCustom
 
 		[JsonIgnoreAttribute]
 		public SettingDelegate ShadowChestMultiplierDelegate = new SettingDelegate(
-																   "Shadow Chests:",
+																   TerraCustomUtils.TCTextC("ShadowChests"),
 																   5f,
 																   () => Main.setting.ShadowChestMultiplier,
 																   x => Main.setting.ShadowChestMultiplier = x,

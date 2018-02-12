@@ -1,12 +1,12 @@
 ﻿{
 	"TerraCustom": {
-		// Tips:
-		// use vanilla translations: {$GameUI.Enabled} Disabled, CLI.Yes, etc
-		// use {0} etc to interpolate values
-
 		// Common
 		"Reset": "重置",
 		// "Settings": "{$LegacyMenu.14}",
+
+		// Choose world size Menu
+		"KeepPreviousCustomSize": "保持预设地图大小",
+		"LoadAutosavedConfig": "载入自动保存的地图配置",
 
 		// Main Menu
 		"ResetAll": "重置所有设置",
@@ -27,16 +27,88 @@
 		"Debug": "调试",
 		"AreYouSureResetAllSettings": "确定重置所有设置?",
 
+		// Terrain Menu
+		"Use100ForDefaultBehaviorNote": "默认设置100%",
+		"SurfaceHeightVariance": "地势起伏",
+		"SurfaceUpperLimit": "地表上限",
+		"SurfaceLowerLimit": "地表下限",
+		"BypassSpawnAreaFlatness": "随设置调整出生点地形",
+		"BeachSize": "海洋大小",
+		"DungeonSize": "地牢大小",
+		"TempleSize": "蜥蜴神庙大小",
+		"SurfaceTunnels": "地表隧道",
+		"Lakes": "湖泊数量",
+		"WorldWidth": "地图宽度",
+		"WorldHeight": "地图高度",
 
-		// Downed Found Menu
-		"DownedBosses": "已击败BOSS",
-		"FoundNPCs": "已发现NPC",
-		"Downed": "已击败",
-		"Found": "已发现",
+		// Ores Menu
+		"AlsoCheckOreAmountNote": "同时检查'矿物含量'设定获得两种设置下的矿物",
+
+		// OreAmount Menu
+		"Setting100ForDefaultAmountOfOresNote": "设置100%将会生成默认数量的矿石",
+		"OptionToGenerateAlternateHardmodeOres": "在游戏开始时设置新三矿生成含量",
+		"GenerateNone": "无新三矿生成",
+		"GenerateLittle": "少量新三矿生成",
+		"GenerateMedium": "中量新三矿生成",
+		"GenerateLot": "大量新三矿生成",
+		"SameAmountAsSmashingXAltars": "粉碎血腥/恶魔祭坛数量 {0}",
+		"PreSmashAltarsGeneratesBothSetsOfOres": "粉碎血腥/恶魔祭坛同时产生两种新矿石",
+		"PreSmashAltarsPreventRandomPatchSpawn": "粉碎血腥/恶魔祭坛是否生成神圣/腐化/血腥之地",
+
+		// GraphicStyles Menu
+		"MoonStyle": "月球样式",
+		"Tree Style Far Left": "地图最左侧树木样式",
+		"Tree Style Left": "地图左侧树木样式",
+		"Tree Style Right": "地图右侧树木样式",
+		"Tree Style Far Right": "地图最右侧树木样式",
+		"Dungeon Color": "地牢颜色",
+		"Moss Color Left": "地图左侧苔藓颜色",
+		"Moss Color Middle": "地图中部苔藓颜色",
+		"Moss Color Right": "地图右侧苔藓颜色",
+		"Jungle Shrines": "丛林宝箱附近砖块类型",
+		"Iridescent Bricks": "荧光砖",
+		"Mudstone Blocks": "泥石砖",
+		"Rich Mahogany": "红木",
+		"Tin Brick": "锡砖",
+		"Gold Brick": "金砖",
+		"Mix": "混合",
 
 		// Backgrounds Menu
 		"SurfaceBackgrounds": "地表环境背景",
 		"UndergroundBackgrounds": "地下环境背景",
+
+		// SurfaceBackgrounds Menu
+		"ForestBackground": "森林环境背景",
+		"CorruptBackground": "腐化环境背景",
+		"JungleBackground": "丛林环境背景",
+		"SnowBackground": "雪地环境背景",
+		"HallowBackground": "神圣环境背景",
+		"CrimsonBackground": "血腥环境背景",
+		"DesertBackground": "沙漠环境背景",
+		"OceanBackground": "海洋环境背景",
+
+		// UnderBackgrounds Menu
+		"IceBackground": "冰窟环境背景",
+		"HellBackground": "地狱环境背景",
+		"JungleBackground": "丛林环境背景",
+		"CaveBackgroundFarLeft": "地下洞穴最左侧背景",
+		"CaveBackgroundLeft": "地下洞穴左侧背景",
+		"CaveBackgroundMiddle": "地下洞穴中侧背景",
+		"CaveBackgroundRight": "地下洞穴右侧背景",
+		"CaveBackgroundFarRight": "地下洞穴最右侧背景",
+
+		// Miscellaneous Menu
+		"CorruptionCrimson": "腐化/血腥之地设置",
+		"ForceCorruptionCrimsonAvoidJungleSide": "防止腐化/血腥之地和丛林环境同侧",
+		"ForceCorruptionCrimsonSeparateSides": "腐化/血腥之地不生成在同侧",
+		"CorruptionBiomes": "腐化之地数量",
+		"CrimsonBiomes": "血腥之地数量",
+		"DungeonSide": "地牢位置",
+		"Hardmode": "困难模式（击败血肉之墙）",
+		"SpawnHardmodeStripesIfHardmode": "是否生成困难模式地形（如果选择困难模式需选择是）",
+		"Pyramids": "金字塔设置",
+		"GiantTrees": "世界树设置",
+		"ForceEnchantedSwordShrineReal": "强制设置石中剑是真剑",
 
 		// Challenge Option Menu
 		"NoTree": "没有树木",
@@ -54,10 +126,65 @@
 		"NoOrbOrHeart": "没有血腥心脏/暗影球",
 		"NoUnderworld": "没有地狱",
 
-		// Not used. Unless we need different order than Reset + noun + Settings?
-		//"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
-		//"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
+		// MicroBiomes Menu
+		"Setting100ForDefaultAmountBiomesNote": "设置100%将生成默认数量的生态环境",
+		"EnchantedSword": "石中剑数量",
+		"Campsite": "野营地数量",
+		"ThinIce": "薄冰数量",
+		"SkyIslands": "空岛数量",
+		"MinecartTracks": "矿道设置",
+		"SpiderCaves": "蜘蛛洞数量",
+		"GraniteCaves": "花岗岩洞穴数量",
+		"MarbleCaves": "大理石洞穴数量",
+		"UndergroundCabins": "地下房间数量",
+		"GemstonesNonCave": "宝石数量",
+		"GemstoneCaves": "宝石洞穴数量",
+		"GemstoneCaveSize": "宝石洞穴大小",
+		"Hives": "蜂巢数量",
 
-		// TODO others
+		// Traps Menu
+		"MiningExplosiveDetonator": "采矿炸药（雷管）",
+		"TrapsDartExplosiveBoulder": "陷阱（毒箭、炸弹、落石）总量",
+		"AdditionalDartTraps": "额外的毒箭陷阱数量",
+		"AdditionalBoulderTraps": "额外的落石陷阱数量",
+		"AdditionalExplosiveTraps": "额外的炸弹陷阱数量",
+		"AdditionalGeyserTraps": "额外的喷泉陷阱数量",
+		"TempleTraps": "蜥蜴神庙陷阱",
+
+		// VariousSpawns Menu
+		"Setting100ForDefaultAmountNote": "设置100%将生成默认设置",
+		"CrystalHearts": "生命水晶数量",
+		"PreDropMeteor": "掉落陨石数量",
+		"TreeLowerBound": "树木最低高度",
+		"TreeUpperBound": "树木最高高度",
+		"MushroomBiomes": "夜光蘑菇地数量",
+		"Statues": "雕像数量",
+
+		// Downed Found Menu
+		"DownedBosses": "已击败BOSS",
+		"FoundNPCs": "已发现NPC",
+		"Downed": "已击败",
+		"Found": "已发现",
+
+		// Chest Menu
+		"EsimatedXChests": "预计有{0}个宝箱",
+		"BiomeChestSets": "地牢特殊宝箱套数",
+		"Pots": "陶罐数量",
+		"JungleShrines": "丛林宝箱数量",
+		"LivingMahoganyTrees": "地下大红木树数量",
+		"WaterChests": "水中宝箱数量",
+		"SurfaceChests": "地表宝箱数量",
+		"TempleChests": "蜥蜴神庙宝箱数量",
+		"ShadowChests": "暗影宝箱数量",
+
+		// SaveLoadSettings Menu
+		"SavedSetings": "保存参数设置",
+		"EnableThisList": "启用设置",
+		"DeleteThisList": "删除设置",
+		"SaveCurrentSettingsAsNew": "当前设置另存为",
+
+		// Debug Menu
+		"SaveWorldAfterEachStep": "每次调整时保存",
+		"SaveWorldIntModLoaderFolder": "地图保存在插件文件夹",
 	}
 }

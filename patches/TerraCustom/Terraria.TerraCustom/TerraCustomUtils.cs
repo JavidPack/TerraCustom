@@ -7,9 +7,16 @@ namespace Terraria.TerraCustom
 {
 	class TerraCustomUtils
 	{
-		internal static string TCText(string key)
+		internal static string TCText(string key, object arg0 = null)
 		{
-			return Language.GetTextValue("TerraCustom." + key);
+			//if(arg0 == null) not needed?
+			//	return Language.GetTextValue("TerraCustom." + key);
+			return Language.GetTextValue("TerraCustom." + key, arg0);
+		}
+
+		internal static string TCTextC(string key)
+		{
+			return TCText(key) + ":";
 		}
 
 		internal static Texture2D GetEmbeddedTexture2D(string name)

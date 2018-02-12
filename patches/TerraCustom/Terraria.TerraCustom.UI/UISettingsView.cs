@@ -44,14 +44,14 @@ namespace Terraria.TerraCustom.UI
 			scrollPanel.Append(uIScrollbar);
 			settingsItemList.SetScrollbar(uIScrollbar);
 
-			UITextPanel<string> titleTextPanel = new UITextPanel<string>("Saved Settings", 0.8f, true);
+			UITextPanel<string> titleTextPanel = new UITextPanel<string>(TerraCustomUtils.TCText("SavedSetings"), 0.8f, true);
 			titleTextPanel.HAlign = 0.5f;
 			titleTextPanel.Top.Set(-35f, 0f);
 			titleTextPanel.SetPadding(15f);
 			titleTextPanel.BackgroundColor = new Color(73, 94, 171);
 			uIElement.Append(titleTextPanel);
 
-			UITextPanel<string> backButton = new UITextPanel<string>("Back", 1f, false);
+			UITextPanel<string> backButton = new UITextPanel<string>(Localization.Language.GetTextValue("UI.Back"), 1f, false);
 			backButton.Width.Set(-10f, 1f / 2f);
 			backButton.Height.Set(25f, 0f);
 			backButton.VAlign = 1f;
@@ -61,7 +61,7 @@ namespace Terraria.TerraCustom.UI
 			backButton.OnClick += new UIElement.MouseEvent(BackClick);
 			uIElement.Append(backButton);
 
-			UIColorTextPanel saveNewButton = new UIColorTextPanel("Save Current Settings as New", Color.Green, 1f, false);
+			UIColorTextPanel saveNewButton = new UIColorTextPanel(TerraCustomUtils.TCText("SaveCurrentSettingsAsNew"), Color.Green, 1f, false);
 			saveNewButton.CopyStyle(backButton);
 			saveNewButton.HAlign = 1f;
 			saveNewButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
@@ -75,7 +75,7 @@ namespace Terraria.TerraCustom.UI
 		private static void SaveNewSettings(UIMouseEvent evt, UIElement listeningElement)
 		{
 			Main.PlaySound(11, -1, -1, 1);
-			Main.MenuUI.SetState(new UIVirtualKeyboard("Enter Settings name", "", new UIVirtualKeyboard.KeyboardSubmitEvent(SaveSetting), () => Main.menuMode = (int)MenuModes.SettingsView, 0));
+			Main.MenuUI.SetState(new UIVirtualKeyboard(TerraCustomUtils.TCText("EnterSettingsName"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(SaveSetting), () => Main.menuMode = (int)MenuModes.SettingsView, 0));
 			Main.menuMode = 888;
 		}
 

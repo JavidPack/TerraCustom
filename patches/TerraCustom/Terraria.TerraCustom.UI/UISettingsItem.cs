@@ -34,7 +34,7 @@ namespace Terraria.TerraCustom.UI
 			this.listName.Top.Set(5f, 0f);
 			base.Append(this.listName);
 
-			loadThisSettingButton = new UITextPanel<string>("Enable this List", 1f, false);
+			loadThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("EnableThisList"), 1f, false);
 			loadThisSettingButton.Width.Set(100f, 0f);
 			loadThisSettingButton.Height.Set(30f, 0f);
 			loadThisSettingButton.Left.Set(75f, 0f);
@@ -46,7 +46,7 @@ namespace Terraria.TerraCustom.UI
 			loadThisSettingButton.OnClick += new UIElement.MouseEvent(LoadThisSetting);
 			base.Append(loadThisSettingButton);
 
-			deleteThisSettingButton = new UITextPanel<string>("Delete this List", 1f, false);
+			deleteThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("DeleteThisList"), 1f, false);
 			deleteThisSettingButton.Width.Set(100f, 0f);
 			deleteThisSettingButton.Height.Set(30f, 0f);
 			deleteThisSettingButton.Left.Set(275f, 0f);
