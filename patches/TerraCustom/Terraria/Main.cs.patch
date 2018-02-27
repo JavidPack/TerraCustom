@@ -136,7 +136,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -43432,7 +_,8 @@
+@@ -43468,7 +_,8 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -146,7 +146,7 @@
  		{
  			Main.SaveSettings();
  #if CLIENT
-@@ -43685,13 +_,13 @@
+@@ -43721,13 +_,13 @@
  			{
  				Main.ActiveWorldFileData.SetSeed(text);
  			}
@@ -163,7 +163,7 @@
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
  			if (Main.UseSeedUI)
-@@ -43699,7 +_,7 @@
+@@ -43735,7 +_,7 @@
  				Main.menuMode = 5000;
  				return;
  			}
@@ -172,7 +172,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -43865,6 +_,10 @@
+@@ -43901,6 +_,10 @@
  			if (Main.menuMode == -1)
  			{
  				Main.menuMode = 0;
@@ -183,7 +183,7 @@
  			}
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -45031,7 +_,7 @@
+@@ -45067,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -192,7 +192,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -45063,27 +_,36 @@
+@@ -45099,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
@@ -229,7 +229,7 @@
  						}
  						Main.clrInput();
  					}
-@@ -45134,14 +_,14 @@
+@@ -45170,14 +_,14 @@
  						num17++;
  						Main.clrInput();
  					}
@@ -248,7 +248,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -46483,6 +_,7 @@
+@@ -46519,6 +_,7 @@
  					}
  					else
  					{
@@ -256,7 +256,7 @@
  						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  					}
  				}
-@@ -47371,11 +_,12 @@
+@@ -47407,11 +_,12 @@
  				}
  				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
  				string patreonShortURL = @"patreon.com/tModLoader";
@@ -270,7 +270,7 @@
  				if (num109 == 4)
  				{
  					color12 = new Microsoft.Xna.Framework.Color(127, 191, 191, 76);
-@@ -47388,6 +_,7 @@
+@@ -47424,6 +_,7 @@
  					Main.PlaySound(SoundID.MenuOpen);
  					Process.Start("https://www.patreon.com/tModLoader");
  				}

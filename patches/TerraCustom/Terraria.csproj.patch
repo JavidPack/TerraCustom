@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.csproj
 +++ src/TerraCustom\Terraria.csproj
-@@ -401,6 +_,7 @@
+@@ -404,6 +_,7 @@
      <Compile Include="Terraria.IO\Preferences.cs" />
      <Compile Include="Terraria.IO\WorldFile.cs" />
      <Compile Include="Terraria.IO\WorldFileData.cs" />
@@ -8,7 +8,7 @@
      <Compile Include="Terraria.Localization\GameCulture.cs" />
      <Compile Include="Terraria.Localization\Language.cs" />
      <Compile Include="Terraria.Localization\LanguageChangeCallback.cs" />
-@@ -604,6 +_,10 @@
+@@ -611,6 +_,10 @@
      <Compile Include="Terraria.Social\ISocialModule.cs" />
      <Compile Include="Terraria.Social\SocialAPI.cs" />
      <Compile Include="Terraria.Social\SocialMode.cs" />
@@ -19,7 +19,7 @@
      <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
      <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
      <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
-@@ -708,6 +_,8 @@
+@@ -715,6 +_,8 @@
      <Compile Include="Terraria\RemoteClient.cs" />
      <Compile Include="Terraria\RemoteServer.cs" />
      <Compile Include="Terraria\ResolutionChangeEvent.cs" />
@@ -28,7 +28,7 @@
      <Compile Include="Terraria\Sign.cs" />
      <Compile Include="Terraria\Star.cs" />
      <Compile Include="Terraria\StrayMethods.cs" />
-@@ -819,6 +_,10 @@
+@@ -826,6 +_,10 @@
      <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
      <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
      <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
@@ -39,7 +39,7 @@
    </ItemGroup>
    <ItemGroup>
      <None Include="App.config">
-@@ -833,6 +_,9 @@
+@@ -840,6 +_,9 @@
      <EmbeddedResource Include="Terraria.Localization.Content.de-DE.tModLoader.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.it-IT.tModLoader.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.tModLoader.json" />
@@ -49,7 +49,7 @@
    </ItemGroup>
    <ItemGroup />
    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-@@ -845,11 +_,11 @@
+@@ -852,11 +_,11 @@
  
  SET RELEASEFILE=""
  
