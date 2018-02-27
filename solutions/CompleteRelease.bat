@@ -1,7 +1,7 @@
 :: After Pulling, Patching, and making sure the version number is changed in src, this bat will compile and create zips for all release.
 :: It will also create a zip for ExampleMod
 
-set version=v0.5.3
+set version=v0.5.3.1
 set exeFile=TerraCustom %version%.exe
 set destinationFolder=.\TerraCustom %version% Release
 

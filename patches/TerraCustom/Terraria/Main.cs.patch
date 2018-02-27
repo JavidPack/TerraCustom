@@ -261,7 +261,7 @@
  				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
  				string patreonShortURL = @"patreon.com/tModLoader";
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + supportMessage;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.5.3"; // TODO, more accessable version string?
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.5.3.1"; // TODO, more accessable version string?
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
