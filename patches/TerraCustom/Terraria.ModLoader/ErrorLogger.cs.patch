@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader\ErrorLogger.cs
 +++ src/TerraCustom\Terraria.ModLoader\ErrorLogger.cs
-@@ -17,7 +_,7 @@
+@@ -18,7 +_,7 @@
  		/// <summary>
  		/// The file path to which logs are written and stored.
  		/// </summary>
