@@ -131,6 +131,13 @@ namespace Terraria.ModLoader
 		/// Allows you to modify the inventory newly created players or killed mediumcore players will start with. To add items to the player's inventory, create a new Item, call its SetDefaults method for whatever ID you want, call its Prefix method with a parameter of -1 if you want to give it a random prefix, then add it to the items list parameter.
 		/// </summary>
 		/// <param name="items"></param>
+		/// <param name="mediumcoreDeath">If true, the inventory is being setup for a character that dies in mediumcore rather than a newly created player.</param>
+		public virtual void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
+		{
+		}
+
+		// @todo: SetupStartInventory marked obsolete until v0.11
+		[method: Obsolete("SetupStartInventory now has an overload with a mediumcoreDeath bool argument, please use that.")]
 		public virtual void SetupStartInventory(IList<Item> items)
 		{
 		}
@@ -251,6 +258,14 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <param name="regen"></param>
 		public virtual void NaturalLifeRegen(ref float regen)
+		{
+		}
+
+		/// <summary>
+		/// Allows you to modify the player's stats while the game is paused due to the autopause setting being on.
+		/// This is called in single player only, some time before the player's tick update would happen when the game isn't paused.
+		/// </summary>
+		public virtual void UpdateAutopause()
 		{
 		}
 
@@ -484,6 +499,7 @@ namespace Terraria.ModLoader
 
 		/// <summary>
 		/// Whether or not ammo will be consumed upon usage. Return false to stop the ammo from being depleted. Returns true by default.
+		/// If false is returned, the OnConsumeAmmo hook is never called.
 		/// </summary>
 		/// <param name="weapon"></param>
 		/// <param name="ammo"></param>
@@ -491,6 +507,17 @@ namespace Terraria.ModLoader
 		public virtual bool ConsumeAmmo(Item weapon, Item ammo)
 		{
 			return true;
+		}
+
+		/// <summary>
+		/// Allows you to make things happen when ammo is consumed.
+		/// Called before the ammo stack is reduced.
+		/// </summary>
+		/// <param name="weapon"></param>
+		/// <param name="ammo"></param>
+		/// <returns></returns>
+		public virtual void OnConsumeAmmo(Item weapon, Item ammo)
+		{
 		}
 
 		/// <summary>

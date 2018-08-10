@@ -27,7 +27,7 @@ namespace Terraria.ModLoader
 	{
 		//change Terraria.Main.DrawMenu change drawn version number string to include this
 		/// <summary>The name and version number of tModLoader.</summary>
-		public static readonly Version version = new Version(0, 10, 1, 3);
+		public static readonly Version version = new Version(0, 10, 1, 5);
 		// Marks this release as a beta release, preventing publishing and marking all built mods as unpublishable.
 #if !BETA
 		public static readonly string versionedName = "tModLoader v" + version;
@@ -35,7 +35,7 @@ namespace Terraria.ModLoader
 #else
 		public static readonly string versionedName = "tModLoader v" + version + " - BetaNameHere Beta 1";
 		public static readonly bool beta = true;
-#endif	
+#endif
 #if WINDOWS
 		public static readonly bool windows = true;
 #else
@@ -80,6 +80,8 @@ namespace Terraria.ModLoader
 		internal static bool dontRemindModBrowserUpdateReload;
 		internal static bool dontRemindModBrowserDownloadEnable;
 		internal static byte musicStreamMode;
+		internal static bool removeForcedMinimumZoom;
+		internal static bool allowGreaterResolutions;
 		internal static string commandLineModPack = "";
 		private static string steamID64 = "";
 		internal static string SteamID64
@@ -140,7 +142,7 @@ namespace Terraria.ModLoader
 			}
 			if (Main.dedServ)
 			{
-				Console.WriteLine("Adding mod content...");
+				Console.WriteLine(Language.GetTextValue("tModLoader.AddingModContent"));
 			}
 			int num = 0;
 			foreach (Mod mod in mods.Values)
@@ -339,7 +341,7 @@ namespace Terraria.ModLoader
 			}
 			return dict[value.Key];
 		}
-		
+
 		internal static Dictionary<string, LocalMod> modsDirCache = new Dictionary<string, LocalMod>();
 		internal static LocalMod[] FindMods()
 		{
@@ -348,6 +350,8 @@ namespace Terraria.ModLoader
 
 			foreach (string fileName in Directory.GetFiles(ModPath, "*.tmod", SearchOption.TopDirectoryOnly))
 			{
+				if (Path.GetFileName(fileName) == "temporaryDownload.tmod")
+					continue;
 				var lastModified = File.GetLastWriteTime(fileName);
 				if (!modsDirCache.TryGetValue(fileName, out var mod) || mod.lastModified != lastModified)
 				{
@@ -358,11 +362,12 @@ namespace Terraria.ModLoader
 					}
 					catch (Exception e) //this will probably spam, given the number of calls to FindMods
 					{
-						ErrorLogger.LogException(e, "Error reading mod file "+modFile.path);
+						// TODO: Reflect these skipped Mods in the UI somehow.
+						//ErrorLogger.LogException(e, Language.GetTextValue("tModLoader.LoadErrorErrorReadingModFile", modFile.path));
 						continue;
 					}
 
-					mod = new LocalMod(modFile) {lastModified = lastModified};
+					mod = new LocalMod(modFile) { lastModified = lastModified };
 					modsDirCache[fileName] = mod;
 				}
 				mods.Add(mod);
@@ -432,8 +437,8 @@ namespace Terraria.ModLoader
 			try
 			{
 				Directory.CreateDirectory(UI.UIModPacks.ModListSaveDirectory);
-				
-				Console.WriteLine($"Loading specified modpack: {commandLineModPack}\n");
+
+				Console.WriteLine(Language.GetTextValue("tModLoader.LoadingSpecifiedModPack", commandLineModPack) + "\n");
 				var modSet = JsonConvert.DeserializeObject<HashSet<string>>(File.ReadAllText(filePath));
 				foreach (var mod in FindMods())
 				{
@@ -446,9 +451,9 @@ namespace Terraria.ModLoader
 			{
 				string err;
 				if (e is FileNotFoundException)
-					err = $"Modpack {filePath} does not exist.\n";
+					err = Language.GetTextValue("tModLoader.ModPackDoesNotExist", filePath) + "\n";
 				else
-					err = $"The {commandLineModPack} modpack failed to be read properly, it might be malformed. ({e.Message})\n";
+					err = Language.GetTextValue("tModLoader.ModPackDoesNotExist", commandLineModPack, e.Message) + "\n";
 
 				if (Main.dedServ)
 				{
@@ -488,16 +493,16 @@ namespace Terraria.ModLoader
 				try
 				{
 					if (mod.Name.Length == 0)
-						throw new ModNameException("Mods must actually have stuff in their names");
+						throw new ModNameException(Language.GetTextValue("tModLoader.BuildErrorModNameEmpty"));
 
 					if (mod.Name.Equals("Terraria", StringComparison.InvariantCultureIgnoreCase))
-						throw new ModNameException("Mods names cannot be named Terraria");
+						throw new ModNameException(Language.GetTextValue("tModLoader.BuildErrorModNamedTerraria"));
 
 					if (names.Contains(mod.Name))
-						throw new ModNameException("Two mods share the internal name " + mod.Name);
+						throw new ModNameException(Language.GetTextValue("tModLoader.BuildErrorTwoModsSameName", mod.Name));
 
 					if (mod.Name.IndexOf('.') >= 0)
-						throw new ModNameException("A mod's internal name cannot contain a period");
+						throw new ModNameException(Language.GetTextValue("tModLoader.BuildErrorModNameHasPeriod"));
 
 					names.Add(mod.Name);
 				}
@@ -523,7 +528,7 @@ namespace Terraria.ModLoader
 					if (!nameMap.ContainsKey(depName))
 					{
 						errored.Add(mod);
-						errorLog.AppendLine("Missing mod: " + depName + " required by " + mod);
+						errorLog.AppendLine(Language.GetTextValue("tModLoader.LoadErrorDependencyMissing", depName, mod));
 					}
 
 			if (errored.Count > 0)
@@ -541,8 +546,7 @@ namespace Terraria.ModLoader
 					if (nameMap.TryGetValue(dep.mod, out var inst) && inst.properties.version < dep.target)
 					{
 						errored.Add(mod);
-						errorLog.AppendLine(mod + " requires version " + dep.target + "+ of " + dep.mod +
-							" but version " + inst.properties.version + " is installed");
+						errorLog.AppendLine(Language.GetTextValue("tModLoader.LoadErrorDependencyVersionTooLow", mod, dep.target, dep.mod, inst.properties.version));
 					}
 
 			if (errored.Count > 0)
@@ -793,6 +797,7 @@ namespace Terraria.ModLoader
 			//save
 			Directory.CreateDirectory(ModPath);
 			string path = ModPath + Path.DirectorySeparatorChar + "enabled.json";
+			_enabledMods.IntersectWith(ModLoader.FindMods().Select(x => x.Name)); // Clear out mods that no longer exist.
 			string json = JsonConvert.SerializeObject(EnabledMods, Formatting.Indented);
 			File.WriteAllText(path, json);
 		}
@@ -989,6 +994,8 @@ namespace Terraria.ModLoader
 			Main.Configuration.Put("DontRemindModBrowserDownloadEnable", ModLoader.dontRemindModBrowserDownloadEnable);
 			Main.Configuration.Put("MusicStreamMode", ModLoader.musicStreamMode);
 			Main.Configuration.Put("AlwaysLogExceptions", ModLoader.alwaysLogExceptions);
+			Main.Configuration.Put("RemoveForcedMinimumZoom", ModLoader.removeForcedMinimumZoom);
+			Main.Configuration.Put("AllowGreaterResolutions", ModLoader.allowGreaterResolutions);
 		}
 
 		internal static void LoadConfiguration()
@@ -1001,6 +1008,8 @@ namespace Terraria.ModLoader
 			Main.Configuration.Get<bool>("DontRemindModBrowserDownloadEnable", ref ModLoader.dontRemindModBrowserDownloadEnable);
 			Main.Configuration.Get<byte>("MusicStreamMode", ref ModLoader.musicStreamMode);
 			Main.Configuration.Get<bool>("AlwaysLogExceptions", ref ModLoader.alwaysLogExceptions);
+			Main.Configuration.Get<bool>("RemoveForcedMinimumZoom", ref ModLoader.removeForcedMinimumZoom);
+			Main.Configuration.Get<bool>("AllowGreaterResolutions", ref ModLoader.removeForcedMinimumZoom);
 		}
 
 		/// <summary>

@@ -79,7 +79,8 @@ namespace Terraria.ModLoader
 		/// If CloneNewInstances is true, just calls Clone()
 		/// Otherwise calls the default constructor and copies fields
 		/// </summary>
-		public virtual GlobalItem NewInstance(Item item) {
+		public virtual GlobalItem NewInstance(Item item)
+		{
 			if (CloneNewInstances)
 				return Clone();
 
@@ -212,10 +213,19 @@ namespace Terraria.ModLoader
 
 		/// <summary>
 		/// Whether or not ammo will be consumed upon usage. Called both by the gun and by the ammo; if at least one returns false then the ammo will not be used. By default returns true.
+		/// If false is returned, the OnConsumeAmmo hook is never called.
 		/// </summary>
 		public virtual bool ConsumeAmmo(Item item, Player player)
 		{
 			return true;
+		}
+
+		/// <summary>
+		/// Allows you to make things happen when ammo is consumed. Called both by the gun and by the ammo.
+		/// Called before the ammo stack is reduced.
+		/// </summary>
+		public virtual void OnConsumeAmmo(Item item, Player player)
+		{
 		}
 
 		/// <summary>
@@ -303,10 +313,19 @@ namespace Terraria.ModLoader
 
 		/// <summary>
 		/// If the item is consumable and this returns true, then the item will be consumed upon usage. Returns true by default.
+		/// If false is returned, the OnConsumeItem hook is never called.
 		/// </summary>
 		public virtual bool ConsumeItem(Item item, Player player)
 		{
 			return true;
+		}
+
+		/// <summary>
+		/// Allows you to make things happen when this item is consumed.
+		/// Called before the item stack is reduced.
+		/// </summary>
+		public virtual void OnConsumeItem(Item item, Player player)
+		{
 		}
 
 		/// <summary>
@@ -468,6 +487,7 @@ namespace Terraria.ModLoader
 		/// Return false to stop the default items from being dropped; returns true by default. 
 		/// Context will either be "present", "bossBag", "crate", "lockBox", "herbBag", or "goodieBag". 
 		/// For boss bags and crates, arg will be set to the type of the item being opened.
+		/// This method is also called for modded bossBags that are properly implemented.
 		/// 
 		/// This method is not instanced.
 		/// </summary>
@@ -481,6 +501,7 @@ namespace Terraria.ModLoader
 		/// This method will not be called if any other GlobalItem returns false for PreOpenVanillaBag.
 		/// Context will either be "present", "bossBag", "crate", "lockBox", "herbBag", or "goodieBag".
 		/// For boss bags and crates, arg will be set to the type of the item being opened.
+		/// This method is also called for modded bossBags that are properly implemented.
 		/// 
 		/// This method is not instanced.
 		/// </summary>
@@ -740,6 +761,9 @@ namespace Terraria.ModLoader
 		/// <summary>
 		/// Allows you to disallow the player from equipping an accessory. Return false to disallow equipping the accessory. Returns true by default.
 		/// </summary>
+		/// <param name="item">The item that is attepting to equip.</param>
+		/// <param name="player">The player.</param>
+		/// <param name="slot">The inventory slot that the item is attempting to occupy.</param>
 		public virtual bool CanEquipAccessory(Item item, Player player, int slot)
 		{
 			return true;

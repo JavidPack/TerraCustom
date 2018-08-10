@@ -12,8 +12,8 @@ namespace Terraria.ModLoader.Default
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Starting Bag");
-			Tooltip.SetDefault("Some starting items couldn't fit in your inventory\n{$CommonItemTooltip.RightClickToOpen}");
+			DisplayName.SetDefault("{$tModLoader.StartBagItemName}");
+			Tooltip.SetDefault("{$tModLoader.StartBagTooltip}\n{$CommonItemTooltip.RightClickToOpen}");
 		}
 
 		public override void SetDefaults()
@@ -48,7 +48,7 @@ namespace Terraria.ModLoader.Default
 
 		public override TagCompound Save()
 		{
-			return new TagCompound {["items"] = items};
+			return new TagCompound { ["items"] = items };
 		}
 
 		public override void Load(TagCompound tag)

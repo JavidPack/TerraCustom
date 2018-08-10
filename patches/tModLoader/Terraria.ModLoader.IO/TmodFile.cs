@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Ionic.Zlib;
+using Terraria.Localization;
 
 namespace Terraria.ModLoader.IO
 {
@@ -130,7 +131,7 @@ namespace Terraria.ModLoader.IO
 		{
 			if (desiredState <= state)
 				return;
-			
+
 			using (var fileStream = File.OpenRead(path))
 			using (var hReader = new BinaryReader(fileStream))
 			{
@@ -148,7 +149,7 @@ namespace Terraria.ModLoader.IO
 					long pos = fileStream.Position;
 					var verifyHash = SHA1.Create().ComputeHash(fileStream);
 					if (!verifyHash.SequenceEqual(hash))
-						throw new Exception("Hash mismatch, data blob has been modified or corrupted");
+						throw new Exception(Language.GetTextValue("tModLoader.LoadErrorHashMismatchCorrupted"));
 
 					state = LoadedState.Integrity;
 					if (desiredState == LoadedState.Integrity)
@@ -179,7 +180,7 @@ namespace Terraria.ModLoader.IO
 							var end = deflateStream.TotalOut + len;
 							streamingHandler(fileName, len, reader);
 							if (deflateStream.TotalOut < end)
-								reader.ReadBytes((int) (end - deflateStream.TotalOut));
+								reader.ReadBytes((int)(end - deflateStream.TotalOut));
 							else if (deflateStream.TotalOut > end)
 								throw new IOException(
 									$"Read too many bytes ({deflateStream.Position - end - len}>{len}) while loading streaming asset: {fileName}");
@@ -193,7 +194,7 @@ namespace Terraria.ModLoader.IO
 					}
 				}
 			}
-			
+
 			if (desiredState >= LoadedState.Info && !HasFile("Info"))
 				throw new Exception("Missing Info file");
 
