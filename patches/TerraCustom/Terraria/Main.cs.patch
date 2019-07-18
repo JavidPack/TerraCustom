@@ -46,7 +46,7 @@
  		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
  		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
  		public static KeyboardState inputText;
-@@ -2067,11 +_,12 @@
+@@ -2080,11 +_,12 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
@@ -61,8 +61,8 @@
 +		public int selectedMenu2 = -1;
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
- 		public static int menuMode = Interface.loadModsID;
-@@ -2926,9 +_,12 @@
+ 		public static int menuMode = Interface.loadModsProgressID;
+@@ -2947,9 +_,12 @@
  			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
  			Main.Configuration.Put("Zoom", Main.GameZoomTarget);
  			Main.Configuration.Put("UIScale", Main._uiScaleWanted);
@@ -75,7 +75,7 @@
  		}
  
  		protected void CheckBunny()
-@@ -3047,7 +_,7 @@
+@@ -3072,7 +_,7 @@
  			bool fullscreen = false;
  			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
  			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
@@ -84,7 +84,7 @@
  			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
  			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
  			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -3249,7 +_,7 @@
+@@ -3274,7 +_,7 @@
  					Main.cMapAlphaDown
  				};
  			}
@@ -93,7 +93,7 @@
  			PlayerInput.Load();
  			if (num2 < 165)
  			{
-@@ -3550,7 +_,8 @@
+@@ -3575,7 +_,8 @@
  				}
  				text += c2;
  			}
@@ -136,7 +136,7 @@
  			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -43479,7 +_,8 @@
+@@ -43566,7 +_,8 @@
  			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
  		}
  
@@ -146,7 +146,7 @@
  		{
  			Main.SaveSettings();
  #if CLIENT
-@@ -43732,13 +_,13 @@
+@@ -43819,13 +_,13 @@
  			{
  				Main.ActiveWorldFileData.SetSeed(text);
  			}
@@ -163,7 +163,7 @@
  			Main.worldName = text.Trim();
  			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
  			if (Main.UseSeedUI)
-@@ -43746,7 +_,7 @@
+@@ -43833,7 +_,7 @@
  				Main.menuMode = 5000;
  				return;
  			}
@@ -172,7 +172,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu)
-@@ -43912,6 +_,10 @@
+@@ -43999,6 +_,10 @@
  			if (Main.menuMode == -1)
  			{
  				Main.menuMode = 0;
@@ -183,7 +183,7 @@
  			}
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -45078,7 +_,7 @@
+@@ -45179,7 +_,7 @@
  						Main.MenuUI.SetState(Main._worldSelectMenu);
  						Main.menuMode = 888;
  					}
@@ -192,7 +192,7 @@
  					{
  						num2 = 200;
  						num4 = 60;
-@@ -45110,27 +_,36 @@
+@@ -45211,27 +_,36 @@
  						{
  							Main.expertMode = false;
  							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
@@ -229,7 +229,7 @@
  						}
  						Main.clrInput();
  					}
-@@ -45181,14 +_,14 @@
+@@ -45282,14 +_,14 @@
  						num17++;
  						Main.clrInput();
  					}
@@ -248,7 +248,7 @@
  						Main.menuMode = 888;
  					}
  					else if (Main.menuMode == 8)
-@@ -46530,6 +_,7 @@
+@@ -46631,6 +_,7 @@
  					}
  					else
  					{
@@ -256,7 +256,7 @@
  						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  					}
  				}
-@@ -47419,11 +_,12 @@
+@@ -47541,11 +_,12 @@
  				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
  				string patreonShortURL = @"patreon.com/tModLoader";
  				bool showPatreon = Main.menuMode == 0;
@@ -270,7 +270,7 @@
  				if (num109 == 4)
  				{
  					color12 = new Microsoft.Xna.Framework.Color(127, 191, 191, 76);
-@@ -47439,6 +_,7 @@
+@@ -47561,6 +_,7 @@
  						Process.Start("https://www.patreon.com/tModLoader");
  					}
  				}
