@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Terraria.ModLoader.Core;
 
 namespace Terraria.ModLoader.Exceptions
 {
@@ -7,8 +8,7 @@ namespace Terraria.ModLoader.Exceptions
 	{
 		public ICollection<LocalMod> errored;
 
-		public ModSortingException(ICollection<LocalMod> errored, string message) : base(message)
-		{
+		public ModSortingException(ICollection<LocalMod> errored, string message) : base(message) {
 			this.errored = errored;
 		}
 	}
