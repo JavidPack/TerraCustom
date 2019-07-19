@@ -7,6 +7,7 @@ using Terraria.Graphics;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 using System.Linq;
+using Terraria.ModLoader.UI;
 
 namespace Terraria.TerraCustom.UI
 {
@@ -34,27 +35,23 @@ namespace Terraria.TerraCustom.UI
 			this.listName.Top.Set(5f, 0f);
 			base.Append(this.listName);
 
-			loadThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("EnableThisList"), 1f, false);
+			loadThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("EnableThisList"), 1f, false).WithFadedMouseOver();
 			loadThisSettingButton.Width.Set(100f, 0f);
 			loadThisSettingButton.Height.Set(30f, 0f);
 			loadThisSettingButton.Left.Set(75f, 0f);
 			loadThisSettingButton.Top.Set(40f, 0f);
 			loadThisSettingButton.PaddingTop -= 2f;
 			loadThisSettingButton.PaddingBottom -= 2f;
-			loadThisSettingButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			loadThisSettingButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			loadThisSettingButton.OnClick += new UIElement.MouseEvent(LoadThisSetting);
 			base.Append(loadThisSettingButton);
 
-			deleteThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("DeleteThisList"), 1f, false);
+			deleteThisSettingButton = new UITextPanel<string>(TerraCustomUtils.TCText("DeleteThisList"), 1f, false).WithFadedMouseOver();
 			deleteThisSettingButton.Width.Set(100f, 0f);
 			deleteThisSettingButton.Height.Set(30f, 0f);
 			deleteThisSettingButton.Left.Set(275f, 0f);
 			deleteThisSettingButton.Top.Set(40f, 0f);
 			deleteThisSettingButton.PaddingTop -= 2f;
 			deleteThisSettingButton.PaddingBottom -= 2f;
-			deleteThisSettingButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			deleteThisSettingButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			deleteThisSettingButton.OnClick += new UIElement.MouseEvent(DeleteThisSetting);
 			base.Append(deleteThisSettingButton);
 		}
@@ -88,17 +85,6 @@ namespace Terraria.TerraCustom.UI
 			base.MouseOut(evt);
 			this.BackgroundColor = new Color(63, 82, 151) * 0.7f;
 			this.BorderColor = new Color(89, 116, 213) * 0.7f;
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		private static void LoadThisSetting(UIMouseEvent evt, UIElement listeningElement)

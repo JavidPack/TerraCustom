@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.ModLoader.Core\ModOrganizer.cs
++++ src/TerraCustom\Terraria.ModLoader.Core\ModOrganizer.cs
+@@ -17,7 +_,7 @@
+ 	/// </summary>
+ 	internal static class ModOrganizer
+ 	{
+-		internal static string modPath = Path.Combine(Main.SavePath, "Mods");
++		internal static string modPath = Path.Combine(Main.TModLoaderSavePath, "Mods");
+ 		internal static string commandLineModPack;
+ 
+ 		private static Dictionary<string, LocalMod> modsDirCache = new Dictionary<string, LocalMod>();
+

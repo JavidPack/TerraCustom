@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.ModLoader\Logging.cs
++++ src/TerraCustom\Terraria.ModLoader\Logging.cs
+@@ -25,7 +_,7 @@
+ {
+ 	public static class Logging
+ 	{
+-		public static readonly string LogDir = Path.Combine(Program.SavePath, "Logs");
++		public static readonly string LogDir = Path.Combine(Program.TerraCustomSavePath, "Logs");
+ 		public static string LogPath { get; private set; }
+ 
+ 		internal static ILog Terraria { get; } = LogManager.GetLogger("Terraria");
+

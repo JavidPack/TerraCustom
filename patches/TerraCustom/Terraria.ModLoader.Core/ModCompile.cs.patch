@@ -1,0 +1,12 @@
+--- src/tModLoader\Terraria.ModLoader.Core\ModCompile.cs
++++ src/TerraCustom\Terraria.ModLoader.Core\ModCompile.cs
+@@ -49,7 +_,7 @@
+ 			}
+ 		}
+ 
+-		public static readonly string ModSourcePath = Path.Combine(Program.SavePath, "Mod Sources");
++		public static readonly string ModSourcePath = Path.Combine(Program.tModLoaderSavePath, "Mod Sources");
+ 
+ 		internal static readonly string modCompileDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ModCompile");
+ 		internal static readonly string modCompileVersionPath = Path.Combine(modCompileDir, "version");
+

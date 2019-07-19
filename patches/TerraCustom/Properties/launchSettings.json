@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Terraria": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Terraria\\TerraCustomDebug.exe",
+      "workingDirectory": "C:/Program Files (x86)/Steam/steamapps/common/Terraria"
+    }
+  }
+}

@@ -1,17 +1,27 @@
 --- src/tModLoader\Terraria\Program.cs
 +++ src/TerraCustom\Terraria\Program.cs
-@@ -235,11 +_,11 @@
- 			// These need to be here since LoadParameters is too late since new Main() and its static initializers happens first.
- 			if (Program.LaunchParameters.ContainsKey("-savedirectory"))
- 			{
--				Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
-+				//Program.LaunchParameters["-savedirectory"] = Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader");
- 			}
- 			if (Program.LaunchParameters.ContainsKey("-tmlsavedirectory"))
- 			{
--				Program.LaunchParameters["-savedirectory"] = Program.LaunchParameters["-tmlsavedirectory"];
-+				//Program.LaunchParameters["-savedirectory"] = Program.LaunchParameters["-tmlsavedirectory"];
- 			}
- 			ErrorLogger.ClearLogs();
- 			ThreadPool.SetMinThreads(8, 8);
+@@ -34,6 +_,8 @@
+ 		#endif
+ 		public static Dictionary<string, string> LaunchParameters = new Dictionary<string, string>();
+ 		public static string SavePath { get; private set; } // moved from Main to avoid triggering the Main static constructor before logging initializes
++		public static string tModLoaderSavePath { get; private set; }
++		public static string TerraCustomSavePath { get; private set; }
+ 		private static int ThingsToLoad = 0;
+ 		private static int ThingsLoaded = 0;
+ 		public static bool LoadedEverything = false;
+@@ -232,9 +_,14 @@
+ 
+ 			LaunchParameters = Utils.ParseArguements(args);
+ 			SavePath =
++				LaunchParameters.ContainsKey("-savedirectory") ? LaunchParameters["-savedirectory"] : Platform.Current.GetStoragePath($"Terraria");
++			tModLoaderSavePath =
+ 				LaunchParameters.ContainsKey("-tmlsavedirectory") ? LaunchParameters["-tmlsavedirectory"] :
+ 				LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(LaunchParameters["-savedirectory"], "ModLoader") :
+ 				Platform.Current.GetStoragePath($"Terraria{Path.DirectorySeparatorChar}ModLoader");
++			TerraCustomSavePath =
++				LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(LaunchParameters["-savedirectory"], "TerraCustom") :
++				Platform.Current.GetStoragePath($"Terraria{Path.DirectorySeparatorChar}TerraCustom");
+ 
+ 			try {
+ 				Logging.Init();
 

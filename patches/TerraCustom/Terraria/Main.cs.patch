@@ -1,13 +1,6 @@
 --- src/tModLoader\Terraria\Main.cs
 +++ src/TerraCustom\Terraria\Main.cs
-@@ -171,13 +_,27 @@
- 		public static Main instance;
- 		public static string versionNumber = "v1.3.5.2";
- 		public static string versionNumber2 = "v1.3.5.2";
--		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : Platform.Current.GetStoragePath("Terraria/ModLoader");
-+		public static string SavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Program.LaunchParameters["-savedirectory"] : Platform.Current.GetStoragePath("Terraria");
- 		public static bool AnnouncementBoxDisabled = false;
- 		public static int AnnouncementBoxRange = -1;
+@@ -179,7 +_,21 @@
  		public static string AutogenSeedName;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
  		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
@@ -15,8 +8,8 @@
 +		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
 +		// Above: Revert SavePath and CloudFavoritesData back to vanilla
 +		// TerraCustom Start: TModLoaderSavePath tModLoader's SavePath, TerraCustomSavePath is for settings
-+		public static string TModLoaderSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(Program.LaunchParameters["-savedirectory"], "ModLoader") : Platform.Current.GetStoragePath("Terraria/ModLoader");
-+		public static string TerraCustomSavePath = Program.LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(Program.LaunchParameters["-savedirectory"], "TerraCustom") : Platform.Current.GetStoragePath("Terraria/TerraCustom");
++		public static string TModLoaderSavePath = Program.tModLoaderSavePath;
++		public static string TerraCustomSavePath = Program.TerraCustomSavePath;
 +		public static TerraCustom.Setting setting = new TerraCustom.Setting();
 +		public static TerraCustom.SettingSaver settingSaver = new TerraCustom.SettingSaver();
 +		public static int bgStylePreview = 1;
@@ -30,7 +23,7 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
-@@ -1350,9 +_,13 @@
+@@ -1362,9 +_,13 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
  		public static string WorldPath = Path.Combine(Main.SavePath, "Worlds");
@@ -103,10 +96,10 @@
  			string path = string.Concat(new object[]
  				{
  					text2,
-@@ -4814,13 +_,14 @@
+@@ -4843,13 +_,14 @@
  #if CLIENT
  			Main.graphics = new GraphicsDeviceManager((Game)this);
- 			base.Content.RootDirectory = "Content";
+ 			base.Content = new TMLContentManager(Content.ServiceProvider, "Content");
 +			// TODO, figure out if I can redirect to original folder for easy mac installs
  #endif
  		}
@@ -119,7 +112,7 @@
  			Platform.Current.SetWindowUnicodeTitle(base.Window, Main._cachedTitle);
  #endif
  		}
-@@ -8100,8 +_,16 @@
+@@ -8139,8 +_,16 @@
  			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -261,7 +254,7 @@
  				string patreonShortURL = @"patreon.com/tModLoader";
  				bool showPatreon = Main.menuMode == 0;
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + (showPatreon ? Environment.NewLine + supportMessage : "");
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.5.4";
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.6";
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;

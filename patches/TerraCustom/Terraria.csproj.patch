@@ -4,8 +4,8 @@
      <OutputType>WinExe</OutputType>
      <PlatformTarget>AnyCPU</PlatformTarget>
      <Optimize>true</Optimize>
--    <OutputName>TerraCustom</OutputName>
-+    <OutputName>tModLoader</OutputName>
+-    <OutputName>tModLoader</OutputName>
++    <OutputName>TerraCustom</OutputName>
    </PropertyGroup>
    <PropertyGroup Condition="$(Configuration.Contains('Server'))">
      <OutputType>Exe</OutputType>

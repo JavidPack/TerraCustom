@@ -7,6 +7,7 @@ using Terraria.UI;
 using Terraria.GameContent.UI.States;
 using Newtonsoft.Json;
 using Terraria.ModLoader.UI;
+using Terraria.ModLoader.Core;
 
 namespace Terraria.TerraCustom.UI
 {
@@ -51,21 +52,18 @@ namespace Terraria.TerraCustom.UI
 			titleTextPanel.BackgroundColor = new Color(73, 94, 171);
 			uIElement.Append(titleTextPanel);
 
-			UITextPanel<string> backButton = new UITextPanel<string>(Localization.Language.GetTextValue("UI.Back"), 1f, false);
+			UITextPanel<string> backButton = new UITextPanel<string>(Localization.Language.GetTextValue("UI.Back"), 1f, false).WithFadedMouseOver();
 			backButton.Width.Set(-10f, 1f / 2f);
 			backButton.Height.Set(25f, 0f);
 			backButton.VAlign = 1f;
 			backButton.Top.Set(-20f, 0f);
-			backButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			backButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			backButton.OnClick += new UIElement.MouseEvent(BackClick);
 			uIElement.Append(backButton);
 
-			UIColorTextPanel saveNewButton = new UIColorTextPanel(TerraCustomUtils.TCText("SaveCurrentSettingsAsNew"), Color.Green, 1f, false);
+			UITextPanel<string> saveNewButton = new UITextPanel<string>(TerraCustomUtils.TCText("SaveCurrentSettingsAsNew"), 1f, false).WithFadedMouseOver(Color.Green, Color.Green * 0.7f); ;
 			saveNewButton.CopyStyle(backButton);
+			saveNewButton.BackgroundColor = Color.Green * 0.7f;
 			saveNewButton.HAlign = 1f;
-			saveNewButton.OnMouseOver += new UIElement.MouseEvent(FadedMouseOver);
-			saveNewButton.OnMouseOut += new UIElement.MouseEvent(FadedMouseOut);
 			saveNewButton.OnClick += new UIElement.MouseEvent(SaveNewSettings);
 			uIElement.Append(saveNewButton);
 
@@ -89,17 +87,6 @@ namespace Terraria.TerraCustom.UI
 		{
 			Main.PlaySound(11, -1, -1, 1);
 			Main.menuMode = (int)MenuModes.Settings;
-		}
-
-		private static void FadedMouseOver(UIMouseEvent evt, UIElement listeningElement)
-		{
-			Main.PlaySound(12, -1, -1, 1);
-			((UIPanel)evt.Target).BackgroundColor = new Color(73, 94, 171);
-		}
-
-		private static void FadedMouseOut(UIMouseEvent evt, UIElement listeningElement)
-		{
-			((UIPanel)evt.Target).BackgroundColor = new Color(63, 82, 151) * 0.7f;
 		}
 
 		public override void OnActivate()
