@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,19 +15,22 @@ using Terraria.Localization;
 using Terraria.ModLoader.Core;
 using Terraria.ModLoader.UI.DownloadManager;
 using Terraria.UI;
+using Terraria.UI.Chat;
 
 namespace Terraria.ModLoader.UI.ModBrowser
 {
 	internal class UIModDownloadItem : UIPanel
 	{
+		private const float PADDING = 5f;
+
 		public readonly string ModName;
 		public readonly string DisplayName;
+		public readonly string DisplayNameClean; // No chat tags: for search and sort functionality.
 		public readonly string DownloadUrl;
 		public readonly bool HasUpdate;
 		public readonly bool UpdateIsDowngrade;
 		public readonly LocalMod Installed;
 
-		private string _version;
 		private readonly string _author;
 		private readonly string _modIconUrl;
 		private ModIconStatus _modIconStatus = ModIconStatus.UNKNOWN;
@@ -40,15 +44,16 @@ namespace Terraria.ModLoader.UI.ModBrowser
 		private readonly UIText _modName;
 		private readonly UIImage _updateButton;
 		private readonly UIImage _updateWithDepsButton;
-		private readonly UIAutoScaleTextTextPanel<string> _moreInfoButton;
+		private readonly UIImage _moreInfoButton;
 		private readonly UIAutoScaleTextTextPanel<string> tMLUpdateRequired;
-		private readonly UIText _authorText;
 		private UIImage _modIcon;
 		internal string tooltip;
 
 		private bool HasModIcon => _modIconUrl != null;
-		private float ModIconAdjust => _modIconStatus == ModIconStatus.APPENDED ? 85f : 0f;
+		private float ModIconAdjust => 85f;
 		private bool IsInstalled => Installed != null;
+
+		private string ViewModInfoText => Language.GetTextValue("tModLoader.ModsMoreInfo");
 
 		private string UpdateText => HasUpdate
 			? UpdateIsDowngrade
@@ -65,13 +70,15 @@ namespace Terraria.ModLoader.UI.ModBrowser
 		public UIModDownloadItem(string displayName, string name, string version, string author, string modReferences, ModSide modSide, string modIconUrl, string downloadUrl, int downloads, int hot, string timeStamp, bool hasUpdate, bool updateIsDowngrade, LocalMod installed, string modloaderversion) {
 			ModName = name;
 			DisplayName = displayName;
+			DisplayNameClean = string.Join("", ChatManager.ParseMessage(displayName, Color.White).Where(x=> x.GetType() == typeof(TextSnippet)).Select(x => x.Text));
 			DownloadUrl = downloadUrl;
 
-			_version = version;
 			_author = author;
 			_modReferences = modReferences;
 			_modSide = modSide;
 			_modIconUrl = modIconUrl;
+			if (UIModBrowser.AvoidImgur)
+				_modIconUrl = null;
 			_downloads = downloads;
 			_hot = hot;
 			_timeStamp = timeStamp;
@@ -80,39 +87,27 @@ namespace Terraria.ModLoader.UI.ModBrowser
 			Installed = installed;
 
 			BorderColor = new Color(89, 116, 213) * 0.7f;
-			_dividerTexture = TextureManager.Load("Images/UI/Divider");
-			_innerPanelTexture = TextureManager.Load("Images/UI/InnerPanelBackground");
+			_dividerTexture = UICommon.DividerTexture;
+			_innerPanelTexture = UICommon.InnerPanelTexture;
 			Height.Pixels = 90;
 			Width.Percent = 1f;
 			SetPadding(6f);
 
-			float left = HasModIcon ? 85f : 0f;
+			float leftOffset = HasModIcon ? ModIconAdjust : 0f;
+
 			_modName = new UIText(displayName) {
-				Left = new StyleDimension(left + 5, 0f),
+				Left = new StyleDimension(leftOffset + PADDING, 0f),
 				Top = { Pixels = 5 }
 			};
 			Append(_modName);
 
-			if (_timeStamp != "0000-00-00 00:00:00") {
-				try {
-					var myDateTime = DateTime.Parse(_timeStamp);
-					string text = TimeHelper.HumanTimeSpanString(myDateTime);
-					int textWidth = (int)Main.fontMouseText.MeasureString(text).X;
-				}
-				catch (Exception e) {
-					Logging.tML.Error(e.ToString());
-				}
-			}
-
-			_moreInfoButton = new UIAutoScaleTextTextPanel<string>(Language.GetTextValue("tModLoader.ModsMoreInfo")) {
-				Width = { Pixels = 100 },
+			_moreInfoButton = new UIImage(UICommon.ButtonModInfoTexture) {
+				Width = { Pixels = 36 },
 				Height = { Pixels = 36 },
-				Left = { Pixels = left },
+				Left = { Pixels = leftOffset },
 				Top = { Pixels = 40 }
-			}.WithFadedMouseOver();
-			_moreInfoButton.PaddingTop -= 2f;
-			_moreInfoButton.PaddingBottom -= 2f;
-			_moreInfoButton.OnClick += RequestMoreInfo;
+			};
+			_moreInfoButton.OnClick += ViewModInfo;
 			Append(_moreInfoButton);
 
 			if (modloaderversion != null) {
@@ -120,46 +115,47 @@ namespace Terraria.ModLoader.UI.ModBrowser
 				tMLUpdateRequired.BackgroundColor = Color.Orange * 0.7f;
 				tMLUpdateRequired.CopyStyle(_moreInfoButton);
 				tMLUpdateRequired.Width.Pixels = 340;
-				tMLUpdateRequired.Left.Pixels = _moreInfoButton.Width.Pixels + _moreInfoButton.Left.Pixels + 5f;
+				tMLUpdateRequired.Left.Pixels += 36 + PADDING;
 				tMLUpdateRequired.OnClick += (a, b) => {
 					Process.Start("https://github.com/tModLoader/tModLoader/releases/latest");
 				};
 				Append(tMLUpdateRequired);
 			}
 			else if (hasUpdate || installed == null) {
-				_updateButton = new UIImage(UICommon.buttonDownloadTexture);
-				_updateButton.Top.Pixels = 40;
-				_updateButton.Left.Set(-166, 1f);
+				_updateButton = new UIImage(UpdateIsDowngrade ? UICommon.ButtonDowngradeTexture : UICommon.ButtonDownloadTexture);
+				_updateButton.CopyStyle(_moreInfoButton);
+				_updateButton.Left.Pixels += 36 + PADDING;
 				_updateButton.OnClick += DownloadMod;
 				Append(_updateButton);
 
 				if (_modReferences.Length > 0) {
-					_updateButton.Left.Set(_updateButton.Left.Pixels - _updateButton.Width.Pixels - 6, 1f);
-					_updateWithDepsButton = new UIImage(UICommon.buttonDownloadMultipleTexture);
+					_updateWithDepsButton = new UIImage(UICommon.ButtonDownloadMultipleTexture);
 					_updateWithDepsButton.CopyStyle(_updateButton);
-					_updateWithDepsButton.Left.Pixels = _updateButton.Width.Pixels + _updateButton.Left.Pixels + 5f;
+					_updateWithDepsButton.Left.Pixels += 36 + PADDING;
 					_updateWithDepsButton.OnClick += DownloadWithDeps;
 					Append(_updateWithDepsButton);
 				}
 			}
 
 			if (modReferences.Length > 0) {
-				var icon = UICommon.buttonExclamationTexture;
+				var icon = UICommon.ButtonExclamationTexture;
 				var modReferenceIcon = new UIHoverImage(icon, Language.GetTextValue("tModLoader.MBClickToViewDependencyMods", string.Join("\n", modReferences.Split(',').Select(x => x.Trim())))) {
-					Left = { Pixels = -icon.Width, Percent = 1f }
+					Left = { Pixels = -icon.Width - PADDING, Percent = 1f }
 				};
-				modReferenceIcon.OnClick += (s, e) => {
-					var modListItem = (UIModDownloadItem)e.Parent;
-					Interface.modBrowser.SpecialModPackFilter = modListItem._modReferences.Split(',').Select(x => x.Trim()).ToList();
-					Interface.modBrowser.SpecialModPackFilterTitle = Language.GetTextValue("tModLoader.MBFilterDependencies"); // Toolong of \n" + modListItem.modName.Text;
-					Interface.modBrowser.FilterTextBox.Text = "";
-					Interface.modBrowser.UpdateNeeded = true;
-					Main.PlaySound(SoundID.MenuOpen);
-				};
+				modReferenceIcon.OnClick += ShowModDependencies;
 				Append(modReferenceIcon);
 			}
 
-			OnDoubleClick += RequestMoreInfo;
+			OnDoubleClick += ViewModInfo;
+		}
+
+		private void ShowModDependencies(UIMouseEvent evt, UIElement element) {
+			var modListItem = (UIModDownloadItem)element.Parent;
+			Interface.modBrowser.SpecialModPackFilter = modListItem._modReferences.Split(',').Select(x => x.Trim()).ToList();
+			Interface.modBrowser.SpecialModPackFilterTitle = Language.GetTextValue("tModLoader.MBFilterDependencies"); // Toolong of \n" + modListItem.modName.Text;
+			Interface.modBrowser.FilterTextBox.Text = "";
+			Interface.modBrowser.UpdateNeeded = true;
+			Main.PlaySound(SoundID.MenuOpen);
 		}
 
 		internal static UIModDownloadItem FromJson(LocalMod[] installedMods, JObject mod) {
@@ -203,9 +199,9 @@ namespace Terraria.ModLoader.UI.ModBrowser
 				default:
 					return base.CompareTo(obj);
 				case ModBrowserSortMode.DisplayNameAtoZ:
-					return string.Compare(DisplayName, item?.DisplayName, StringComparison.Ordinal);
+					return string.Compare(DisplayNameClean, item?.DisplayNameClean, StringComparison.Ordinal);
 				case ModBrowserSortMode.DisplayNameZtoA:
-					return -1 * string.Compare(DisplayName, item?.DisplayName, StringComparison.Ordinal);
+					return -1 * string.Compare(DisplayNameClean, item?.DisplayNameClean, StringComparison.Ordinal);
 				case ModBrowserSortMode.DownloadsAscending:
 					return _downloads.CompareTo(item?._downloads);
 				case ModBrowserSortMode.DownloadsDescending:
@@ -226,7 +222,7 @@ namespace Terraria.ModLoader.UI.ModBrowser
 					if (_author.IndexOf(Interface.modBrowser.Filter, StringComparison.OrdinalIgnoreCase) == -1)
 						return false;
 				}
-				else if (DisplayName.IndexOf(Interface.modBrowser.Filter, StringComparison.OrdinalIgnoreCase) == -1
+				else if (DisplayNameClean.IndexOf(Interface.modBrowser.Filter, StringComparison.OrdinalIgnoreCase) == -1
 					&& ModName.IndexOf(Interface.modBrowser.Filter, StringComparison.OrdinalIgnoreCase) == -1)
 					return false;
 			}
@@ -243,6 +239,8 @@ namespace Terraria.ModLoader.UI.ModBrowser
 					return HasUpdate || Installed == null;
 				case UpdateFilter.UpdateOnly:
 					return HasUpdate;
+				case UpdateFilter.InstalledOnly:
+					return Installed != null;
 			}
 		}
 
@@ -254,16 +252,21 @@ namespace Terraria.ModLoader.UI.ModBrowser
 			}
 
 			CalculatedStyle innerDimensions = GetInnerDimensions();
-			Vector2 drawPos = new Vector2(innerDimensions.X + 5f + ModIconAdjust, innerDimensions.Y + 30f);
-			spriteBatch.Draw(_dividerTexture, drawPos, null, Color.White, 0f, Vector2.Zero, new Vector2((innerDimensions.Width - 10f - ModIconAdjust) / 8f, 1f), SpriteEffects.None, 0f);
+			float leftOffset = HasModIcon ? ModIconAdjust : 0f;
+			Vector2 drawPos = new Vector2(innerDimensions.X + 5f + leftOffset, innerDimensions.Y + 30f);
+			spriteBatch.Draw(_dividerTexture, drawPos, null, Color.White, 0f, Vector2.Zero, new Vector2((innerDimensions.Width - 10f - leftOffset) / 8f, 1f), SpriteEffects.None, 0f);
 
 			drawPos = new Vector2(innerDimensions.X + innerDimensions.Width - 125, innerDimensions.Y + 45);
 			DrawTimeText(spriteBatch, drawPos);
 
 			if (_updateButton?.IsMouseHovering == true) {
 				tooltip = UpdateText;
-			} else if (_updateWithDepsButton?.IsMouseHovering == true) {
+			}
+			else if (_updateWithDepsButton?.IsMouseHovering == true) {
 				tooltip = UpdateWithDepsText;
+			}
+			else if (_moreInfoButton?.IsMouseHovering == true) {
+				tooltip = ViewModInfoText;
 			}
 		}
 
@@ -314,22 +317,30 @@ namespace Terraria.ModLoader.UI.ModBrowser
 		}
 
 		private void IconDownloadComplete(object sender, DownloadDataCompletedEventArgs e) {
+			bool success = false;
 			try {
-				byte[] data = e.Result;
-				using (var buffer = new MemoryStream(data)) {
-					var iconTexture = Texture2D.FromStream(Main.instance.GraphicsDevice, buffer);
-					_modIcon = new UIImage(iconTexture) {
-						Left = { Percent = 0f },
-						Top = { Percent = 0f }
-					};
-					_modIconStatus = ModIconStatus.READY;
+				if (!e.Cancelled && e.Error == null) {
+					byte[] data = e.Result;
+					using (var buffer = new MemoryStream(data)) {
+						var iconTexture = Texture2D.FromStream(Main.instance.GraphicsDevice, buffer);
+						_modIcon = new UIImage(iconTexture) {
+							Left = { Percent = 0f },
+							Top = { Percent = 0f }
+						};
+						_modIconStatus = ModIconStatus.READY;
+						success = true;
+					}
 				}
 			}
 			catch {
 				// country- wide imgur blocks, cannot load icon
+			}
+			if (!success) {
 				_modIconStatus = ModIconStatus.APPENDED;
-				_modName.Left.Set(5f, 0f);
-				_moreInfoButton.Left.Set(0f, 0f);
+				_modName.Left.Pixels -= ModIconAdjust;
+				_moreInfoButton.Left.Pixels -= ModIconAdjust;
+				_updateButton.Left.Pixels -= ModIconAdjust;
+				_updateWithDepsButton.Left.Pixels -= ModIconAdjust;
 			}
 		}
 
@@ -360,7 +371,7 @@ namespace Terraria.ModLoader.UI.ModBrowser
 
 		public override void MouseOver(UIMouseEvent evt) {
 			base.MouseOver(evt);
-			BackgroundColor = UICommon.defaultUIBlue;
+			BackgroundColor = UICommon.DefaultUIBlue;
 			BorderColor = new Color(89, 116, 213);
 		}
 
@@ -379,18 +390,30 @@ namespace Terraria.ModLoader.UI.ModBrowser
 
 		private void DownloadWithDeps(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(SoundID.MenuTick);
-			var modDownload = GetModDownload();
-			var mods = _modReferences.Split(',')
-				.Select(Interface.modBrowser.FindModDownloadItem)
-				.Where(item => item != null && (!item.IsInstalled || (item.HasUpdate && !item.UpdateIsDowngrade)))
-				.Select(x => x.GetModDownload())
-				.ToList();
-			mods.Add(modDownload);
+			var downloads = new HashSet<DownloadModFile> { GetModDownload() };
+			GetDependenciesRecursive(this, ref downloads);
 			Interface.downloadProgress.gotoMenu = Interface.modBrowserID;
-			Interface.downloadProgress.HandleDownloads(mods.ToArray());
+			Interface.downloadProgress.HandleDownloads(downloads.ToArray());
 		}
 
-		private void RequestMoreInfo(UIMouseEvent evt, UIElement listeningElement) {
+		private IEnumerable<DownloadModFile> GetDependencies() {
+			return _modReferences.Split(',')
+				.Select(Interface.modBrowser.FindModDownloadItem)
+				.Where(item => item != null && (!item.IsInstalled || (item.HasUpdate && !item.UpdateIsDowngrade)))
+				.Select(x => x.GetModDownload());
+		}
+
+		private void GetDependenciesRecursive(UIModDownloadItem item, ref HashSet<DownloadModFile> set) {
+			var deps = item.GetDependencies();
+			set.UnionWith(deps);
+			// Cyclic dependency should never happen, as it's not allowed
+			// TODO: What if the same mod is a dependency twice, but different versions?
+			foreach (var dep in deps) {
+				GetDependenciesRecursive(dep.ModBrowserItem, ref set);
+			}
+		}
+
+		private void ViewModInfo(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(SoundID.MenuOpen);
 			Interface.modInfo.Show(ModName, DisplayName, Interface.modBrowserID, Installed, loadFromWeb: true);
 		}

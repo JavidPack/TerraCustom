@@ -16,6 +16,7 @@
 		"ModsModPacks": "Grupos de mods",
 		"ModsDisable": "Desactivar",
 		"ModsEnable": "Activar",
+		// "ModsOpenConfig": "Click to open config",
 		// "ModOldWarning": "Old mod, enable at own risk",
 		// "ModDependencyClickTooltip": "This mod depends on: {0}\n (click to enable)",
 		// "ModDependencyModsNotFound": "The following mods were not found: {0}",
@@ -97,6 +98,7 @@
 		// "ModInfoExtract": "Extract",
 		// "ModInfoNoDescriptionAvailable": "No description available",
 		// "ModInfoProblemTryAgain": "There was a problem, try again",
+		// "ModInfoDisableModToDelete": "Disable Mod to Delete",
 
 		// Mod Packs
 		// "ModPacksHeader": "Mod Packs",
@@ -156,6 +158,7 @@
 		"MBShowAllMods": "Mostrar todos los mods",
 		"MBShowNotInstalledUpdates": "Mostrar mods sin instalar y actualizaciones",
 		"MBShowUpdates": "Mostrar sólo actualizaciones",
+		// "MBShowInstalled": "Show installed mods",
 		// "MBShowMSAll": "Show all mods",
 		// "MBShowMSBoth": "Show normal side only mods",
 		// "MBShowMSClient": "Show client side only mods",
@@ -302,6 +305,7 @@
 		// "MSSandboxing": "Sandboxing: {0}",
 		"MSIntializing": "Inicializando: ",
 		"MSLoading": "Cargando Mod: ",
+		// "MSUnloading": "Unloading: {0}",
 		// "MSFinishingResourceLoading": "Finishing Resource Loading",
 		// "MSSettingUp": "Setting up...",
 		// "MSAddingRecipes": "Adding Recipes...",

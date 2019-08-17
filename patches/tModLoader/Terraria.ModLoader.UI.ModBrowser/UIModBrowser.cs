@@ -26,6 +26,7 @@ namespace Terraria.ModLoader.UI.ModBrowser
 	internal partial class UIModBrowser : UIState
 	{
 		public static bool AvoidGithub;
+		public static bool AvoidImgur;
 		public static bool PlatformSupportsTls12
 			=> FrameworkVersion.Framework != Framework.Mono || FrameworkVersion.Version >= new Version(5, 20);
 
@@ -82,7 +83,7 @@ namespace Terraria.ModLoader.UI.ModBrowser
 			get => _specialModPackFilter;
 			set {
 				if (_specialModPackFilter != null && value == null) {
-					_backgroundElement.BackgroundColor = UICommon.mainPanelBackground;
+					_backgroundElement.BackgroundColor = UICommon.MainPanelBackground;
 					_rootElement.RemoveChild(_clearButton);
 					_rootElement.RemoveChild(_downloadAllButton);
 				}
@@ -336,8 +337,6 @@ namespace Terraria.ModLoader.UI.ModBrowser
 		///     Enqueues a list of mods, if found on the browser (also used for ModPacks)
 		/// </summary>
 		internal void DownloadMods(IEnumerable<string> modNames) {
-			Main.PlaySound(SoundID.MenuTick);
-
 			var downloads = new List<DownloadFile>();
 
 			foreach (string desiredMod in modNames) {
@@ -351,6 +350,10 @@ namespace Terraria.ModLoader.UI.ModBrowser
 				}
 			}
 
+			// If no download detected for some reason (e.g. empty modpack filter), prevent switching UI
+			if (downloads.Count <= 0) return;
+
+			Main.PlaySound(SoundID.MenuTick);
 			Interface.downloadProgress.gotoMenu = Interface.modBrowserID;
 			Interface.downloadProgress.OnDownloadsComplete += () => {
 				if (_missingMods.Count > 0) {

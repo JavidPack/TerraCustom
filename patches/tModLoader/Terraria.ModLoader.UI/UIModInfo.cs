@@ -29,6 +29,7 @@ namespace Terraria.ModLoader.UI
 		private UIAutoScaleTextTextPanel<string> _modHomepageButton;
 		private UIAutoScaleTextTextPanel<string> _extractButton;
 		private UIAutoScaleTextTextPanel<string> _deleteButton;
+		private UIAutoScaleTextTextPanel<string> _fakeDeleteButton; // easier than making new OnMouseOver code.
 		private readonly UILoaderAnimatedImage _loaderElement = new UILoaderAnimatedImage(0.5f, 0.5f);
 
 		private int _gotoMenu;
@@ -37,7 +38,9 @@ namespace Terraria.ModLoader.UI
 		private string _info = string.Empty;
 		private string _modName = string.Empty;
 		private string _modDisplayName = string.Empty;
-		private bool _loadFromWeb = false;
+		private bool _loadFromWeb;
+		private bool _loading;
+		private bool _ready;
 
 		private CancellationTokenSource _cts;
 		
@@ -53,7 +56,7 @@ namespace Terraria.ModLoader.UI
 			var uIPanel = new UIPanel {
 				Width = {Percent = 1f},
 				Height = {Pixels = -110, Percent = 1f},
-				BackgroundColor = UICommon.mainPanelBackground
+				BackgroundColor = UICommon.MainPanelBackground
 			};
 			_uIElement.Append(uIPanel);
 
@@ -74,7 +77,7 @@ namespace Terraria.ModLoader.UI
 			_uITextPanel = new UITextPanel<string>(Language.GetTextValue("tModLoader.ModInfoHeader"), 0.8f, true) {
 				HAlign = 0.5f,
 				Top = {Pixels = -35},
-				BackgroundColor = UICommon.defaultUIBlue
+				BackgroundColor = UICommon.DefaultUIBlue
 			}.WithPadding(15f);
 			_uIElement.Append(_uITextPanel);
 
@@ -102,7 +105,7 @@ namespace Terraria.ModLoader.UI
 				HAlign = 0.5f,
 				Top = {Pixels = -20}
 			}.WithFadedMouseOver();
-			_extractButton.OnClick += ExtractClick;
+			_extractButton.OnClick += ExtractMod;
 
 			_deleteButton = new UIAutoScaleTextTextPanel<string>(Language.GetTextValue("UI.Delete")) {
 				Width = {Pixels = -10, Percent = 0.333f},
@@ -111,7 +114,16 @@ namespace Terraria.ModLoader.UI
 				HAlign = 1f,
 				Top = {Pixels = -20}
 			}.WithFadedMouseOver();
-			_deleteButton.OnClick += DeleteClick;
+			_deleteButton.OnClick += DeleteMod;
+
+			_fakeDeleteButton = new UIAutoScaleTextTextPanel<string>(Language.GetTextValue("UI.Delete")) {
+				Width = { Pixels = -10, Percent = 0.333f },
+				Height = { Pixels = 40 },
+				VAlign = 1f,
+				HAlign = 1f,
+				Top = { Pixels = -20 }
+			};
+			_fakeDeleteButton.BackgroundColor = Color.Gray;
 
 			Append(_uIElement);
 		}
@@ -144,6 +156,7 @@ namespace Terraria.ModLoader.UI
 			_url = string.Empty;
 			_modHomepageButton.Remove();
 			_deleteButton.Remove();
+			_fakeDeleteButton.Remove();
 			_extractButton.Remove();
 		}
 
@@ -152,12 +165,12 @@ namespace Terraria.ModLoader.UI
 			Main.menuMode = _gotoMenu;
 		}
 
-		private void ExtractClick(UIMouseEvent evt, UIElement listeningElement) {
+		private void ExtractMod(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(SoundID.MenuOpen);
 			Interface.extractMod.Show(_localMod, _gotoMenu);
 		}
 
-		private void DeleteClick(UIMouseEvent evt, UIElement listeningElement) {
+		private void DeleteMod(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(SoundID.MenuClose);
 			File.Delete(_localMod.modFile.path);
 			Main.menuMode = _gotoMenu;
@@ -177,10 +190,10 @@ namespace Terraria.ModLoader.UI
 			if (_modHomepageButton.IsMouseHovering) {
 				UICommon.DrawHoverStringInBounds(spriteBatch, _url);
 			}
+			if (_fakeDeleteButton.IsMouseHovering) {
+				UICommon.DrawHoverStringInBounds(spriteBatch, Language.GetTextValue("tModLoader.ModInfoDisableModToDelete"));
+			}
 		}
-
-		private bool _loading;
-		private bool _ready;
 
 		public override void OnActivate() {
 			_modInfo.SetText(_info);
@@ -225,7 +238,9 @@ namespace Terraria.ModLoader.UI
 				}
 
 				if (_localMod != null) {
-					_uIElement.AddOrRemoveChild(_deleteButton, ModLoader.Mods.All(x => x.Name != _localMod.Name));
+					bool realDeleteButton = ModLoader.Mods.All(x => x.Name != _localMod.Name);
+					_uIElement.AddOrRemoveChild(_deleteButton, realDeleteButton);
+					_uIElement.AddOrRemoveChild(_fakeDeleteButton, !realDeleteButton);
 					_uIElement.Append(_extractButton);
 				}
 				Recalculate();

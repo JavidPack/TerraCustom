@@ -14,10 +14,9 @@ using Terraria.UI;
 
 namespace Terraria.ModLoader.Config.UI
 {
-	// TODO: Dictionary
-	// TODO: NPC UIElements w/special ui.	
 	// TODO: Revert individual button.	
-	// TODO: DefaultValue for new elements in Lists
+	// TODO: Collapse All button, or default to collapsed?
+	// TODO: Localization support
 	internal class UIModConfig : UIState
 	{
 		private UIElement uIElement;
@@ -30,6 +29,7 @@ namespace Terraria.ModLoader.Config.UI
 		private UITextPanel<string> revertConfigButton;
 		private UITextPanel<string> restoreDefaultsConfigButton;
 		private UIPanel uIPanel;
+		private readonly List<Tuple<UIElement, UIElement>> mainConfigItems = new List<Tuple<UIElement, UIElement>>();
 		private UIList mainConfigList;
 		private UIScrollbar uIScrollbar;
 		private Stack<UIPanel> configPanelStack = new Stack<UIPanel>();
@@ -41,6 +41,10 @@ namespace Terraria.ModLoader.Config.UI
 		private ModConfig modConfig;
 		// the clone we modify. 
 		private ModConfig pendingConfig;
+		public int updateCount;
+
+		private bool updateNeeded;
+		private UIFocusInputTextField filterTextField;
 
 		public override void OnInitialize() {
 			uIElement = new UIElement();
@@ -52,9 +56,32 @@ namespace Terraria.ModLoader.Config.UI
 
 			uIPanel = new UIPanel();
 			uIPanel.Width.Set(0f, 1f);
-			uIPanel.Height.Set(-110f, 1f);
-			uIPanel.BackgroundColor = UICommon.mainPanelBackground;
+			uIPanel.Height.Set(-140f, 1f);
+			uIPanel.Top.Set(30f, 0f);
+			uIPanel.BackgroundColor = UICommon.MainPanelBackground;
 			uIElement.Append(uIPanel);
+
+			UIPanel textBoxBackground = new UIPanel();
+			textBoxBackground.SetPadding(0);
+			filterTextField = new UIFocusInputTextField("Filter Options");
+			textBoxBackground.Top.Set(2f, 0f);
+			textBoxBackground.Left.Set(-190, 1f);
+			textBoxBackground.Width.Set(180, 0f);
+			textBoxBackground.Height.Set(30, 0f);
+			uIElement.Append(textBoxBackground);
+
+			filterTextField.SetText("");
+			filterTextField.Top.Set(5, 0f);
+			filterTextField.Left.Set(10, 0f);
+			filterTextField.Width.Set(-20, 1f);
+			filterTextField.Height.Set(20, 0);
+			filterTextField.OnTextChange += (a, b) => {
+				updateNeeded = true;
+			};
+			filterTextField.OnRightClick += (a, b) => {
+				filterTextField.SetText("");
+			};
+			textBoxBackground.Append(filterTextField);
 
 			// TODO: ModConfig Localization support
 			message = new UITextPanel<string>("Notification: ");
@@ -85,7 +112,7 @@ namespace Terraria.ModLoader.Config.UI
 			headerTextPanel.HAlign = 0.5f;
 			headerTextPanel.Top.Set(-50f, 0f);
 			headerTextPanel.SetPadding(15f);
-			headerTextPanel.BackgroundColor = UICommon.defaultUIBlue;
+			headerTextPanel.BackgroundColor = UICommon.DefaultUIBlue;
 			uIElement.Append(headerTextPanel);
 
 			previousConfigButton = new UITextPanel<string>("<", 1f, false);
@@ -145,7 +172,7 @@ namespace Terraria.ModLoader.Config.UI
 			restoreDefaultsConfigButton.OnClick += RestoreDefaults;
 			uIElement.Append(restoreDefaultsConfigButton);
 
-			uIPanel.BackgroundColor = UICommon.mainPanelBackground;
+			uIPanel.BackgroundColor = UICommon.MainPanelBackground;
 
 			Append(uIElement);
 		}
@@ -167,6 +194,7 @@ namespace Terraria.ModLoader.Config.UI
 
 		internal void Unload() {
 			mainConfigList?.Clear();
+			mainConfigItems?.Clear();
 			mod = null;
 			modConfigs = null;
 			modConfig = null;
@@ -291,6 +319,7 @@ namespace Terraria.ModLoader.Config.UI
 		bool netUpdate;
 		public override void Update(GameTime gameTime) {
 			base.Update(gameTime);
+			updateCount++;
 			if (pendingChangesUIUpdate) {
 				uIElement.Append(saveConfigButton);
 				uIElement.Append(revertConfigButton);
@@ -301,6 +330,16 @@ namespace Terraria.ModLoader.Config.UI
 				DoMenuModeState();
 				netUpdate = false;
 			}
+			if (!updateNeeded) return;
+			updateNeeded = false;
+			mainConfigList.Clear();
+			mainConfigList.AddRange(mainConfigItems.Where(item => {
+				if (item.Item2 is ConfigElement configElement) {
+					return configElement.TextDisplayFunction().IndexOf(filterTextField.CurrentString, StringComparison.OrdinalIgnoreCase) != -1;
+				}
+				return true;
+			}).Select(x=>x.Item1));
+			Recalculate();
 		}
 
 		public static string tooltip;
@@ -338,10 +377,12 @@ namespace Terraria.ModLoader.Config.UI
 
 		static bool pendingRevertDefaults;
 		public override void OnActivate() {
+			filterTextField.SetText("");
+			updateNeeded = false;
 			SetMessage("", Color.White);
 			string configDisplayName = ((LabelAttribute)Attribute.GetCustomAttribute(modConfig.GetType(), typeof(LabelAttribute)))?.Label ?? modConfig.Name;
-			headerTextPanel.SetText(modConfig.mod.DisplayName + ": " + configDisplayName);
-			pendingConfig = modConfig.Clone();
+			headerTextPanel.SetText(string.IsNullOrEmpty(configDisplayName) ? modConfig.mod.DisplayName : modConfig.mod.DisplayName + ": " + configDisplayName);
+			pendingConfig = ConfigManager.GeneratePopulatedClone(modConfig);
 			pendingChanges = pendingRevertDefaults;
 			if (pendingRevertDefaults) {
 				pendingRevertDefaults = false;
@@ -352,7 +393,7 @@ namespace Terraria.ModLoader.Config.UI
 			int index = modConfigs.IndexOf(modConfig);
 			int count = modConfigs.Count;
 			//pendingChanges = false;
-			backButton.BackgroundColor = UICommon.defaultUIBlueMouseOver;
+			backButton.BackgroundColor = UICommon.DefaultUIBlueMouseOver;
 			uIElement.RemoveChild(saveConfigButton);
 			uIElement.RemoveChild(revertConfigButton);
 			uIElement.RemoveChild(previousConfigButton);
@@ -364,17 +405,17 @@ namespace Terraria.ModLoader.Config.UI
 
 			uIElement.RemoveChild(configPanelStack.Peek());
 			uIElement.Append(uIPanel);
+			mainConfigItems.Clear();
 			mainConfigList.Clear();
 			configPanelStack.Clear();
 			configPanelStack.Push(uIPanel);
 			subPageStack.Clear();
 			//currentConfigList = mainConfigList;
-			int i = 0;
 			int top = 0;
 			// load all mod config options into UIList
 			// TODO: Inheritance with ModConfig? DeclaredOnly?
 
-			uIPanel.BackgroundColor = UICommon.mainPanelBackground;
+			uIPanel.BackgroundColor = UICommon.MainPanelBackground;
 			var backgroundColorAttribute = (BackgroundColorAttribute)Attribute.GetCustomAttribute(pendingConfig.GetType(), typeof(BackgroundColorAttribute));
 			if (backgroundColorAttribute != null) {
 				uIPanel.BackgroundColor = backgroundColorAttribute.color;
@@ -426,6 +467,15 @@ namespace Terraria.ModLoader.Config.UI
 			}
 			else if (type == typeof(ItemDefinition)) {
 				e = new ItemDefinitionElement();
+			}
+			else if (type == typeof(ProjectileDefinition)) {
+				e = new ProjectileDefinitionElement();
+			}
+			else if (type == typeof(NPCDefinition)) {
+				e = new NPCDefinitionElement();
+			}
+			else if (type == typeof(PrefixDefinition)) {
+				e = new PrefixDefinitionElement();
 			}
 			else if (type == typeof(Color)) {
 				e = new ColorElement();
@@ -518,8 +568,12 @@ namespace Terraria.ModLoader.Config.UI
 					parent.Append(container);
 					parent.Height.Set(top, 0);
 				}
+				var tuple = new Tuple<UIElement, UIElement>(container, e);
+				if(parent == Interface.modConfig.mainConfigList) {
+					Interface.modConfig.mainConfigItems.Add(tuple);
+				}
 
-				return new Tuple<UIElement, UIElement>(container, e);
+				return tuple;
 			}
 			return null;
 		}
@@ -536,7 +590,7 @@ namespace Terraria.ModLoader.Config.UI
 		internal static UIPanel MakeSeparateListPanel(object item, object subitem, PropertyFieldWrapper memberInfo, IList array, int index, Func<string> AbridgedTextDisplayFunction) {
 			UIPanel uIPanel = new UIPanel();
 			uIPanel.CopyStyle(Interface.modConfig.uIPanel);
-			uIPanel.BackgroundColor = UICommon.mainPanelBackground;
+			uIPanel.BackgroundColor = UICommon.MainPanelBackground;
 
 			BackgroundColorAttribute bca = ConfigManager.GetCustomAttribute<BackgroundColorAttribute>(memberInfo, subitem, null);
 			if (bca != null) {
@@ -649,11 +703,6 @@ namespace Terraria.ModLoader.Config.UI
 			Interface.modConfig.subPageStack.Pop();
 			return uIPanel;
 		}
-
-		//private class UIDynamicText : UIText
-		//{
-
-		//}
 
 		internal static void SwitchToSubConfig(UIPanel separateListPanel) {
 			Interface.modConfig.uIElement.RemoveChild(Interface.modConfig.configPanelStack.Peek());

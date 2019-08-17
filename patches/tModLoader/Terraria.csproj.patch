@@ -35,7 +35,7 @@
    </PropertyGroup>
    <PropertyGroup Condition="$(Configuration.Contains('Windows'))">
      <PlatformTarget>x86</PlatformTarget>
-@@ -38,13 +_,26 @@
+@@ -38,13 +_,31 @@
    <PropertyGroup Condition="$(Configuration.Contains('Linux'))">
      <DefineConstants>$(DefineConstants);LINUX;FNA</DefineConstants>
    </PropertyGroup>
@@ -48,6 +48,11 @@
 -    <Reference Include="Microsoft.Xna.Framework.Graphics" Condition="$(DefineConstants.Contains('XNA'))" />
 -    <Reference Include="Microsoft.Xna.Framework" Condition="$(DefineConstants.Contains('XNA'))" />
 -    <Reference Include="Microsoft.Xna.Framework.Xact" Condition="$(DefineConstants.Contains('XNA'))" />
++    <None Remove="Terraria.ModLoader.UI\ButtonDowngrade.png" />
++    <None Remove="Terraria.ModLoader.UI\ButtonModConfig.png" />
++    <None Remove="Terraria.ModLoader.UI\ButtonModInfo.png" />
++  </ItemGroup>
++  <ItemGroup>
 +    <Reference Include="Microsoft.Xna.Framework.Game" Condition="$(DefineConstants.Contains('XNA'))">
 +      <Private>true</Private>
 +    </Reference>
@@ -120,7 +125,7 @@
      <Compile Include="Terraria.ID\NPCID.cs" />
      <Compile Include="Terraria.ID\PlayerTextureID.cs" />
      <Compile Include="Terraria.ID\PlayerVariantID.cs" />
-@@ -339,6 +_,230 @@
+@@ -339,6 +_,242 @@
      <Compile Include="Terraria.Map\MapHelper.cs" />
      <Compile Include="Terraria.Map\MapTile.cs" />
      <Compile Include="Terraria.Map\WorldMap.cs" />
@@ -129,13 +134,17 @@
 +    <Compile Include="Terraria.ModLoader.Config.UI\CollectionElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\ColorElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\ConfigElement.cs" />
++    <Compile Include="Terraria.ModLoader.Config.UI\DefinitionElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\DictionaryElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\EnumElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\FloatElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\IntegerElements.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\ItemDefinitionElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\ListElement.cs" />
++    <Compile Include="Terraria.ModLoader.Config.UI\NPCDefinitionElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\ObjectElement.cs" />
++    <Compile Include="Terraria.ModLoader.Config.UI\PrefixDefinitionElement.cs" />
++    <Compile Include="Terraria.ModLoader.Config.UI\ProjectileDefinitionElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\PropertyFieldWrapper.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\RangeElement.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\SetElement.cs" />
@@ -144,11 +153,14 @@
 +    <Compile Include="Terraria.ModLoader.Config.UI\UIModConfig.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\UIModConfigList.cs" />
 +    <Compile Include="Terraria.ModLoader.Config.UI\Vector2Element.cs" />
-+    <Compile Include="Terraria.ModLoader.Config\ItemDefinition.cs" />
++    <Compile Include="Terraria.ModLoader.Config\EntityDefinition.cs" />
 +    <Compile Include="Terraria.ModLoader.Config\ConfigAttributes.cs" />
 +    <Compile Include="Terraria.ModLoader.Config\ModConfig.cs" />
 +    <Compile Include="Terraria.ModLoader.Config\ConfigManager.cs" />
 +    <Compile Include="Terraria.ModLoader.Core\AssemblyResolving.cs" />
++    <Compile Include="Terraria.ModLoader.Core\LogArchiver.cs" />
++    <Compile Include="Terraria.ModLoader.Core\LoggingHooks.cs" />
++    <Compile Include="Terraria.ModLoader.Core\ZipExtractFix.cs" />
 +    <Compile Include="Terraria.ModLoader.Default.Developer\DeveloperItem.cs" />
 +    <Compile Include="Terraria.ModLoader.Default.Developer\DeveloperPlayer.cs" />
 +    <Compile Include="Terraria.ModLoader.Default.Developer\Jofairden.cs" />
@@ -171,6 +183,8 @@
 +    <Compile Include="Terraria.ModLoader.Default\MysteryGlobalItem.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryTile.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryTileEntity.cs" />
++    <Compile Include="Terraria.ModLoader.Default\MysteryTileFrame.cs" />
++    <Compile Include="Terraria.ModLoader.Default\MysteryTileInfo.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryTilesWorld.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryWorld.cs" />
 +    <Compile Include="Terraria.ModLoader.Default\MysteryPlayer.cs" />
@@ -208,6 +222,7 @@
 +    <Compile Include="Terraria.ModLoader.UI.DownloadManager\UIProgress.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.DownloadManager\UIDownloadProgress.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.DownloadManager\UIProgressBar.cs" />
++    <Compile Include="Terraria.ModLoader.UI.DownloadManager\UIUnloadModsProgress.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.Elements\FixedUIScrollbar.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.Elements\UIGrid.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.ModBrowser\ModBrowserSortMode.cs" />
@@ -232,6 +247,7 @@
 +    <Compile Include="Terraria.ModLoader.UI\UICycleImage.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIEnterSteamIDMenu.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIErrorMessage.cs" />
++    <Compile Include="Terraria.ModLoader.UI\UIFocusInputTextField.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIHoverImage.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIInfoMessage.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIInputTextField.cs" />
@@ -250,6 +266,7 @@
 +    <Compile Include="Terraria.ModLoader.UI\UIMods.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIModSourceItem.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIModSources.cs" />
++    <Compile Include="Terraria.ModLoader.UI\UIModStateText.cs" />
 +    <Compile Include="Terraria.ModLoader.UI\UIUpdateMessage.cs" />
 +    <Compile Include="Terraria.ModLoader.UI.DownloadManager\UIUploadModProgress.cs" />
 +    <Compile Include="Terraria.ModLoader.Core\AssemblyManager.cs" />
@@ -394,12 +411,13 @@
      <EmbeddedResource Include="Terraria.Localization.Content.de-DE.Game.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.de-DE.Items.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.de-DE.Main.json" />
-@@ -593,4 +_,144 @@
+@@ -593,4 +_,147 @@
      <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.Projectiles.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.Town.json" />
    </ItemGroup>
 +  <ItemGroup>
 +    <Content Include="Icon.ico" />
++    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonDowngrade.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.Config.UI\ButtonUpDown.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.Config.UI\ButtonCollapsed.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.Config.UI\ButtonExpanded.png" />
@@ -435,6 +453,8 @@
 +    <EmbeddedResource Include="Terraria.ModLoader.Default.Patreon\Squid_Legs_Legs.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonDownload.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonDownloadMultiple.png" />
++    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonModConfig.png" />
++    <EmbeddedResource Include="Terraria.ModLoader.UI\ButtonModInfo.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.UI\CopyCodeButton.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.Default.Patreon\Saethar_Body.png" />
 +    <EmbeddedResource Include="Terraria.ModLoader.Default.Patreon\Saethar_Body_Arms.png" />

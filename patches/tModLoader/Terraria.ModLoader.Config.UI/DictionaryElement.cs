@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,14 +90,32 @@ namespace Terraria.ModLoader.Config.UI
 		internal UIText save;
 		public List<IDictionaryElementWrapper> dataWrapperList;
 
+		// These 2 hold the default value of the dictionary value, hence ValueValue
+		protected DefaultDictionaryKeyValueAttribute defaultDictionaryKeyValueAttribute;
+		protected JsonDefaultDictionaryKeyValueAttribute jsonDefaultDictionaryKeyValueAttribute;
+
 		protected override void PrepareTypes() {
 			keyType = memberInfo.Type.GetGenericArguments()[0];
 			valueType = memberInfo.Type.GetGenericArguments()[1];
+			jsonDefaultListValueAttribute = ConfigManager.GetCustomAttribute<JsonDefaultListValueAttribute>(memberInfo, valueType);
+			defaultDictionaryKeyValueAttribute = ConfigManager.GetCustomAttribute<DefaultDictionaryKeyValueAttribute>(memberInfo, null, null);
+			jsonDefaultDictionaryKeyValueAttribute = ConfigManager.GetCustomAttribute<JsonDefaultDictionaryKeyValueAttribute>(memberInfo, null, null);
 		}
 
 		protected override void AddItem() {
 			try {
-				((IDictionary)data).Add(ConfigManager.AlternateCreateInstance(keyType), ConfigManager.AlternateCreateInstance(valueType));
+				object value;
+				if (defaultDictionaryKeyValueAttribute != null) {
+					value = defaultDictionaryKeyValueAttribute.Value;
+				}
+				else {
+					value = ConfigManager.AlternateCreateInstance(valueType);
+					if (!valueType.IsValueType) {
+						string json = jsonDefaultDictionaryKeyValueAttribute?.json ?? "{}";
+						JsonConvert.PopulateObject(json, value, ConfigManager.serializerSettings);
+					}
+				}
+				((IDictionary)data).Add(value, CreateCollectionElementInstance(valueType));
 			}
 			catch (Exception e) {
 				Interface.modConfig.SetMessage("Error: " + e.Message, Color.Red);
@@ -106,6 +125,10 @@ namespace Terraria.ModLoader.Config.UI
 		protected override void InitializeCollection() {
 			data = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(keyType, valueType));
 			SetObject(data);
+		}
+
+		protected override void ClearCollection() {
+			((IDictionary)data).Clear();
 		}
 
 		protected override void SetupList() {

@@ -16,6 +16,7 @@
 		"ModsModPacks": "Сборки модов",
 		"ModsDisable": "Выключить",
 		"ModsEnable": "Включить",
+		// "ModsOpenConfig": "Click to open config",
 		"ModOldWarning": "Устаревший мод, включайте на свой страх и риск",
 		"ModDependencyClickTooltip": "Этот мод зависит от: {0}\n (нажмите чтобы включить)",
 		"ModDependencyModsNotFound": "Следующие моды не были обнаружены: {0}",
@@ -97,6 +98,7 @@
 		"ModInfoExtract": "Извлечь",
 		"ModInfoNoDescriptionAvailable": "Нет описания",
 		"ModInfoProblemTryAgain": "Произошла ошибка, попробуйте снова",
+		// "ModInfoDisableModToDelete": "Disable Mod to Delete",
 
 		// Mod Packs
 		"ModPacksHeader": "Сборки модов",
@@ -156,6 +158,7 @@
 		"MBShowAllMods": "Показать все моды",
 		"MBShowNotInstalledUpdates": "Показать неустановленные или необновлённые моды",
 		"MBShowUpdates": "Показать необновлённые моды",
+		// "MBShowInstalled": "Show installed mods",
 		"MBShowMSAll": "Показать все моды",
 		"MBShowMSBoth": "Показывать только моды для обеих сторон",
 		"MBShowMSClient": "Показывать только клиентосторонние моды",
@@ -302,6 +305,7 @@
 		"MSSandboxing": "Настройка совместимости: {0}",
 		"MSIntializing": "Инициализация мода: ",
 		"MSLoading": "Загрузка мода: ",
+		// "MSUnloading": "Unloading: {0}",
 		"MSFinishingResourceLoading": "Завершается загрузка ресурсов",
 		"MSSettingUp": "Настройка...",
 		"MSAddingRecipes": "Добавление рецептов...",

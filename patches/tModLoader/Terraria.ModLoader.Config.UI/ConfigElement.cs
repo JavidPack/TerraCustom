@@ -22,12 +22,12 @@ namespace Terraria.ModLoader.Config.UI
 	{
 		protected Texture2D playTexture = TextureManager.Load("Images/UI/ButtonPlay");
 		protected Texture2D deleteTexture = TextureManager.Load("Images/UI/ButtonDelete");
-		protected Texture2D plusTexture = UICommon.buttonPlusTexture;
+		protected Texture2D plusTexture = UICommon.ButtonPlusTexture;
 		//protected Texture2D upArrowTexture = Texture2D.FromStream(Main.instance.GraphicsDevice, Assembly.GetExecutingAssembly().GetManifestResourceStream("Terraria.ModLoader.Config.UI.ButtonIncrement.png"));
 		//protected Texture2D downArrowTexture = Texture2D.FromStream(Main.instance.GraphicsDevice, Assembly.GetExecutingAssembly().GetManifestResourceStream("Terraria.ModLoader.Config.UI.ButtonDecrement.png"));
-		protected Texture2D upDownTexture = UICommon.buttonUpDownTexture;
-		protected Texture2D collapsedTexture = UICommon.buttonCollapsedTexture;
-		protected Texture2D expandedTexture = UICommon.buttonExpandedTexture;
+		protected Texture2D upDownTexture = UICommon.ButtonUpDownTexture;
+		protected Texture2D collapsedTexture = UICommon.ButtonCollapsedTexture;
+		protected Texture2D expandedTexture = UICommon.ButtonExpandedTexture;
 
 		// Provides access to the field/property contained in the item
 		protected PropertyFieldWrapper memberInfo;
@@ -38,7 +38,7 @@ namespace Terraria.ModLoader.Config.UI
 		public int index;
 
 		private Color backgroundColor; // TODO inherit parent object color?
-		protected Func<string> TextDisplayFunction;
+		protected internal Func<string> TextDisplayFunction;
 		protected Func<string> TooltipFunction;
 		protected bool drawLabel = true;
 
@@ -47,6 +47,8 @@ namespace Terraria.ModLoader.Config.UI
 		protected BackgroundColorAttribute backgroundColorAttribute;
 		protected RangeAttribute rangeAttribute;
 		protected IncrementAttribute incrementAttribute;
+		protected JsonDefaultValueAttribute jsonDefaultValueAttribute;
+		protected bool nullAllowed;
 
 		public ConfigElement()
 		{
@@ -62,7 +64,7 @@ namespace Terraria.ModLoader.Config.UI
 			this.item = item;
 			this.list = array;
 			this.index = index;
-			this.backgroundColor = UICommon.defaultUIBlue;
+			this.backgroundColor = UICommon.DefaultUIBlue;
 		}
 
 		public virtual void OnBind() {
@@ -81,6 +83,8 @@ namespace Terraria.ModLoader.Config.UI
 			}
 			rangeAttribute = ConfigManager.GetCustomAttribute<RangeAttribute>(memberInfo, item, list);
 			incrementAttribute = ConfigManager.GetCustomAttribute<IncrementAttribute>(memberInfo, item, list);
+			nullAllowed = ConfigManager.GetCustomAttribute<NullAllowedAttribute>(memberInfo, item, list) != null;
+			jsonDefaultValueAttribute = ConfigManager.GetCustomAttribute<JsonDefaultValueAttribute>(memberInfo, item, list);
 		}
 
 		protected virtual void SetObject(object value) {
@@ -165,8 +169,9 @@ namespace Terraria.ModLoader.Config.UI
 		string header;
 		public HeaderElement(string header) {
 			this.header = header;
+			Vector2 size = ChatManager.GetStringSize(Main.fontItemStack, this.header, Vector2.One, 532); // TODO: Max Width can't be known at this time.
 			Width.Set(0f, 1f);
-			Height.Set(30f, 0f);
+			Height.Set(size.Y + 6, 0f);
 		}
 
 		protected override void DrawSelf(SpriteBatch spriteBatch) {
@@ -175,7 +180,7 @@ namespace Terraria.ModLoader.Config.UI
 			float settingsWidth = dimensions.Width + 1f;
 			Vector2 position = new Vector2(dimensions.X, dimensions.Y) + new Vector2(8);
 			spriteBatch.Draw(Main.magicPixel, new Rectangle((int)dimensions.X + 10, (int)dimensions.Y + (int)dimensions.Height - 2, (int)dimensions.Width - 20, 1), Color.LightGray);
-			ChatManager.DrawColorCodedStringWithShadow(spriteBatch, Main.fontItemStack, header, position, Color.White, 0f, Vector2.Zero, new Vector2(1f), settingsWidth, 2f);
+			ChatManager.DrawColorCodedStringWithShadow(spriteBatch, Main.fontItemStack, header, position, Color.White, 0f, Vector2.Zero, new Vector2(1f), settingsWidth - 20, 2f);
 		}
 	}
 }
