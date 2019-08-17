@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader\ModLoader.cs
 +++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
-@@ -121,7 +_,24 @@
+@@ -122,7 +_,24 @@
  					OnSuccessfulLoad = null;
  				}
  				else {
@@ -25,5 +25,5 @@
 +					Main.firstModLoad = false;
  				}
  			}
- 			catch (Exception e) {
+ 			catch when (token.IsCancellationRequested) {
 

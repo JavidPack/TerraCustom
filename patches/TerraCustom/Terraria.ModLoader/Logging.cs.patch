@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader\Logging.cs
 +++ src/TerraCustom\Terraria.ModLoader\Logging.cs
-@@ -25,7 +_,7 @@
+@@ -21,7 +_,7 @@
  {
  	public static class Logging
  	{

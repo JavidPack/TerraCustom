@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader.Config\ConfigManager.cs
 +++ src/TerraCustom\Terraria.ModLoader.Config\ConfigManager.cs
-@@ -47,7 +_,7 @@
+@@ -49,7 +_,7 @@
  			//new ColorJsonConverter(),
  		};
  

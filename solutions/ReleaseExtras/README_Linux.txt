@@ -1,5 +1,7 @@
-Install Instructions: Copy the "TerraCustom vX.Y.Z.exe" file to the Terraria install folder. 
-To Run: Rename "Terraria.exe" to "Terraria_original.exe" and then rename "TerraCustom vX.Y.Z.exe" to "Terraria.exe". Then Run Terraria as you normally do. Be sure to reverse the process after to revert back to vanilla Terraria when done.
+Install Instructions: Copy all the files from this zip to the Terraria install folder. Then, you'll need to give execute permissions to the TerraCustom file. To do this, open a terminal in the install directory and run this command:
+    chmod +x TerraCustom
+
+To Run: Run the TerraCustom file (not TerraCustom.exe)
 
 How to find your Install Location:
 
@@ -13,4 +15,4 @@ If you see an error mentioning "System.DllNotFoundException" or "ReLogic.Native.
 
 Note: "~/.local/share/Terraria" or "$XDG_DATA_HOME/Terraria" are NOT your install folder, they are your SAVE folder. Terra Custom NEEDS to be placed in the install folder to work.
 
-Report bugs and feature requests to https://github.com/JavidPack/TerraCustom/issues or https://forums.terraria.org/index.php?threads/terracustom-for-1-3.35346/
+Report bugs and feature requests to https://github.com/JavidPack/TerraCustom/issues or https://forums.terraria.org/index.php?threads/terracustom-for-1-3.35346/ . We can also chat in my Discord server: https://discord.gg/w8Hcwby
