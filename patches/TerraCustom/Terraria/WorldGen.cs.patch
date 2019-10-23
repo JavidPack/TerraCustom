@@ -202,11 +202,12 @@
  			WorldGen.lastMaxTilesX = Main.maxTilesX;
  			WorldGen.lastMaxTilesY = Main.maxTilesY;
  			if (Main.netMode != 2)
-@@ -3176,12 +_,175 @@
+@@ -3176,12 +_,176 @@
  
  		public static void RandomizeMoonState()
  		{
 -			Main.moonType = WorldGen.genRand.Next(Main.maxMoons);
++			Main.moonType = Main.setting.MoonStyle;
 +			if (Main.setting.MoonStyle == 3)
 +			{
 +				Main.moonType = WorldGen.genRand.Next(Main.maxMoons);

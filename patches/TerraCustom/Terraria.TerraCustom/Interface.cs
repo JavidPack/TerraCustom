@@ -704,25 +704,7 @@ namespace Terraria.TerraCustom
 				}
 				if (main.selectedMenu == num48)
 				{
-					if (Main.setting.MoonStyle == 0)
-					{
-						Main.setting.MoonStyle = 1;
-						Main.moonType = Main.setting.MoonStyle;
-					}
-					else if (Main.setting.MoonStyle == 1)
-					{
-						Main.setting.MoonStyle = 2;
-						Main.moonType = Main.setting.MoonStyle;
-					}
-					else if (Main.setting.MoonStyle == 2)
-					{
-						Main.setting.MoonStyle = 3;
-					}
-					else if (Main.setting.MoonStyle == 3)
-					{
-						Main.setting.MoonStyle = 0;
-						Main.moonType = Main.setting.MoonStyle;
-					}
+					Main.setting.MoonStyle = (Main.setting.MoonStyle + 1) % 4;
 				}
 				num48++;
 				if (Main.setting.SelectTreeStyle[0] == 6)
@@ -954,7 +936,8 @@ namespace Terraria.TerraCustom
 
 				if (main.lastSelectedMenu == 1)
 				{
-					Main.spriteBatch.Draw(Main.moonTexture[Main.moonType], new Vector2(0, Main.screenHeight - Main.moonTexture[Main.moonType].Height), Color.White);
+					int moonToDraw = Main.setting.MoonStyle == 3 ? ((int)Main.GlobalTime / 1 % 3) : Main.setting.MoonStyle;
+					Main.spriteBatch.Draw(Main.moonTexture[moonToDraw], new Vector2(0, Main.screenHeight - Main.moonTexture[moonToDraw].Height), Color.White);
 				}
 
 				if (main.lastSelectedMenu == 2 || main.lastSelectedMenu == 3 || (TerraCustomUtils.WorldSize > 0 && main.lastSelectedMenu == 4) || (TerraCustomUtils.WorldSize > 1 && main.lastSelectedMenu == 5))
