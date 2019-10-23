@@ -1,13 +1,15 @@
-Install Instructions: Copy all the files from this zip to the Terraria install folder. Then, you'll need to give execute permissions to the TerraCustom file. To do this, open a terminal in the install directory and run this command:
-    chmod +x TerraCustom
+Install Instructions: Copy all the files from this zip to the Terraria install folder.
 
 To Run: Run the TerraCustom file (not TerraCustom.exe)
+
+If it doesn't run, you might need to give execute permissions to the TerraCustom file. To do this, open a terminal in the install directory and run this command:
+    chmod +x TerraCustom
 
 How to find your Install Location:
 
   Default Steam: ".local/share/Steam/steamapps/common/Terraria"
 
-  Non-Default Steam: Use the browse local files option within steam to locate your install folder.
+  Non-Default Steam: Use the browse local files option within steam to locate your install folder. If you can't find it, view this video: https://gfycat.com/SelfreliantAssuredIsabellineshrike
 
   GOG: Wherever you put it
 

@@ -250,26 +250,28 @@
  						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  					}
  				}
-@@ -47545,11 +_,12 @@
- 				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
- 				string patreonShortURL = @"patreon.com/tModLoader";
- 				bool showPatreon = Main.menuMode == 0;
+@@ -47542,10 +_,10 @@
+ 				{
+ 					num111 = 2;
+ 				}
+-				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
+-				string patreonShortURL = @"patreon.com/tModLoader";
+-				bool showPatreon = Main.menuMode == 0;
 -				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + (showPatreon ? Environment.NewLine + supportMessage : "");
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.6.2";
++				string supportMessage = "jopojelly's Pateron - ";
++				string patreonShortURL = @"patreon.com/jopojelly";
++				bool showPatreon = Main.menuMode == 5001;
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.6.2" + (showPatreon ? Environment.NewLine + supportMessage : "");
  				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
- 				Main.spriteBatch.DrawString(Main.fontMouseText, drawVersion, new Vector2(origin3.X + (float)num110 + 10f, (float)Main.screenHeight - origin3.Y + (float)num111 - 2f), color12, 0f, origin3, 1f, SpriteEffects.None, 0f);
-+				/*
- 				if (num109 == 4)
- 				{
- 					color12 = new Microsoft.Xna.Framework.Color(127, 191, 191, 76);
-@@ -47565,6 +_,7 @@
- 						Process.Start("https://www.patreon.com/tModLoader");
+@@ -47562,7 +_,7 @@
+ 					if (num109 == 4 && Main.mouseLeftRelease && Main.mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, Main.screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(Main.mouseX, Main.mouseY)) && hasFocus)
+ 					{
+ 						Main.PlaySound(SoundID.MenuOpen);
+-						Process.Start("https://www.patreon.com/tModLoader");
++						Process.Start("https://www.patreon.com/jopojelly");
  					}
  				}
-+				*/
  			}
- 			Vector2 bonus = Main.DrawThickCursor(false);
- 			Main.DrawCursor(bonus, false);
 

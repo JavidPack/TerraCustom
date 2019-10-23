@@ -1,10 +1,12 @@
-Install Instructions: Copy the "TerraCustom vX.Y.Z.exe" file to the Terraria install folder, then simply run it.
+Install Instructions: Copy the "TerraCustom vX.Y.Z.exe" file to the Terraria install folder, 
+
+To Run: Run the TerraCustom vX.Y.Z.exe file
 
 How to find your Install Location:
 
   Default Steam: "C:\Program Files (x86)\Steam\SteamApps\common\Terraria"
 
-  Non-Default Steam: Use the browse local files option within steam to locate your install folder.
+  Non-Default Steam: Use the browse local files option within steam to locate your install folder. If you can't find it, view this video: https://gfycat.com/SelfreliantAssuredIsabellineshrike
 
   GOG: Wherever you put it, likely "C:\GOG Games\Terraria​"
 

@@ -26,4 +26,15 @@
  				}
  			}
  			catch when (token.IsCancellationRequested) {
+@@ -339,8 +_,10 @@
+ 			if (LastLaunchedTModLoaderVersion < version)
+ 				ShowWhatsNew = true;
+ 			*/
++			/* Disable Welcome message since it is reading from vanilla config file.
+ 			if (LastLaunchedTModLoaderVersion == new Version(0, 0))
+ 				ShowFirstLaunchWelcomeMessage = true;
++			*/
+ 		}
+ 
+ 		/// <summary>
 
