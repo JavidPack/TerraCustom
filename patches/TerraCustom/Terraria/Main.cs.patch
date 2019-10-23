@@ -147,6 +147,7 @@
 -			WorldGen.CreateNewWorld(null);
 +			Main.menuMode = (int)TerraCustom.MenuModes.Settings; // Originally 10.
 +			//WorldGen.CreateNewWorld(null); // not sure why this is commented out
++			Main.DefaultSeed = text; // This remembers the seed since the order we do things forgets it.
  		}
  
  		private void OnWorldNamed(string text)
