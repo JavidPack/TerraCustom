@@ -8,6 +8,7 @@
 		"MenuMods": "Mod",
 		"MenuModSources": "Fonti delle Mod",
 		// "MenuEnableDeveloperMode": "Enable Developer Mode",
+		// "FirstLaunchWelcomeMessage": "Welcome to tModLoader.\n\nYou have successfully installed tModLoader. Use the Mod Browser menu to find mods you wish to download. Use the Mods menu to change which mods are currently active. After changing mods, make sure you click the Reload Mods button to reload them.",
 
 		// Mods Menu
 		"ModsModsList": "Lista delle Mod",
@@ -22,11 +23,13 @@
 		// "ModOldWarning": "Old mod, enable at own risk",
 		// "ModDependencyClickTooltip": "This mod depends on: {0}\n (click to enable)",
 		// "ModDependencyModsNotFound": "The following mods were not found: {0}",
+		// "ModDidNotFullyUnloadWarning": "This mod did not fully unload during last unload.\n(This is a message for the mod creator)",
 		// "BetaModCantPublish": "This mod was built on beta version and can't be published",
 		// "BetaModCantPublishError": "You cannot publish a Mod built on a Beta version of tModLoader",
 		// "OutdatedModCantPublishError": "You cannot publish a Mod built on an old version of tModLoader",
 		// "ModReloadRequired": "Reload Required",
 		// "ModReloadForced": "Reload Forced",
+		// "ModIsServerSide": "This is a server side mod",
 		// "ModsByline": "By: {0}",
 		"ModsMoreInfo": "Altre Informazioni",
 		"ModsOriginatedFromModBrowser": "Questa mod è originata dal Browser delle Mod",
@@ -225,8 +228,8 @@
 		// "AutomaticallyEnableNewlyDownloadedModsNo": "Automatically enabled newly downloaded mods: Off",
 		// "AutomaticallyReloadAndEnableModsLeavingModBrowserYes": "Automatically enable and reload mods when leaving Mod Browser: On",
 		// "AutomaticallyReloadAndEnableModsLeavingModBrowserNo": "Automatically enable and reload mods when leaving Mod Browser: Off",
-		// "ReloadModsReminder": "You have updated a mod. Remember to reload mods for it to take effect.",
-		// "EnableModsReminder": "Your recently downloaded mods are currently disabled. Remember to enable and reload if you intend to use them.",
+		// "ReloadModsReminder": "You have updated a disabled mod. Remember to enable it and reload mods for it to take effect.",
+		// "EnableModsReminder": "Your recently downloaded mods are currently disabled. Remember to enable them and reload if you intend to use them.",
 		// "DontShowAgain": "Don't show again",
 		// "ModControls": "Mod Controls",
 

@@ -11,6 +11,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Core;
 using Terraria.ModLoader.UI.DownloadManager;
+using Terraria.ModLoader.UI;
 
 namespace Terraria.ModLoader
 {
@@ -265,9 +266,7 @@ namespace Terraria.ModLoader
 
 			try {
 				if (downloadingFile == null) {
-					Interface.progress.DisplayText = reader.ReadString();
-					Interface.progress.OnCancel += CancelDownload;
-					Interface.progress.Show();
+					Interface.progress.Show(displayText: reader.ReadString(), cancel: CancelDownload);
 
 					ModLoader.GetMod(downloadingMod.name)?.Close();
 					downloadingLength = reader.ReadInt64();
@@ -277,7 +276,7 @@ namespace Terraria.ModLoader
 
 				var bytes = reader.ReadBytes((int)Math.Min(downloadingLength - downloadingFile.Position, CHUNK_SIZE));
 				downloadingFile.Write(bytes, 0, bytes.Length);
-				Interface.progress.Progress = downloadingFile.Position / downloadingLength;
+				Interface.progress.Progress = downloadingFile.Position / (float)downloadingLength;
 
 				if (downloadingFile.Position == downloadingLength) {
 					downloadingFile.Close();
@@ -362,6 +361,7 @@ namespace Terraria.ModLoader
 
 			ItemLoader.WriteNetGlobalOrder(p);
 			WorldHooks.WriteNetWorldOrder(p);
+			p.Write(Player.MaxBuffs);
 
 			p.Send(toClient);
 		}
@@ -382,6 +382,11 @@ namespace Terraria.ModLoader
 
 			ItemLoader.ReadNetGlobalOrder(reader);
 			WorldHooks.ReadNetWorldOrder(reader);
+			int serverMaxBuffs = reader.ReadInt32();
+			if (serverMaxBuffs != Player.MaxBuffs) {
+				Netplay.disconnect = true;
+				Main.statusText = $"The server expects Player.MaxBuffs of {serverMaxBuffs}\nbut this client reports {Player.MaxBuffs}.\nSome mod is behaving poorly.";
+			}
 		}
 
 		internal static void HandleModPacket(BinaryReader reader, int whoAmI, int length) {

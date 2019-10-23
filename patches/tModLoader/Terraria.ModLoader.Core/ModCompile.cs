@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Terraria.Localization;
 using Terraria.ModLoader.Exceptions;
+using Terraria.ModLoader.UI;
 using Terraria.Utilities;
 
 namespace Terraria.ModLoader.Core
@@ -154,7 +155,7 @@ namespace Terraria.ModLoader.Core
 				return true;
 
 			referenceAssembliesPath = Path.Combine(modCompileDir, "v4.5 Reference Assemblies");
-			if (Directory.Exists(referenceAssembliesPath) && Directory.EnumerateFiles(referenceAssembliesPath).Any())
+			if (Directory.Exists(referenceAssembliesPath) && Directory.EnumerateFiles(referenceAssembliesPath).Any(x => Path.GetExtension(x) != ".tmp"))
 				return true;
 
 			if (FrameworkVersion.Framework == Framework.Mono)
@@ -489,6 +490,7 @@ namespace Terraria.ModLoader.Core
 				// read mod assembly using cecil for verification and pdb processing
 				using (var asmResolver = new DefaultAssemblyResolver()) {
 					asmResolver.AddSearchDirectory(Path.GetDirectoryName(dllPath));
+					asmResolver.AddSearchDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
 					var asm = AssemblyDefinition.ReadAssembly(dllPath, new ReaderParameters { InMemory = true, ReadSymbols = mod.properties.includePDB, AssemblyResolver = asmResolver });
 					VerifyModAssembly(mod.Name, asm);

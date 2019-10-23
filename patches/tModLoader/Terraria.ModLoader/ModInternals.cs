@@ -15,6 +15,7 @@ using Terraria.Localization;
 using Terraria.ModLoader.Audio;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
+using Terraria.ModLoader.UI;
 using Terraria.Utilities;
 
 namespace Terraria.ModLoader
@@ -237,7 +238,7 @@ namespace Terraria.ModLoader
 			if (Code == null)
 				return;
 
-			Interface.loadModsProgress.SubProgressText = Language.GetTextValue("tModLoader.MSFinishingResourceLoading");
+			Interface.loadMods.SubProgressText = Language.GetTextValue("tModLoader.MSFinishingResourceLoading");
 			while (AsyncLoadQueue.Count > 0)
 				AsyncLoadQueue.Dequeue().Wait();
 

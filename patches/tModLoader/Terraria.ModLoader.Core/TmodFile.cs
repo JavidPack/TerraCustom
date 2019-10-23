@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
+using Terraria.ModLoader.UI;
 
 namespace Terraria.ModLoader.Core
 {
@@ -256,16 +257,25 @@ namespace Terraria.ModLoader.Core
 				if (fileStream != null)
 					throw new Exception($"File already opened? {path}");
 
-				if (name == null)
-					Read();
-				else
-					Reopen();
+				try {
+					if (name == null)
+						Read();
+					else
+						Reopen();
+				}
+				catch {
+					try { Close(); } catch {}
+					throw;
+				}
 			}
 
 			return new DisposeWrapper(Close);
 		}
 
 		private void Close() {
+			if (openCounter == 0)
+				return;
+
 			if (--openCounter == 0) {
 				if (sharedEntryReadStream != null)
 					throw new IOException($"Previous entry read stream not closed: {sharedEntryReadStream.Name}");
@@ -375,7 +385,7 @@ namespace Terraria.ModLoader.Core
 		}
 
 		private void Upgrade() {
-			Interface.loadModsProgress.SubProgressText = $"Upgrading: {Path.GetFileName(path)}";
+			Interface.loadMods.SubProgressText = $"Upgrading: {Path.GetFileName(path)}";
 			Logging.tML.InfoFormat("Upgrading: {0}", Path.GetFileName(path));
 
 			using (var deflateStream = new DeflateStream(fileStream, CompressionMode.Decompress, true))

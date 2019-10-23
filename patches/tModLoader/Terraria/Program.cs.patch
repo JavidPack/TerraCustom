@@ -12,7 +12,7 @@
  		public const bool IsServer = true;
  		#endif
  		public static Dictionary<string, string> LaunchParameters = new Dictionary<string, string>();
-+		public static string SavePath { get; private set; } // moved from Main to avoid triggering the Main static constructor before logging initializes 
++		public static string SavePath { get; private set; } // moved from Main to avoid triggering the Main static constructor before logging initializes
  		private static int ThingsToLoad = 0;
  		private static int ThingsLoaded = 0;
  		public static bool LoadedEverything = false;
@@ -112,12 +112,12 @@
 -				MessageBox.Show(e.ToString(), "Terraria: Error");
 -#else
 -				Console.WriteLine(Language.GetTextValue("Error.ServerCrash"), DateTime.Now, e);
-+				MessageBox.Show(e.ToString(), "Terraria: Error" + $" ({ModLoader.ModLoader.versionedName})");
++				ModLoader.UI.Interface.MessageBoxShow(e.ToString());
 +				if (e.Message.Contains("CSteamworks"))
 +					Process.Start(@"https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Usage-FAQ#systemdllnotfoundexception-unable-to-load-dllcsteamworks");
 +				if (e.StackTrace.Contains("LaunchLocalServer"))
 +				{
-+					MessageBox.Show("Looks like you didn't do a complete install. You are missing tModLoaderServer.exe. Check your install directory and read the install directions.", "Terraria: Error");
++					ModLoader.UI.Interface.MessageBoxShow("Looks like you didn't do a complete install. You are missing tModLoaderServer.exe. Check your install directory and read the install directions.");
 +					Process.Start(@"https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Usage-FAQ#host-and-play-the-system-cannot-find-the-file-specified");
 +				}
 +#else

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace Terraria.ModLoader.UI.DownloadManager
+namespace Terraria.ModLoader.UI
 {
 	internal class UIProgressBar : UIPanel
 	{

@@ -10,8 +10,10 @@ using Terraria.GameInput;
 using Terraria.Localization;
 using Terraria.ModLoader.Audio;
 using Terraria.ModLoader.Core;
+using Terraria.ModLoader.Engine;
 using Terraria.ModLoader.Exceptions;
 using Terraria.ModLoader.IO;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace Terraria.ModLoader
@@ -20,11 +22,9 @@ namespace Terraria.ModLoader
 	/// Manages content added by mods.
 	/// Liasons between mod content and Terraria's arrays and oversees the Loader classes.
 	/// </summary>
-	public class ModContent
+	public static class ModContent
 	{
-		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
-
-		internal static readonly IDictionary<string, ModHotKey> modHotKeys = new Dictionary<string, ModHotKey>();
+		public static T GetInstance<T>() where T : class => ContentInstance<T>.Instance;
 
 		public static void SplitName(string name, out string domain, out string subName) {
 			int slash = name.IndexOf('/');
@@ -84,6 +84,7 @@ namespace Terraria.ModLoader
 			return mod.GetTexture(subName);
 		}
 
+		private static readonly string ImagePath = "Content" + Path.DirectorySeparatorChar + "Images";
 		/// <summary>
 		/// Returns whether or not a texture with the specified name exists.
 		/// </summary>
@@ -284,6 +285,56 @@ namespace Terraria.ModLoader
 		/// </summary>
 		public static ModUgBgStyle GetModUgBgStyle(int style) => UgBgStyleLoader.GetUgBgStyle(style);
 
+		/// <summary>
+		/// Get the id (type) of a ModItem by class. Assumes one instance per class.
+		/// </summary>
+		public static int ItemType<T>() where T : ModItem => GetInstance<T>()?.item.type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModPrefix by class. Assumes one instance per class.
+		/// </summary>
+		public static byte PrefixType<T>() where T : ModPrefix => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModDust by class. Assumes one instance per class.
+		/// </summary>
+		public static int DustType<T>() where T : ModDust => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModTile by class. Assumes one instance per class.
+		/// </summary>
+		public static int TileType<T>() where T : ModTile => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModTileEntity by class. Assumes one instance per class.
+		/// </summary>
+		public static int TileEntityType<T>() where T : ModTileEntity => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModWall by class. Assumes one instance per class.
+		/// </summary>
+		public static int WallType<T>() where T : ModWall => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModProjectile by class. Assumes one instance per class.
+		/// </summary>
+		public static int ProjectileType<T>() where T : ModProjectile => GetInstance<T>()?.projectile.type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModNPC by class. Assumes one instance per class.
+		/// </summary>
+		public static int NPCType<T>() where T : ModNPC => GetInstance<T>()?.npc.type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModBuff by class. Assumes one instance per class.
+		/// </summary>
+		public static int BuffType<T>() where T : ModBuff => GetInstance<T>()?.Type ?? 0;
+
+		/// <summary>
+		/// Get the id (type) of a ModMountData by class. Assumes one instance per class.
+		/// </summary>
+		public static int MountType<T>() where T : ModMountData => GetInstance<T>()?.Type ?? 0;
+
 		private static LocalizedText SetLocalizedText(Dictionary<string, LocalizedText> dict, LocalizedText value) {
 			if (dict.ContainsKey(value.Key)) {
 				dict[value.Key].SetValue(value.Value);
@@ -294,17 +345,12 @@ namespace Terraria.ModLoader
 			return dict[value.Key];
 		}
 
-		internal static ModHotKey RegisterHotKey(Mod mod, string name, string defaultKey) {
-			string key = mod.Name + ": " + name;
-			modHotKeys[key] = new ModHotKey(mod, name, defaultKey);
-			return modHotKeys[key];
-		}
-
 		internal static void Load(CancellationToken token) {
 			CacheVanillaState();
 
-			Interface.loadModsProgress.SetLoadStage("tModLoader.MSIntializing", ModLoader.Mods.Length);
+			Interface.loadMods.SetLoadStage("tModLoader.MSIntializing", ModLoader.Mods.Length);
 			LoadModContent(token, mod => {
+				ContentInstance.Register(mod);
 				mod.loading = true;
 				mod.AutoloadConfig();
 				mod.LoadResources();
@@ -313,16 +359,16 @@ namespace Terraria.ModLoader
 				mod.loading = false;
 			});
 
-			Interface.loadModsProgress.SetLoadStage("tModLoader.MSSettingUp");
+			Interface.loadMods.SetLoadStage("tModLoader.MSSettingUp");
 			ResizeArrays();
 			RecipeGroupHelper.FixRecipeGroupLookups();
 
-			Interface.loadModsProgress.SetLoadStage("tModLoader.MSLoading", ModLoader.Mods.Length);
+			Interface.loadMods.SetLoadStage("tModLoader.MSLoading", ModLoader.Mods.Length);
 			LoadModContent(token, mod => {
 				mod.SetupContent();
 				mod.PostSetupContent();
 			});
-			
+
 			MemoryTracking.Finish();
 
 			if (Main.dedServ)
@@ -347,7 +393,7 @@ namespace Terraria.ModLoader
 			int num = 0;
 			foreach (var mod in ModLoader.Mods) {
 				token.ThrowIfCancellationRequested();
-				Interface.loadModsProgress.SetCurrentMod(num++, $"{mod.Name} v{mod.Version}");
+				Interface.loadMods.SetCurrentMod(num++, $"{mod.Name} v{mod.Version}");
 				try {
 					LoadingMod = mod;
 					loadAction(mod);
@@ -364,7 +410,7 @@ namespace Terraria.ModLoader
 		}
 
 		private static void SetupRecipes(CancellationToken token) {
-			Interface.loadModsProgress.SetLoadStage("tModLoader.MSAddingRecipes");
+			Interface.loadMods.SetLoadStage("tModLoader.MSAddingRecipes");
 			for (int k = 0; k < Recipe.maxRecipes; k++) {
 				token.ThrowIfCancellationRequested();
 				Main.recipe[k] = new Recipe();
@@ -382,7 +428,7 @@ namespace Terraria.ModLoader
 					if (Main.dedServ)
 						Console.WriteLine($"Unloading {mod.DisplayName}...");
 					else
-						Interface.unloadModsProgress.SetCurrentMod(i++, mod.DisplayName);
+						Interface.loadMods.SetCurrentMod(i++, mod.DisplayName);
 					mod.Close();
 					mod.UnloadContent();
 				}
@@ -397,6 +443,7 @@ namespace Terraria.ModLoader
 		}
 
 		internal static void Unload() {
+			ContentInstance.Clear();
 			ItemLoader.Unload();
 			EquipLoader.Unload();
 			ModPrefix.Unload();
@@ -429,7 +476,7 @@ namespace Terraria.ModLoader
 			Recipe.SetupRecipes();
 			MapLoader.UnloadModMap();
 			ItemSorting.SetupWhiteLists();
-			modHotKeys.Clear();
+			HotKeyLoader.Unload();
 			RecipeHooks.Unload();
 			CommandManager.Unload();
 			TagSerializer.Reload();

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Terraria.ID;
 using Terraria.Localization;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace Terraria.ModLoader.Config.UI
@@ -54,7 +55,7 @@ namespace Terraria.ModLoader.Config.UI
 			CalculatedStyle dimensions = base.GetInnerDimensions();
 			spriteBatch.Draw(backgroundTexture, dimensions.Position(), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 			if (definition != null) {
-				int type = unloaded ? NPCID.Count : this.type;
+				int type = unloaded ? 0 : this.type;
 				Main.instance.LoadNPC(type);
 				Texture2D npcTexture = Main.npcTexture[type];
 

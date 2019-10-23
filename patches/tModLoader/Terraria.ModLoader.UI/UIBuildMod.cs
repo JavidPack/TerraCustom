@@ -6,9 +6,9 @@ using Terraria.Localization;
 using Terraria.ModLoader.Core;
 using Terraria.ModLoader.Exceptions;
 
-namespace Terraria.ModLoader.UI.DownloadManager
+namespace Terraria.ModLoader.UI
 {
-	internal class UIBuildModProgress : UIProgress, ModCompile.IBuildStatus
+	internal class UIBuildMod : UIProgress, ModCompile.IBuildStatus
 	{
 		private CancellationTokenSource _cts;
 		private int numProgressItems;
@@ -34,8 +34,8 @@ namespace Terraria.ModLoader.UI.DownloadManager
 			=> Build(mc => mc.BuildAll(), reload);
 
 		private void Build(Action<ModCompile> buildAction, bool reload) {
-			Main.menuMode = Interface.buildModProgressID;
-			Task.Run(() => { BuildMod(buildAction, reload); });
+			Main.menuMode = Interface.buildModID;
+			Task.Run(() => BuildMod(buildAction, reload));
 		}
 
 		public override void OnInitialize() {

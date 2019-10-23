@@ -7,9 +7,9 @@ using Terraria.Localization;
 using Terraria.ModLoader.Core;
 using Terraria.Utilities;
 
-namespace Terraria.ModLoader.UI.DownloadManager
+namespace Terraria.ModLoader.UI
 {
-	internal class UIExtractModProgress : UIProgress
+	internal class UIExtractMod : UIProgress
 	{
 		private const string LOG_NAME = "extract.log";
 		private LocalMod mod;
@@ -33,7 +33,7 @@ namespace Terraria.ModLoader.UI.DownloadManager
 		internal void Show(LocalMod mod, int gotoMenu) {
 			this.mod = mod;
 			this.gotoMenu = gotoMenu;
-			Main.menuMode = Interface.extractModProgressID;
+			Main.menuMode = Interface.extractModID;
 		}
 
 		private Task Extract() {
@@ -96,6 +96,12 @@ namespace Terraria.ModLoader.UI.DownloadManager
 						Directory.CreateDirectory(modReferencesPath);
 						File.Copy(path, Path.Combine(modReferencesPath, $"{mod.Name}_v{mod.modFile.version}.dll"), true);
 						log?.WriteLine("You can find this mod's .dll files under ModLoader\\references\\mods for easy mod collaboration!");
+					}
+					if (name == $"{mod.Name}.xml" && !mod.properties.hideCode) {
+						string modReferencesPath = Path.Combine(Program.SavePath, "references", "mods");
+						Directory.CreateDirectory(modReferencesPath);
+						File.Copy(path, Path.Combine(modReferencesPath, $"{mod.Name}_v{mod.modFile.version}.xml"), true);
+						log?.WriteLine("You can find this mod's documentation .xml file under ModLoader\\references\\mods for easy mod collaboration!");
 					}
 				};
 			}

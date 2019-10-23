@@ -14,6 +14,7 @@ using Terraria.ModLoader.Core;
 using Terraria.ModLoader.Exceptions;
 using System.Linq;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.UI;
 
 namespace Terraria.ModLoader
 {
@@ -83,6 +84,11 @@ namespace Terraria.ModLoader
 		}
 
 		/// <summary>
+		/// The amount of extra buff slots this mod desires for Players. This value is checked after Mod.Load but before Mod.PostSetupContent. The actual number of buffs the player can use will be 22 plus the max value of all enabled mods. In-game use Player.MaxBuffs to check the maximum number of buffs.
+		/// </summary>
+		public virtual uint ExtraPlayerBuffSlots { get; }
+
+		/// <summary>
 		/// Override this method to add recipe groups to this mod. You must add recipe groups by calling the RecipeGroup.RegisterGroup method here. A recipe group is a set of items that can be used interchangeably in the same recipe.
 		/// </summary>
 		public virtual void AddRecipeGroups() {
@@ -108,7 +114,7 @@ namespace Terraria.ModLoader
 
 			var skipCache = new HashSet<string>();
 			foreach (var entry in File) {
-				Interface.loadModsProgress.SubProgressText = entry.Name;
+				Interface.loadMods.SubProgressText = entry.Name;
 
 				Stream _stream = null;
 				Stream GetStream() => _stream = File.GetStream(entry);
@@ -222,6 +228,7 @@ namespace Terraria.ModLoader
 			mc.mod = this;
 
 			ConfigManager.Add(mc);
+			ContentInstance.Register(mc);
 		}
 
 		/// <summary>
@@ -247,6 +254,7 @@ namespace Terraria.ModLoader
 
 			items[name] = item;
 			ItemLoader.items.Add(item);
+			ContentInstance.Register(item);
 		}
 
 		/// <summary>
@@ -261,7 +269,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetItem<T>() where T : ModItem => (T)GetItem(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetItem<T>() where T : ModItem => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the internal ID / type of the ModItem corresponding to the name. Returns 0 if no ModItem with the given name is found.
@@ -275,7 +284,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int ItemType<T>() where T : ModItem => ItemType(typeof(T).Name);
+		[Obsolete("Use ModContent.ItemType<T> instead", true)]
+		public int ItemType<T>() where T : ModItem => ModContent.ItemType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalItem instance to this mod with the provided name.
@@ -301,6 +311,7 @@ namespace Terraria.ModLoader
 				ItemLoader.globalIndexesByType[globalItem.GetType()] = ItemLoader.globalItems.Count;
 			}
 			ItemLoader.globalItems.Add(globalItem);
+			ContentInstance.Register(globalItem);
 		}
 
 		/// <summary>
@@ -432,6 +443,7 @@ namespace Terraria.ModLoader
 			prefixes[name] = prefix;
 			ModPrefix.prefixes.Add(prefix);
 			ModPrefix.categoryPrefixes[prefix.Category].Add(prefix);
+			ContentInstance.Register(prefix);
 		}
 
 		/// <summary>
@@ -446,7 +458,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetPrefix<T>() where T : ModPrefix => (T)GetPrefix(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetPrefix<T>() where T : ModPrefix => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the internal ID / type of the ModPrefix corresponding to the name. Returns 0 if no ModPrefix with the given name is found.
@@ -460,7 +473,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public byte PrefixType<T>() where T : ModPrefix => PrefixType(typeof(T).Name);
+		[Obsolete("Use ModContent.PrefixType<T> instead", true)]
+		public byte PrefixType<T>() where T : ModPrefix => ModContent.PrefixType<T>();
 
 		/// <summary>
 		/// Adds a type of dust to your mod with the specified name. Create an instance of ModDust normally, preferably through the constructor of an overriding class. Leave the texture as an empty string to use the vanilla dust sprite sheet.
@@ -479,6 +493,7 @@ namespace Terraria.ModLoader
 
 			dusts[name] = dust;
 			ModDust.dusts.Add(dust);
+			ContentInstance.Register(dust);
 		}
 
 		/// <summary>
@@ -493,7 +508,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetDust<T>() where T : ModDust => (T)GetDust(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetDust<T>() where T : ModDust => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModDust of this mod with the given name. Returns 0 if no ModDust with the given name is found.
@@ -507,7 +523,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int DustType<T>() where T : ModDust => DustType(typeof(T).Name);
+		[Obsolete("Use ModContent.DustType<T> instead", true)]
+		public int DustType<T>() where T : ModDust => ModContent.DustType<T>();
 
 		/// <summary>
 		/// Adds a type of tile to the game with the specified name and texture.
@@ -529,6 +546,7 @@ namespace Terraria.ModLoader
 
 			tiles[name] = tile;
 			TileLoader.tiles.Add(tile);
+			ContentInstance.Register(tile);
 		}
 
 		/// <summary>
@@ -543,7 +561,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetTile<T>() where T : ModTile => (T)GetTile(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetTile<T>() where T : ModTile => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModTile of this mod with the given name. Returns 0 if no ModTile with the given name is found.
@@ -557,7 +576,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int TileType<T>() where T : ModTile => TileType(typeof(T).Name);
+		[Obsolete("Use ModContent.TileType<T> instead", true)]
+		public int TileType<T>() where T : ModTile => ModContent.TileType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalTile instance to this mod with the provided name.
@@ -573,6 +593,7 @@ namespace Terraria.ModLoader
 
 			globalTiles[name] = globalTile;
 			TileLoader.globalTiles.Add(globalTile);
+			ContentInstance.Register(globalTile);
 		}
 
 		/// <summary>
@@ -587,7 +608,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetGlobalTile<T>() where T : GlobalTile => (T)GetGlobalTile(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalTile<T>() where T : GlobalTile => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Manually add a tile entity during Load.
@@ -604,6 +626,7 @@ namespace Terraria.ModLoader
 
 			tileEntities[name] = entity;
 			ModTileEntity.tileEntities.Add(entity);
+			ContentInstance.Register(entity);
 		}
 
 		/// <summary>
@@ -619,7 +642,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetTileEntity<T>() where T : ModTileEntity => (T)GetTileEntity(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetTileEntity<T>() where T : ModTileEntity => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModTileEntity of this mod with the given name. Returns -1 if no ModTileEntity with the given name is found.
@@ -633,7 +657,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int TileEntityType<T>() where T : ModTileEntity => TileEntityType(typeof(T).Name);
+		[Obsolete("Use ModContent.TileEntityType<T> instead", true)]
+		public int TileEntityType<T>() where T : ModTileEntity => ModContent.TileEntityType<T>();
 
 		/// <summary>
 		/// Adds a type of wall to the game with the specified name and texture.
@@ -652,6 +677,7 @@ namespace Terraria.ModLoader
 
 			walls[name] = wall;
 			WallLoader.walls.Add(wall);
+			ContentInstance.Register(wall);
 		}
 
 		/// <summary>
@@ -661,7 +687,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModWall GetWall(string name) => walls.TryGetValue(name, out var wall) ? wall : null;
 
-		public T GetWall<T>() where T : ModWall => (T)GetWall(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetWall<T>() where T : ModWall => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModWall of this mod with the given name. Returns 0 if no ModWall with the given name is found.
@@ -675,7 +702,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int WallType<T>() where T : ModWall => WallType(typeof(T).Name);
+		[Obsolete("Use ModContent.WallType<T> instead", true)]
+		public int WallType<T>() where T : ModWall => ModContent.WallType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalWall instance to this mod with the provided name.
@@ -691,6 +719,7 @@ namespace Terraria.ModLoader
 
 			globalWalls[name] = globalWall;
 			WallLoader.globalWalls.Add(globalWall);
+			ContentInstance.Register(globalWall);
 		}
 
 		/// <summary>
@@ -700,7 +729,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalWall GetGlobalWall(string name) => globalWalls.TryGetValue(name, out var globalWall) ? globalWall : null;
 
-		public T GetGlobalWall<T>() where T : GlobalWall => (T)GetGlobalWall(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalWall<T>() where T : GlobalWall => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds a type of projectile to the game with the specified name.
@@ -721,6 +751,7 @@ namespace Terraria.ModLoader
 
 			projectiles[name] = projectile;
 			ProjectileLoader.projectiles.Add(projectile);
+			ContentInstance.Register(projectile);
 		}
 
 		/// <summary>
@@ -730,7 +761,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModProjectile GetProjectile(string name) => projectiles.TryGetValue(name, out var proj) ? proj : null;
 
-		public T GetProjectile<T>() where T : ModProjectile => (T)GetProjectile(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetProjectile<T>() where T : ModProjectile => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModProjectile of this mod with the given name. Returns 0 if no ModProjectile with the given name is found.
@@ -744,7 +776,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int ProjectileType<T>() where T : ModProjectile => ProjectileType(typeof(T).Name);
+		[Obsolete("Use ModContent.ProjectileType<T> instead", true)]
+		public int ProjectileType<T>() where T : ModProjectile => ModContent.ProjectileType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalProjectile instance to this mod with the provided name.
@@ -770,6 +803,7 @@ namespace Terraria.ModLoader
 				ProjectileLoader.globalIndexesByType[globalProjectile.GetType()] = ProjectileLoader.globalProjectiles.Count;
 			}
 			ProjectileLoader.globalProjectiles.Add(globalProjectile);
+			ContentInstance.Register(globalProjectile);
 		}
 
 		/// <summary>
@@ -779,7 +813,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalProjectile GetGlobalProjectile(string name) => globalProjectiles.TryGetValue(name, out var globalProj) ? globalProj : null;
 
-		public T GetGlobalProjectile<T>() where T : GlobalProjectile => (T)GetGlobalProjectile(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalProjectile<T>() where T : GlobalProjectile => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds a type of NPC to the game with the specified name and texture. Also allows you to give the NPC alternate textures.
@@ -800,6 +835,7 @@ namespace Terraria.ModLoader
 
 			npcs[name] = npc;
 			NPCLoader.npcs.Add(npc);
+			ContentInstance.Register(npc);
 		}
 
 		/// <summary>
@@ -809,7 +845,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModNPC GetNPC(string name) => npcs.TryGetValue(name, out var npc) ? npc : null;
 
-		public T GetNPC<T>() where T : ModNPC => (T)GetNPC(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetNPC<T>() where T : ModNPC => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModNPC of this mod with the given name. Returns 0 if no ModNPC with the given name is found.
@@ -823,7 +860,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int NPCType<T>() where T : ModNPC => NPCType(typeof(T).Name);
+		[Obsolete("Use ModContent.NPCType<T> instead", true)]
+		public int NPCType<T>() where T : ModNPC => ModContent.NPCType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalNPC instance to this mod with the provided name.
@@ -849,6 +887,7 @@ namespace Terraria.ModLoader
 				NPCLoader.globalIndexesByType[globalNPC.GetType()] = NPCLoader.globalNPCs.Count;
 			}
 			NPCLoader.globalNPCs.Add(globalNPC);
+			ContentInstance.Register(globalNPC);
 		}
 
 		/// <summary>
@@ -858,7 +897,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalNPC GetGlobalNPC(string name) => globalNPCs.TryGetValue(name, out var globalNPC) ? globalNPC : null;
 
-		public T GetGlobalNPC<T>() where T : GlobalNPC => (T)GetGlobalNPC(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalNPC<T>() where T : GlobalNPC => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Assigns a head texture to the given town NPC type.
@@ -914,6 +954,7 @@ namespace Terraria.ModLoader
 
 			players[name] = player;
 			PlayerHooks.Add(player);
+			ContentInstance.Register(player);
 		}
 
 		/// <summary>
@@ -923,7 +964,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModPlayer GetPlayer(string name) => players.TryGetValue(name, out var player) ? player : null;
 
-		public T GetPlayer<T>() where T : ModPlayer => (T)GetPlayer(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetPlayer<T>() where T : ModPlayer => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds a type of buff to the game with the specified internal name and texture.
@@ -947,6 +989,7 @@ namespace Terraria.ModLoader
 
 			buffs[name] = buff;
 			BuffLoader.buffs.Add(buff);
+			ContentInstance.Register(buff);
 		}
 
 		/// <summary>
@@ -956,7 +999,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModBuff GetBuff(string name) => buffs.TryGetValue(name, out var buff) ? buff : null;
 
-		public T GetBuff<T>() where T : ModBuff => (T)GetBuff(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetBuff<T>() where T : ModBuff => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the type of the ModBuff of this mod corresponding to the given name. Returns 0 if no ModBuff with the given name is found.
@@ -970,7 +1014,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int BuffType<T>() where T : ModBuff => BuffType(typeof(T).Name);
+		[Obsolete("Use ModContent.BuffType<T> instead", true)]
+		public int BuffType<T>() where T : ModBuff => ModContent.BuffType<T>();
 
 		/// <summary>
 		/// Adds the given GlobalBuff instance to this mod using the provided name.
@@ -983,6 +1028,7 @@ namespace Terraria.ModLoader
 
 			globalBuffs[name] = globalBuff;
 			BuffLoader.globalBuffs.Add(globalBuff);
+			ContentInstance.Register(globalBuff);
 		}
 
 		/// <summary>
@@ -992,7 +1038,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalBuff GetGlobalBuff(string name) => globalBuffs.TryGetValue(name, out var globalBuff) ? globalBuff : null;
 
-		public T GetGlobalBuff<T>() where T : GlobalBuff => (T)GetGlobalBuff(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalBuff<T>() where T : GlobalBuff => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds the given mount to the game with the given name and texture. The extraTextures dictionary should optionally map types of mount textures to the texture paths you want to include.
@@ -1016,6 +1063,7 @@ namespace Terraria.ModLoader
 
 			mountDatas[name] = mount;
 			MountLoader.mountDatas[mount.Type] = mount;
+			ContentInstance.Register(mount);
 
 			if (extraTextures == null)
 				return;
@@ -1061,7 +1109,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModMountData GetMount(string name) => mountDatas.TryGetValue(name, out var modMountData) ? modMountData : null;
 
-		public T GetMount<T>() where T : ModMountData => (T)GetMount(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetMount<T>() where T : ModMountData => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Gets the ID of the ModMountData instance corresponding to the given name. Returns 0 if no ModMountData has the given name.
@@ -1075,7 +1124,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public int MountType<T>() where T : ModMountData => MountType(typeof(T).Name);
+		[Obsolete("Use ModContent.MountType<T> instead", true)]
+		public int MountType<T>() where T : ModMountData => ModContent.MountType<T>();
 
 		/// <summary>
 		/// Adds a ModWorld to this mod with the given name.
@@ -1091,6 +1141,7 @@ namespace Terraria.ModLoader
 
 			worlds[name] = modWorld;
 			WorldHooks.Add(modWorld);
+			ContentInstance.Register(modWorld);
 		}
 
 		/// <summary>
@@ -1105,7 +1156,8 @@ namespace Terraria.ModLoader
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public T GetModWorld<T>() where T : ModWorld => (T)GetModWorld(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetModWorld<T>() where T : ModWorld => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds the given underground background style with the given name to this mod.
@@ -1122,6 +1174,7 @@ namespace Terraria.ModLoader
 
 			ugBgStyles[name] = ugBgStyle;
 			UgBgStyleLoader.ugBgStyles.Add(ugBgStyle);
+			ContentInstance.Register(ugBgStyle);
 		}
 
 		/// <summary>
@@ -1131,7 +1184,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModUgBgStyle GetUgBgStyle(string name) => ugBgStyles.TryGetValue(name, out var bgStyle) ? bgStyle : null;
 
-		public T GetUgBgStyle<T>() where T : ModUgBgStyle => (T)GetUgBgStyle(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetUgBgStyle<T>() where T : ModUgBgStyle => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds the given surface background style with the given name to this mod.
@@ -1148,6 +1202,7 @@ namespace Terraria.ModLoader
 
 			surfaceBgStyles[name] = surfaceBgStyle;
 			SurfaceBgStyleLoader.surfaceBgStyles.Add(surfaceBgStyle);
+			ContentInstance.Register(surfaceBgStyle);
 		}
 
 		/// <summary>
@@ -1157,7 +1212,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModSurfaceBgStyle GetSurfaceBgStyle(string name) => surfaceBgStyles.TryGetValue(name, out var bgStyle) ? bgStyle : null;
 
-		public T GetSurfaceBgStyle<T>() where T : ModSurfaceBgStyle => (T)GetSurfaceBgStyle(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetSurfaceBgStyle<T>() where T : ModSurfaceBgStyle => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Returns the Slot of the surface background style corresponding to the given name.
@@ -1182,6 +1238,7 @@ namespace Terraria.ModLoader
 
 			globalBgStyles[name] = globalBgStyle;
 			GlobalBgStyleLoader.globalBgStyles.Add(globalBgStyle);
+			ContentInstance.Register(globalBgStyle);
 		}
 
 		/// <summary>
@@ -1191,7 +1248,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalBgStyle GetGlobalBgStyle(string name) => globalBgStyles.TryGetValue(name, out var bgStyle) ? bgStyle : null;
 
-		public T GetGlobalBgStyle<T>() where T : GlobalBgStyle => (T)GetGlobalBgStyle(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalBgStyle<T>() where T : GlobalBgStyle => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds the given water style to the game with the given name, texture path, and block texture path.
@@ -1212,6 +1270,7 @@ namespace Terraria.ModLoader
 
 			waterStyles[name] = waterStyle;
 			WaterStyleLoader.waterStyles.Add(waterStyle);
+			ContentInstance.Register(waterStyle);
 		}
 
 		/// <summary>
@@ -1221,7 +1280,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModWaterStyle GetWaterStyle(string name) => waterStyles.TryGetValue(name, out var waterStyle) ? waterStyle : null;
 
-		public T GetWaterStyle<T>() where T : ModWaterStyle => (T)GetWaterStyle(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetWaterStyle<T>() where T : ModWaterStyle => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Adds the given waterfall style to the game with the given name and texture path.
@@ -1240,6 +1300,7 @@ namespace Terraria.ModLoader
 
 			waterfallStyles[name] = waterfallStyle;
 			WaterfallStyleLoader.waterfallStyles.Add(waterfallStyle);
+			ContentInstance.Register(waterfallStyle);
 		}
 
 		/// <summary>
@@ -1249,7 +1310,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public ModWaterfallStyle GetWaterfallStyle(string name) => waterfallStyles.TryGetValue(name, out var waterfallStyle) ? waterfallStyle : null;
 
-		public T GetWaterfallStyle<T>() where T : ModWaterfallStyle => (T)GetWaterfallStyle(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetWaterfallStyle<T>() where T : ModWaterfallStyle => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Returns the waterfall style corresponding to the given name.
@@ -1273,6 +1335,7 @@ namespace Terraria.ModLoader
 			ModGore.gores[texture] = id;
 			if (modGore != null) {
 				ModGore.modGores[id] = modGore;
+				ContentInstance.Register(modGore);
 			}
 		}
 
@@ -1356,6 +1419,7 @@ namespace Terraria.ModLoader
 
 			globalRecipes[name] = globalRecipe;
 			RecipeHooks.Add(globalRecipe);
+			ContentInstance.Register(globalRecipe);
 		}
 
 		/// <summary>
@@ -1365,7 +1429,8 @@ namespace Terraria.ModLoader
 		/// <returns></returns>
 		public GlobalRecipe GetGlobalRecipe(string name) => globalRecipes.TryGetValue(name, out var globalRecipe) ? globalRecipe : null;
 
-		public T GetGlobalRecipe<T>() where T : GlobalRecipe => (T)GetGlobalRecipe(typeof(T).Name);
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
+		public T GetGlobalRecipe<T>() where T : GlobalRecipe => ModContent.GetInstance<T>();
 
 		/// <summary>
 		/// Manually add a Command during Load
@@ -1463,7 +1528,7 @@ namespace Terraria.ModLoader
 			if (!loading)
 				throw new Exception("RegisterHotKey can only be called from Mod.Load or Mod.Autoload");
 
-			return ModContent.RegisterHotKey(this, name, defaultKey);
+			return HotKeyLoader.RegisterHotKey(new ModHotKey(this, name, defaultKey));
 		}
 
 		/// <summary>
@@ -1649,6 +1714,7 @@ namespace Terraria.ModLoader
 			return null;
 		}
 
+		[Obsolete("Use ModContent.GetInstance<T> instead", true)]
 		public T GetConfig<T>() where T : ModConfig => (T)GetConfig(typeof(T).Name);
 	}
 }

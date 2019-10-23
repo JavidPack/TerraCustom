@@ -80,14 +80,14 @@ namespace Terraria.ModLoader.Core
 			//	File.Copy(fileName, Path.GetFileNameWithoutExtension(fileName), true);
 			//	File.Delete(fileName);
 			//}
-			Interface.loadModsProgress.SetLoadStage("tModLoader.MSFinding");
+			Interface.loadMods.SetLoadStage("tModLoader.MSFinding");
 			var modsToLoad = FindMods().Where(mod => ModLoader.IsEnabled(mod.Name) && LoadSide(mod.properties.side)).ToList();
 			
 			// Press shift while starting up tModLoader or while trapped in a reload cycle to skip loading all mods.
 			if (Main.oldKeyState.PressingShift() || ModLoader.skipLoad || token.IsCancellationRequested) {
 				ModLoader.skipLoad = false;
 				modsToLoad.Clear();
-				Interface.loadModsProgress.SetLoadStage("Cancelling loading...");
+				Interface.loadMods.SetLoadStage("Cancelling loading...");
 			}
 
 			VerifyNames(modsToLoad);
@@ -281,7 +281,7 @@ namespace Terraria.ModLoader.Core
 					Logging.tML.Warn("Did not find enabled.json file");
 					return new HashSet<string>();
 				}
-				return JsonConvert.DeserializeObject<HashSet<string>>(File.ReadAllText(path));
+				return JsonConvert.DeserializeObject<HashSet<string>>(File.ReadAllText(path)) ?? new HashSet<string>();
 			}
 			catch (Exception e) {
 				Logging.tML.Warn("Unknown error occurred when trying to read enabled.json", e);

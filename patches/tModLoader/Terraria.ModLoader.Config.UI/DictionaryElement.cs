@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader.UI;
 
 namespace Terraria.ModLoader.Config.UI
 {
@@ -104,18 +105,18 @@ namespace Terraria.ModLoader.Config.UI
 
 		protected override void AddItem() {
 			try {
-				object value;
+				object keyValue;
 				if (defaultDictionaryKeyValueAttribute != null) {
-					value = defaultDictionaryKeyValueAttribute.Value;
+					keyValue = defaultDictionaryKeyValueAttribute.Value;
 				}
 				else {
-					value = ConfigManager.AlternateCreateInstance(valueType);
-					if (!valueType.IsValueType) {
+					keyValue = ConfigManager.AlternateCreateInstance(keyType);
+					if (!keyType.IsValueType) {
 						string json = jsonDefaultDictionaryKeyValueAttribute?.json ?? "{}";
-						JsonConvert.PopulateObject(json, value, ConfigManager.serializerSettings);
+						JsonConvert.PopulateObject(json, keyValue, ConfigManager.serializerSettings);
 					}
 				}
-				((IDictionary)data).Add(value, CreateCollectionElementInstance(valueType));
+				((IDictionary)data).Add(keyValue, CreateCollectionElementInstance(valueType));
 			}
 			catch (Exception e) {
 				Interface.modConfig.SetMessage("Error: " + e.Message, Color.Red);

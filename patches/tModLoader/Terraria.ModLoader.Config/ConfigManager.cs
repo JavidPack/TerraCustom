@@ -10,6 +10,7 @@ using System.Reflection;
 using Terraria.ID;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Exceptions;
+using Terraria.ModLoader.UI;
 using Terraria.UI;
 
 namespace Terraria.ModLoader.Config
@@ -241,6 +242,7 @@ namespace Terraria.ModLoader.Config
 				if (success)
 				{
 					// Apply to Servers Config
+					ConfigManager.Save(pendingConfig);
 					JsonConvert.PopulateObject(json, config, ConfigManager.serializerSettingsCompact);
 					config.OnChanged();
 					// Send new config to all clients

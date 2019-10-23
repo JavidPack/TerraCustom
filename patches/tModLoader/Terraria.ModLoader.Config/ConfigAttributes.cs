@@ -275,7 +275,7 @@ namespace Terraria.ModLoader.Config
 	}
 
 	/// <summary>
-	/// Specifies a range for primative data values. Without this, default min and max are as follows: float: 0, 1 - int/uint: 0, 100 - byte: 0, 255
+	/// Specifies a range for primitive data values. Without this, default min and max are as follows: float: 0, 1 - int/uint: 0, 100 - byte: 0, 255
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class RangeAttribute : Attribute
@@ -316,6 +316,26 @@ namespace Terraria.ModLoader.Config
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class DrawTicksAttribute : Attribute
 	{
+	}
+
+	/// <summary>
+	/// Add this attribute to a Color item and Alpha will not be presented in the UI and will remain as 255 unless manually edited.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+	public class ColorNoAlphaAttribute : Attribute
+	{
+	}
+
+	/// <summary>
+	/// Add this attribute to a Color item and the UI will present a Hue, Saturation, and Lightness sliders rather than Red, Green, and Blue sliders. Pass in false to skip Saturation and Lightness.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+	public class ColorHSLSliderAttribute : Attribute
+	{
+		public bool showSaturationAndLightness;
+		public ColorHSLSliderAttribute(bool showSaturationAndLightness = true) {
+			this.showSaturationAndLightness = showSaturationAndLightness;
+		}
 	}
 
 	/// <summary>

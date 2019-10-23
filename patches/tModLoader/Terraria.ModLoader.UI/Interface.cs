@@ -1,24 +1,24 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Core;
-using Terraria.ModLoader.IO;
 using Terraria.ModLoader.UI;
 using Terraria.ModLoader.UI.DownloadManager;
 using Terraria.ModLoader.UI.ModBrowser;
 
-namespace Terraria.ModLoader
+namespace Terraria.ModLoader.UI
 {
 	internal static class Interface
 	{
 		internal const int modsMenuID = 10000;
 		internal const int modSourcesID = 10001;
 		//set initial Main.menuMode to loadModsID
-		internal const int loadModsProgressID = 10002;
-		internal const int buildModProgressID = 10003;
+		internal const int loadModsID = 10002;
+		internal const int buildModID = 10003;
 		internal const int errorMessageID = 10005;
 		internal const int reloadModsID = 10006;
 		internal const int modBrowserID = 10007;
@@ -32,19 +32,17 @@ namespace Terraria.ModLoader
 		internal const int modPacksMenuID = 10016;
 		internal const int tModLoaderSettingsID = 10017;
 		internal const int enterSteamIDMenuID = 10018;
-		internal const int extractModProgressID = 10019;
+		internal const int extractModID = 10019;
 		internal const int downloadProgressID = 10020;
-		internal const int uploadModProgressID = 10021;
 		internal const int developerModeHelpID = 10022;
 		internal const int progressID = 10023;
 		internal const int modConfigID = 10024;
 		internal const int createModID = 10025;
 		internal const int exitID = 10026;
-		internal const int unloadModsID = 10027;
 		internal static UIMods modsMenu = new UIMods();
-		internal static UILoadModsProgress loadModsProgress = new UILoadModsProgress();
+		internal static UILoadMods loadMods = new UILoadMods();
 		private static UIModSources modSources = new UIModSources();
-		internal static UIBuildModProgress buildMod = new UIBuildModProgress();
+		internal static UIBuildMod buildMod = new UIBuildMod();
 		internal static UIErrorMessage errorMessage = new UIErrorMessage();
 		internal static UIModBrowser modBrowser = new UIModBrowser();
 		internal static UIModInfo modInfo = new UIModInfo();
@@ -54,15 +52,13 @@ namespace Terraria.ModLoader
 		internal static UIEnterPassphraseMenu enterPassphraseMenu = new UIEnterPassphraseMenu();
 		internal static UIModPacks modPacksMenu = new UIModPacks();
 		internal static UIEnterSteamIDMenu enterSteamIDMenu = new UIEnterSteamIDMenu();
-		internal static UIExtractModProgress extractMod = new UIExtractModProgress();
-		internal static UIUploadModProgress uploadModProgress = new UIUploadModProgress();
+		internal static UIExtractMod extractMod = new UIExtractMod();
 		internal static UIDeveloperModeHelp developerModeHelp = new UIDeveloperModeHelp();
 		internal static UIModConfig modConfig = new UIModConfig();
 		internal static UIModConfigList modConfigList = new UIModConfigList();
 		internal static UICreateMod createMod = new UICreateMod();
 		internal static UIProgress progress = new UIProgress();
 		internal static UIDownloadProgress downloadProgress = new UIDownloadProgress();
-		internal static UIUnloadModsProgress unloadModsProgress = new UIUnloadModsProgress();
 
 		//add to Terraria.Main.DrawMenu in Main.menuMode == 0 after achievements
 		//Interface.AddMenuButtons(this, this.selectedMenu, array9, array7, ref num, ref num3, ref num10, ref num5);
@@ -123,6 +119,17 @@ namespace Terraria.ModLoader
 		//add to end of if else chain of Main.menuMode in Terraria.Main.DrawMenu
 		//Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
 		internal static void ModLoaderMenus(Main main, int selectedMenu, string[] buttonNames, float[] buttonScales, int[] buttonVerticalSpacing, ref int offY, ref int spacing, ref int numButtons, ref bool backButtonDown) {
+			if (Main.menuMode == loadModsID) {
+				if (ModLoader.ShowFirstLaunchWelcomeMessage) {
+					ModLoader.ShowFirstLaunchWelcomeMessage = false;
+					infoMessage.Show(Language.GetTextValue("tModLoader.FirstLaunchWelcomeMessage"), Main.menuMode);
+				}
+				//else if (ModLoader.ShowWhatsNew) {
+				//	// TODO: possibly pull from github
+				//	ModLoader.ShowWhatsNew = false;
+				//	infoMessage.Show(Language.GetTextValue("tModLoader.WhatsNewMessage"), Main.menuMode);
+				//}
+			}
 			if (Main.menuMode == modsMenuID) {
 				Main.MenuUI.SetState(modsMenu);
 				Main.menuMode = 888;
@@ -139,11 +146,11 @@ namespace Terraria.ModLoader
 				Main.MenuUI.SetState(developerModeHelp);
 				Main.menuMode = 888;
 			}
-			else if (Main.menuMode == loadModsProgressID) {
+			else if (Main.menuMode == loadModsID) {
 				Main.menuMode = 888;
-				Main.MenuUI.SetState(loadModsProgress);
+				Main.MenuUI.SetState(loadMods);
 			}
-			else if (Main.menuMode == buildModProgressID) {
+			else if (Main.menuMode == buildModID) {
 				Main.MenuUI.SetState(buildMod);
 				Main.menuMode = 888;
 			}
@@ -190,12 +197,8 @@ namespace Terraria.ModLoader
 				Main.MenuUI.SetState(modPacksMenu);
 				Main.menuMode = 888;
 			}
-			else if (Main.menuMode == extractModProgressID) {
+			else if (Main.menuMode == extractModID) {
 				Main.MenuUI.SetState(extractMod);
-				Main.menuMode = 888;
-			}
-			else if (Main.menuMode == uploadModProgressID) {
-				Main.MenuUI.SetState(uploadModProgress);
 				Main.menuMode = 888;
 			}
 			else if(Main.menuMode == progressID) {
@@ -204,10 +207,6 @@ namespace Terraria.ModLoader
 			}
 			else if (Main.menuMode == downloadProgressID) {
 				Main.MenuUI.SetState(downloadProgress);
-				Main.menuMode = 888;
-			}
-			else if (Main.menuMode == unloadModsID) {
-				Main.MenuUI.SetState(unloadModsProgress);
 				Main.menuMode = 888;
 			}
 			else if (Main.menuMode == tModLoaderSettingsID) {
@@ -374,6 +373,17 @@ namespace Terraria.ModLoader
 				}
 			}
 			Console.Clear();
+		}
+
+		internal static void MessageBoxShow(string text, string caption = null) {
+			// MessageBox.Show fails on Mac, this method will open a text file to show a message.
+			caption = caption ?? "Terraria: Error" + $" ({ModLoader.versionedName})";
+#if !MAC
+			System.Windows.Forms.MessageBox.Show(text, caption);
+#else
+			File.WriteAllText("fake-messagebox.txt", $"{caption}\n\n{text}");
+			Process.Start("fake-messagebox.txt");
+#endif
 		}
 	}
 }

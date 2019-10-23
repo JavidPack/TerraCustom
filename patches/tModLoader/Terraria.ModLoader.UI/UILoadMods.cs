@@ -5,9 +5,9 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.ModLoader.Engine;
 
-namespace Terraria.ModLoader.UI.DownloadManager
+namespace Terraria.ModLoader.UI
 {
-	internal class UILoadModsProgress : UIProgress
+	internal class UILoadMods : UIProgress
 	{
 		public int modCount;
 

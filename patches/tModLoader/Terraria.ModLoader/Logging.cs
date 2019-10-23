@@ -33,6 +33,7 @@ namespace Terraria.ModLoader
 		internal const string side = "server";
 #endif
 
+		private static List<string> initWarnings = new List<string>();
 		internal static void Init() {
 			if (Program.LaunchParameters.ContainsKey("-build"))
 				return;
@@ -51,7 +52,10 @@ namespace Terraria.ModLoader
 			if (ModCompile.DeveloperMode)
 				tML.Info("Developer mode enabled");
 
-			AppDomain.CurrentDomain.UnhandledException += (s, args) => tML.Error("Unhandled Exception", args.ExceptionObject as Exception);
+			foreach (var line in initWarnings)
+				tML.Warn(line);
+
+				AppDomain.CurrentDomain.UnhandledException += (s, args) => tML.Error("Unhandled Exception", args.ExceptionObject as Exception);
 			LogFirstChanceExceptions();
 			EnablePortablePDBTraces();
 			AssemblyResolving.Init();
@@ -71,12 +75,11 @@ namespace Terraria.ModLoader
 				Name = "ConsoleAppender",
 				Layout = layout
 			});
-#else
+#endif
 			appenders.Add(new DebugAppender {
 				Name = "DebugAppender",
 				Layout = layout
 			});
-#endif
 
 			var fileAppender = new FileAppender {
 				Name = "FileAppender",
@@ -92,7 +95,7 @@ namespace Terraria.ModLoader
 		}
 
 		private static string GetNewLogFile(string baseName) {
-			var pattern = new Regex($"{baseName}(\\d*)\\.log");
+			var pattern = new Regex($"{baseName}(\\d*)\\.log$");
 			var existingLogs = Directory.GetFiles(LogDir).Where(s => pattern.IsMatch(Path.GetFileName(s))).ToList();
 
 			if (!existingLogs.All(CanOpen)) {
@@ -103,8 +106,19 @@ namespace Terraria.ModLoader
 				return $"{baseName}{n + 1}.log";
 			}
 
-			foreach (var existingLog in existingLogs.OrderBy(File.GetCreationTime))
-				File.Move(existingLog, existingLog + ".old");
+			foreach (var existingLog in existingLogs.OrderBy(File.GetCreationTime)) {
+				var oldExt = ".old";
+				int n = 0;
+				while (File.Exists(existingLog + oldExt))
+					oldExt = $".old{++n}";
+
+				try {
+					File.Move(existingLog, existingLog + oldExt);
+				}
+				catch (IOException e) {
+					initWarnings.Add($"Move failed during log initialization: {existingLog} -> {Path.GetFileName(existingLog)}{oldExt}\n{e}");
+				}
+			}
 
 			return $"{baseName}.log";
 		}
@@ -136,7 +150,7 @@ namespace Terraria.ModLoader
 
 		private static List<string> ignoreContents = new List<string> {
 			"System.Console.set_OutputEncoding", // when the game is launched without a console handle (client outside dev environment)
-			"Terraria.ModLoader.ModCompile",
+			"Terraria.ModLoader.Core.ModCompile",
 			"Delegate.CreateDelegateNoSecurityCheck",
 			"MethodBase.GetMethodBody",
 			"Terraria.Net.Sockets.TcpSocket.Terraria.Net.Sockets.ISocket.AsyncSend", // client disconnects from server
@@ -166,40 +180,54 @@ namespace Terraria.ModLoader
 				ignoreContents.Add(source);
 		}
 
+		private static ThreadLocal<bool> handlerActive = new ThreadLocal<bool>(() => false);
 		private static Exception previousException;
 		private static void FirstChanceExceptionHandler(object sender, FirstChanceExceptionEventArgs args) {
-			if (args.Exception == previousException ||
-				args.Exception is ThreadAbortException ||
-				ignoreSources.Contains(args.Exception.Source) ||
-				ignoreMessages.Any(str => args.Exception.Message?.Contains(str) ?? false) ||
-				ignoreThrowingMethods.Any(str => args.Exception.StackTrace?.Contains(str) ?? false))
+			if (handlerActive.Value)
 				return;
 
-			var stackTrace = new StackTrace(true);
-			PrettifyStackTraceSources(stackTrace.GetFrames());
-			var traceString = stackTrace.ToString();
+			try {
+				handlerActive.Value = true;
 
-			if (ignoreContents.Any(traceString.Contains))
-				return;
-
-			traceString = traceString.Substring(traceString.IndexOf('\n'));
-			var exString = args.Exception.GetType() + ": " + args.Exception.Message + traceString;
-			lock (pastExceptions) {
-				if (!pastExceptions.Add(exString))
+				if (args.Exception == previousException ||
+					args.Exception is ThreadAbortException ||
+					ignoreSources.Contains(args.Exception.Source) ||
+					ignoreMessages.Any(str => args.Exception.Message?.Contains(str) ?? false) ||
+					ignoreThrowingMethods.Any(str => args.Exception.StackTrace?.Contains(str) ?? false))
 					return;
-			}
 
-			previousException = args.Exception;
-			var msg = args.Exception.Message + " " + Language.GetTextValue("tModLoader.RuntimeErrorSeeLogsForFullTrace", Path.GetFileName(LogPath));
-#if CLIENT
-			if (ModCompile.activelyModding)
-				AddChatMessage(msg, Color.OrangeRed);
-#else
-			Console.ForegroundColor = ConsoleColor.DarkMagenta;
-			Console.WriteLine(msg);
-			Console.ResetColor();
-#endif
-			tML.Warn(Language.GetTextValue("tModLoader.RuntimeErrorSilentlyCaughtException") + '\n' + exString);
+				var stackTrace = new StackTrace(true);
+				PrettifyStackTraceSources(stackTrace.GetFrames());
+				var traceString = stackTrace.ToString();
+
+				if (ignoreContents.Any(traceString.Contains))
+					return;
+
+				traceString = traceString.Substring(traceString.IndexOf('\n'));
+				var exString = args.Exception.GetType() + ": " + args.Exception.Message + traceString;
+				lock (pastExceptions) {
+					if (!pastExceptions.Add(exString))
+						return;
+				}
+
+				previousException = args.Exception;
+				var msg = args.Exception.Message + " " + Language.GetTextValue("tModLoader.RuntimeErrorSeeLogsForFullTrace", Path.GetFileName(LogPath));
+	#if CLIENT
+				if (ModCompile.activelyModding)
+					AddChatMessage(msg, Color.OrangeRed);
+	#else
+				Console.ForegroundColor = ConsoleColor.DarkMagenta;
+				Console.WriteLine(msg);
+				Console.ResetColor();
+	#endif
+				tML.Warn(Language.GetTextValue("tModLoader.RuntimeErrorSilentlyCaughtException") + '\n' + exString);
+			}
+			catch (Exception e) {
+				tML.Warn("FirstChanceExceptionHandler exception", e);
+			}
+			finally {
+				handlerActive.Value = false;
+			}
 		}
 
 		// Separate method to avoid triggering Main constructor

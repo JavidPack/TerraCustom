@@ -10,7 +10,7 @@
  using Terraria.Achievements;
  using Terraria.Audio;
  using Terraria.Chat;
-@@ -54,6 +_,11 @@
+@@ -54,6 +_,12 @@
  using Terraria.IO;
  using Terraria.Localization;
  using Terraria.Map;
@@ -19,6 +19,7 @@
 +using Terraria.ModLoader.Core;
 +using Terraria.ModLoader.Engine;
 +using Terraria.ModLoader.IO;
++using Terraria.ModLoader.UI;
  using Terraria.Net;
  using Terraria.ObjectData;
  using Terraria.Social;
@@ -47,6 +48,14 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
+@@ -184,6 +_,7 @@
+ 		public static ulong LobbyId = 0uL;
+ 		private static object _audioLock = new object();
+ 		private static Microsoft.Xna.Framework.Color[] _mapColorCacheArray = new Microsoft.Xna.Framework.Color[30000];
++		public static bool playerLoaded { get { return Main.ActivePlayersCount > 0; } }
+ 		public static float expertLife = 2f;
+ 		public static float expertDamage = 2f;
+ 		public static float expertDebuffTime = 2f;
 @@ -211,11 +_,13 @@
  		public static bool UseHeatDistortion = true;
  		public static int npcStreamSpeed = 60;
@@ -244,7 +253,7 @@
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
 -		public static int menuMode = 0;
-+		public static int menuMode = Interface.loadModsProgressID;
++		public static int menuMode = Interface.loadModsID;
  		public static int menuSkip = 0;
  		private static bool _needsLanguageSelect = true;
 -		private static Item cpItem = new Item();
@@ -448,7 +457,7 @@
  			Main.mouseBorderColorSlider.SetHSL(Main.MouseBorderColor);
  			Main.mouseBorderColorSlider.Alpha = (float)Main.MouseBorderColor.A / 255f;
 -			if (num2 != 193)
-+			if (num2 != 194)
++			if (num2 != 194 || ModLoader.ModLoader.LastLaunchedTModLoaderVersion != ModLoader.ModLoader.version)
  			{
  				Main.SaveSettings();
  			}
@@ -506,7 +515,7 @@
  			Main.dedServ = true;
  			Main.showSplash = false;
  			this.Initialize();
-+			ModLoader.ModLoader.Load();
++			ModLoader.ModLoader.Reload();
  			while (Main.worldPathName == null || Main.worldPathName == "")
  			{
  				bool flag = true;
@@ -747,7 +756,7 @@
  			{
  				if (TexturePackSupport.Enabled && typeof(T) == this.t2d)
  				{
-@@ -7468,12 +_,16 @@
+@@ -7468,13 +_,18 @@
  					}
  				}
  				result = base.Content.Load<T>(path);
@@ -762,8 +771,10 @@
  		{
 +			HiDefGraphicsIssues.OnLoadContent();
  			Main.Configuration.Load();
++			ModLoader.ModLoader.MigrateSettings();
  			Main.Configuration.Get<bool>("UseExperimentalFeatures", ref Main.UseExperimentalFeatures);
  			if (Main.UseExperimentalFeatures)
+ 			{
 @@ -7482,18 +_,16 @@
  			}
  			Main.Configuration.Get<bool>("Support4K", ref Main.Support4K);
@@ -1041,11 +1052,12 @@
  				}
  				this._isDrawingOrUpdating = false;
  			}
-@@ -11997,6 +_,7 @@
+@@ -11997,6 +_,8 @@
  			{
  				Main.InGameUI.Update(gameTime);
  			}
 +			ModHooks.UpdateUI(gameTime);
++			PlayerInput.ScrollWheelDeltaForUI = 0;
  			PlayerInput.SetZoom_Unscaled();
  			Main.MouseOversTryToClear();
  			PlayerInput.ResetInputsOnActiveStateChange();
@@ -1088,6 +1100,15 @@
  				if (flag)
  				{
  					NetMessage.SendData(36, -1, -1, null, Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
+@@ -12468,7 +_,7 @@
+ 					NetMessage.SendData(42, -1, -1, null, Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
+ 				}
+ 				bool flag2 = false;
+-				for (int num4 = 0; num4 < 22; num4++)
++				for (int num4 = 0; num4 < Player.MaxBuffs; num4++)
+ 				{
+ 					if (Main.player[Main.myPlayer].buffType[num4] != Main.clientPlayer.buffType[num4])
+ 					{
 @@ -12498,6 +_,7 @@
  				{
  					NetMessage.SendData(115, -1, -1, null, Main.myPlayer, 0f, 0f, 0f, 0, 0, 0);
@@ -3736,8 +3757,12 @@
  				}
  			}
  			Microsoft.Xna.Framework.Rectangle rectangle = new Microsoft.Xna.Framework.Rectangle(Main.screenWidth / 2 - Main.chatBackTexture.Width / 2, 100, Main.chatBackTexture.Width, (num2 + 2) * 30);
-@@ -34287,11 +_,15 @@
- 			for (int j = 0; j < 22; j++)
+@@ -34284,14 +_,18 @@
+ 			string focusText = "";
+ 			string focusText2 = "";
+ 			int num5 = Main.player[Main.myPlayer].statLifeMax2 - Main.player[Main.myPlayer].statLife;
+-			for (int j = 0; j < 22; j++)
++			for (int j = 0; j < Player.MaxBuffs; j++)
  			{
  				int num6 = Main.player[Main.myPlayer].buffType[j];
 -				if (Main.debuff[num6] && Main.player[Main.myPlayer].buffTime[j] > 5 && num6 != 28 && num6 != 34 && num6 != 87 && num6 != 89 && num6 != 21 && num6 != 86 && num6 != 199)
@@ -3805,9 +3830,10 @@
  											Main.npcChatText = Lang.dialog(230, false);
  										}
 -										Main.player[Main.myPlayer].statLife = Main.player[Main.myPlayer].statLifeMax2;
+-										for (int l = 0; l < 22; l++)
 +										Main.player[Main.myPlayer].statLife += health;
 +										if (removeDebuffs) { // no indent for better patching
- 										for (int l = 0; l < 22; l++)
++										for (int l = 0; l < Player.MaxBuffs; l++)
  										{
  											int num24 = Main.player[Main.myPlayer].buffType[l];
 -											if (Main.debuff[num24] && Main.player[Main.myPlayer].buffTime[l] > 0 && num24 != 28 && num24 != 34 && num24 != 87 && num24 != 89 && num24 != 21 && num24 != 86 && num24 != 199)
@@ -3845,6 +3871,15 @@
  			new Microsoft.Xna.Framework.Color(150, 150, 150, 150);
  			if (Main.mouseX >= num && (float)Main.mouseX <= (float)num + (float)Main.inventoryBackTexture.Width * Main.inventoryScale && Main.mouseY >= num2 && (float)Main.mouseY <= (float)num2 + (float)Main.inventoryBackTexture.Height * Main.inventoryScale && !PlayerInput.IgnoreMouseInterface)
  			{
+@@ -36095,7 +_,7 @@
+ 					num24++;
+ 				}
+ 				int num26 = 46;
+-				for (int n = 0; n < 22; n++)
++				for (int n = 0; n < Player.MaxBuffs; n++)
+ 				{
+ 					int num27 = Main.player[Main.myPlayer].buffType[n];
+ 					if (num27 != 0)
 @@ -36133,14 +_,13 @@
  							int num31 = (int)(Main.player[Main.myPlayer].manaSickReduction * 100f) + 1;
  							Main.buffString = Main.buffString + num31 + "%";
@@ -3966,10 +4001,30 @@
  						{
  							bool flag3 = Main.SmartInteractShowingGenuine && Main.SmartInteractNPC == k;
 -							if (Main.npc[k].townNPC || Main.npc[k].type == 105 || Main.npc[k].type == 106 || Main.npc[k].type == 123 || Main.npc[k].type == 354 || Main.npc[k].type == 376 || Main.npc[k].type == 579 || Main.npc[k].type == 453)
-+							if (NPCLoader.CanChat(Main.npc[k]))
++							if (NPCLoader.CanChat(Main.npc[k], Main.npc[k].townNPC || Main.npc[k].type == 105 || Main.npc[k].type == 106 || Main.npc[k].type == 123 || Main.npc[k].type == 354 || Main.npc[k].type == 376 || Main.npc[k].type == 579 || Main.npc[k].type == 453))
  							{
  								Microsoft.Xna.Framework.Rectangle rectangle2 = new Microsoft.Xna.Framework.Rectangle((int)(Main.player[Main.myPlayer].position.X + (float)(Main.player[Main.myPlayer].width / 2) - (float)(Player.tileRangeX * 16)), (int)(Main.player[Main.myPlayer].position.Y + (float)(Main.player[Main.myPlayer].height / 2) - (float)(Player.tileRangeY * 16)), Player.tileRangeX * 16 * 2, Player.tileRangeY * 16 * 2);
  								Microsoft.Xna.Framework.Rectangle value4 = new Microsoft.Xna.Framework.Rectangle((int)Main.npc[k].position.X, (int)Main.npc[k].position.Y, Main.npc[k].width, Main.npc[k].height);
+@@ -38003,7 +_,7 @@
+ 			Main.recBigList = false;
+ 			int num = -1;
+ 			int num2 = 11;
+-			for (int i = 0; i < 22; i++)
++			for (int i = 0; i <	Player.MaxBuffs; i++)
+ 			{
+ 				if (Main.player[Main.myPlayer].buffType[i] > 0)
+ 				{
+@@ -38012,8 +_,8 @@
+ 					int num3 = 76;
+ 					if (i >= num2)
+ 					{
+-						x = 32 + (i - num2) * 38;
+-						num3 += 50;
++						x = 32 + Math.Abs(i % 11) * 38;
++						num3 += 50 * (i / 11);
+ 					}
+ 					num = Main.DrawBuffIcon(num, i, b, x, num3);
+ 				}
 @@ -38028,6 +_,7 @@
  				if (num4 > 0)
  				{
@@ -4066,7 +4121,7 @@
  				{
  					LanguageManager.Instance.SetLanguage(this.selectedMenu);
 -					Main.menuMode = 0;
-+					Main.menuMode = ModLoader.Interface.loadModsProgressID;
++					Main.menuMode = Interface.loadModsID;
  					Main.PlaySound(10, -1, -1, 1, 1f, 0f);
  					Main.SaveSettings();
  				}
@@ -4326,7 +4381,7 @@
 +					origin3 = Main.fontMouseText.MeasureString(supportMessage);
 +					Vector2 urlSize = Main.fontMouseText.MeasureString(patreonShortURL);
 +					Main.spriteBatch.DrawString(Main.fontMouseText, patreonShortURL, new Vector2(origin3.X + (float)num110 + 10f, (float)Main.screenHeight - origin3.Y + (float)num111 - 2f), color12, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-+					if (num109 == 4 && Main.mouseLeftRelease && Main.mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, Main.screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(Main.mouseX, Main.mouseY)))
++					if (num109 == 4 && Main.mouseLeftRelease && Main.mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, Main.screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(Main.mouseX, Main.mouseY)) && hasFocus)
 +					{
 +						Main.PlaySound(SoundID.MenuOpen);
 +						Process.Start("https://www.patreon.com/tModLoader");
