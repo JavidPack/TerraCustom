@@ -63,7 +63,7 @@ namespace Terraria.TerraCustom
 		static TerraCustomMenuItem[] SettingsMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(TCText("ResetAll"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
 			//new ActionLabel(seedlabel, () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.ResetAllSettings; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -38 },
-			new ActionLabel(TCText("ReloadtModLoaderMods"), () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
+			new ActionLabel(TCText("ReloadtModLoaderMods"), () => { Main.instance.selectedMenu = -1; Main.menuMode = ModLoader.UI.Interface.reloadModsID; }){ labelScale = 0.53f, additionalHorizontalSpacingPre = -10 },
 			new ActionLabel(TCText("Terrain"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Terrain; }),
 			new ActionLabel(TCText("Ores"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.Ores; }),
 			new ActionLabel(TCText("OreAmount"), () => { Main.instance.selectedMenu = -1; Main.menuMode = (int)MenuModes.OreAmount; }),

@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader.Core\ModCompile.cs
 +++ src/TerraCustom\Terraria.ModLoader.Core\ModCompile.cs
-@@ -49,7 +_,7 @@
+@@ -50,7 +_,7 @@
  			}
  		}
  
