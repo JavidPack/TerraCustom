@@ -6,12 +6,20 @@
 *.suo
 *.cache
 *.force
-solutions/**/*.zip
 installer2/*.class
 installer2/*.jar
-/solutions/packages
 solutions/documentation/html
 solutions/documentation/*.tmp
-solutions/*.zip
-solutions/.vs/**/*
-solutions/.idea/**/*
+solutions/**/*.zip
+solutions/**/*.tar.gz
+**/packages/
+**/.vs/
+**/.idea/
+/test/Terraria.xml
+/test/Test Local/Players
+/test/Test Local/Worlds
+/test/Test Local/Logs
+/test/Test Local/*.json
+/test/Test Local/Mods
+/test/Test Local/Mod Configs
+/ExampleMod/Fonts/ExampleFont.xnb

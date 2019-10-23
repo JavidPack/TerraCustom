@@ -51,7 +51,9 @@ namespace Terraria.ModLoader.Setup
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.decompileServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.formatCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.hookGenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonSetupDebugging = new System.Windows.Forms.Button();
+			this.diffGoGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonPatchTerraCustom = new System.Windows.Forms.Button();
 			this.buttonDiffTerraCustom = new System.Windows.Forms.Button();
 			this.mainMenuStrip.SuspendLayout();
@@ -62,7 +64,7 @@ namespace Terraria.ModLoader.Setup
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Enabled = false;
-			this.buttonCancel.Location = new System.Drawing.Point(135, 398);
+			this.buttonCancel.Location = new System.Drawing.Point(135, 397);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(82, 23);
 			this.buttonCancel.TabIndex = 6;
@@ -277,7 +279,9 @@ namespace Terraria.ModLoader.Setup
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.decompileServerToolStripMenuItem,
-            this.formatCodeToolStripMenuItem});
+            this.formatCodeToolStripMenuItem,
+            this.hookGenToolStripMenuItem,
+            this.diffGoGToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
 			this.toolsToolStripMenuItem.Text = "Tools";
@@ -285,7 +289,7 @@ namespace Terraria.ModLoader.Setup
 			// decompileServerToolStripMenuItem
 			// 
 			this.decompileServerToolStripMenuItem.Name = "decompileServerToolStripMenuItem";
-			this.decompileServerToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.decompileServerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.decompileServerToolStripMenuItem.Text = "Decompile Server";
 			this.decompileServerToolStripMenuItem.Click += new System.EventHandler(this.menuItemDecompileServer_Click);
 			// 
@@ -293,9 +297,16 @@ namespace Terraria.ModLoader.Setup
 			// 
 			this.formatCodeToolStripMenuItem.Enabled = false;
 			this.formatCodeToolStripMenuItem.Name = "formatCodeToolStripMenuItem";
-			this.formatCodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.formatCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.formatCodeToolStripMenuItem.Text = "Format Code";
 			this.formatCodeToolStripMenuItem.Click += new System.EventHandler(this.menuItemFormatCode_Click);
+			// 
+			// hookGenToolStripMenuItem
+			// 
+			this.hookGenToolStripMenuItem.Name = "hookGenToolStripMenuItem";
+			this.hookGenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.hookGenToolStripMenuItem.Text = "HookGen";
+			this.hookGenToolStripMenuItem.Click += new System.EventHandler(this.menuItemHookGen_Click);
 			// 
 			// buttonSetupDebugging
 			// 
@@ -335,6 +346,13 @@ namespace Terraria.ModLoader.Setup
 			this.toolTipButtons.SetToolTip(this.buttonDiffTerraCustom, resources.GetString("buttonDiffTerraCustom.ToolTip"));
 			this.buttonDiffTerraCustom.UseVisualStyleBackColor = true;
 			this.buttonDiffTerraCustom.Click += new System.EventHandler(this.buttonTask_Click);
+			// 
+			// diffGoGToolStripMenuItem
+			// 
+			this.diffGoGToolStripMenuItem.Name = "diffGoGToolStripMenuItem";
+			this.diffGoGToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.diffGoGToolStripMenuItem.Text = "Diff GoG";
+			this.diffGoGToolStripMenuItem.Click += new System.EventHandler(this.diffGoGToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -392,6 +410,8 @@ namespace Terraria.ModLoader.Setup
 		private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem decompileServerToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem formatCodeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem hookGenToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem diffGoGToolStripMenuItem;
 		private System.Windows.Forms.Button buttonPatchTerraCustom;
 		private System.Windows.Forms.Button buttonDiffTerraCustom;
 	}
