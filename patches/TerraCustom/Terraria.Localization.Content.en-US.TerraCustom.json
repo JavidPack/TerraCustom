@@ -11,7 +11,7 @@
 		"Reset": "Reset",
 		"Both": "Both",
 		// "Settings": "{$LegacyMenu.14}",
-		
+
 		// Choose world size Menu
 		"KeepPreviousCustomSize": "Keep Previous Custom Size",
 		"LoadAutosavedConfig": "Load Autosaved Config",
@@ -51,7 +51,7 @@
 
 		// Ores Menu
 		"AlsoCheckOreAmountNote": "Also check 'Ore Amount' option to get both hardmode ores",
-		
+
 		// OreAmount Menu
 		"Setting100ForDefaultAmountOfOresNote": "setting 100% will generate default amount of ores",
 		"OptionToGenerateAlternateHardmodeOres": "Option to generate alternate hardmode ores in the beginning",
@@ -60,6 +60,7 @@
 		"GenerateMedium": "Generate medium amount",
 		"GenerateLot": "Generate a lot",
 		"SameAmountAsSmashingXAltars": "(Same amount as smashing {0} altars)",
+		"PreSmashAltarsGeneratesOpposite": "PreSmash Altars generates opposite set of ores",
 		"PreSmashAltarsGeneratesBothSetsOfOres": "PreSmash Altars generates both sets of ores",
 		"PreSmashAltarsPreventRandomPatchSpawn": "PreSmash Altars prevent random Corruption/Crimson/Hallow patch spawn",
 
@@ -94,7 +95,7 @@
 		"CrimsonBackground": "Crimson Background",
 		"DesertBackground": "Desert Background",
 		"OceanBackground": "Ocean Background",
-		
+
 		// UnderBackgrounds Menu
 		"IceBackground": "Ice Background",
 		"HellBackground": "Hell Background",
@@ -133,7 +134,7 @@
 		"NoAltar": "No altar",
 		"NoOrbOrHeart": "No orb/heart",
 		"NoUnderworld": "No underworld",
-		
+
 		// MicroBiomes Menu
 		"Setting100ForDefaultAmountBiomesNote": "setting 100% will generate default amount of biomes",
 		"EnchantedSword": "Enchanted Sword",

@@ -82,6 +82,7 @@ namespace Terraria.TerraCustom
 			Main.setting.PercDemonite = 1f;
 			Main.setting.PercHellstone = 1f;
 			Main.setting.PreSmashAltar = 0f;
+			Main.setting.PreSmashAltarOreGenerateOpposite = true;
 			Main.setting.PreSmashAltarOreAlternates = false;
 			Main.setting.PreSmashAltarPreventPatches = true;
 		}
@@ -268,6 +269,10 @@ namespace Terraria.TerraCustom
 
 		[JsonProperty]
 		public float PreSmashAltar { get; internal set; }
+
+		[JsonProperty]
+		[DefaultValue(true)]
+		public bool PreSmashAltarOreGenerateOpposite { get; internal set; } = true;
 
 		[JsonProperty]
 		public bool PreSmashAltarOreAlternates { get; internal set; }

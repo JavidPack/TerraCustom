@@ -188,6 +188,7 @@ namespace Terraria.TerraCustom
 			return new string[] { $"{a}/{b}: {b}", $"{a}/{b}: {a}", $"{a}/{b}: {Language.GetTextValue("CLI.Random")}", $"{a}/{b}: {TCText("Both")}" };
 		}
 
+		// Regular = 1, Alternate = 0, Random = 2, Both = 3
 		static TerraCustomMenuItem[] OresMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Ore")), Setting.initializeOres) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel(TCText("AlsoCheckOreAmountNote")) {labelScale = 0.6f},
@@ -339,6 +340,7 @@ namespace Terraria.TerraCustom
 				}
 			}) { secondStringOnly = true},
 			new SliderItem("",0,() => 0f, x=> { }, x => TCText("SameAmountAsSmashingXAltars", Math.Round((double)(Main.setting.PreSmashAltar * 50f)))) { secondStringOnly = true, noSlider = true},
+			new OptionLabel(CreateDisabledEnabledArray(TCText("PreSmashAltarsGeneratesOpposite")), () => Main.setting.PreSmashAltarOreGenerateOpposite? 1 : 0, x => Main.setting.PreSmashAltarOreGenerateOpposite = x > 0 ? true : false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("PreSmashAltarsGeneratesBothSetsOfOres")), () => Main.setting.PreSmashAltarOreAlternates? 1 : 0, x => Main.setting.PreSmashAltarOreAlternates = x > 0 ? true : false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("PreSmashAltarsPreventRandomPatchSpawn")), () => Main.setting.PreSmashAltarPreventPatches? 1 : 0, x => Main.setting.PreSmashAltarPreventPatches = x > 0 ? true : false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },

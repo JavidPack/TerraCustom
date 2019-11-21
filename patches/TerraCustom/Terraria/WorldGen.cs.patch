@@ -2347,11 +2347,12 @@
  			int num4 = 1 - num;
  			num3 = num3 * 310f - (float)(85 * num);
  			num3 *= 0.85f;
-@@ -26782,6 +_,11 @@
+@@ -26782,6 +_,12 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num5].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier1;
-+				num = num == 107 ? 221 : 107; // For presmash, flip it.
++				if (Main.setting.PreSmashAltarOreGenerateOpposite)
++					num = num == 107 ? 221 : 107; // For presmash, flip it.
 +				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
 +				{
 +					num = num == 107 ? 221 : 107; // if both, flip again maybe
@@ -2359,11 +2360,12 @@
  				num3 *= 1.05f;
  			}
  			else if (num == 1)
-@@ -26809,6 +_,11 @@
+@@ -26809,6 +_,12 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num6].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier2;
-+				num = num == 108 ? 222 : 108;
++				if (Main.setting.PreSmashAltarOreGenerateOpposite)
++					num = num == 108 ? 222 : 108;
 +				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
 +				{
 +					num = num == 108 ? 222 : 108;
@@ -2371,11 +2373,12 @@
  			}
  			else
  			{
-@@ -26835,6 +_,11 @@
+@@ -26835,6 +_,12 @@
  					NetMessage.BroadcastChatMessage(NetworkText.FromKey(Lang.misc[num7].Key, new object[0]), new Color(50, 255, 130), -1);
  				}
  				num = WorldGen.oreTier3;
-+				num = num == 111 ? 223 : 111;
++				if (Main.setting.PreSmashAltarOreGenerateOpposite)
++					num = num == 111 ? 223 : 111;
 +				if (Main.setting.PreSmashAltarOreAlternates && WorldGen.genRand.Next(2) == 0)
 +				{
 +					num = num == 111 ? 223 : 111;
