@@ -38,6 +38,8 @@ namespace Terraria.TerraCustom
 		UndergroundBackgrounds,
 		Miscellaneous,
 		Terrain,
+		Terrain2,
+		Terrain3,
 		Chests,
 		Debug,
 		Traps,
@@ -180,6 +182,7 @@ namespace Terraria.TerraCustom
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoAltar")), () => Main.setting.NoAltar ? 1 : 0, x => Main.setting.NoAltar = x > 0 ? true :false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoOrbOrHeart")), () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoUnderworld")), () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("SwapShroomJungle")), () => Main.setting.SwapShroomJungle ? 1 : 0, x => Main.setting.SwapShroomJungle = x > 0 ? true :false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -212,6 +215,10 @@ namespace Terraria.TerraCustom
 			return new string[] { $"{value}: {Language.GetTextValue("CLI.No")}", $"{value}: {Language.GetTextValue("CLI.Yes")}", $"{value}: {Language.GetTextValue("CLI.Random")}" };
 		}
 
+		static string[] ShallowNormalDeepArray(string value) {
+			return new string[] { $"{value}: {TCText("Shallow")}", $"{value}: {TCText("Normal")}", $"{value}: {TCText("Deep")}" };
+		}
+
 		static TerraCustomMenuItem[] MiscellaneousMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("Miscellaneous")), Setting.initializeMiscellaneous) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(new string[] { TCText("CorruptionCrimson") + ": Random",TCText("CorruptionCrimson") + ": Corruption",TCText("CorruptionCrimson") + ": Crimson",TCText("CorruptionCrimson") + ": (Both) Corruption plus Crimson chasms",TCText("CorruptionCrimson") + ": (Both) Crimson plus Corruption chasms", TCText("CorruptionCrimson") + ": None"}, () => Main.setting.IsCorruption, x => Main.setting.IsCorruption = x),
@@ -236,6 +243,8 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCTextC("TreeLowerBound"),150f,() => (float)Main.setting.TreeLowerBound,x => Main.setting.TreeLowerBound = ((int)x>Main.setting.TreeUpperBound? Main.setting.TreeUpperBound: (int)x),x => "Between " + (int)x ), // ratio * %
 			new SliderItem(TCTextC("TreeUpperBound"),150f,() => (float)Main.setting.TreeUpperBound,x => Main.setting.TreeUpperBound = ((int)x<Main.setting.TreeLowerBound? Main.setting.TreeLowerBound: (int)x),x => " and " + (int)x + " tiles tall"),
 			new SliderItem(TCTextC("MushroomBiomes"),10f,() => Main.setting.MushroomBiomeMultiplier, x => Main.setting.MushroomBiomeMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((Main.maxTilesX / 500) * x)),
+			new SliderItem(TCTextC("MushroomSize"),40f,() => Main.setting.MushroomScale, x => Main.setting.MushroomScale = x,x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem(TCTextC("Webs"),40f,() => Main.setting.WebMult, x => Main.setting.WebMult = x,x => Math.Round((double)(x * 100f)) + "%"),
 			new SliderItem(TCTextC("Statues"),10f,() => Main.setting.StatueMultiplier, x => Main.setting.StatueMultiplier = x,x => Math.Round((double)(x * 100f)) + "% -> " + (int)((WorldGen.statueList.Length * 2 * (float)Main.maxTilesX / 4200) * x)),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
@@ -263,6 +272,8 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCTextC("GemstoneCaves"), 10f, () => Main.setting.GemCaveMultiplier, x => Main.setting.GemCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
 			new SliderItem(TCTextC("GemstoneCaveSize"), 10f, () => Main.setting.GemCaveSizeMultiplier, x => Main.setting.GemCaveSizeMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(300*x) +" tiles"),
 			new SliderItem(TCTextC("Hives"), 10f, () => Main.setting.HiveMultiplier, x => Main.setting.HiveMultiplier = x, x => Math.Round((double)(x * 100f)) + "% -> " + (int)(x*(1 + (int)(5f * Main.maxTilesX / 4200f))) + "-" + (int)(x*(1 + (int)(8f * Main.maxTilesX / 4200f))) +" hives"),
+			new SliderItem(TCTextC("UnderworldHouseMult"), 10f, () => Main.setting.UnderworldHouseMult, x => Main.setting.UnderworldHouseMult = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new SliderItem(TCText("GiantTreeMult"),9.8f,() => Main.setting.GiantTreeMult - .2f, x => Main.setting.GiantTreeMult = x + .2f, x => Math.Round((double)(Main.setting.GiantTreeMult * 100f)) + "%"),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes1; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
@@ -276,6 +287,7 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCTextC("AdditionalExplosiveTraps"), 10f, () => Main.setting.AdditionalExplosiveTrapMultiplier, x => Main.setting.AdditionalExplosiveTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.05 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalExplosiveTrapMultiplier))),
 			new SliderItem(TCTextC("AdditionalGeyserTraps"), 10f, () => Main.setting.AdditionalGeyserTrapMultiplier, x => Main.setting.AdditionalGeyserTrapMultiplier = x, x => "     "+Math.Round(x * 100f) + "% -> " + ((int)(0.25 * Main.maxTilesX * 0.05 * Main.setting.TrapMultiplier) + (int)(Main.maxTilesX * 0.05 * Main.setting.AdditionalGeyserTrapMultiplier))),
 			new SliderItem(TCTextC("TempleTraps"), 10f, () => Main.setting.TempleTrapMultiplier, x => Main.setting.TempleTrapMultiplier = x, x => Math.Round((double)(x * 100f)) + "%"),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoMultiWire")), () => Main.setting.SmartTrapsOff ? 1 : 0, x => Main.setting.SmartTrapsOff = x > 0 ? true :false),
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -293,6 +305,33 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCText("Lakes"),20f,() => Main.setting.LakeMultiplier, x => Main.setting.LakeMultiplier = x, x => Math.Round((double)(Main.setting.LakeMultiplier * 100f)) + "%" + " -> " + " between 2 and " + (int)((double)Main.maxTilesX * 0.005 * Main.setting.LakeMultiplier - 1)),
 			new SliderItem(TCText("WorldWidth"), 16800f ,() => Main.maxTilesX, x => Main.maxTilesX = (int)(x/200) * 200, x => x +" tiles wide" +  (x<4200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>8400?" Warning: Will not Load in Vanilla":"")),
 			new SliderItem(TCText("WorldHeight"), 4800f ,() => Main.maxTilesY, x => Main.maxTilesY = (int)(x/150) *150, x => x +" tiles tall" + (x<1200?" Warning: Might not gen, might have Vanilla issues":"") +  (x>2400?" Warning: Will not Load in Vanilla":"")),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.Terrain2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] TerrainMenuItems2 = new TerraCustomMenuItem[] {
+			new ActionLabel(ResetMenu(TCText("Terrain")), Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel(TCText("Use100ForDefaultBehaviorNote")) {labelScale = 0.6f},
+			new SliderItem(TCText("Sand"), 20f,() => Main.setting.SandMultiplier, x => Main.setting.SandMultiplier = x, x => Math.Round(Main.setting.SandMultiplier * 100f) + "%"),
+			new SliderItem(TCText("Clay"), 20f,() => Main.setting.ClayMult, x => Main.setting.ClayMult = x, x => Math.Round(Main.setting.ClayMult * 100f) + "%"),
+			new SliderItem(TCText("Silt"), 20f,() => Main.setting.SiltMultiplier, x => Main.setting.SiltMultiplier = x, x => Math.Round(Main.setting.SiltMultiplier * 100f) + "%"),
+			new SliderItem(TCText("SurfaceCaves"), 10f,() => Main.setting.SurfaceCaveMult, x => Main.setting.SurfaceCaveMult = x, x => Math.Round(Main.setting.SurfaceCaveMult * 100f) + "%"),
+			new SliderItem(TCText("UndergroundCaves"), 10f,() => Main.setting.DeepCaveMult, x => Main.setting.DeepCaveMult = x, x => Math.Round(Main.setting.DeepCaveMult * 100f) + "%"),
+			new SliderItem(TCText("DesertScale"), 3.9f,() => Main.setting.DesertScale- .1f, x => Main.setting.DesertScale = x + .1f, x => Math.Round((double)(Main.setting.DesertScale * 100f)) + "%" + (Main.setting.DesertScale>(3.1f)?" Warning: Might Fail":"")),
+			new SliderItem(TCText("IceBiomeWidth"), 9.9f,() => Main.setting.IceBiomeWidth- .1f, x => Main.setting.IceBiomeWidth = x + .1f, x => Math.Round((double)(Main.setting.IceBiomeWidth * 100f)) + "%"),
+			new OptionLabel(ShallowNormalDeepArray(TCText("IceBiomeDepth")), () => Main.setting.IceBiomeDepth, x => Main.setting.IceBiomeDepth = x),
+			new SliderItem(TCText("JungleScale"), 3.1f,() => Main.setting.JungleScale- .4f, x => Main.setting.JungleScale = x + .4f, x => Math.Round((double)(Main.setting.JungleScale * 100f)) + "%" + (Main.setting.JungleScale>(3f)?" Warning: Might Fail":"")),
+			new SliderItem(TCText("LakeScale"),3.8f,() => Main.setting.LakeScale - .2f, x => Main.setting.LakeScale = x + .2f, x => Math.Round((double)(Main.setting.LakeScale * 100f)) + "%"),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("DoubleDungeon")), () => Main.setting.DoubleDungeon ? 1 : 0, x => Main.setting.DoubleDungeon = x > 0 ? true :false),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.Terrain3; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] TerrainMenuItems3 = new TerraCustomMenuItem[] {
+			new ActionLabel(ResetMenu(TCText("Terrain")), Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel(TCText("Use100ForDefaultBehaviorNote")) {labelScale = 0.6f},
+			new OptionLabel(CreateDisabledEnabledArray(TCText("NoGravitate")), () => Main.setting.NoGravitate ? 1 : 0, x => Main.setting.NoGravitate = x > 0 ? true :false),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.Terrain; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -430,6 +469,13 @@ namespace Terraria.TerraCustom
 				// % = get/ratio therfore, ratio must be range, get must return 0 to range
 				//x => Main.setting.SurfaceTerrainHeightMax = x+.1f,
 				//x => Main.setting.SurfaceTerrainHeightMin = x+.3f, // ration * % 
+			}
+			else if (Main.menuMode == (int)MenuModes.Terrain2)
+			{
+				GenericMenu(main, TerrainMenuItems2, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.Terrain3) {
+				GenericMenu(main, TerrainMenuItems3, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.VariousSpawns)
 			{

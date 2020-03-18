@@ -1,6 +1,15 @@
 --- src/tModLoader\Terraria.GameContent.Biomes\DesertBiome.cs
 +++ src/TerraCustom\Terraria.GameContent.Biomes\DesertBiome.cs
-@@ -475,13 +_,18 @@
+@@ -449,7 +_,7 @@
+ 			for (int i = -20; i < num + 20; i++)
+ 			{
+ 				int j = 220;
+-				while (j < Main.maxTilesY)
++				while (j < (int)(Main.maxTilesY))
+ 				{
+ 					if (WorldGen.SolidTile(i + origin.X, j))
+ 					{
+@@ -475,20 +_,25 @@
  			start = new Point(origin.X, num2);
  			return true;
  		}
@@ -20,4 +29,12 @@
  			Point start;
  			if (!this.FindStart(origin, scale, num2, num3, out start))
  			{
+ 				return false;
+ 			}
+ 			DesertBiome.ClusterGroup clusterGroup = new DesertBiome.ClusterGroup();
+-			clusterGroup.Generate(num2, num3);
++			clusterGroup.Generate((int)(num2 * Main.setting.DesertScale), (int)(num3 * Main.setting.DesertScale));
+ 			this.PlaceSand(clusterGroup, start, scale);
+ 			this.PlaceClusters(clusterGroup, start, scale);
+ 			this.AddTileVariance(clusterGroup, start, scale);
 
