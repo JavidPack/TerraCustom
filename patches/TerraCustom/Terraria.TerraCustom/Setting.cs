@@ -44,6 +44,18 @@ namespace Terraria.TerraCustom
 			Main.setting.TempleSizeMultiplier = 1f;
 			Main.setting.SurfaceHorizontalTunnelsMultiplier = 1f;
 			Main.setting.LakeMultiplier = 1f;
+			Main.setting.LakeScale = 1f;
+			Main.setting.SandMultiplier = 1f;
+			Main.setting.SiltMultiplier = 1f;
+			Main.setting.DesertScale = 1f;
+			Main.setting.IceBiomeDepth = 1;
+			Main.setting.ClayMult = 1f;
+			Main.setting.SurfaceCaveMult = 1f;
+			Main.setting.DeepCaveMult = 1f;
+			Main.setting.JungleScale = 1f;
+			Main.setting.IceBiomeWidth = 1f;
+			Main.setting.DoubleDungeon = false;
+			Main.setting.NoGravitate = false;
 			// Reset tile width/height
 			if (TerraCustomUtils.WorldSize == 0)
 			{
@@ -102,6 +114,8 @@ namespace Terraria.TerraCustom
 			Main.setting.GraniteCaveMultiplier = 1f;
 			Main.setting.MarbleCaveMultiplier = 1f;
 			Main.setting.UndergroundCabinMultiplier = 1f;
+			Main.setting.UnderworldHouseMult = 1f;
+			Main.setting.GiantTreeMult = 1f;
 		}
 
 		public static void initializeTrapsAmount()
@@ -113,6 +127,7 @@ namespace Terraria.TerraCustom
 			Main.setting.AdditionalExplosiveTrapMultiplier = 0f;
 			Main.setting.AdditionalGeyserTrapMultiplier = 0f;
 			Main.setting.TempleTrapMultiplier = 1f;
+			Main.setting.SmartTrapsOff = false;
 		}
 
 		public static void initializeVariousSpawnsAmount()
@@ -124,6 +139,8 @@ namespace Terraria.TerraCustom
 			Main.setting.TreeLowerBound = 5;
 			Main.setting.TreeUpperBound = 16;
 			Main.setting.MushroomBiomeMultiplier = 1f;
+			Main.setting.MushroomScale = 1f;
+			Main.setting.WebMult = 1f;
 		}
 
 		public static void initializeChallenge()
@@ -141,6 +158,7 @@ namespace Terraria.TerraCustom
 			Main.setting.NoPot = false;
 			Main.setting.NoAltar = false;
 			Main.setting.NoOrbHeart = false;
+			Main.setting.SwapShroomJungle = false;
 		}
 
 		public static void initializeGraphic()
@@ -258,6 +276,34 @@ namespace Terraria.TerraCustom
 		[DefaultValue(4200)]
 		public int WorldWidth { get { return Main.maxTilesX; } set { Main.maxTilesX = value; } }
 		[DefaultValue(1200)]
+		public float SandMultiplier { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float SiltMultiplier { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public int IceBiomeDepth { get; internal set; } = 1;
+		[DefaultValue(1)]
+		public float DesertScale { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float IceBiomeWidth { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float JungleScale { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float UnderworldHouseMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float ClayMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float SurfaceCaveMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float DeepCaveMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float MushroomScale { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float WebMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float LakeScale { get; internal set; } = 1f;
+		[DefaultValue(1)]
+		public float GiantTreeMult { get; internal set; } = 1f;
+		[DefaultValue(1)]
 		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
 		public bool ExpertMode { get { return Main.expertMode; } set { Main.expertMode = value; } }
 
@@ -392,7 +438,19 @@ namespace Terraria.TerraCustom
 		
 		[JsonProperty]
 		public bool NoDungeon { get; internal set; }
-		
+
+		[JsonProperty]
+		public bool DoubleDungeon { get; internal set; }
+
+		[JsonProperty]
+		public bool SmartTrapsOff { get; internal set; }
+
+		[JsonProperty]
+		public bool SwapShroomJungle { get; internal set; }
+
+		[JsonProperty]
+		public bool NoGravitate { get; internal set; }
+
 		[JsonProperty]
 		public bool NoTemple { get; internal set; }
 		
