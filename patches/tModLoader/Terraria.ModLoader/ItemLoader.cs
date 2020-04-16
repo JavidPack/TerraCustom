@@ -249,14 +249,51 @@ namespace Terraria.ModLoader
 		public static int ChoosePrefix(Item item, UnifiedRandom rand) {
 			foreach (var g in HookChoosePrefix.arr) {
 				int pre = g.Instance(item).ChoosePrefix(item, rand);
-				if (pre >= 0) {
+				if (pre > 0) {
 					return pre;
 				}
 			}
 			if (item.modItem != null) {
-				return item.modItem.ChoosePrefix(rand);
+				int pre = item.modItem.ChoosePrefix(rand);
+				if (pre > 0) {
+					return pre;
+				}
 			}
 			return -1;
+		}
+
+		private static HookList HookPrefixChance = AddHook<Func<Item, int, UnifiedRandom, bool?>>(g => g.PrefixChance);
+
+		/// <summary>
+		/// Allows for blocking, forcing and altering chance of prefix rolling.
+		/// False (block) takes precedence over True (force).
+		/// Null gives vanilla behaviour
+		/// </summary>
+		public static bool? PrefixChance(Item item, int pre, UnifiedRandom rand) {
+			bool? result = null;
+			foreach (var g in HookPrefixChance.arr) {
+				bool? r = g.Instance(item).PrefixChance(item, pre, rand);
+				if (r.HasValue)
+					result = r.Value && (result ?? true);
+			}
+			if (item.modItem != null) {
+				bool? r = item.modItem.PrefixChance(pre, rand);
+				if (r.HasValue)
+					result = r.Value && (result ?? true);
+			}
+			return result;
+		}
+
+		private static HookList HookAllowPrefix = AddHook<Func<Item, int, bool>>(g => g.AllowPrefix);
+		public static bool AllowPrefix(Item item, int pre) {
+			bool result = true;
+			foreach (var g in HookAllowPrefix.arr) {
+				result &= g.Instance(item).AllowPrefix(item, pre);
+			}
+			if (item.modItem != null) {
+				result &= item.modItem.AllowPrefix(pre);
+			}
+			return result;
 		}
 
 		private static HookList HookCanUseItem = AddHook<Func<Item, Player, bool>>(g => g.CanUseItem);
@@ -1347,6 +1384,19 @@ namespace Terraria.ModLoader
 				g.Instance(item).Update(item, ref gravity, ref maxFallSpeed);
 		}
 
+		private static HookList HookCanBurnInLava = AddHook<Func<Item, bool>>(g => g.CanBurnInLava);
+		/// <summary>
+		/// Calls ModItem.CanBurnInLava.
+		/// </summary>
+		public static bool CanBurnInLava(Item item)
+		{
+			foreach (var g in HookCanBurnInLava.arr)
+				if (g.Instance(item).CanBurnInLava(item))
+					return true;
+
+			return item.modItem?.CanBurnInLava() ?? false;
+		}
+		
 		private static HookList HookPostUpdate = AddHook<Action<Item>>(g => g.PostUpdate);
 		/// <summary>
 		/// Calls ModItem.PostUpdate and all GlobalItem.PostUpdate hooks.
