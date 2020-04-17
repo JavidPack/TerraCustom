@@ -1,7 +1,7 @@
 --- src/tModLoader\Terraria.ModLoader\ModLoader.cs
 +++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
-@@ -135,7 +_,24 @@
- 					OnSuccessfulLoad = null;
+@@ -134,7 +_,24 @@
+ 					OnSuccessfulLoad();
  				}
  				else {
 -					Main.menuMode = 0;
@@ -26,7 +26,7 @@
  				}
  			}
  			catch when (token.IsCancellationRequested) {
-@@ -339,8 +_,10 @@
+@@ -354,8 +_,10 @@
  			if (LastLaunchedTModLoaderVersion < version)
  				ShowWhatsNew = true;
  			*/

@@ -17,7 +17,7 @@
      <Compile Include="Terraria.Localization\GameCulture.cs" />
      <Compile Include="Terraria.Localization\Language.cs" />
      <Compile Include="Terraria.Localization\LanguageChangeCallback.cs" />
-@@ -675,6 +_,10 @@
+@@ -676,6 +_,10 @@
      <Compile Include="Terraria.Social\ISocialModule.cs" />
      <Compile Include="Terraria.Social\SocialAPI.cs" />
      <Compile Include="Terraria.Social\SocialMode.cs" />
@@ -28,7 +28,7 @@
      <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
      <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
      <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
-@@ -779,6 +_,8 @@
+@@ -780,6 +_,8 @@
      <Compile Include="Terraria\RemoteClient.cs" />
      <Compile Include="Terraria\RemoteServer.cs" />
      <Compile Include="Terraria\ResolutionChangeEvent.cs" />
@@ -37,7 +37,7 @@
      <Compile Include="Terraria\Sign.cs" />
      <Compile Include="Terraria\Star.cs" />
      <Compile Include="Terraria\StrayMethods.cs" />
-@@ -1004,6 +_,10 @@
+@@ -1019,6 +_,10 @@
      <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
      <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
      <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
@@ -48,7 +48,7 @@
    </ItemGroup>
    <ItemGroup>
      <EmbeddedResource Include="Terraria.Localization.Content.en-US.tModLoader.json" />
-@@ -1015,6 +_,9 @@
+@@ -1030,6 +_,9 @@
      <EmbeddedResource Include="Terraria.Localization.Content.de-DE.tModLoader.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.it-IT.tModLoader.json" />
      <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.tModLoader.json" />

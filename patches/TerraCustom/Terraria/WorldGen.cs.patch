@@ -915,7 +915,7 @@
  					num2 += (int)((float)WorldGen.genRand.Next(20, 40) * num3);
 -					int num4 = num - num2;
 +					int num4 = (int)((num - num2) / (Main.setting.IceBiomeWidth));
-+					if (num4 > (num - num2)) 
++					if (num4 > (num - num2))
 +					{
 +						num4 = num - num2;
 +					}
@@ -1096,7 +1096,7 @@
  								WorldGen.grassSpread = 0;
 -								WorldGen.SpreadGrass(k, l, 59, 60, true, 0);
 +								int GrassID = 60;
-+								if (Main.setting.SwapShroomJungle) 
++								if (Main.setting.SwapShroomJungle)
 +								{
 +									GrassID = 70;
 +								}
@@ -1316,7 +1316,7 @@
  						WorldGen.TileRunner(WorldGen.genRand.Next(0, Main.maxTilesX), WorldGen.genRand.Next(Main.maxTilesY - 140, Main.maxTilesY), (double)WorldGen.genRand.Next(2, 7), WorldGen.genRand.Next(3, 7), 58, false, 0f, 0f, false, true);
  					}
 -					WorldGen.AddHellHouses();
-+					if (Main.setting.UnderworldHouseMult > 0) 
++					if (Main.setting.UnderworldHouseMult > 0)
 +					{
 +						WorldGen.AddHellHouses();
 +					}
@@ -1345,28 +1345,25 @@
  					int x;
  					if (dungeonSide == -1)
  					{
-@@ -6213,17 +_,35 @@
+@@ -6213,17 +_,32 @@
  						dungeonSide = 1;
  					}
  					int y = (int)((Main.worldSurface + Main.rockLayer) / 2.0) + WorldGen.genRand.Next(-200, 200);
 -					WorldGen.MakeDungeon(x, y);
 +					if (!InWorldY(y, 0)) y = (int)((Main.worldSurface + Main.rockLayer) / 2.0);
++					if (!Main.setting.NoDungeon) {
++						WorldGen.MakeDungeon(x, y, progress);
++					}
 +					if (Main.setting.DoubleDungeon == true)
 +					{
-+						x = 0;
 +						if (dungeonSide == 1) {
 +							x = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.05), (int)((double)Main.maxTilesX * 0.2));
-+							dungeonSide = 1;
 +						}
 +						else {
 +							x = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.8), (int)((double)Main.maxTilesX * 0.95));
-+							dungeonSide = -1;
 +						}
 +						y = (int)((Main.worldSurface + Main.rockLayer) / 2.0) + WorldGen.genRand.Next(-200, 200);
 +						if (!InWorldY(y, 0)) y = (int)((Main.worldSurface + Main.rockLayer) / 2.0);
-+						WorldGen.MakeDungeon(x, y, progress);
-+					}
-+					if (!Main.setting.NoDungeon) {
 +						WorldGen.MakeDungeon(x, y, progress);
 +					}
  				});
@@ -2444,11 +2441,12 @@
  			num7 *= 1f + (float)WorldGen.genRand.Next(-15, 16) * 0.01f;
  			int contain = 1293;
  			num4 = 0;
-@@ -16043,13 +_,17 @@
+@@ -16043,13 +_,18 @@
  			return false;
  		}
  
 -		public static void MakeDungeon(int x, int y)
++		public static void MakeDungeon(int x, int y) { } // Empty method for IL compatibility
 +		public static void MakeDungeon(int x, int y, GenerationProgress progress)
  		{
 -			int num = WorldGen.genRand.Next(3);

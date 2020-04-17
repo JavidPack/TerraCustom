@@ -4,7 +4,7 @@
 @ECHO off
 :: Compile/Build exe 
 echo "Building Release"
-set version=v0.6.2
+set version=v0.7
 call buildRelease.bat
 set exeFile=TerraCustom %version%.exe
 set exeFileMacLinux=TerraCustom.exe
