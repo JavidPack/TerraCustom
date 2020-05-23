@@ -112,8 +112,13 @@ namespace Terraria.ModLoader.Core
 
 				try {
 					using (modFile.Open()) {
-						foreach (var dll in properties.dllReferences)
-							LoadAssembly(EncapsulateReferences(modFile.GetBytes("lib/" + dll + ".dll")));
+						const string suffixPlat = PlatformUtilities.IsXNA ? ".XNA.dll" : ".FNA.dll";
+						foreach (var dll in properties.dllReferences) {
+							byte[] dllBytes = modFile.GetBytes("lib/" + dll + suffixPlat) ??
+							                  modFile.GetBytes("lib/" + dll + ".dll");
+
+							LoadAssembly(EncapsulateReferences(dllBytes));
+						}
 
 						if (eacEnabled && HasEaC) //load the unmodified dll and EaC pdb
 							assembly = LoadAssembly(modFile.GetModAssembly(), File.ReadAllBytes(properties.eacPath));
@@ -367,8 +372,12 @@ namespace Terraria.ModLoader.Core
 
 		private class CecilAssemblyResolver : DefaultAssemblyResolver
 		{
+			private readonly AssemblyNameReference tMLAssemblyName;
+
 			public CecilAssemblyResolver() {
-				RegisterAssembly(ModuleDefinition.ReadModule(Assembly.GetExecutingAssembly().Location).Assembly);
+				var tMLAssembly = AssemblyDefinition.ReadAssembly(Assembly.GetExecutingAssembly().Location);
+				RegisterAssembly(tMLAssembly);
+				tMLAssemblyName = tMLAssembly.Name;
 			}
 
 			public new void RegisterAssembly(AssemblyDefinition asm) {
@@ -378,6 +387,9 @@ namespace Terraria.ModLoader.Core
 
 			public override AssemblyDefinition Resolve(AssemblyNameReference name) {
 				try {
+					if (name.Name == "Terraria")
+						name = tMLAssemblyName;
+
 					return base.Resolve(name);
 				}
 				catch (AssemblyResolutionException) {

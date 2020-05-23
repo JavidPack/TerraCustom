@@ -4,7 +4,7 @@ import sys
 import time
 import tarfile
 
-executables = ['tModLoaderServer', 'Terraria', 'TerraCustom']
+executables = ['tModLoaderServer', 'tModLoader', 'open-folder']
 extra = None
 
 def set_permissions(tarinfo):

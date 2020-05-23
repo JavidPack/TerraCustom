@@ -248,7 +248,7 @@ namespace Terraria.ModLoader.UI
 		private static void OpenModsFolder(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(10, -1, -1, 1);
 			Directory.CreateDirectory(ModLoader.ModPath);
-			Process.Start(ModLoader.ModPath);
+			Utils.OpenFolder(ModLoader.ModPath);
 		}
 
 		private static void GotoModPacksMenu(UIMouseEvent evt, UIElement listeningElement) {
@@ -260,16 +260,20 @@ namespace Terraria.ModLoader.UI
 
 		private void EnableAll(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(12, -1, -1, 1);
+			ModLoader.PauseSavingEnabledMods = true;
 			foreach (UIModItem modItem in items) {
 				modItem.Enable();
 			}
+			ModLoader.PauseSavingEnabledMods = false;
 		}
 
 		private void DisableAll(UIMouseEvent evt, UIElement listeningElement) {
 			Main.PlaySound(12, -1, -1, 1);
+			ModLoader.PauseSavingEnabledMods = true;
 			foreach (UIModItem modItem in items) {
 				modItem.Disable();
 			}
+			ModLoader.PauseSavingEnabledMods = false;
 		}
 
 		public UIModItem FindUIModItem(string modName) {
