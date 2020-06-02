@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria\WorldGen.cs
 +++ src/TerraCustom\Terraria\WorldGen.cs
-@@ -587,6 +_,7 @@
+@@ -469,6 +_,7 @@
  		public static int tBottom;
  		public static int tRooms;
  		public static int[] mossType = new int[3];
@@ -8,18 +8,18 @@
  		public static int c = 0;
  		public static int m = 0;
  		public static int a = 0;
-@@ -699,7 +_,7 @@
+@@ -581,7 +_,7 @@
  		public static int dungeonX;
  		public static int dungeonY;
  		public static Vector2 lastDungeonHall = Vector2.Zero;
 -		public static int maxDRooms = 100;
 +		public static int maxDRooms = 1000; // TODO? prob?
  		public static int numDRooms = 0;
- 		public static int[] dRoomX = new int[WorldGen.maxDRooms];
- 		public static int[] dRoomY = new int[WorldGen.maxDRooms];
-@@ -710,12 +_,12 @@
- 		private static int[] dRoomT = new int[WorldGen.maxDRooms];
- 		private static int[] dRoomB = new int[WorldGen.maxDRooms];
+ 		public static int[] dRoomX = new int[maxDRooms];
+ 		public static int[] dRoomY = new int[maxDRooms];
+@@ -592,12 +_,12 @@
+ 		private static int[] dRoomT = new int[maxDRooms];
+ 		private static int[] dRoomB = new int[maxDRooms];
  		private static int numDDoors;
 -		private static int[] DDoorX = new int[300];
 -		private static int[] DDoorY = new int[300];
@@ -35,87 +35,78 @@
  		private static int JungleItemCount = 0;
  		private static int[] JChestX = new int[100];
  		private static int[] JChestY = new int[100];
-@@ -2043,7 +_,7 @@
+@@ -1638,5 +_,5 @@
  
- 		public static void dropMeteor()
- 		{
+ 		public static void dropMeteor() {
 -			bool flag = true;
 +			bool flag = false;
  			if (Main.netMode == 1)
- 			{
  				return;
-@@ -2057,7 +_,7 @@
- 				}
+@@ -1649,5 +_,5 @@
  			}
+ 
  			int num = 0;
--			float num2 = (float)(Main.maxTilesX / 4200);
-+			float num2 = ((float)Main.maxTilesX / 4200);
+-			float num2 = Main.maxTilesX / 4200;
++			float num2 = Main.maxTilesX / 4200f;
  			int num3 = (int)(400f * num2);
- 			for (int j = 5; j < Main.maxTilesX - 5; j++)
- 			{
-@@ -2066,7 +_,7 @@
- 				{
- 					if (Main.tile[j, num4].active() && Main.tile[j, num4].type == 37)
- 					{
+@@ -1655,5 +_,5 @@
+ 				for (int k = 5; (double)k < Main.worldSurface; k++) {
+ 					if (Main.tile[j, k].active() && Main.tile[j, k].type == 37) {
 -						num++;
 +						//num++; // prevents dropmeteor from failing
  						if (num > num3)
- 						{
  							return;
-@@ -2126,10 +_,10 @@
- 						k++;
+@@ -1698,9 +_,9 @@
  					}
+ 
+ 					break;
  				}
--				if (num5 < 100f)
--				{
--					return;
--				}
-+				//if (num5 < 100f)
-+				//{
-+				//	return;
-+				//}
+ 
+-				if (num4 < 100f)
+-					break;
++				//if (num4 < 100f)
++				//	break;
  			}
  		}
- 
-@@ -2334,11 +_,14 @@
- 			WorldGen.generateWorld(Main.ActiveWorldFileData.Seed, threadContext as GenerationProgress);
- 			WorldFile.saveWorld(Main.ActiveWorldFileData.IsCloudSave, true);
+@@ -1861,10 +_,13 @@
+ 			generateWorld(Main.ActiveWorldFileData.Seed, threadContext as GenerationProgress);
+ 			WorldFile.saveWorld(Main.ActiveWorldFileData.IsCloudSave, resetTime: true);
  			BackupIO.archiveLock = false;
 +			/*
  			if (Main.menuMode == 10 || Main.menuMode == 888)
- 			{
  				Main.menuMode = 6;
- 			}
+ 
 +			*/
- 			Main.PlaySound(10, -1, -1, 1, 1f, 0f);
+ 			Main.PlaySound(10);
 +			Main.menuMode = (int)TerraCustom.MenuModes.Settings;
  		}
  
- 		public static void CreateNewWorld(GenerationProgress progress = null)
-@@ -2629,6 +_,7 @@
+ 		public static void CreateNewWorld(GenerationProgress progress = null) {
+@@ -2099,5 +_,6 @@
  
- 		public static void clearWorld()
- 		{
+ 		public static void clearWorld() {
 +			WorldGen.numPyramids = 0;
- 			WorldGen.TownManager = new TownRoomManager();
- 			WorldGen.Hooks.ClearWorld();
+ 			TownManager = new TownRoomManager();
+ 			Hooks.ClearWorld();
  			TileEntity.Clear();
-@@ -2641,7 +_,7 @@
- 					float arg_32_0 = (float)i / (float)WorldGen.lastMaxTilesX;
+@@ -2108,9 +_,9 @@
+ 					_ = (float)i / (float)lastMaxTilesX;
  					Main.statusText = Lang.gen[65].Value;
  				}
+ 
 -				Main.Map.Clear();
 +				//Main.Map.Clear();
  			}
+ 
  			NPC.MoonLordCountdown = 0;
  			Main.pumpkinMoon = false;
-@@ -2680,16 +_,17 @@
- 			WorldGen.prioritizedTownNPC = 0;
- 			WorldGen.shadowOrbCount = 0;
- 			WorldGen.altarCount = 0;
--			WorldGen.oreTier1 = -1;
--			WorldGen.oreTier2 = -1;
--			WorldGen.oreTier3 = -1;
+@@ -2149,16 +_,17 @@
+ 			prioritizedTownNPC = 0;
+ 			shadowOrbCount = 0;
+ 			altarCount = 0;
+-			oreTier1 = -1;
+-			oreTier2 = -1;
+-			oreTier3 = -1;
 +			//WorldGen.oreTier1 = -1;
 +			//WorldGen.oreTier2 = -1;
 +			//WorldGen.oreTier3 = -1;
@@ -131,7 +122,7 @@
  			NPC.downedBoss1 = false;
  			NPC.downedBoss2 = false;
  			NPC.downedBoss3 = false;
-@@ -2702,11 +_,25 @@
+@@ -2171,11 +_,25 @@
  			NPC.downedFishron = false;
  			NPC.downedAncientCultist = false;
  			NPC.downedMoonlord = false;
@@ -157,7 +148,7 @@
  			NPC.downedPlantBoss = false;
  			NPC.downedGolemBoss = false;
  			NPC.savedStylist = false;
-@@ -2716,6 +_,16 @@
+@@ -2185,6 +_,16 @@
  			NPC.savedTaxCollector = false;
  			NPC.savedAngler = false;
  			NPC.savedBartender = false;
@@ -174,7 +165,7 @@
  			NPC.downedGoblins = false;
  			NPC.downedClown = false;
  			NPC.downedFrost = false;
-@@ -2737,13 +_,15 @@
+@@ -2206,12 +_,14 @@
  			Main.treeX[0] = Main.maxTilesX;
  			Main.treeX[1] = Main.maxTilesX;
  			Main.treeX[2] = Main.maxTilesX;
@@ -186,21 +177,21 @@
 +			//Main.treeStyle[1] = 0;
 +			//Main.treeStyle[2] = 0;
 +			//Main.treeStyle[3] = 0;
- 			WorldGen.noLiquidCheck = false;
+ 			noLiquidCheck = false;
  			Liquid.numLiquid = 0;
  			LiquidBuffer.numLiquidBuffer = 0;
 +			Main.tile = new Tile[Main.maxTilesX + 1, Main.maxTilesY + 1]; // should be +1?
 +			/*
- 			if (Main.netMode == 1 || WorldGen.lastMaxTilesX > Main.maxTilesX || WorldGen.lastMaxTilesY > Main.maxTilesY)
- 			{
- 				for (int j = 0; j < WorldGen.lastMaxTilesX; j++)
-@@ -2762,6 +_,7 @@
+ 			if (Main.netMode == 1 || lastMaxTilesX > Main.maxTilesX || lastMaxTilesY > Main.maxTilesY) {
+ 				for (int j = 0; j < lastMaxTilesX; j++) {
+@@ -2222,7 +_,8 @@
  					}
  				}
  			}
+ 
 +			*/
- 			WorldGen.lastMaxTilesX = Main.maxTilesX;
- 			WorldGen.lastMaxTilesY = Main.maxTilesY;
+ 			lastMaxTilesX = Main.maxTilesX;
+ 			lastMaxTilesY = Main.maxTilesY;
  			if (Main.netMode != 2)
 @@ -3176,12 +_,176 @@
  
@@ -2778,4 +2769,3 @@
  					}
  				}
  			}
-

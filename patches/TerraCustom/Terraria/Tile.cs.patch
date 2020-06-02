@@ -1,17 +1,16 @@
 --- src/tModLoader\Terraria\Tile.cs
 +++ src/TerraCustom\Terraria\Tile.cs
-@@ -28,6 +_,7 @@
+@@ -18,5 +_,6 @@
  		public byte bTileHeader3;
  		public short frameX;
  		public short frameY;
 +		internal static int WireTypeOverride = -1;
+ 		public const int Type_Solid = 0;
+ 		public const int Type_Halfbrick = 1;
+@@ -351,8 +_,20 @@
+ 		public bool wire() => (sTileHeader & 0x80) == 128;
  
- 		public int collisionType
- 		{
-@@ -458,6 +_,18 @@
- 
- 		public void wire(bool wire)
- 		{
+ 		public void wire(bool wire) {
 +			if(WireTypeOverride > 0) // -1 is rand, 0 is 0
 +			{
 +				if (WireTypeOverride == 1)
@@ -25,6 +24,7 @@
 +				return;
 +			}
  			if (wire)
- 			{
- 				this.sTileHeader |= 128;
-
+ 				sTileHeader |= 128;
+ 			else
+ 				sTileHeader = (ushort)(sTileHeader & 0xFF7F);
+ 		}

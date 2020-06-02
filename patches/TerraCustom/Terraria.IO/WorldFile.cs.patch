@@ -1,9 +1,9 @@
 --- src/tModLoader\Terraria.IO\WorldFile.cs
 +++ src/TerraCustom\Terraria.IO\WorldFile.cs
-@@ -410,8 +_,15 @@
- 				{
+@@ -341,9 +_,16 @@
+ 				if (text != null && array2 != null)
  					FileUtilities.WriteAllBytes(text, array2, useCloudSaving);
- 				}
+ 
 -				WorldIO.Save(Main.worldPathName, useCloudSaving);
 +				if (Main.tModLoaderModsLoaded)
 +				{
@@ -15,6 +15,6 @@
 +			{
 +				LeveledRPGMod.LeveledRPGModUtilities.saveEXP(useCloudSaving, Main.worldPathName);
  			}
+ 
  			Main.serverGenLock = false;
  		}
-

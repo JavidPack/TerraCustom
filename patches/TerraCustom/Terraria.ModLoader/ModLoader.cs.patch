@@ -1,6 +1,6 @@
 --- src/tModLoader\Terraria.ModLoader\ModLoader.cs
 +++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
-@@ -134,7 +_,24 @@
+@@ -141,7 +_,24 @@
  					OnSuccessfulLoad();
  				}
  				else {
@@ -26,7 +26,7 @@
  				}
  			}
  			catch when (token.IsCancellationRequested) {
-@@ -354,8 +_,10 @@
+@@ -389,8 +_,10 @@
  			if (LastLaunchedTModLoaderVersion < version)
  				ShowWhatsNew = true;
  			*/
@@ -37,4 +37,3 @@
  		}
  
  		/// <summary>
-

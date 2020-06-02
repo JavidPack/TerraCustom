@@ -1,7 +1,7 @@
 --- src/tModLoader\Terraria.csproj
 +++ src/TerraCustom\Terraria.csproj
-@@ -15,7 +_,7 @@
-     <OutputType>WinExe</OutputType>
+@@ -13,7 +_,7 @@
+     <LangVersion>7.3</LangVersion>
      <PlatformTarget>AnyCPU</PlatformTarget>
      <Optimize>true</Optimize>
 -    <OutputName>tModLoader</OutputName>
@@ -9,53 +9,3 @@
    </PropertyGroup>
    <PropertyGroup Condition="$(Configuration.Contains('Server'))">
      <OutputType>Exe</OutputType>
-@@ -382,6 +_,7 @@
-     <Compile Include="Terraria.IO\Preferences.cs" />
-     <Compile Include="Terraria.IO\WorldFile.cs" />
-     <Compile Include="Terraria.IO\WorldFileData.cs" />
-+    <Compile Include="Terraria.LeveledRPGMod\LeveledRPGModUtilities.cs" />
-     <Compile Include="Terraria.Localization\GameCulture.cs" />
-     <Compile Include="Terraria.Localization\Language.cs" />
-     <Compile Include="Terraria.Localization\LanguageChangeCallback.cs" />
-@@ -676,6 +_,10 @@
-     <Compile Include="Terraria.Social\ISocialModule.cs" />
-     <Compile Include="Terraria.Social\SocialAPI.cs" />
-     <Compile Include="Terraria.Social\SocialMode.cs" />
-+    <Compile Include="Terraria.TerraCustom.UI\UISettingsItem.cs" />
-+    <Compile Include="Terraria.TerraCustom.UI\UISettingsView.cs" />
-+    <Compile Include="Terraria.TerraCustom\Interface.cs" />
-+    <Compile Include="Terraria.TerraCustom\TerraCustomUtils.cs" />
-     <Compile Include="Terraria.UI.Chat\ChatLine.cs" />
-     <Compile Include="Terraria.UI.Chat\ChatManager.cs" />
-     <Compile Include="Terraria.UI.Chat\ITagHandler.cs" />
-@@ -780,6 +_,8 @@
-     <Compile Include="Terraria\RemoteClient.cs" />
-     <Compile Include="Terraria\RemoteServer.cs" />
-     <Compile Include="Terraria\ResolutionChangeEvent.cs" />
-+    <Compile Include="Terraria.TerraCustom\Setting.cs" />
-+    <Compile Include="Terraria.TerraCustom\SettingSaver.cs" />
-     <Compile Include="Terraria\Sign.cs" />
-     <Compile Include="Terraria\Star.cs" />
-     <Compile Include="Terraria\StrayMethods.cs" />
-@@ -1019,6 +_,10 @@
-     <EmbeddedResource Include="Terraria.ModLoader.Default\MysteryItem.png" />
-     <EmbeddedResource Include="Terraria.ModLoader.Default\StartBag.png" />
-     <EmbeddedResource Include="Terraria.ModLoader.UI\UIModBrowserIcons.png" />
-+    <EmbeddedResource Include="Terraria.TerraCustom\DungeonColors.png" />
-+    <EmbeddedResource Include="Terraria.TerraCustom\Logo.png" />
-+    <EmbeddedResource Include="Terraria.TerraCustom\MossColors.png" />
-+    <EmbeddedResource Include="Terraria.TerraCustom\TreeTops.png" />
-   </ItemGroup>
-   <ItemGroup>
-     <EmbeddedResource Include="Terraria.Localization.Content.en-US.tModLoader.json" />
-@@ -1030,6 +_,9 @@
-     <EmbeddedResource Include="Terraria.Localization.Content.de-DE.tModLoader.json" />
-     <EmbeddedResource Include="Terraria.Localization.Content.it-IT.tModLoader.json" />
-     <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.tModLoader.json" />
-+    <EmbeddedResource Include="Terraria.Localization.Content.en-US.TerraCustom.json" />
-+    <EmbeddedResource Include="Terraria.Localization.Content.es-ES.TerraCustom.json" />
-+    <EmbeddedResource Include="Terraria.Localization.Content.zh-Hans.TerraCustom.json" />
-   </ItemGroup>
-   <Target Name="EditBin" AfterTargets="Build">
-     <PropertyGroup>
-

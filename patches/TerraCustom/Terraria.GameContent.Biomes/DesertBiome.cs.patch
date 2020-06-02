@@ -1,22 +1,12 @@
 --- src/tModLoader\Terraria.GameContent.Biomes\DesertBiome.cs
 +++ src/TerraCustom\Terraria.GameContent.Biomes\DesertBiome.cs
-@@ -449,7 +_,7 @@
- 			for (int i = -20; i < num + 20; i++)
- 			{
- 				int j = 220;
--				while (j < Main.maxTilesY)
-+				while (j < (int)(Main.maxTilesY))
- 				{
- 					if (WorldGen.SolidTile(i + origin.X, j))
- 					{
-@@ -475,20 +_,25 @@
+@@ -397,17 +_,22 @@
  			start = new Point(origin.X, num2);
  			return true;
  		}
 -
 +		//0.262085 x+106.798 = y
- 		public override bool Place(Point origin, StructureMap structures)
- 		{
+ 		public override bool Place(Point origin, StructureMap structures) {
  			float num = (float)Main.maxTilesX / 4200f;
 +			//num = 1f;// TODO TODO TODO
  			int num2 = (int)(80f * num);
@@ -26,15 +16,12 @@
 +			num3 = (int)((GenBase._random.NextFloat() + 1f) * 80f * num);
  			Vector2 scale = new Vector2(4f, 2f);
 +			//scale = new Vector2(4f, .5f);
- 			Point start;
- 			if (!this.FindStart(origin, scale, num2, num3, out start))
- 			{
+ 			if (!FindStart(origin, scale, num2, num3, out Point start))
  				return false;
- 			}
- 			DesertBiome.ClusterGroup clusterGroup = new DesertBiome.ClusterGroup();
+ 
+ 			ClusterGroup clusterGroup = new ClusterGroup();
 -			clusterGroup.Generate(num2, num3);
 +			clusterGroup.Generate((int)(num2 * Main.setting.DesertScale), (int)(num3 * Main.setting.DesertScale));
- 			this.PlaceSand(clusterGroup, start, scale);
- 			this.PlaceClusters(clusterGroup, start, scale);
- 			this.AddTileVariance(clusterGroup, start, scale);
-
+ 			PlaceSand(clusterGroup, start, scale);
+ 			PlaceClusters(clusterGroup, start, scale);
+ 			AddTileVariance(clusterGroup, start, scale);

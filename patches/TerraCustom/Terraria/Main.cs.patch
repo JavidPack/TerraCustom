@@ -1,9 +1,9 @@
 --- src/tModLoader\Terraria\Main.cs
 +++ src/TerraCustom\Terraria\Main.cs
-@@ -180,7 +_,21 @@
+@@ -117,7 +_,21 @@
  		public static string AutogenSeedName;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
- 		public static FavoritesFile LocalFavoriteData = new FavoritesFile(Main.SavePath + "/favorites.json", false);
+ 		public static FavoritesFile LocalFavoriteData = new FavoritesFile(SavePath + "/favorites.json", isCloud: false);
 -		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/ModLoader/favorites.json", true);
 +		public static FavoritesFile CloudFavoritesData = new FavoritesFile("/favorites.json", true);
 +		// Above: Revert SavePath and CloudFavoritesData back to vanilla
@@ -23,30 +23,30 @@
  		public static FileMetadata WorldFileMetadata;
  		public static FileMetadata MapFileMetadata;
  		private AchievementManager _achievements;
-@@ -1364,9 +_,13 @@
+@@ -1354,9 +_,13 @@
  		public static List<WorldFileData> WorldList = new List<WorldFileData>();
  		public static WorldFileData ActiveWorldFileData = new WorldFileData();
- 		public static string WorldPath = Path.Combine(Main.SavePath, "Worlds");
+ 		public static string WorldPath = Path.Combine(SavePath, "Worlds");
 -		public static string CloudWorldPath = "ModLoader/worlds";
 +		public static string CloudWorldPath = "worlds";
- 		public static string PlayerPath = Path.Combine(Main.SavePath, "Players");
+ 		public static string PlayerPath = Path.Combine(SavePath, "Players");
 -		public static string CloudPlayerPath = "ModLoader/players";
 +		public static string CloudPlayerPath = "players";
 +		// Above, revert to pre tModLoader paths
 +		public static string TModLoaderWorldPath = Path.Combine(Main.TModLoaderSavePath, "Worlds");
 +		public static string LeveledWorldPath = Path.Combine(Main.SavePath, "Terraria Leveled", "Worlds");
 +		public static string SettingPath = Main.TerraCustomSavePath;
- 		public static Preferences Configuration = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "config.json", false, false);
- 		public static Preferences InputProfiles = new Preferences(Main.SavePath + Path.DirectorySeparatorChar + "input profiles.json", false, false);
+ 		public static Preferences Configuration = new Preferences(SavePath + Path.DirectorySeparatorChar + "config.json");
+ 		public static Preferences InputProfiles = new Preferences(SavePath + Path.DirectorySeparatorChar + "input profiles.json");
  		public static KeyboardState inputText;
-@@ -2082,11 +_,12 @@
+@@ -2072,11 +_,12 @@
  		private float logoScale = 1f;
  		private float logoScaleDirection = 1f;
  		private float logoScaleSpeed = 1f;
 -		private static int maxMenuItems = 16;
 +		// Room for more menu items, make maxMenuItems, selectedMenu, selectedMenu2 public
 +		public static int maxMenuItems = 24; // 16;
- 		private float[] menuItemScale = new float[Main.maxMenuItems];
+ 		private float[] menuItemScale = new float[maxMenuItems];
  		private int focusMenu = -1;
 -		private int selectedMenu = -1;
 -		private int selectedMenu2 = -1;
@@ -55,70 +55,71 @@
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
  		public static int menuMode = Interface.loadModsID;
-@@ -2949,9 +_,12 @@
- 			Main.Configuration.Put("QuickLaunch", Main.SkipAssemblyLoad);
- 			Main.Configuration.Put("Zoom", Main.GameZoomTarget);
- 			Main.Configuration.Put("UIScale", Main._uiScaleWanted);
+@@ -2703,10 +_,12 @@
+ 			Configuration.Put("UIScale", _uiScaleWanted);
+ 			Configuration.Put("RunningAchievementEnabled", RunningAchievementEnabled);
 +			/*
  			ModLoader.ModLoader.SaveConfiguration();
- 			bool flag = Main.Configuration.Save(true);
- 			return flag && PlayerInput.Save();
+ 			if (Configuration.Save())
+ 				return PlayerInput.Save();
 +			*/
-+			return false;
+ 
+ 			return false;
  		}
  
- 		protected void CheckBunny()
-@@ -3074,7 +_,7 @@
- 			bool fullscreen = false;
- 			int preferredBackBufferWidth = Main.graphics.PreferredBackBufferWidth;
- 			int preferredBackBufferHeight = Main.graphics.PreferredBackBufferHeight;
--			Main.Configuration.Get<bool>("Fullscreen", ref fullscreen);
-+			// Main.Configuration.Get<bool>("Fullscreen", ref fullscreen);
- 			Main.Configuration.Get<int>("DisplayWidth", ref preferredBackBufferWidth);
- 			Main.Configuration.Get<int>("DisplayHeight", ref preferredBackBufferHeight);
- 			Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-@@ -3276,7 +_,7 @@
- 					Main.cMapAlphaDown
+ 		protected void CheckBunny() {
+@@ -2813,7 +_,7 @@
+ 			bool currentValue2 = false;
+ 			int currentValue3 = graphics.PreferredBackBufferWidth;
+ 			int currentValue4 = graphics.PreferredBackBufferHeight;
+-			Configuration.Get("Fullscreen", ref currentValue2);
++			// Main.Configuration.Get<bool>("Fullscreen", ref currentValue2);
+ 			Configuration.Get("DisplayWidth", ref currentValue3);
+ 			Configuration.Get("DisplayHeight", ref currentValue4);
+ 			Dictionary<string, byte> currentValue5 = new Dictionary<string, byte>();
+@@ -2998,7 +_,7 @@
+ 					cMapAlphaDown
  				};
  			}
+ 
 -			ModLoader.ModLoader.LoadConfiguration();
 +			//ModLoader.ModLoader.LoadConfiguration();
  			PlayerInput.Load();
- 			if (num2 < 165)
- 			{
-@@ -3577,7 +_,8 @@
- 				}
- 				text += c2;
+ 			if (currentValue7 < 165) {
+@@ -3209,10 +_,10 @@
+ 			foreach (char c in worldName) {
+ 				text += ((!invalidFileNameChars.Contains(c)) ? ((c != ' ') ? c : '_') : '-');
  			}
--			string text2 = cloudSave ? Main.CloudWorldPath : Main.WorldPath;
-+			//string text2 = cloudSave ? Main.CloudWorldPath : Main.WorldPath;
+ 
+-			string text2 = cloudSave ? CloudWorldPath : WorldPath;
 +			string text2 = (Main.setting.SaveInTModFolder || Main.tModLoaderModsLoaded) ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
- 			string path = string.Concat(new object[]
- 				{
- 					text2,
-@@ -4845,13 +_,14 @@
- #if CLIENT
- 			Main.graphics = new GraphicsDeviceManager((Game)this);
- 			base.Content = new TMLContentManager(Content.ServiceProvider, "Content");
+ 			if (FileUtilities.GetFullPath(text2 + Path.DirectorySeparatorChar + text + ".wld", cloudSave).StartsWith("\\\\.\\", StringComparison.Ordinal))
+ 				text += "_";
+ 
+ 			if (FileUtilities.Exists(text2 + Path.DirectorySeparatorChar + text + ".wld", cloudSave)) {
+ 				int num = 2;
+@@ -4220,12 +_,13 @@
+ 
+ 			AlternateContentManager = new TMLContentManager(Content.ServiceProvider, "Content", null);
+ 			base.Content = new TMLContentManager(Content.ServiceProvider, vanillaContentFolder, AlternateContentManager);
 +			// TODO, figure out if I can redirect to original folder for easy mac installs
  #endif
  		}
  
- 		protected void SetTitle()
- 		{
+ 		protected void SetTitle() {
  #if CLIENT
--			Main._cachedTitle = Lang.GetRandomGameTitle();
+-			_cachedTitle = Lang.GetRandomGameTitle();
 +			Main._cachedTitle = "TerraCustom -- " + Lang.GetRandomGameTitle();
- 			Platform.Current.SetWindowUnicodeTitle(base.Window, Main._cachedTitle);
+ 			Platform.Current.SetWindowUnicodeTitle(base.Window, _cachedTitle);
  #endif
  		}
-@@ -8144,8 +_,16 @@
- 			Main.gridTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
- 			Main.trashTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
- 			Main.cdTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
+@@ -7123,8 +_,16 @@
+ 			gridTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
+ 			trashTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
+ 			cdTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
 +			/*
- 			Main.logoTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
- 			Main.logo2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
+ 			logoTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
+ 			logo2Texture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
 +			*/
 +			Main.logoTexture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
 +			Main.logo2Texture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
@@ -126,152 +127,133 @@
 +			Main.TCMossColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.MossColors.png");
 +			Main.TCDungeonColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.DungeonColors.png");
 +			// End TerraCustom Changes
- 			Main.dustTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
- 			Main.sunTexture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
- 			Main.sun2Texture = this.OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -43572,7 +_,8 @@
- 			Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
+ 			dustTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
+ 			sunTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
+ 			sun2Texture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
+@@ -35766,6 +_,7 @@
+ 			Utils.DrawBorderString(spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * invasionProgressAlpha, num * 0.9f, 1f, 0.4f);
  		}
  
--		protected void QuitGame()
+-		protected void QuitGame() {
 +		// Make public so accessable,
 +		public void QuitGame()
- 		{
- 			Main.SaveSettings();
+ 			SaveSettings();
  #if CLIENT
-@@ -43825,13 +_,14 @@
- 			{
- 				Main.ActiveWorldFileData.SetSeed(text);
- 			}
--			Main.menuMode = 10;
--			WorldGen.CreateNewWorld(null);
+@@ -35979,16 +_,17 @@
+ 			else
+ 				ActiveWorldFileData.SetSeed(text);
+ 
+-			menuMode = 10;
+-			WorldGen.CreateNewWorld();
 +			Main.menuMode = (int)TerraCustom.MenuModes.Settings; // Originally 10.
-+			//WorldGen.CreateNewWorld(null); // not sure why this is commented out
++			//WorldGen.CreateNewWorld(); // not sure why this is commented out
 +			Main.DefaultSeed = text; // This remembers the seed since the order we do things forgets it.
  		}
  
- 		private void OnWorldNamed(string text)
- 		{
--			Main.menuMode = 10;
+ 		private void OnWorldNamed(string text) {
+-			menuMode = 10;
 +			Main.menuMode = (int)TerraCustom.MenuModes.Settings; // Originally 10. Redirects to Settings menu after world is named
- 			Main.worldName = text.Trim();
- 			Main.ActiveWorldFileData = WorldFile.CreateMetadata(Main.worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, Main.expertMode);
- 			if (Main.UseSeedUI)
-@@ -43839,7 +_,7 @@
- 				Main.menuMode = 5000;
- 				return;
- 			}
--			WorldGen.CreateNewWorld(null);
-+			//WorldGen.CreateNewWorld(null);
+ 			worldName = text.Trim();
+ 			ActiveWorldFileData = WorldFile.CreateMetadata(worldName, SocialAPI.Cloud != null && SocialAPI.Cloud.EnabledByDefault, expertMode);
+ 			if (UseSeedUI)
+ 				menuMode = 5000;
+-			else
+-				WorldGen.CreateNewWorld();
++			//else
++			//	WorldGen.CreateNewWorld();
  		}
- 
- 		private static Action CreateGoToMenuEvent(int menu)
-@@ -44005,6 +_,10 @@
- 			if (Main.menuMode == -1)
- 			{
- 				Main.menuMode = 0;
-+			}
+@@ -36127,5 +_,7 @@
+ 			if (menuMode == -1)
+ 				menuMode = 0;
 +			if (Main.menuMode == 0) // This is to hijack menu mod 0 always
-+			{
 +				Main.menuMode = (int)TerraCustom.MenuModes.Settings;
- 			}
+ 
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -45185,7 +_,7 @@
- 						Main.MenuUI.SetState(Main._worldSelectMenu);
- 						Main.menuMode = 888;
+@@ -37141,6 +_,7 @@
+ 					menuMode = 888;
+ 				}
+ 				else if (menuMode == -7) {
++				else if (menuMode == (int)TerraCustom.MenuModes.SelectDifficulty) // originally -7
+ 					num2 = 200;
+ 					num4 = 60;
+ 					array4[2] = 30;
+@@ -37168,21 +_,27 @@
+ 					if (selectedMenu == 2) {
+ 						expertMode = false;
+ 						PlaySound(10);
++						menuMode = (int)TerraCustom.MenuModes.EnterWorldName; // originally 7
++						/*
+ 						menuMode = 7;
+ 						if (SettingsUnlock_WorldEvil)
+ 							menuMode = -71;
++						*/
  					}
--					else if (Main.menuMode == -7)
-+					else if (Main.menuMode == (int)TerraCustom.MenuModes.SelectDifficulty) // originally -1
- 					{
- 						num2 = 200;
- 						num4 = 60;
-@@ -45217,27 +_,36 @@
- 						{
- 							Main.expertMode = false;
- 							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
-+							Main.menuMode = (int)TerraCustom.MenuModes.EnterWorldName;
-+							/*
- 							Main.menuMode = 7;
- 							if (Main.SettingsUnlock_WorldEvil)
- 							{
- 								Main.menuMode = -71;
- 							}
-+							*/
- 						}
- 						else if (this.selectedMenu == 3)
- 						{
- 							Main.expertMode = true;
- 							Main.PlaySound(10, -1, -1, 1, 1f, 0f);
-+							Main.menuMode = (int)TerraCustom.MenuModes.EnterWorldName;
-+							/*
- 							Main.menuMode = 7;
- 							if (Main.SettingsUnlock_WorldEvil)
- 							{
- 								Main.menuMode = -71;
- 							}
-+							*/
- 						}
- 						else if (this.selectedMenu == 4 || flag5)
- 						{
- 							flag5 = false;
- 							Main.PlaySound(11, -1, -1, 1, 1f, 0f);
-+							Main.menuMode = (int)TerraCustom.MenuModes.ChooseWorldSize;
-+							/*
- 							Main.menuMode = 16;
-+							*/
- 						}
- 						Main.clrInput();
+ 					else if (selectedMenu == 3) {
+ 						expertMode = true;
+ 						PlaySound(10);
++						menuMode = (int)TerraCustom.MenuModes.EnterWorldName; // originally 7
++						/*
+ 						menuMode = 7;
+ 						if (SettingsUnlock_WorldEvil)
+ 							menuMode = -71;
++						*/
  					}
-@@ -45288,14 +_,14 @@
- 						num17++;
- 						Main.clrInput();
+ 					else if (selectedMenu == 4 || flag5) {
+ 						flag5 = false;
+ 						PlaySound(11);
+-						menuMode = 16;
++						menuMode = (int)TerraCustom.MenuModes.ChooseWorldSize; // originally 16
  					}
--					else if (Main.menuMode == 7)
--					{
--						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48].Value, "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent(-7), 0, false));
-+					else if (Main.menuMode == (int)TerraCustom.MenuModes.EnterWorldName) // redirect to Select Difficulty
-+					{
-+						Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48].Value, "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent((int)TerraCustom.MenuModes.SelectDifficulty), 0));
- 						Main.menuMode = 888;
- 					}
- 					else if (Main.menuMode == 5000)
- 					{
--						Main.MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnSeedSelected), Main.CreateGoToMenuEvent(7), 0, true));
-+						Main.MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnSeedSelected), Main.CreateGoToMenuEvent((int)TerraCustom.MenuModes.EnterWorldName), 0, true));
- 						Main.menuMode = 888;
- 					}
- 					else if (Main.menuMode == 8)
-@@ -46637,6 +_,7 @@
- 					}
- 					else
- 					{
-+						TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num2, ref num4, ref num5);
- 						Interface.ModLoaderMenus(this, this.selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
+ 
+ 					clrInput();
+@@ -37233,15 +_,15 @@
+ 					num17++;
+ 					clrInput();
+ 				}
+-				else if (menuMode == 7) {
+-					MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48].Value, "", OnWorldNamed, CreateGoToMenuEvent(-7)));
++				else if (Main.menuMode == (int)TerraCustom.MenuModes.EnterWorldName) { // redirect to Select Difficulty
++					Main.MenuUI.SetState(new UIVirtualKeyboard(Lang.menu[48].Value, "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnWorldNamed), Main.CreateGoToMenuEvent((int)TerraCustom.MenuModes.SelectDifficulty), 0));
+ 					menuMode = 888;
+ 				}
+ 				else if (menuMode == 5000) {
+-					MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", OnSeedSelected, CreateGoToMenuEvent(7), 0, allowEmpty: true));
++					Main.MenuUI.SetState(new UIVirtualKeyboard(Language.GetTextValue("UI.EnterSeed"), "", new UIVirtualKeyboard.KeyboardSubmitEvent(this.OnSeedSelected), Main.CreateGoToMenuEvent((int)TerraCustom.MenuModes.EnterWorldName), 0, true));
+ 					menuMode = 888;
+ 				}
+ 				else if (menuMode == 8) {
+ 					num2 = 180;
+ 					num4 = 40;
+ 					num5 = 8;
+@@ -38387,6 +_,7 @@
  					}
  				}
-@@ -47544,10 +_,10 @@
- 				{
- 					num111 = 2;
+ 				else {
++					TerraCustom.Interface.TerraCustomMenu(this, this.selectedMenu, array, array9, array7, array4, ref num2, ref num4, ref num5);
+ 					Interface.ModLoaderMenus(this, selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  				}
+ 			}
+@@ -39166,10 +_,10 @@
+ 				if (num108 == 3)
+ 					num110 = 2;
+ 
 -				string supportMessage = Language.GetTextValue("tModLoader.PatreonSupport");
 -				string patreonShortURL = @"patreon.com/tModLoader";
--				bool showPatreon = Main.menuMode == 0;
--				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + (showPatreon ? Environment.NewLine + supportMessage : "");
+-				bool showPatreon = !Steam.IsSteamApp;
+-				string drawVersion = versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + (showPatreon ? Environment.NewLine + supportMessage : "");
 +				string supportMessage = "jopojelly's Pateron - ";
 +				string patreonShortURL = @"patreon.com/jopojelly";
 +				bool showPatreon = Main.menuMode == 5001;
 +				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.7" + (showPatreon ? Environment.NewLine + supportMessage : "");
- 				Vector2 origin3 = Main.fontMouseText.MeasureString(drawVersion);
+ 				Vector2 origin3 = fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
-@@ -47564,7 +_,7 @@
- 					if (num109 == 4 && Main.mouseLeftRelease && Main.mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, Main.screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(Main.mouseX, Main.mouseY)) && hasFocus)
- 					{
- 						Main.PlaySound(SoundID.MenuOpen);
+@@ -39184,6 +_,6 @@
+ 					if (num108 == 4 && mouseLeftRelease && mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(mouseX, mouseY)) && hasFocus) {
+ 						PlaySound(SoundID.MenuOpen);
 -						Process.Start("https://www.patreon.com/tModLoader");
 +						Process.Start("https://www.patreon.com/jopojelly");
  					}
  				}
  			}
-

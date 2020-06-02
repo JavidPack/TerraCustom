@@ -1,7 +1,7 @@
 --- src/tModLoader\Terraria\Program.cs
 +++ src/TerraCustom\Terraria\Program.cs
-@@ -34,6 +_,8 @@
- 		#endif
+@@ -36,6 +_,8 @@
+ #endif
  		public static Dictionary<string, string> LaunchParameters = new Dictionary<string, string>();
  		public static string SavePath { get; private set; } // moved from Main to avoid triggering the Main static constructor before logging initializes
 +		public static string tModLoaderSavePath { get; private set; }
@@ -9,7 +9,7 @@
  		private static int ThingsToLoad = 0;
  		private static int ThingsLoaded = 0;
  		public static bool LoadedEverything = false;
-@@ -232,9 +_,14 @@
+@@ -210,11 +_,16 @@
  
  			LaunchParameters = Utils.ParseArguements(args);
  			SavePath =
@@ -18,10 +18,11 @@
  				LaunchParameters.ContainsKey("-tmlsavedirectory") ? LaunchParameters["-tmlsavedirectory"] :
  				LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(LaunchParameters["-savedirectory"], "ModLoader") :
  				Platform.Current.GetStoragePath($"Terraria{Path.DirectorySeparatorChar}ModLoader");
+ 			if (File.Exists("savehere.txt"))
+ 				SavePath = "ModLoader"; // Fallback for unresolveable antivirus/onedrive issues. Also makes the game portable I guess.
 +			TerraCustomSavePath =
 +				LaunchParameters.ContainsKey("-savedirectory") ? Path.Combine(LaunchParameters["-savedirectory"], "TerraCustom") :
 +				Platform.Current.GetStoragePath($"Terraria{Path.DirectorySeparatorChar}TerraCustom");
  
  			try {
  				Logging.Init();
-

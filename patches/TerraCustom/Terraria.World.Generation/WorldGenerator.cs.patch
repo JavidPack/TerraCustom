@@ -1,31 +1,29 @@
 --- src/tModLoader\Terraria.World.Generation\WorldGenerator.cs
 +++ src/TerraCustom\Terraria.World.Generation\WorldGenerator.cs
-@@ -3,6 +_,7 @@
- using System.Diagnostics;
- using Terraria.GameContent.UI.States;
+@@ -6,6 +_,7 @@
+ using Terraria.ModLoader;
+ using Terraria.ModLoader.UI;
  using Terraria.Utilities;
 +using Terraria.IO;
  
  namespace Terraria.World.Generation
  {
-@@ -25,6 +_,7 @@
+@@ -26,5 +_,6 @@
  
- 		public void GenerateWorld(GenerationProgress progress = null)
- 		{
+ 		public void GenerateWorld(GenerationProgress progress = null) {
 +			string originalWorldName = Main.worldName;
  			Stopwatch stopwatch = new Stopwatch();
  			float num = 0f;
- 			foreach (GenPass current in this._passes)
-@@ -37,6 +_,7 @@
- 			}
+ 			foreach (GenPass pass in _passes) {
+@@ -36,5 +_,6 @@
+ 
  			progress.TotalWeight = num;
  			Main.menuMode = 888;
 +			int a = 0;
  			Main.MenuUI.SetState(new UIWorldLoad(progress));
- 			foreach (GenPass current2 in this._passes)
- 			{
-@@ -47,7 +_,17 @@
- 				current2.Apply(progress);
+ 			foreach (GenPass pass2 in _passes) {
+@@ -61,7 +_,17 @@
+ 				}
  				progress.End();
  				stopwatch.Reset();
 +				if (Main.setting.GenerateWldEachStep)
@@ -42,4 +40,3 @@
  		}
  	}
  }
-
