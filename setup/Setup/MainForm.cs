@@ -26,8 +26,8 @@ namespace Terraria.ModLoader.Setup
 			taskButtons[buttonPatchTerraria] = () => new PatchTask(this, "src/decompiled", "src/Terraria", "patches/Terraria", new ProgramSetting<DateTime>("TerrariaDiffCutoff"));
 			taskButtons[buttonDiffModLoader] = () => new DiffTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", new ProgramSetting<DateTime>("tModLoaderDiffCutoff"));
 			taskButtons[buttonPatchModLoader] = () => new PatchTask(this, "src/Terraria", "src/tModLoader", "patches/tModLoader", new ProgramSetting<DateTime>("tModLoaderDiffCutoff"));
-			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
-			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/Terraria", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
+			taskButtons[buttonDiffTerraCustom] = () => new DiffTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
+			taskButtons[buttonPatchTerraCustom] = () => new PatchTask(this, "src/tModLoader", "src/TerraCustom", "patches/TerraCustom", new ProgramSetting<DateTime>("TerraCustomDiffCutoff"));
 			taskButtons[buttonSetupDebugging] = () => new SetupDebugTask(this);
 
 			taskButtons[buttonRegenSource] = () =>

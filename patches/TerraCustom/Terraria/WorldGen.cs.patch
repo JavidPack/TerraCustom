@@ -22,15 +22,15 @@
  		private static int[] dRoomB = new int[maxDRooms];
  		private static int numDDoors;
 -		private static int[] DDoorX = new int[300];
--		private static int[] DDoorY = new int[300];
--		private static int[] DDoorPos = new int[300];
 +		private static int[] DDoorX = new int[3000];
+-		private static int[] DDoorY = new int[300];
 +		private static int[] DDoorY = new int[3000];
+-		private static int[] DDoorPos = new int[300];
 +		private static int[] DDoorPos = new int[3000];
  		private static int numDPlats;
 -		private static int[] DPlatX = new int[300];
--		private static int[] DPlatY = new int[300];
 +		private static int[] DPlatX = new int[3000];
+-		private static int[] DPlatY = new int[300];
 +		private static int[] DPlatY = new int[3000];
  		private static int JungleItemCount = 0;
  		private static int[] JChestX = new int[100];
@@ -171,12 +171,12 @@
  			Main.treeX[1] = Main.maxTilesX;
  			Main.treeX[2] = Main.maxTilesX;
 -			Main.treeStyle[0] = 0;
--			Main.treeStyle[1] = 0;
--			Main.treeStyle[2] = 0;
--			Main.treeStyle[3] = 0;
 +			//Main.treeStyle[0] = 0;
+-			Main.treeStyle[1] = 0;
 +			//Main.treeStyle[1] = 0;
+-			Main.treeStyle[2] = 0;
 +			//Main.treeStyle[2] = 0;
+-			Main.treeStyle[3] = 0;
 +			//Main.treeStyle[3] = 0;
  			noLiquidCheck = false;
  			Liquid.numLiquid = 0;
@@ -199,10 +199,10 @@
  		}
  
  		public static void RandomizeMoonState() {
--			Main.moonType = genRand.Next(Main.maxMoons);
 +			Main.moonType = Main.setting.MoonStyle;
 +			if (Main.setting.MoonStyle == 3)
 +			{
+-			Main.moonType = genRand.Next(Main.maxMoons);
 +				Main.moonType = WorldGen.genRand.Next(Main.maxMoons);
 +			}
  		}
@@ -628,14 +628,14 @@
 +					// randomness??
 +					// flatish near bigger middle
  					if ((double)num702 > (double)Main.maxTilesX * 0.43 && (double)num702 < (double)Main.maxTilesX * 0.57 && num700 >= 3)
--						num700 = genRand.Next(3);
 +						if(!Main.setting.BypassSpawnAreaFlatness)
+-						num700 = genRand.Next(3);
 +							num700 = genRand.Next(3);
  
 +					// flat near middle
  					if ((double)num702 > (double)Main.maxTilesX * 0.47 && (double)num702 < (double)Main.maxTilesX * 0.53)
--						num700 = 0;
 +						if(!Main.setting.BypassSpawnAreaFlatness)
+-						num700 = 0;
 +							num700 = 0;
  
 -					if (num700 == 0) {
@@ -659,14 +659,14 @@
  						while (genRand.Next(0, 4) == 0) {
  							worldSurface += 1.0;
  						}
-@@ -3934,6 +_,7 @@
- 							worldSurface -= 1.0;
+@@ -3935,6 +_,7 @@
  						}
  					}
  					else if (num700 == 3) {
 +						//  1/2 chance -1(up) 1/6 chance down
  						while (genRand.Next(0, 2) == 0) {
  							worldSurface -= 1.0;
+ 						}
 @@ -3944,6 +_,7 @@
  						}
  					}
@@ -690,8 +690,8 @@
  						num701 = 0;
  					}
 -					else if (worldSurface > (double)Main.maxTilesY * 0.3) {
--						worldSurface = (double)Main.maxTilesY * 0.3;
 +					else if (worldSurface > (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMin) { // 0.3 prevent surface from going too deep
+-						worldSurface = (double)Main.maxTilesY * 0.3;
 +						worldSurface = (double)Main.maxTilesY * Main.setting.SurfaceTerrainHeightMin;
  						num701 = 0;
  					}
@@ -748,8 +748,8 @@
  
  						for (int num691 = 0; (double)num691 < Main.worldSurface; num691++) {
  							if (Main.tile[num690, num691].active()) {
--								if (num690 == (num687 + num688) / 2 && genRand.Next(6) == 0) {
 +								if (Main.setting.IsPyramid == 2 || Main.setting.IsPyramid == 0) {
+-								if (num690 == (num687 + num688) / 2 && genRand.Next(6) == 0) {
 +									if (num690 == (num687 + num688) / 2 && genRand.Next(6) == 0) {
 +										PyrX[numPyr] = num690;
 +										PyrY[numPyr] = num691;
@@ -796,8 +796,8 @@
  			AddGenerationPass("Small Holes", delegate (GenerationProgress progress) {
  				i2 = 0;
  				progress.Message = Lang.gen[7].Value;
--				for (int num660 = 0; num660 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0015); num660++) {
 +				if (Main.setting.DeepCaveMult <= 0) return;
+-				for (int num660 = 0; num660 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0015); num660++) {
 +				for (int num660 = 0; num660 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.0015 * Main.setting.DeepCaveMult); num660++) {
  					float value19 = (float)((double)num660 / ((double)(Main.maxTilesX * Main.maxTilesY) * 0.0015));
  					progress.Set(value19);
@@ -806,8 +806,8 @@
  
  			AddGenerationPass("Dirt Layer Caves", delegate (GenerationProgress progress) {
  				progress.Message = Lang.gen[8].Value;
--				for (int num659 = 0; num659 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05); num659++) {
 +				if (Main.setting.SurfaceCaveMult <= 0) return;
+-				for (int num659 = 0; num659 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05); num659++) {
 +				for (int num659 = 0; num659 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05 * Main.setting.SurfaceCaveMult); num659++) {
  					float value18 = (float)((double)num659 / ((double)(Main.maxTilesX * Main.maxTilesY) * 3E-05));
  					progress.Set(value18);
@@ -816,8 +816,8 @@
  
  			AddGenerationPass("Rock Layer Caves", delegate (GenerationProgress progress) {
  				progress.Message = Lang.gen[9].Value;
--				for (int num658 = 0; num658 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00013); num658++) {
 +				if (Main.setting.DeepCaveMult <= 0) return;
+-				for (int num658 = 0; num658 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00013); num658++) {
 +				for (int num658 = 0; num658 < (int)((double)(Main.maxTilesX * Main.maxTilesY) * 0.00013 * Main.setting.DeepCaveMult); num658++) {
  					float value17 = (float)((double)num658 / ((double)(Main.maxTilesX * Main.maxTilesY) * 0.00013));
  					progress.Set(value17);
@@ -826,8 +826,8 @@
  
  			AddGenerationPass("Surface Caves", delegate (GenerationProgress progress) {
  				progress.Message = Lang.gen[10].Value;
--				for (int num648 = 0; num648 < (int)((double)Main.maxTilesX * 0.002); num648++) {
 +				if (Main.setting.SurfaceCaveMult <= 0) return;
+-				for (int num648 = 0; num648 < (int)((double)Main.maxTilesX * 0.002); num648++) {
 +				for (int num648 = 0; num648 < (int)((double)Main.maxTilesX * 0.002 * Main.setting.SurfaceCaveMult); num648++) {
  					i2 = genRand.Next(0, Main.maxTilesX);
  					while ((float)i2 > (float)Main.maxTilesX * 0.45f && (float)i2 < (float)Main.maxTilesX * 0.55f) {
@@ -840,8 +840,8 @@
 +				float num656 = Main.maxTilesX / 4200f;
  				for (int num657 = 0; (float)num657 < 5f * num656; num657++) {
  					try {
--						Caverer(genRand.Next(100, Main.maxTilesX - 100), genRand.Next((int)Main.rockLayer, Main.maxTilesY - 400));
 +						if (Main.maxTilesY > 1000)
+-						Caverer(genRand.Next(100, Main.maxTilesX - 100), genRand.Next((int)Main.rockLayer, Main.maxTilesY - 400));
 +							Caverer(genRand.Next(100, Main.maxTilesX - 100), genRand.Next((int)Main.rockLayer, Main.maxTilesY - 400));
 +						else
 +							Caverer(genRand.Next(100, Main.maxTilesX - 100), genRand.Next((int)Main.rockLayer, Main.maxTilesY - 100));
@@ -889,9 +889,9 @@
 +					Ybase = (int)Main.worldSurface + (int)(WorldGen.lastMaxTilesY / 24);
 +				}
 +				for (int num645 = 0; num645 <= Ybase; num645++) {
-+					num645 += (int)(genRand.Next(-4, 4) * Main.setting.IceBiomeWidth);
++					num642 += (int)(genRand.Next(-4, 4) * Main.setting.IceBiomeWidth);
 +					num643 += (int)(genRand.Next(-3, 5) * Main.setting.IceBiomeWidth);
-+					num645 = Utils.Clamp(num645, 0, Main.maxTilesX);
++					num642 = Utils.Clamp(num642, 0, Main.maxTilesX);
 +					num643 = Utils.Clamp(num643, 0, Main.maxTilesX);
  					snowMinX[num645] = num642;
  					snowMaxX[num645] = num643;
@@ -903,15 +903,15 @@
 +				if (Main.setting.NoJungle) return;
  				progress.Message = Lang.gen[11].Value;
 -				float num616 = Main.maxTilesX / 4200;
--				num616 *= 1.5f;
 +				float num616 = Main.maxTilesX / 4200f;
+-				num616 *= 1.5f;
 +				num616 *= 1.5f * Main.setting.JungleScale;
  				int num617 = 0;
 +				float yStrength = (Main.maxTilesY / 4200f) * 3.5f * 1.5f; // num616 is xStrength
  				float num618 = (float)genRand.Next(15, 30) * 0.01f;
  				if (dungeonSide == -1) {
  					num618 = 1f - num618;
-@@ -4512,17 +_,17 @@
+@@ -4512,38 +_,38 @@
  
  				int num619 = (int)((double)Main.maxTilesY + Main.rockLayer) / 2;
  				num617 += genRand.Next((int)(-100f * num616), (int)(101f * num616));
@@ -933,7 +933,7 @@
 +				num619 += genRand.Next((int)(-150f * yStrength), (int)(151f * yStrength));
  				int num623 = num617;
  				int num624 = num619;
-@@ -4530,20 +_,20 @@
+ 				int num625 = num617;
  				int num626 = num619;
  				TileRunner(num617, num619, genRand.Next((int)(250f * num616), (int)(500f * num616)), genRand.Next(50, 150), 59);
  				mudWall = false;
@@ -1230,7 +1230,7 @@
  				progress.Message = Lang.gen[18].Value;
  				progress.Set(0f);
  				int num540 = Main.maxTilesY - genRand.Next(150, 190);
-@@ -5024,22 +_,23 @@
+@@ -5024,22 +_,24 @@
  					}
  				}
  
@@ -1252,7 +1252,7 @@
  					progress.Set(value16);
  					int num538 = genRand.Next(300, Main.maxTilesX - 300);
  					while (num538 > Main.maxTilesX / 2 - 100 && num538 < Main.maxTilesX / 2 + 100) {
--						num538 = genRand.Next(300, Main.maxTilesX - 300);
+ 						num538 = genRand.Next(300, Main.maxTilesX - 300);
 +						if (Main.maxTilesX <= 600) num538 = genRand.Next(0, Main.maxTilesX);
  					}
  

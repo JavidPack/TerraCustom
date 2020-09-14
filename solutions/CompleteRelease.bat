@@ -4,12 +4,10 @@
 @ECHO off
 :: Compile/Build exe 
 echo "Building Release"
-set version=v0.7
+set TerraCustomVersion=v0.8
 call buildRelease.bat
-set exeFile=TerraCustom %version%.exe
-set exeFileMacLinux=TerraCustom.exe
 
-set destinationFolder=.\TerraCustom %version% Release
+set destinationFolder=.\TerraCustom %TerraCustomVersion% Release
 @IF %ERRORLEVEL% NEQ 0 (
 	pause
 	EXIT /B %ERRORLEVEL%
@@ -20,42 +18,39 @@ set destinationFolder=.\TerraCustom %version% Release
 mkdir "%destinationFolder%"
 
 :: Temp Folders
-set win=%destinationFolder%\TerraCustom Windows %version%
-set mac=%destinationFolder%\TerraCustom Mac %version%
-set lnx=%destinationFolder%\TerraCustom Linux %version%
+set win=%destinationFolder%\TerraCustom Windows %TerraCustomVersion%
+set mac=%destinationFolder%\TerraCustom Mac %TerraCustomVersion%
+set macReal=%destinationFolder%\TerraCustom Mac %TerraCustomVersion%\TerraCustom.app\Contents\MacOS
+set lnx=%destinationFolder%\TerraCustom Linux %TerraCustomVersion%
 
 mkdir "%win%"
 mkdir "%mac%"
 mkdir "%lnx%"
 
 :: Windows release
-copy ..\src\TerraCustom\bin\WindowsRelease\net45\Terraria.exe "%win%\%exeFile%" /y
-copy ReleaseExtras\README_Windows.txt "%win%\README.txt" /y
+robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%win%\Content"
+robocopy /s ReleaseExtras\WindowsFiles "%win%"
+copy ..\src\TerraCustom\bin\WindowsRelease\net45\Terraria.exe "%win%\TerraCustom.exe" /y
 
-::call zipjs.bat zipDirItems -source "%win%" -destination "%win%.zip" -keep yes -force yes
 call python ZipAndMakeExecutable.py "%win%" "%win%.zip"
 
-
-
 :: Linux release
-copy ..\src\TerraCustom\bin\LinuxRelease\net45\Terraria.exe "%lnx%\%exeFileMacLinux%" /y
-
+robocopy /s ReleaseExtras\LinuxFiles "%lnx%"
+robocopy /s ReleaseExtras\LinuxMacSharedFiles "%lnx%"
+robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%lnx%\Content"
+copy ..\src\TerraCustom\bin\LinuxRelease\net45\Terraria.exe "%lnx%\TerraCustom.exe" /y
 copy ReleaseExtras\TerraCustom "%lnx%\TerraCustom" /y
-copy ..\references\I18N.dll "%lnx%\I18N.dll" /y
-copy ..\references\I18N.West.dll "%lnx%\I18N.West.dll" /y
-copy ReleaseExtras\README_Linux.txt "%lnx%\README.txt" /y
 
-::call zipjs.bat zipDirItems -source "%lnx%" -destination "%lnx%.zip" -keep yes -force yes
 call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.tar.gz"
-::call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.zip"
+call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.zip"
 
 :: Mac release
-copy "%lnx%" "%mac%"
-copy ..\src\TerraCustom\bin\MacRelease\net45\Terraria.exe "%mac%\%exeFileMacLinux%" /y
-copy ReleaseExtras\README_Mac.txt "%mac%\README.txt" /y
-copy ReleaseExtras\osx\libMonoPosixHelper.dylib "%mac%\libMonoPosixHelper.dylib" /y
+robocopy /s ReleaseExtras\MacFiles "%mac%"
+robocopy /s ReleaseExtras\LinuxMacSharedFiles "%macReal%"
+robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%macReal%\Content"
+copy ..\src\TerraCustom\bin\MacRelease\net45\Terraria.exe "%macReal%\tModLoader.exe" /y
+copy ReleaseExtras\TerraCustom "%macReal%\TerraCustom" /y
 
-::call zipjs.bat zipDirItems -source "%mac%" -destination "%mac%.zip" -keep yes -force yes
 call python ZipAndMakeExecutable.py "%mac%" "%mac%.zip"
 
 :: CleanUp, Delete temp Folders
@@ -66,8 +61,8 @@ rmdir "%lnx%" /S /Q
 echo(
 echo(
 echo(
-echo TerraCustom %version% ready to release.
-echo Upload the 3 zip files to github.
+echo TerraCustom %TerraCustomVersion% ready to release.
+echo Upload the 6 zip files to github.
 echo(
 echo(
 pause

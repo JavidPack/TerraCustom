@@ -1,6 +1,6 @@
-Install Instructions: Copy the "TerraCustom vX.Y.Z.exe" file to the Terraria install folder, 
+Install Instructions: Make a 'TerraCustom' folder next to the Terraria install folder and place the .zip contents in it.
 
-To Run: Run the TerraCustom vX.Y.Z.exe file
+To Run: Run TerraCustom.exe
 
 How to find your Install Location:
 
@@ -9,8 +9,6 @@ How to find your Install Location:
   Non-Default Steam: Use the browse local files option within steam to locate your install folder. If you can't find it, view this video: https://gfycat.com/SelfreliantAssuredIsabellineshrike
 
   GOG: Wherever you put it, likely "C:\GOG Games\Terraria​"
-
-If you see an error mentioning "System.DllNotFoundException" or "ReLogic.Native.dll", you didn't install in the correct folder.
 
 Note: "C:\Documents\My Games\Terraria\" is NOT your install folder, it is your SAVE folder. Terra Custom NEEDS to be placed in the install folder to work.
 

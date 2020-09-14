@@ -1,19 +1,20 @@
-Install Instructions: Copy all the files from this zip to the Terraria install folder.
+Install Instructions: Make a 'TerraCustom' folder next to the Terraria install folder and place the .zip contents in it.
 
-To Run: Run the TerraCustom file (not TerraCustom.exe)
+To Run: Run TerraCustom.app
 
-If it doesn't run, you might need to give execute permissions to the TerraCustom file. To do this, open a terminal in the install directory and run this command:
+If it doesn't run, you might need to give execute permissions to the TerraCustom file. To do this, open a terminal in the TerraCustom\TerraCustom.app\Contents\MacOS directory and run this command:
     chmod +x TerraCustom
+
+Why are there EXE files?:
+Don't worry about it, you didn't download the wrong thing.
 
 How to find your Install Location:
 
-  Default Steam: "Library/Application Support/Steam/steamapps/common/Terraria/Terraria.app/Contents/MacOS"
+  Default Steam: "Library/Application Support/Steam/steamapps/common/Terraria"
 
   Non-Default Steam: Use the browse local files option within steam to locate your install folder. If you can't find it, view this video: https://gfycat.com/SelfreliantAssuredIsabellineshrike
 
   GOG: Wherever you put it
-
-If you see an error mentioning "System.DllNotFoundException" or "ReLogic.Native.dll", you didn't install in the correct folder.
 
 Note: "/Users/account/Library/Application Support/Terraria" is NOT your install folder, it is your SAVE folder. Terra Custom NEEDS to be placed in the install folder to work.
 
