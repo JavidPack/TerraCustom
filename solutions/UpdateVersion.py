@@ -12,6 +12,6 @@ versionList = versionInput.split('.')
 #versionNums = [int(x) for x in versionList]
 
 TypicalReplace("CompleteRelease.bat", "set TerraCustomVersion=v", versionInput)
-TypicalReplace("../patches/TerraCustom/Terraria.ModLoader/ModLoader.cs", "\t\t\t\tstring drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + \"jopojelly's TerraCustom v", versionInput + '" + (showPatreon ? Environment.NewLine + supportMessage : "");')
+TypicalReplace("../patches/TerraCustom/Terraria/Main.cs.patch", "+\t\t\t\tstring drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + \"jopojelly's TerraCustom v", versionInput + '" + (showPatreon ? Environment.NewLine + supportMessage : "");')
 
 input("Press Enter to continue...")

@@ -1,0 +1,11 @@
+--- src/tModLoader/Terraria.ModLoader.Engine/InstallVerifier.cs
++++ src/TerraCustom/Terraria.ModLoader.Engine/InstallVerifier.cs
+@@ -83,6 +_,8 @@
+ 				return false;
+ 			}
+ #endif
++			IsGoG = true;
++			return true;
+ 			// Whether the steam_api file exists, indicating we'd have to check steam installation
+ 			if (File.Exists(steamAPIPath))
+ 				return CheckSteam();

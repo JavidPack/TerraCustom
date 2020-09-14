@@ -31,6 +31,7 @@ mkdir "%lnx%"
 robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%win%\Content"
 robocopy /s ReleaseExtras\WindowsFiles "%win%"
 copy ..\src\TerraCustom\bin\WindowsRelease\net45\Terraria.exe "%win%\TerraCustom.exe" /y
+copy ReleaseExtras\README_Windows.txt "%win%\README.txt" /y
 
 call python ZipAndMakeExecutable.py "%win%" "%win%.zip"
 
@@ -40,6 +41,7 @@ robocopy /s ReleaseExtras\LinuxMacSharedFiles "%lnx%"
 robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%lnx%\Content"
 copy ..\src\TerraCustom\bin\LinuxRelease\net45\Terraria.exe "%lnx%\TerraCustom.exe" /y
 copy ReleaseExtras\TerraCustom "%lnx%\TerraCustom" /y
+copy ReleaseExtras\README_Linux.txt "%lnx%\README.txt" /y
 
 call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.tar.gz"
 call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.zip"
@@ -48,8 +50,9 @@ call python ZipAndMakeExecutable.py "%lnx%" "%lnx%.zip"
 robocopy /s ReleaseExtras\MacFiles "%mac%"
 robocopy /s ReleaseExtras\LinuxMacSharedFiles "%macReal%"
 robocopy /s ReleaseExtras\JourneysEndCompatibilityContent "%macReal%\Content"
-copy ..\src\TerraCustom\bin\MacRelease\net45\Terraria.exe "%macReal%\tModLoader.exe" /y
+copy ..\src\TerraCustom\bin\MacRelease\net45\Terraria.exe "%macReal%\TerraCustom.exe" /y
 copy ReleaseExtras\TerraCustom "%macReal%\TerraCustom" /y
+copy ReleaseExtras\README_Mac.txt "%mac%\README.txt" /y
 
 call python ZipAndMakeExecutable.py "%mac%" "%mac%.zip"
 
@@ -62,7 +65,7 @@ echo(
 echo(
 echo(
 echo TerraCustom %TerraCustomVersion% ready to release.
-echo Upload the 6 zip files to github.
+echo Upload the 4 zip files to github.
 echo(
 echo(
 pause

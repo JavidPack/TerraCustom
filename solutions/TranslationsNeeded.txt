@@ -1,0 +1,8 @@
+zh-Hans 26
+ru-RU All
+pt-BR All
+pl-PL All
+it-IT All
+fr-FR All
+es-ES 172
+de-DE All

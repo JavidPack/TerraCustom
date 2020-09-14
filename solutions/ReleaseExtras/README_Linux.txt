@@ -19,3 +19,5 @@ How to find your Install Location:
 Note: "~/.local/share/Terraria" or "$XDG_DATA_HOME/Terraria" are NOT your install folder, they are your SAVE folder. Terra Custom NEEDS to be placed in the install folder to work.
 
 Report bugs and feature requests to https://github.com/JavidPack/TerraCustom/issues or https://forums.terraria.org/index.php?threads/terracustom-for-1-3.35346/ . We can also chat in my Discord server: https://discord.gg/w8Hcwby
+
+Additional install instructions can be found at https://github.com/JavidPack/TerraCustom/wiki/Install-Instructions

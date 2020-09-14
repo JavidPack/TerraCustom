@@ -1,9 +1,16 @@
 ﻿{
 	"TerraCustom": {
+		// Tips:
+		// use vanilla translations: {$GameUI.Enabled} Disabled, CLI.Yes, etc
+		// use {0} etc to interpolate values
+		// Not used. Unless we need different order than Reset + noun + Settings?
+		// //"ResetChallengeOptions": "{$TerraCustom.Reset} {$TerraCustom.ChallengeOptions} {$TerraCustom.Settings}",
+		// //"ResetChests": "{$TerraCustom.Reset} {$TerraCustom.Chests} {$TerraCustom.Settings}",
+
 		// Common
 		"Reset": "重置",
 		"Both": "并存",
-		// "Settings": "{$LegacyMenu.14}",
+		// // "Settings": "{$LegacyMenu.14}",
 
 		// Choose world size Menu
 		"KeepPreviousCustomSize": "保持以前自定义的大小",
@@ -36,9 +43,29 @@
 		"BypassSpawnAreaFlatness": "随设置调整出生点地形",
 		"BeachSize": "海洋大小",
 		"DungeonSize": "地牢大小",
+		// "DesertScale": "Underground Desert Size",
+		// "Shallow": "Shallow",
+		// "Normal": "Normal",
+		// "Deep": "Deep",
+		// "JungleScale": "Jungle Scale",
+		// "UnderworldHouseMult": "Underworld Houses",
+		// "IceBiomeDepth": "Ice Biome Depth",
+		// "IceBiomeWidth": "Ice Biome Width",
 		"TempleSize": "蜥蜴神庙大小",
 		"SurfaceTunnels": "地表隧道",
 		"Lakes": "湖泊",
+		// "LakeScale": "Lake Size",
+		// "GiantTreeMult": "Giant Trees",
+		// "NoMultiWire": "No Non-Temple Different Wires",
+		// "NoGravitate": "Dont Extend Sand Downwards",
+		// "DoubleDungeon": "Additional Dungeon on Jungle Side",
+		// "SwapShroomJungle": "Swap Jungle and Mushroom Biomes",
+		// "Sand": "Sand",
+		// "Clay": "Clay",
+		// "Silt": "Silt",
+		// "Webs": "Webs",
+		// "SurfaceCaves": "Surface Caves",
+		// "UndergroundCaves": "Regular Caves",
 		"WorldWidth": "宽度",
 		"WorldHeight": "高度",
 
@@ -53,10 +80,11 @@
 		"GenerateMedium": "中量新三矿生成",
 		"GenerateLot": "大量新三矿生成",
 		"SameAmountAsSmashingXAltars": "（相当于粉碎{0}个祭坛）",
+		// "PreSmashAltarsGeneratesOpposite": "PreSmash Altars generates opposite set of ores",
 		"PreSmashAltarsGeneratesBothSetsOfOres": "粉碎祭坛前允许生成两种新矿石",
 		"PreSmashAltarsPreventRandomPatchSpawn": "粉碎祭坛前防止随机生成腐化/血腥/神圣之地",
 
-		// GraphicStyles Menu
+		// GraphicStyles Menu --- TODO: Rewrite these menus so I can localize them
 		"MoonStyle": "月亮风格",
 		"Tree Style Far Left": "最左侧树木风格",
 		"Tree Style Left": "左侧树木风格",
@@ -159,6 +187,7 @@
 		"TreeLowerBound": "树木最低高度",
 		"TreeUpperBound": "树木最高高度",
 		"MushroomBiomes": "夜光蘑菇地",
+		// "MushroomSize": "Mushroom Biome Scale",
 		"Statues": "雕像",
 
 		// Downed Found Menu
@@ -183,6 +212,7 @@
 		"EnableThisList": "启用设置",
 		"DeleteThisList": "删除设置",
 		"SaveCurrentSettingsAsNew": "将当前设置保存新设置",
+		// "EnterSettingsName": "Enter Settings name",
 
 		// Debug Menu
 		"SaveWorldAfterEachStep": "每次调整时都保存世界",

@@ -1,0 +1,13 @@
+--- src/tModLoader/Terraria.Social/SocialAPI.cs
++++ src/TerraCustom/Terraria.Social/SocialAPI.cs
+@@ -35,8 +_,8 @@
+ 
+ 			_mode = mode.Value;
+ 			SocialMode mode2 = Mode;
+-			if (mode2 == SocialMode.Steam)
++			//if (mode2 == SocialMode.Steam)
+-				LoadSteam();
++				//LoadSteam();
+ 		}
+ 
+ 		public static void Shutdown() {
