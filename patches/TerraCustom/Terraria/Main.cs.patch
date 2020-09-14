@@ -1,5 +1,5 @@
---- src/tModLoader\Terraria\Main.cs
-+++ src/TerraCustom\Terraria\Main.cs
+--- src/tModLoader/Terraria/Main.cs
++++ src/TerraCustom/Terraria/Main.cs
 @@ -117,7 +_,21 @@
  		public static string AutogenSeedName;
  		public static Vector2 destroyerHB = new Vector2(0f, 0f);
@@ -55,7 +55,7 @@
  		public static int selectedPlayer = 0;
  		public static int selectedWorld = 0;
  		public static int menuMode = Interface.loadModsID;
-@@ -2703,10 +_,12 @@
+@@ -2703,8 +_,10 @@
  			Configuration.Put("UIScale", _uiScaleWanted);
  			Configuration.Put("RunningAchievementEnabled", RunningAchievementEnabled);
 +			/*
@@ -66,19 +66,16 @@
  
  			return false;
  		}
- 
- 		protected void CheckBunny() {
 @@ -2813,7 +_,7 @@
  			bool currentValue2 = false;
  			int currentValue3 = graphics.PreferredBackBufferWidth;
  			int currentValue4 = graphics.PreferredBackBufferHeight;
 -			Configuration.Get("Fullscreen", ref currentValue2);
-+			// Main.Configuration.Get<bool>("Fullscreen", ref currentValue2);
++			// Configuration.Get("Fullscreen", ref currentValue2);
  			Configuration.Get("DisplayWidth", ref currentValue3);
  			Configuration.Get("DisplayHeight", ref currentValue4);
  			Dictionary<string, byte> currentValue5 = new Dictionary<string, byte>();
-@@ -2998,7 +_,7 @@
- 					cMapAlphaDown
+@@ -2999,7 +_,7 @@
  				};
  			}
  
@@ -86,8 +83,19 @@
 +			//ModLoader.ModLoader.LoadConfiguration();
  			PlayerInput.Load();
  			if (currentValue7 < 165) {
-@@ -3209,10 +_,10 @@
- 			foreach (char c in worldName) {
+ 				try {
+@@ -3012,10 +_,9 @@
+ 			mouseColorSlider.SetHSL(mouseColor);
+ 			mouseBorderColorSlider.SetHSL(MouseBorderColor);
+ 			mouseBorderColorSlider.Alpha = (float)(int)MouseBorderColor.A / 255f;
+ 			if (currentValue7 != 194 || ModLoader.ModLoader.LastLaunchedTModLoaderVersion != ModLoader.ModLoader.version) {
+-				ModLoader.ModLoader.MigrateSettings();
+ 				SaveSettings();
+ 			}
+ 		}
+ 
+ 		protected void OpenLegacySettings() {
+@@ -3212,6 +_,6 @@
  				text += ((!invalidFileNameChars.Contains(c)) ? ((c != ' ') ? c : '_') : '-');
  			}
  
@@ -95,10 +103,7 @@
 +			string text2 = (Main.setting.SaveInTModFolder || Main.tModLoaderModsLoaded) ? Main.TModLoaderWorldPath : (Main.setting.generateLeveledRPGSave ? Main.LeveledWorldPath : Main.WorldPath);
  			if (FileUtilities.GetFullPath(text2 + Path.DirectorySeparatorChar + text + ".wld", cloudSave).StartsWith("\\\\.\\", StringComparison.Ordinal))
  				text += "_";
- 
- 			if (FileUtilities.Exists(text2 + Path.DirectorySeparatorChar + text + ".wld", cloudSave)) {
- 				int num = 2;
-@@ -4220,12 +_,13 @@
+@@ -4230,12 +_,13 @@
  
  			AlternateContentManager = new TMLContentManager(Content.ServiceProvider, "Content", null);
  			base.Content = new TMLContentManager(Content.ServiceProvider, vanillaContentFolder, AlternateContentManager);
@@ -109,11 +114,11 @@
  		protected void SetTitle() {
  #if CLIENT
 -			_cachedTitle = Lang.GetRandomGameTitle();
-+			Main._cachedTitle = "TerraCustom -- " + Lang.GetRandomGameTitle();
++			_cachedTitle = "TerraCustom -- " + Lang.GetRandomGameTitle();
  			Platform.Current.SetWindowUnicodeTitle(base.Window, _cachedTitle);
  #endif
  		}
-@@ -7123,8 +_,16 @@
+@@ -7137,8 +_,16 @@
  			gridTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			trashTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			cdTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -121,25 +126,25 @@
  			logoTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo");
  			logo2Texture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Logo2");
 +			*/
-+			Main.logoTexture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
-+			Main.logo2Texture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
-+			Main.TCTreeTops = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.TreeTops.png");
-+			Main.TCMossColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.MossColors.png");
-+			Main.TCDungeonColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.DungeonColors.png");
++			logoTexture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
++			logo2Texture = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.Logo.png");
++			TCTreeTops = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.TreeTops.png");
++			TCMossColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.MossColors.png");
++			TCDungeonColors = TerraCustom.TerraCustomUtils.GetEmbeddedTexture2D("Terraria.TerraCustom.DungeonColors.png");
 +			// End TerraCustom Changes
  			dustTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			sunTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			sun2Texture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -35766,6 +_,7 @@
+@@ -35780,7 +_,7 @@
  			Utils.DrawBorderString(spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * invasionProgressAlpha, num * 0.9f, 1f, 0.4f);
  		}
  
 -		protected void QuitGame() {
-+		// Make public so accessable,
-+		public void QuitGame()
++		public void QuitGame() {
  			SaveSettings();
  #if CLIENT
-@@ -35979,16 +_,17 @@
+ 			SocialAPI.Shutdown();
+@@ -35993,18 +_,19 @@
  			else
  				ActiveWorldFileData.SetSeed(text);
  
@@ -162,7 +167,10 @@
 +			//else
 +			//	WorldGen.CreateNewWorld();
  		}
-@@ -36127,5 +_,7 @@
+ 
+ 		private static Action CreateGoToMenuEvent(int menu) {
+@@ -36140,6 +_,8 @@
+ 			string[] array9 = new string[maxMenuItems];
  			if (menuMode == -1)
  				menuMode = 0;
 +			if (Main.menuMode == 0) // This is to hijack menu mod 0 always
@@ -170,16 +178,16 @@
  
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -37141,6 +_,7 @@
+@@ -37154,7 +_,7 @@
+ 					MenuUI.SetState(_worldSelectMenu);
  					menuMode = 888;
  				}
- 				else if (menuMode == -7) {
-+				else if (menuMode == (int)TerraCustom.MenuModes.SelectDifficulty) // originally -7
+-				else if (menuMode == -7) {
++				else if (menuMode == (int)TerraCustom.MenuModes.SelectDifficulty) { // originally -7
  					num2 = 200;
  					num4 = 60;
  					array4[2] = 30;
-@@ -37168,21 +_,27 @@
- 					if (selectedMenu == 2) {
+@@ -37183,20 +_,26 @@
  						expertMode = false;
  						PlaySound(10);
 +						menuMode = (int)TerraCustom.MenuModes.EnterWorldName; // originally 7
@@ -207,7 +215,7 @@
  					}
  
  					clrInput();
-@@ -37233,15 +_,15 @@
+@@ -37247,12 +_,12 @@
  					num17++;
  					clrInput();
  				}
@@ -223,10 +231,7 @@
  					menuMode = 888;
  				}
  				else if (menuMode == 8) {
- 					num2 = 180;
- 					num4 = 40;
- 					num5 = 8;
-@@ -38387,6 +_,7 @@
+@@ -38401,6 +_,7 @@
  					}
  				}
  				else {
@@ -234,7 +239,7 @@
  					Interface.ModLoaderMenus(this, selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  				}
  			}
-@@ -39166,10 +_,10 @@
+@@ -39180,10 +_,10 @@
  				if (num108 == 3)
  					num110 = 2;
  
@@ -249,7 +254,8 @@
  				Vector2 origin3 = fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
-@@ -39184,6 +_,6 @@
+@@ -39197,7 +_,7 @@
+ 					spriteBatch.DrawString(fontMouseText, patreonShortURL, new Vector2(origin3.X + num109 + 10f, screenHeight - origin3.Y + num110 - 2f), color13, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
  					if (num108 == 4 && mouseLeftRelease && mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(mouseX, mouseY)) && hasFocus) {
  						PlaySound(SoundID.MenuOpen);
 -						Process.Start("https://www.patreon.com/tModLoader");

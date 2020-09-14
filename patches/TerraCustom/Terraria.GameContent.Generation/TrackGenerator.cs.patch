@@ -1,6 +1,7 @@
---- src/tModLoader\Terraria.GameContent.Generation\TrackGenerator.cs
-+++ src/TerraCustom\Terraria.GameContent.Generation\TrackGenerator.cs
-@@ -42,5 +_,15 @@
+--- src/tModLoader/Terraria.GameContent.Generation/TrackGenerator.cs
++++ src/TerraCustom/Terraria.GameContent.Generation/TrackGenerator.cs
+@@ -41,12 +_,22 @@
+ 			87,
  			86
  		};
 +		public TrackGenerator(GenerationProgress progress)
@@ -16,17 +17,14 @@
  		private const int TOTAL_TILE_IGNORES = 150;
  		private const int PLAYER_HEIGHT = 6;
  		private const int MAX_RETRIES = 400;
-@@ -48,5 +_,5 @@
+ 		private const int MAX_SMOOTH_DISTANCE = 15;
  		private const int MAX_ITERATIONS = 1000000;
 -		private TrackHistory[] _historyCache = new TrackHistory[2048];
 +		private TrackHistory[] _historyCache = new TrackHistory[2048 * 2]; // 2048 vanilla.
  
  		public void Generate(int trackCount, int minimumLength) {
  			int num = trackCount;
-@@ -56,8 +_,12 @@
- 				if (IsLocationEmpty(x, i)) {
- 					for (; IsLocationEmpty(x, i + 1); i++) {
- 					}
+@@ -59,6 +_,10 @@
  
  					if (FindPath(x, i, minimumLength))
 +					{
@@ -36,7 +34,8 @@
 +					}
  				}
  			}
-@@ -128,10 +_,10 @@
+ 		}
+@@ -128,11 +_,11 @@
  
  			int num3 = 1;
  			int num4 = 0;
@@ -50,14 +49,14 @@
 +			int num8 = MAX_ITERATIONS;
  			while (num8 > 0 && flag && num < historyCache.Length - 1) {
  				num8--;
-@@ -264,8 +_,9 @@
+ 				historyCache[num] = new TrackHistory(x, y, num3);
+@@ -264,8 +_,8 @@
  			return false;
  		}
  
 -		public static void Run(int trackCount = 30, int minimumLength = 250) {
++		public static void Run(GenerationProgress progress, int trackCount = 30, int minimumLength = 250) {
 -			new TrackGenerator().Generate(trackCount, minimumLength);
-+		public static void Run(GenerationProgress progress, int trackCount = 30, int minimumLength = 250)
-+		{
 +			new TrackGenerator(progress).Generate(trackCount, minimumLength);
  		}
  
