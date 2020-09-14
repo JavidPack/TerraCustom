@@ -1,5 +1,5 @@
---- src/tModLoader\Terraria.ModLoader\ModLoader.cs
-+++ src/TerraCustom\Terraria.ModLoader\ModLoader.cs
+--- src/tModLoader/Terraria.ModLoader/ModLoader.cs
++++ src/TerraCustom/Terraria.ModLoader/ModLoader.cs
 @@ -141,7 +_,24 @@
  					OnSuccessfulLoad();
  				}
@@ -26,14 +26,14 @@
  				}
  			}
  			catch when (token.IsCancellationRequested) {
-@@ -389,8 +_,10 @@
+@@ -386,8 +_,8 @@
  			if (LastLaunchedTModLoaderVersion < version)
  				ShowWhatsNew = true;
  			*/
-+			/* Disable Welcome message since it is reading from vanilla config file.
- 			if (LastLaunchedTModLoaderVersion == new Version(0, 0))
- 				ShowFirstLaunchWelcomeMessage = true;
-+			*/
+-			if (LastLaunchedTModLoaderVersion == new Version(0, 0))
++			//if (LastLaunchedTModLoaderVersion == new Version(0, 0))
+-				ShowFirstLaunchWelcomeMessage = true;
++			//	ShowFirstLaunchWelcomeMessage = true;
  		}
  
  		/// <summary>
