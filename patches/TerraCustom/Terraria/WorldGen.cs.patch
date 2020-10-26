@@ -1300,7 +1300,7 @@
  						progress.Set(value14);
  						bool flag38 = false;
  						int num488 = 0;
-@@ -5080,20 +_,102 @@
+@@ -5080,20 +_,85 @@
  							flag38 = true;
  							int num492 = Main.maxTilesX / 2;
  							int num493 = 200;
@@ -1309,109 +1309,90 @@
 +								if (Main.maxTilesY < 1000) num488 = WorldGen.genRand.Next(100, Main.maxTilesX - 50);
 +							} else {
 +								num488 = WorldGen.genRand.Next(320, Main.maxTilesX - 600);
--							num488 = ((dungeonSide >= 0) ? genRand.Next(320, Main.maxTilesX - 600) : genRand.Next(600, Main.maxTilesX - 320));
-+							// }
--							num489 = num488 - genRand.Next(200) - 100;
-+							// num489 = num488 - genRand.Next(200) - 100;
--							num490 = num488 + genRand.Next(200) + 100;
-+							// num490 = num488 + genRand.Next(200) + 100;
--							if (num489 < 285)
-+							// if (num489 < 285)
--								num489 = 285;
-+							// 	num489 = 285;
- 
--							if (num490 > Main.maxTilesX - 285)
-+							// if (num490 > Main.maxTilesX - 285)
--								num490 = Main.maxTilesX - 285;
-+							// 	num490 = Main.maxTilesX - 285;
- 
--							if (dungeonSide < 0 && num489 < 400)
-+							// if (dungeonSide < 0 && num489 < 400)
--								num489 = 400;
-+							// 	num489 = 400;
--							else if (dungeonSide > 0 && num489 > Main.maxTilesX - 400)
-+							// else if (dungeonSide > 0 && num489 > Main.maxTilesX - 400)
--								num489 = Main.maxTilesX - 400;
-+							// 	num489 = Main.maxTilesX - 400;
--
 +								if (Main.maxTilesY < 1000) num488 = WorldGen.genRand.Next(50, Main.maxTilesX - 100);
 +							}
-+								// I don't like this ugly diff...
-+								if (Main.setting.CrimsonCorruptionAvoidJungle)
++							// I don't like this ugly diff...
++							if (Main.setting.CrimsonCorruptionAvoidJungle)
++							{
++								if (dungeonSide == -1) // dungeon on left side, so place on left side
 +								{
-+									if (dungeonSide == -1) // dungeon on left side, so place on left side
-+									{
-+										if (num488 > Main.maxTilesX / 2) {
-+											flag38 = false;
-+											continue;
-+										}
-+									} else {
-+										if (num488 < Main.maxTilesX / 2)
-+										{
-+											flag38 = false;
-+											continue;
-+										}
++									if (num488 > Main.maxTilesX / 2) {
++										flag38 = false;
++										continue;
 +									}
-+								}
-+								if (Main.setting.CrimsonCorruptionAvoidEachOther)
-+								{
-+									if (crimsonSide == -1) // Crimson on left
-+									{
-+										if (num488 > Main.maxTilesX / 2)
-+										{
-+											flag38 = false;
-+											continue;
-+										}
-+									}
-+									else if (crimsonSide == 1)
-+									{
-+										if (num488 < Main.maxTilesX / 2)
-+										{
-+											flag38 = false;
-+											continue;
-+										}
-+									}
-+								}
-+								if (Main.maxTilesY < 1000)
-+								{
-+									num489 = num488 - WorldGen.genRand.Next(50) - 50;
-+									num490 = num488 + WorldGen.genRand.Next(50) + 50;
-+									if (num489 < 50)
-+									{
-+										num489 = 50;
-+									}
-+									if (num490 > Main.maxTilesX - 50)
-+									{
-+										num490 = Main.maxTilesX - 50;
-+									}
-+									if (dungeonSide < 0 && num489 < 50)
-+									{
-+										num489 = 50;
-+									}
-+									else if (dungeonSide > 0 && num489 > Main.maxTilesX - 50)
-+									{
-+										num489 = Main.maxTilesX - 50;
-+									}
-+									num493 = 50;
 +								} else {
-+									num489 = num488 - WorldGen.genRand.Next(200) - 100;
-+									num490 = num488 + WorldGen.genRand.Next(200) + 100;
-+									if (num489 < 285)
++									if (num488 < Main.maxTilesX / 2)
 +									{
-+										num489 = 285;
++										flag38 = false;
++										continue;
 +									}
-+									if (num490 > Main.maxTilesX - 285)
++								}
++							}
++							if (Main.setting.CrimsonCorruptionAvoidEachOther)
++							{
++								if (crimsonSide == -1) // Crimson on left
++								{
++									if (num488 > Main.maxTilesX / 2)
 +									{
-+										num490 = Main.maxTilesX - 285;
++										flag38 = false;
++										continue;
 +									}
-+									if (dungeonSide < 0 && num489 < 400)
++								}
++								else if (crimsonSide == 1)
++								{
++									if (num488 < Main.maxTilesX / 2)
 +									{
-+										num489 = 400;
++										flag38 = false;
++										continue;
 +									}
-+									else if (dungeonSide > 0 && num489 > Main.maxTilesX - 400)
-+									{
-+										num489 = Main.maxTilesX - 400;
-+									}
++								}
+-							num488 = ((dungeonSide >= 0) ? genRand.Next(320, Main.maxTilesX - 600) : genRand.Next(600, Main.maxTilesX - 320));
++							}
+-							num489 = num488 - genRand.Next(200) - 100;
++							num489 = num488 - WorldGen.genRand.Next(200) - 100;
+-							num490 = num488 + genRand.Next(200) + 100;
++							num490 = num488 + WorldGen.genRand.Next(200) + 100;
+-							if (num489 < 285)
++							if (num489 < 285) {
+ 								num489 = 285;
+-
+-							if (num490 > Main.maxTilesX - 285)
++							}
++							if (num490 > Main.maxTilesX - 285) {
+ 								num490 = Main.maxTilesX - 285;
+-
+-							if (dungeonSide < 0 && num489 < 400)
++							}
++							if (dungeonSide < 0 && num489 < 400) {
+ 								num489 = 400;
++							}
+-							else if (dungeonSide > 0 && num489 > Main.maxTilesX - 400)
++							else if (dungeonSide > 0 && num489 > Main.maxTilesX - 400) {
+ 								num489 = Main.maxTilesX - 400;
+-
++							}
++							if (Main.maxTilesY < 1000)
++							{
++								num489 = num488 - WorldGen.genRand.Next(50) - 50;
++								num490 = num488 + WorldGen.genRand.Next(50) + 50;
++								if (num489 < 50)
++								{
++									num489 = 50;
++								}
++								if (num490 > Main.maxTilesX - 50)
++								{
++									num490 = Main.maxTilesX - 50;
++								}
++								if (dungeonSide < 0 && num489 < 50)
++								{
++									num489 = 50;
++								}
++								else if (dungeonSide > 0 && num489 > Main.maxTilesX - 50)
++								{
++									num489 = Main.maxTilesX - 50;
++								}
++								num493 = 50;
++							}
  							if (num488 > num492 - num493 && num488 < num492 + num493)
  								flag38 = false;
  
@@ -1510,14 +1491,6 @@
  									int num529 = num527 - 13;
  									int num530 = num527 + 13;
  									int num531 = num528 - 13;
-@@ -5395,6 +_,7 @@
- 						}
- 					}
- 				}
-+				}
- 			});
- 
- 			AddGenerationPass("Slush", delegate {
 @@ -5409,7 +_,7 @@
  									int num484 = 3;
  									for (int num485 = num483 - num484; num485 <= num483 + num484; num485++) {
