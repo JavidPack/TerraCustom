@@ -2474,7 +2474,7 @@
  					break;
  				case 298:
  					Item.NewItem(i * 16, j * 16, 32, 32, 2190);
-@@ -35362,7 +_,7 @@
+@@ -35364,7 +_,7 @@
  		public static void CrimStart(int i, int j) {
  			int crimDir = 1;
  			heartCount = 0;
@@ -2483,7 +2483,7 @@
  			int k = j;
  			if ((double)k > Main.worldSurface)
  				k = (int)Main.worldSurface;
-@@ -35531,7 +_,7 @@
+@@ -35533,7 +_,7 @@
  			}
  
  			for (int num34 = 0; num34 < heartCount; num34++) {
@@ -2492,7 +2492,7 @@
  			}
  
  			int num35 = Main.maxTilesX;
-@@ -35773,9 +_,9 @@
+@@ -35775,9 +_,9 @@
  					num = 2f;
  
  				if (num <= 0f) {
@@ -2504,7 +2504,7 @@
  					}
  					else if (!flag3) {
  						flag3 = false;
-@@ -35797,7 +_,14 @@
+@@ -35799,7 +_,14 @@
  								num10 = Main.maxTilesY - 5;
  
  							if ((double)num10 > Main.worldSurface) {
@@ -2520,7 +2520,7 @@
  								if (Main.tile[num9, num10].type == 26) {
  									flag4 = true;
  									continue;
-@@ -35951,7 +_,7 @@
+@@ -35953,7 +_,7 @@
  
  		public static void GERunner(int i, int j, float speedX = 0f, float speedY = 0f, bool good = true) {
  			int num = genRand.Next(200, 250);
@@ -2529,7 +2529,7 @@
  			num = (int)((float)num * num2);
  			double num3 = num;
  			Vector2 vector = default(Vector2);
-@@ -37560,9 +_,9 @@
+@@ -37562,9 +_,9 @@
  		}
  
  		public static void Lakinater(int i, int j) {
@@ -2541,7 +2541,7 @@
  			if (genRand.Next(5) == 0) {
  				num *= 1.5;
  				num2 *= 1.5;
-@@ -37717,9 +_,9 @@
+@@ -37719,9 +_,9 @@
  
  					int num12 = genRand.Next(7, 10);
  					int num13 = genRand.Next(7, 10);

@@ -26,7 +26,7 @@
  				}
  			}
  			catch when (token.IsCancellationRequested) {
-@@ -386,8 +_,8 @@
+@@ -387,8 +_,8 @@
  			if (LastLaunchedTModLoaderVersion < version)
  				ShowWhatsNew = true;
  			*/
