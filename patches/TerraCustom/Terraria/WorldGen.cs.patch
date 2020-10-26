@@ -467,6 +467,14 @@
  		}
  
  		public static void setMoss(int x, int y) {
+@@ -3747,6 +_,7 @@
+ 
+ 		public static void generateWorld(int seed, GenerationProgress customProgressObject = null) {
+ 			Logging.Terraria.InfoFormat("Generating World: {0}", Main.ActiveWorldFileData.Name);
++			Logging.Terraria.InfoFormat("Numerical Seed: {0}", seed);
+ 			_lastSeed = seed;
+ 			_generator = new WorldGenerator(seed);
+ 			Main.rand = new UnifiedRandom(seed);
 @@ -3763,6 +_,7 @@
  			int silver = 9;
  			int gold = 8;
