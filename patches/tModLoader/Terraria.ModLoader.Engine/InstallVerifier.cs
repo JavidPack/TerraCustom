@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using Terraria.Localization;
 using Terraria.Social;
 
 namespace Terraria.ModLoader.Engine
@@ -13,7 +14,6 @@ namespace Terraria.ModLoader.Engine
 	internal static class InstallVerifier
 	{
 		const string ContentDirectory = "Content";
-		const string InstallInstructions = "Please restore your Terraria install, then install tModLoader on Steam or by following the README.txt instructions for manual installation.";
 
 		private static bool? isValid;
 		public static bool IsValid => isValid ?? (isValid = InstallCheck()).Value;
@@ -30,23 +30,23 @@ namespace Terraria.ModLoader.Engine
 			if (Platform.IsWindows) {
 				steamAPIPath = "steam_api.dll";
 				steamAPIHash = ToByteArray("7B857C897BC69313E4936DC3DCCE5193");
-				gogHash = ToByteArray("8b546731a5b6a498a0e28f047bc56377");
-				steamHash = ToByteArray("6b85b2a8ea384384c1090d784f3fcff6");
+				gogHash = ToByteArray("fb4ea5896142d5b76ac1ede10e864690");
+				steamHash = ToByteArray("9d8adb4aab1f1f7eac8742a685b4cba8");
 			}
 			else if (Platform.IsOSX) {
 				steamAPIPath = "osx/libsteam_api.dylib";
 				steamAPIHash = ToByteArray("4EECD26A0CDF89F90D4FF26ECAD37BE0");
-				gogHash = ToByteArray("47f34aed84a7267cf42a7724a356fd1a");
-				steamHash = ToByteArray("214b6e8d77644ed8148fde1bfc9b321e");
+				gogHash = ToByteArray("3591d61f040fca118430f32c78dc247b");
+				steamHash = ToByteArray("3651544f9387bbbba0183177cf631880");
 			}
 			else if (Platform.IsLinux) {
 				steamAPIPath = "lib/libsteam_api.so";
 				steamAPIHash = ToByteArray("7B74FD4C207D22DB91B4B649A44467F6");
-				gogHash = ToByteArray("a9ebf47eee8f65ad264509f2fa16d161");
-				steamHash = ToByteArray("c15c0d10d11200384371e8db2ec05679");
+				gogHash = ToByteArray("db41f89cfa0df5fb35f9878375ae7483");
+				steamHash = ToByteArray("dd3ba3b44bee0e4b130f95d502429ab5");
 			}
 			else {
-				string message = "Unknown OS platform: unable to verify installation.";
+				string message = Language.GetTextValue("tModLoader.UnknownVerificationOS");
 				Logging.tML.Fatal(message);
 				Exit(message, string.Empty);
 			}
@@ -66,7 +66,7 @@ namespace Terraria.ModLoader.Engine
 				retval[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
 			return retval;
 		}
-		private static void Exit(string errorMessage, string extraMessage = InstallInstructions)
+		private static void Exit(string errorMessage, string extraMessage)
 		{
 			errorMessage += $"\r\n\r\n{extraMessage}";
 			Logging.tML.Fatal(errorMessage);
@@ -79,7 +79,7 @@ namespace Terraria.ModLoader.Engine
 #if CLIENT
 			// Check if the content directory is present which is required
 			if (!Directory.Exists(ContentDirectory)) {
-				Exit($"{ContentDirectory} directory could not be found.\r\n\r\nDid you forget to extract tModLoader's Content directory into the tModLoader folder?\r\n\r\nEnsure tModLoader is installed in a separate folder from Terraria.");
+				Exit(Language.GetTextValue("tModLoader.ContentFolderNotFoundInstallCheck", ContentDirectory), Language.GetTextValue("tModLoader.DefaultExtraMessage"));
 				return false;
 			}
 #endif
@@ -98,15 +98,19 @@ namespace Terraria.ModLoader.Engine
 #if CLIENT
 			SocialAPI.LoadSteam();
 			string terrariaInstallLocation = Steam.GetSteamTerrariaInstallDir();
+			string terrariaContentLocation = Path.Combine(terrariaInstallLocation, ContentDirectory);
+#if MAC
+			terrariaContentLocation = Path.Combine(terrariaInstallLocation, "../Resources/Content");
+#endif
 
-			if (!Directory.Exists(Path.Combine(terrariaInstallLocation, ContentDirectory))) {
-				Exit($"Terraria Steam installation or Terraria Content directory not found.\r\n\r\nPlease ensure Terraria 1.4 is installed through Steam.");
+			if (!Directory.Exists(terrariaContentLocation)) {
+				Exit(Language.GetTextValue("tModLoader.VanillaSteamInstallationNotFound"), Language.GetTextValue("tModLoader.DefaultExtraMessage"));
 				return false;
 			}
 #endif
 			if (!HashMatchesFile(steamAPIPath, steamAPIHash)) {
 				Process.Start(@"https://terraria.org");
-				Exit("Steam API hash mismatch, assumed pirated.\n\ntModLoader requires a legitimate Terraria install to work.", string.Empty);
+				Exit(Language.GetTextValue("tModLoader.SteamAPIHashMismatch"), string.Empty);
 				return false;
 			}
 
@@ -121,12 +125,15 @@ namespace Terraria.ModLoader.Engine
 			IsGoG = true;
 
 			const string DefaultExe = "Terraria.exe";
-			string CheckExe = $"Terraria_1.4.0.5.exe"; // {Main.versionNumber}
+			string CheckExe = $"Terraria_1.4.1.exe"; // {Main.versionNumber}
 			string vanillaPath = File.Exists(CheckExe) ? CheckExe : DefaultExe;
 
 			// If .exe not present, check Terraria directory (Side-by-Side Manual Install)
 			if (!File.Exists(vanillaPath)) {
 				vanillaPath = Path.Combine("..", "Terraria");
+#if MAC
+				vanillaPath = "../../../Terraria.app/Contents/MacOS/";
+#endif
 				string defaultExe = Path.Combine(vanillaPath, DefaultExe);
 				string checkExe = Path.Combine(vanillaPath, CheckExe);
 				vanillaPath = File.Exists(defaultExe) ? defaultExe : checkExe;
@@ -142,13 +149,13 @@ namespace Terraria.ModLoader.Engine
 #if SERVER
 				return false;
 #else
-				Exit($"{vanillaPath} could not be found.\r\n\r\nGOG installs must have the unmodified Terraria executable to function.", string.Empty);
+				Exit(Language.GetTextValue("tModLoader.VanillaGOGNotFound", vanillaPath), string.Empty);
 				return false;
 #endif
 			}
 
 			if (!HashMatchesFile(vanillaPath, gogHash)) {
-				Exit($"{vanillaPath} is not the unmodified Terraria executable.\r\n\r\nGOG installs must have the unmodified Terraria executable to function.\r\n\r\nIf you patched the .exe, you can create a copy of the original exe and name it \"Terraria_v<VERSION>.exe\"", string.Empty);
+				Exit(Language.GetTextValue("tModLoader.GOGHashMismatch", vanillaPath), string.Empty);
 				return false;
 			}
 

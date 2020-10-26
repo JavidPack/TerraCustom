@@ -136,6 +136,14 @@
  				inventory[selectedItem].stack--;
  			}
  			else {
+@@ -1544,6 +_,7 @@
+ 			else {
+ 				itemAnimation = 10;
+ 				itemAnimationMax = 10;
++				itemTime = 10; // Bandaid fix for #976, does not need to be merged in 1.4
+ 			}
+ 
+ 			Recipe.FindRecipes();
 @@ -1551,11 +_,13 @@
  				NetMessage.SendData(21, -1, -1, null, num);
  		}
@@ -1658,6 +1666,29 @@
  			velocity.Y -= num * gravDir;
  			if (gravDir == 1f) {
  				if (velocity.Y > 0f)
+@@ -13977,6 +_,11 @@
+ 			float num3 = 0f;
+ 			for (int i = 0; i < grapCount; i++) {
+ 				Projectile projectile = Main.projectile[grappling[i]];
++				int type = projectile.type;
++				bool useAiType = projectile.modProjectile != null && projectile.modProjectile.aiType > 0;
++				if(useAiType) {
++					projectile.type = projectile.modProjectile.aiType;
++				}
+ 				num2 += projectile.position.X + (float)(projectile.width / 2);
+ 				num3 += projectile.position.Y + (float)(projectile.height / 2);
+ 				if (projectile.type == 403) {
+@@ -14017,6 +_,10 @@
+ 					num2 += 0f - vector4.X + value.X * num5;
+ 					num3 += 0f - vector4.Y + value.Y * num5;
+ 				}
++				if(useAiType) {
++					projectile.type = type;
++				}
++				ProjectileLoader.GrappleTargetPoint(projectile, this, ref num2, ref num3);
+ 			}
+ 
+ 			num2 /= (float)grapCount;
 @@ -14032,6 +_,7 @@
  			if (Main.projectile[grappling[0]].type >= 646 && Main.projectile[grappling[0]].type <= 649)
  				num9 = 13f;
@@ -3940,19 +3971,9 @@
  
  			if (tile.type == 147 || tile.type == 0 || tile.type == 40 || tile.type == 53 || tile.type == 57 || tile.type == 59 || tile.type == 123 || tile.type == 224 || tile.type == 397)
  				num += pickPower;
-@@ -30102,14 +_,20 @@
- 				if (Main.netMode == 1 && Main.tileContainer[Main.tile[x, y].type]) {
- 					WorldGen.KillTile(x, y, fail: true);
- 					NetMessage.SendData(17, -1, -1, null, 0, x, y, 1f);
--					if (Main.tile[x, y].type == 21)
-+					if (Main.tile[x, y].type == 21 || Main.tile[x, y].type >= TileID.Count && TileID.Sets.BasicChest[Main.tile[x, y].type])
- 						NetMessage.SendData(34, -1, -1, null, 1, x, y);
+@@ -30110,6 +_,12 @@
  
- 					if (Main.tile[x, y].type == 467)
- 						NetMessage.SendData(34, -1, -1, null, 5, x, y);
- 
--					if (Main.tile[x, y].type == 88)
-+					if (TileLoader.IsDresser(Main.tile[x, y].type))
+ 					if (Main.tile[x, y].type == 88)
  						NetMessage.SendData(34, -1, -1, null, 3, x, y);
 +
 +					if (Main.tile[x, y].type >= TileID.Count && TileID.Sets.BasicChest[Main.tile[x, y].type])
