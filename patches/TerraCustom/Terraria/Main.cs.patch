@@ -102,7 +102,7 @@
  			if (FileUtilities.GetFullPath(text2 + Path.DirectorySeparatorChar + text + ".wld", cloudSave).StartsWith("\\\\.\\", StringComparison.Ordinal))
  				text += "_";
  
-@@ -4224,18 +_,19 @@
+@@ -4232,18 +_,19 @@
  				Logging.Terraria.Info($"Steam Cloud Quota: {UIMemoryBar.SizeSuffix((long)ModLoader.Engine.Steam.lastAvailableSteamCloudStorage)} available");
  			}
  			if (!Directory.Exists(vanillaContentFolder)) {
@@ -124,7 +124,7 @@
  			Platform.Current.SetWindowUnicodeTitle(base.Window, _cachedTitle);
  #endif
  		}
-@@ -7137,8 +_,16 @@
+@@ -7145,8 +_,16 @@
  			gridTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Grid");
  			trashTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Trash");
  			cdTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "CoolDown");
@@ -141,7 +141,7 @@
  			dustTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Dust");
  			sunTexture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun");
  			sun2Texture = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar + "Sun2");
-@@ -35780,7 +_,7 @@
+@@ -35794,7 +_,7 @@
  			Utils.DrawBorderString(spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Microsoft.Xna.Framework.Color.White * invasionProgressAlpha, num * 0.9f, 1f, 0.4f);
  		}
  
@@ -150,7 +150,7 @@
  			SaveSettings();
  #if CLIENT
  			SocialAPI.Shutdown();
-@@ -35993,18 +_,19 @@
+@@ -36007,18 +_,19 @@
  			else
  				ActiveWorldFileData.SetSeed(text);
  
@@ -175,7 +175,7 @@
  		}
  
  		private static Action CreateGoToMenuEvent(int menu) {
-@@ -36140,6 +_,8 @@
+@@ -36154,6 +_,8 @@
  			string[] array9 = new string[maxMenuItems];
  			if (menuMode == -1)
  				menuMode = 0;
@@ -184,7 +184,7 @@
  
  			bool loadedEverything = Program.LoadedEverything;
  			if (loadedEverything)
-@@ -37154,7 +_,7 @@
+@@ -37168,7 +_,7 @@
  					MenuUI.SetState(_worldSelectMenu);
  					menuMode = 888;
  				}
@@ -193,7 +193,7 @@
  					num2 = 200;
  					num4 = 60;
  					array4[2] = 30;
-@@ -37182,21 +_,27 @@
+@@ -37196,21 +_,27 @@
  					if (selectedMenu == 2) {
  						expertMode = false;
  						PlaySound(10);
@@ -222,7 +222,7 @@
  					}
  
  					clrInput();
-@@ -37247,12 +_,12 @@
+@@ -37261,12 +_,12 @@
  					num17++;
  					clrInput();
  				}
@@ -238,7 +238,7 @@
  					menuMode = 888;
  				}
  				else if (menuMode == 8) {
-@@ -38401,6 +_,7 @@
+@@ -38415,6 +_,7 @@
  					}
  				}
  				else {
@@ -246,7 +246,7 @@
  					Interface.ModLoaderMenus(this, selectedMenu, array9, array7, array4, ref num2, ref num4, ref num5, ref flag5);
  				}
  			}
-@@ -39180,10 +_,10 @@
+@@ -39194,10 +_,10 @@
  				if (num108 == 3)
  					num110 = 2;
  
@@ -257,11 +257,11 @@
 +				string supportMessage = "jopojelly's Pateron - ";
 +				string patreonShortURL = @"patreon.com/jopojelly";
 +				bool showPatreon = Main.menuMode == 5001;
-+				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.8.1" + (showPatreon ? Environment.NewLine + supportMessage : "");
++				string drawVersion = Main.versionNumber + Environment.NewLine + ModLoader.ModLoader.versionedName + Environment.NewLine + "jopojelly's TerraCustom v0.8.1.1" + (showPatreon ? Environment.NewLine + supportMessage : "");
  				Vector2 origin3 = fontMouseText.MeasureString(drawVersion);
  				origin3.X *= 0.5f;
  				origin3.Y *= 0.5f;
-@@ -39197,7 +_,7 @@
+@@ -39211,7 +_,7 @@
  					spriteBatch.DrawString(fontMouseText, patreonShortURL, new Vector2(origin3.X + num109 + 10f, screenHeight - origin3.Y + num110 - 2f), color13, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
  					if (num108 == 4 && mouseLeftRelease && mouseLeft && new Microsoft.Xna.Framework.Rectangle((int)origin3.X + 10, screenHeight - (int)urlSize.Y - 2, (int)urlSize.X, (int)origin3.Y).Contains(new Microsoft.Xna.Framework.Point(mouseX, mouseY)) && hasFocus) {
  						PlaySound(SoundID.MenuOpen);

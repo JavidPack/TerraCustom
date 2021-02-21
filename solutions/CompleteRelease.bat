@@ -4,7 +4,7 @@
 @ECHO off
 :: Compile/Build exe 
 echo "Building Release"
-set TerraCustomVersion=v0.8.1
+set TerraCustomVersion=v0.8.1.1
 call buildRelease.bat
 
 set destinationFolder=.\TerraCustom %TerraCustomVersion% Release

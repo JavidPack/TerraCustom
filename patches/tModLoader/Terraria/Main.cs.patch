@@ -783,7 +783,7 @@
  		}
  
  		public static void Sundialing() {
-@@ -4105,7 +_,40 @@
+@@ -4105,7 +_,48 @@
  			instance = this;
  #if CLIENT
  			graphics = new GraphicsDeviceManager(this);
@@ -799,7 +799,15 @@
 +				vanillaContentFolder = "../Content"; // Nested Manual Install
 +			}
 +#if MAC
-+			vanillaContentFolder = "../../../Terraria.app/Contents/Resources/Content";
++			if (Directory.Exists("../../../../Terraria/Terraria.app/")) {
++				vanillaContentFolder = "../../../../Terraria/Terraria.app/Contents/Resources/Content";
++			}
++			else if (Directory.Exists("../../../Terraria.app/")) {
++				vanillaContentFolder = "../../../Terraria.app/Contents/Resources/Content";
++			}
++			else {
++				Logging.tML.Info($"Mac Terraria content folder location not found.");
++			}
 +#endif
 +			if (SocialAPI.Mode == SocialMode.Steam && Steamworks.SteamAPI.Init()) {
 +				var appID = ModLoader.Engine.Steam.TerrariaAppId_t;
@@ -940,7 +948,7 @@
  		}
  
  		private void LoadFonts() {
-@@ -7140,12 +_,14 @@
+@@ -7140,12 +_,20 @@
  					npcAltTextures[num35][num37] = OurLoad<Texture2D>("Images" + Path.DirectorySeparatorChar.ToString() + "NPC_" + num35 + "_Alt_" + num37);
  				}
  			}
@@ -950,11 +958,17 @@
  
  		private static void LoadMusic() {
 -			engine = new AudioEngine("Content" + Path.DirectorySeparatorChar + "TerrariaMusic.xgs");
-+			engine = new AudioEngine(Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "TerrariaMusic.xgs");
 -			soundBank = new SoundBank(engine, "Content" + Path.DirectorySeparatorChar + "Sound Bank.xsb");
-+			soundBank = new SoundBank(engine, Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "Sound Bank.xsb");
 -			waveBank = new WaveBank(engine, "Content" + Path.DirectorySeparatorChar + "Wave Bank.xwb");
-+			waveBank = new WaveBank(engine, Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "Wave Bank.xwb");
++			engine = new AudioEngine(Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "TerrariaMusic.xgs");
++			soundBank = new SoundBank(engine, Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "Sound Bank.xsb");
++			engine.Update();
++			waveBank = new WaveBank(engine, Main.instance.Content.RootDirectory + Path.DirectorySeparatorChar + "Wave Bank.xwb", 0, 512);
++			engine.Update();
++			music = new Music[42];
++			while (!waveBank.IsPrepared) {
++				engine.Update();
++			}
  			for (int i = 1; i < 42; i++) {
  				music[i] = soundBank.GetCue("Music_" + i);
  			}
@@ -1141,6 +1155,14 @@
  						if (musicFade[curMusic] > 0.25f)
  							musicFade[m] -= 0.005f;
  						else if (curMusic == 0)
+@@ -7951,6 +_,7 @@
+ 					}
+ 				}
+ 
++				engine.Update();
+ 				if (musicError > 0)
+ 					musicError--;
+ 			}
 @@ -9803,6 +_,7 @@
  		}
  
@@ -3376,6 +3398,15 @@
  			if (drawPlayer.head == 23) {
  				if (!drawPlayer.invis) {
  					value = new DrawData(playerHairTexture[drawPlayer.hair], new Vector2((int)(Position.X - screenPosition.X - (float)(drawPlayer.bodyFrame.Width / 2) + (float)(drawPlayer.width / 2)), (int)(Position.Y - screenPosition.Y + (float)drawPlayer.height - (float)drawPlayer.bodyFrame.Height + 4f)) + drawPlayer.headPosition + vector3, bodyFrame, color, drawPlayer.headRotation, vector3, 1f, spriteEffects, 0);
+@@ -26816,7 +_,7 @@
+ 				value.shader = num5;
+ 				playerDrawData.Add(value);
+ 			}
+-			else if (drawPlayer.head == 14 || drawPlayer.head == 56 || drawPlayer.head == 114 || drawPlayer.head == 158 || drawPlayer.head == 69 || drawPlayer.head == 180) {
++			else if (drawPlayer.head == 14 || drawPlayer.head == 56 || drawPlayer.head == 114 || drawPlayer.head == 158 || drawPlayer.head == 69 || drawPlayer.head == 180 || drawPlayer.head == ModLoader.Default.ModLoaderMod.Instance.GetEquipSlot("WitchDaggah_Head", EquipType.Head) || drawPlayer.head == ModLoader.Default.ModLoaderMod.Instance.GetEquipSlot("Elfinlocks_Head", EquipType.Head)) { // TODO: This probably needs a field or hook
+ 				Microsoft.Xna.Framework.Rectangle bodyFrame3 = drawPlayer.bodyFrame;
+ 				Vector2 origin2 = vector3;
+ 				if (drawPlayer.gravDir == 1f) {
 @@ -26836,7 +_,7 @@
  				value.shader = num5;
  				playerDrawData.Add(value);
@@ -3695,12 +3726,11 @@
  			if (!flag)
  				DrawNPCChatButtons(num, textColor, lineAmount, focusText, focusText2);
  
-@@ -28446,7 +_,12 @@
+@@ -28446,7 +_,11 @@
  					else
  						IngameFancyUI.OpenVirtualKeyboard(1);
  				}
-+
-+				if (!NPCLoader.PreChatButtonClicked(true))
++				if (player[myPlayer].talkNPC < 0 || !NPCLoader.PreChatButtonClicked(true))
 +					return;
 +
 +				NPCLoader.OnChatButtonClicked(true);
@@ -3968,15 +3998,15 @@
  				InReforgeMenu = false;
  			}
  
-@@ -33064,6 +_,8 @@
- 				num3 += 70;
+@@ -33065,6 +_,8 @@
  				text2 = $"{txDataType[j]:0,0}";
  				spriteBatch.DrawString(fontMouseText, text2, new Vector2(num3, num4), Microsoft.Xna.Framework.Color.White, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
-+
-+				ModNet.DrawModDiagnoseNet();
  			}
++
++			ModNet.DrawModDiagnoseNet();
  		}
  
+ 		private void DrawInterface_16_MapOrMinimap() {
 @@ -33170,6 +_,11 @@
  						if (type == 439 || type == 370)
  							scale = 1.5f;
