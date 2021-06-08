@@ -2362,20 +2362,23 @@
  							if (flag9) {
  								flag5 = false;
  								break;
-@@ -15920,10 +_,12 @@
- 								int num7 = genRand.Next(2);
- 								int stack3 = genRand.Next(26) + 25;
- 								if (num7 == 0)
+@@ -15899,11 +_,15 @@
+ 							if (genRand.Next(2) == 0) {
+ 								int num6 = genRand.Next(2);
+ 								int stack = genRand.Next(8) + 3;
+-								if (num6 == 0)
++								if (num6 == 0) {
 +									if (Main.setting.IsCopper == 3) WorldGen.copperBar = WorldGen.genRand.NextBool() ? 20 : 703;
--									Main.chest[num2].item[num4].SetDefaults(40);
-+									Main.chest[num2].item[num4].SetDefaults(copperBar, false);
+ 									Main.chest[num2].item[num4].SetDefaults(copperBar);
++								}
  
- 								if (num7 == 1)
+-								if (num6 == 1)
++								if (num6 == 1) {
 +									if (Main.setting.IsIron == 3) WorldGen.ironBar = WorldGen.genRand.NextBool() ? 22 : 704;
--									Main.chest[num2].item[num4].SetDefaults(42);
-+									Main.chest[num2].item[num4].SetDefaults(ironBar, false);
+ 									Main.chest[num2].item[num4].SetDefaults(ironBar);
++								}
  
- 								Main.chest[num2].item[num4].stack = stack3;
+ 								Main.chest[num2].item[num4].stack = stack;
  								num4++;
 @@ -16262,10 +_,12 @@
  								int num18 = genRand.Next(2);
