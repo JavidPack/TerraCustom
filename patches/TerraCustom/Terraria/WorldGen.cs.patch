@@ -2380,20 +2380,41 @@
  
  								Main.chest[num2].item[num4].stack = stack;
  								num4++;
-@@ -16262,10 +_,12 @@
- 								int num18 = genRand.Next(2);
- 								int stack15 = genRand.Next(26) + 25;
- 								if (num18 == 0)
-+									if (Main.setting.IsGold == 3) WorldGen.goldBar = WorldGen.genRand.NextBool() ? 19 : 706;
--									Main.chest[num2].item[num4].SetDefaults(41);
-+									Main.chest[num2].item[num4].SetDefaults(goldBar, false);
+@@ -16070,11 +_,15 @@
+ 							if (genRand.Next(2) == 0) {
+ 								int num12 = genRand.Next(2);
+ 								int stack8 = genRand.Next(10) + 5;
+-								if (num12 == 0)
++								if (num12 == 0) {
++									if (Main.setting.IsIron == 3) WorldGen.ironBar = WorldGen.genRand.NextBool() ? 22 : 704;
+ 									Main.chest[num2].item[num4].SetDefaults(ironBar);
++								}
  
- 								if (num18 == 1)
+-								if (num12 == 1)
++								if (num12 == 1) {
 +									if (Main.setting.IsSilver == 3) WorldGen.silverBar = WorldGen.genRand.NextBool() ? 21 : 705;
--									Main.chest[num2].item[num4].SetDefaults(279);
-+									Main.chest[num2].item[num4].SetDefaults(silverBar, false);
+ 									Main.chest[num2].item[num4].SetDefaults(silverBar);
++								}
  
- 								Main.chest[num2].item[num4].stack = stack15;
+ 								Main.chest[num2].item[num4].stack = stack8;
+ 								num4++;
+@@ -16248,11 +_,15 @@
+ 							if (genRand.Next(2) == 0) {
+ 								int num17 = genRand.Next(2);
+ 								int stack14 = genRand.Next(8) + 3;
+-								if (num17 == 0)
++								if (num17 == 0) {
++									if (Main.setting.IsGold == 3) WorldGen.goldBar = WorldGen.genRand.NextBool() ? 19 : 706;
+ 									Main.chest[num2].item[num4].SetDefaults(goldBar);
++								}
+ 
+-								if (num17 == 1)
++								if (num17 == 1) {
++									if (Main.setting.IsSilver == 3) WorldGen.silverBar = WorldGen.genRand.NextBool() ? 21 : 705;
+ 									Main.chest[num2].item[num4].SetDefaults(silverBar);
++								}
+ 
+ 								Main.chest[num2].item[num4].stack = stack14;
  								num4++;
 @@ -16406,8 +_,10 @@
  								if (num24 == 0)
