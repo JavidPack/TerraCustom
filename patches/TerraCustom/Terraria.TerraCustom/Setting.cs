@@ -276,34 +276,62 @@ namespace Terraria.TerraCustom
 		[DefaultValue(4200)]
 		public int WorldWidth { get { return Main.maxTilesX; } set { Main.maxTilesX = value; } }
 		[DefaultValue(1200)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float SandMultiplier { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float SiltMultiplier { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public int IceBiomeDepth { get; internal set; } = 1;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float DesertScale { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float IceBiomeWidth { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float JungleScale { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float UnderworldHouseMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float ClayMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float SurfaceCaveMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float DeepCaveMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float MushroomScale { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float WebMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float LakeScale { get; internal set; } = 1f;
-		[DefaultValue(1)]
+
+		[DefaultValue(1f)]
+		[JsonProperty]
 		public float GiantTreeMult { get; internal set; } = 1f;
-		[DefaultValue(1)]
 		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
 		public bool ExpertMode { get { return Main.expertMode; } set { Main.expertMode = value; } }
 
