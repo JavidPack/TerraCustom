@@ -56,6 +56,9 @@ namespace Terraria.TerraCustom
 			Main.setting.IceBiomeWidth = 1f;
 			Main.setting.DoubleDungeon = false;
 			Main.setting.NoGravitate = false;
+			Main.setting.BeachDepthMultiplier = 1f;
+			Main.setting.MountCaveMult = 1f;
+			Main.setting.MountCaveArea = 1f;
 			// Reset tile width/height
 			if (TerraCustomUtils.WorldSize == 0)
 			{
@@ -105,6 +108,13 @@ namespace Terraria.TerraCustom
 			Main.setting.ThinIceBiomeMultiplier = 1f;
 			Main.setting.CampsiteBiomeMultiplier = 1f;
 			Main.setting.SkyIslandMultiplier = 1f;
+			Main.setting.SnowIslands = 1f;
+			Main.setting.SandIslands = 1f;
+			Main.setting.JungleIslands = 1f;
+			Main.setting.MushroomIslands = 1f;
+			Main.setting.RainIslands = 1f;
+			Main.setting.Snow2Islands = 1f;
+			Main.setting.UnderworldIslands = 1f;
 			Main.setting.MineCartMultiplier = 1f;
 			Main.setting.GemMultiplier = 1f;
 			Main.setting.GemCaveMultiplier = 1f;
@@ -159,6 +169,10 @@ namespace Terraria.TerraCustom
 			Main.setting.NoAltar = false;
 			Main.setting.NoOrbHeart = false;
 			Main.setting.SwapShroomJungle = false;
+			Main.setting.RandomizedTiles = false;
+			Main.setting.SwappedTiles = false;
+			Main.setting.FlippedWorld = false;
+			Main.setting.CorruptedWorld = 0;
 		}
 
 		public static void initializeGraphic()
@@ -273,9 +287,13 @@ namespace Terraria.TerraCustom
 
 		// Properties for non Setting things
 		public bool HardMode { get { return Main.hardMode; } set { Main.hardMode = value; } }
+
 		[DefaultValue(4200)]
 		public int WorldWidth { get { return Main.maxTilesX; } set { Main.maxTilesX = value; } }
+		
 		[DefaultValue(1200)]
+		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
+		public bool ExpertMode { get { return Main.expertMode; } set { Main.expertMode = value; } }
 
 		[DefaultValue(1f)]
 		[JsonProperty]
@@ -332,8 +350,6 @@ namespace Terraria.TerraCustom
 		[DefaultValue(1f)]
 		[JsonProperty]
 		public float GiantTreeMult { get; internal set; } = 1f;
-		public int WorldHeight { get { return Main.maxTilesY; } set { Main.maxTilesY = value; } }
-		public bool ExpertMode { get { return Main.expertMode; } set { Main.expertMode = value; } }
 
 		[JsonProperty]
 		public bool generateLeveledRPGSave { get; internal set; }
@@ -409,7 +425,10 @@ namespace Terraria.TerraCustom
 		
 		[JsonProperty]
 		public int IsCorruption { get; internal set; }
-		
+
+		[JsonProperty]
+		public int CorruptedWorld { get; internal set; }
+
 		[JsonProperty]
 		[DefaultValue(2)]
 		public int IsPyramid { get; internal set; } = 2;
@@ -475,6 +494,15 @@ namespace Terraria.TerraCustom
 
 		[JsonProperty]
 		public bool SwapShroomJungle { get; internal set; }
+
+		[JsonProperty]
+		public bool RandomizedTiles { get; internal set; }
+
+		[JsonProperty]
+		public bool SwappedTiles { get; internal set; }
+
+		[JsonProperty]
+		public bool FlippedWorld { get; internal set; }
 
 		[JsonProperty]
 		public bool NoGravitate { get; internal set; }
@@ -580,7 +608,39 @@ namespace Terraria.TerraCustom
 		[JsonProperty]
 		[DefaultValue(1f)]
 		public float SkyIslandMultiplier { get; internal set; } = 1f;
-		
+
+		[JsonProperty]
+		[DefaultValue(1f)]
+		public float SkyLakeMultiplier { get; internal set; } = 1f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float SnowIslands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float SandIslands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float JungleIslands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float MushroomIslands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float RainIslands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float Snow2Islands { get; internal set; } = 0f;
+
+		[JsonProperty]
+		[DefaultValue(0f)]
+		public float UnderworldIslands { get; internal set; } = 0f;
+
 		[JsonProperty]
 		public int DungeonSide { get; internal set; } = 0;
 		
@@ -726,7 +786,23 @@ namespace Terraria.TerraCustom
 		[JsonProperty]
 		[DefaultValue(1f)]
 		public float BeachSizeMultiplier { get; internal set; } = 1f;
-		
+
+		[JsonProperty]
+		[DefaultValue(1f)]
+		public float BeachDepthMultiplier { get; internal set; } = 1f;
+
+		[JsonProperty]
+		[DefaultValue(1f)]
+		public float MountCaveMult { get; internal set; } = 1f;
+
+		[JsonProperty]
+		[DefaultValue(1f)]
+		public float MountCaveArea { get; internal set; } = 1f;
+
+		[JsonProperty]
+		[DefaultValue(1f)]
+		public float grassMult { get; internal set; } = 1f;
+
 		[JsonProperty]
 		public int PreDropMeteor { get; internal set; } = 0;
 		

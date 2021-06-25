@@ -68,6 +68,9 @@
 		"UndergroundCaves": "Regular Caves",
 		"WorldWidth": "World Width",
 		"WorldHeight": "World Height",
+		"BeachDepth": "Ocean Depth",
+		"DirtMounds": "Spawn Mounds",
+		"MoundArea": "Spawn Mound Area",
 
 		// Ores Menu
 		"AlsoCheckOreAmountNote": "Also check 'Ore Amount' option to get both hardmode ores",
@@ -154,13 +157,20 @@
 		"NoAltar": "No altar",
 		"NoOrbOrHeart": "No orb/heart",
 		"NoUnderworld": "No underworld",
+		"RandomizedTiles": "Randomized Tiles",
+		"SwappedTiles": "Swapped Tiles",
+		"FlippedWorld": "Flipped World",
+		"CorruptedWorld": "Fullworld Evil",
+		"Corruption": "Corruption",
+		"Crimson": "Crimson",
+		"False": "False",
 
 		// MicroBiomes Menu
 		"Setting100ForDefaultAmountBiomesNote": "setting 100% will generate default amount of biomes",
 		"EnchantedSword": "Enchanted Sword",
 		"Campsite": "Campsite",
 		"ThinIce": "Thin Ice",
-		"SkyIslands": "Sky Islands",
+		"SkyIslandSettings": "Sky Island Settings",
 		"MinecartTracks": "Minecart Tracks",
 		"SpiderCaves": "Spider Caves",
 		"GraniteCaves": "Granite Caves",
@@ -170,6 +180,17 @@
 		"GemstoneCaves": "Gemstone Caves",
 		"GemstoneCaveSize": "Gemstone Cave Size",
 		"Hives": "Hives",
+
+		// SkyIslands Menu
+		"SkyIslands": "Sky Islands",
+		"SkyLakes": "Sky Lakes",
+		"ColdIslands": "Cold Islands",
+		"SandIslands": "Sandy Islands",
+		"JungleIslands": "Jungle Islands",
+		"MushroomIslands": "Mushroom Islands",
+		"RainIslands": "Rainy Islands",
+		"SnowIslands": "Snow Islands",
+		"UnderworldIslands": "Underworld Islands",
 
 		// Traps Menu
 		"MiningExplosiveDetonator": "Mining Explosive(Detonator)",

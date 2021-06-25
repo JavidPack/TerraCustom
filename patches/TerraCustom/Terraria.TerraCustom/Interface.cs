@@ -23,9 +23,11 @@ namespace Terraria.TerraCustom
 		Settings,
 		ChooseWorldSize,
 		ChallengeOption,
+		ChallengeOption2,
 		ResetAllSettings,
 		MicroBiomes1,
 		MicroBiomes2,
+		SkyIslandSettings,
 		DownedFound,
 		Downed,
 		Found,
@@ -166,6 +168,10 @@ namespace Terraria.TerraCustom
 			return $"{Language.GetTextValue("TerraCustom.Reset")} {menu} {Language.GetTextValue("LegacyMenu.14")}";
 		}
 
+		static string[] FullCorruptArray(string value) {
+			return new string[] { $"{value}: {TCText("False")}", $"{value}: {TCText("Corruption")}", $"{value}: {TCText("Crimson")}" };
+		}
+
 		static TerraCustomMenuItem[] ChallengeOptionMenuItems = new TerraCustomMenuItem[] {
 			new ActionLabel(ResetMenu(TCText("ChallengeOptions")), Setting.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoTree")), () => Main.setting.NoTree ? 1 : 0, x => Main.setting.NoTree = x > 0 ? true :false),
@@ -183,6 +189,18 @@ namespace Terraria.TerraCustom
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoOrbOrHeart")), () => Main.setting.NoOrbHeart ? 1 : 0, x => Main.setting.NoOrbHeart = x > 0 ? true :false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoUnderworld")), () => Main.setting.NoUnderworld ? 1 : 0, x => Main.setting.NoUnderworld = x > 0 ? true :false),
 			new OptionLabel(CreateDisabledEnabledArray(TCText("SwapShroomJungle")), () => Main.setting.SwapShroomJungle ? 1 : 0, x => Main.setting.SwapShroomJungle = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("RandomizedTiles")), () => Main.setting.RandomizedTiles ? 1 : 0, x => Main.setting.RandomizedTiles = x > 0 ? true :false),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.ChallengeOption2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static TerraCustomMenuItem[] ChallengeOptionMenuItems2 = new TerraCustomMenuItem[] {
+			new ActionLabel(ResetMenu(TCText("ChallengeOptions")), Setting.initializeChallenge) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new OptionLabel(CreateDisabledEnabledArray(TCText("SwappedTiles")), () => Main.setting.SwappedTiles ? 1 : 0, x => Main.setting.SwappedTiles = x > 0 ? true :false),
+			new OptionLabel(CreateDisabledEnabledArray(TCText("FlippedWorld")), () => Main.setting.FlippedWorld ? 1 : 0, x => Main.setting.FlippedWorld = x > 0 ? true :false),
+			//new OptionLabel(new string[] { TCText("CorruptedWorld") + ": False",TCText("CorruptedWorld") + ": Corruption",TCText("CorruptedWorld") + ": Crimson"}, () => Main.setting.CorruptedWorld, x => Main.setting.CorruptedWorld = x),
+			new OptionLabel(FullCorruptArray(TCText("CorruptedWorld")), () => Main.setting.CorruptedWorld, x => Main.setting.CorruptedWorld = x),
+			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.ChallengeOption; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }) { labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
@@ -255,7 +273,8 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCTextC("EnchantedSword"), 5f, () => Main.setting.EnchantedSwordBiomeMultiplier, x => Main.setting.EnchantedSwordBiomeMultiplier = x,x => Math.Round(x * 100f) + "%" + " -> " + (int)Math.Ceiling((Main.maxTilesX * Main.maxTilesY / 5040000f) * x)),
 			new SliderItem(TCTextC("Campsite"), 20f, () => Main.setting.CampsiteBiomeMultiplier, x => Main.setting.CampsiteBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)6 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier) + "-" + (int)((float)11 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.CampsiteBiomeMultiplier)),
 			new SliderItem(TCTextC("ThinIce"), 5f, () => Main.setting.ThinIceBiomeMultiplier, x => Main.setting.ThinIceBiomeMultiplier = x,x => Math.Round(x* 100f) + "% -> " + (int)((float)3 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier) + "-" + (int)((float)5 * ((float)(Main.maxTilesX* Main.maxTilesY) / 5040000) * Main.setting.ThinIceBiomeMultiplier)),
-			new SliderItem(TCTextC("SkyIslands"), 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
+			//new SliderItem(TCTextC("SkyIslands"), 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
+			new ActionLabel(TCText("SkyIslandSettings"), ()=> { Main.menuMode = (int)MenuModes.SkyIslandSettings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new SliderItem(TCTextC("MinecartTracks"), 3f, () => Main.setting.MineCartMultiplier, x => Main.setting.MineCartMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(10f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f * x)),
 			new SliderItem(TCTextC("SpiderCaves"), 5f, () => Main.setting.SpiderCaveMultiplier, x => Main.setting.SpiderCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + "~"+(int)(Main.maxTilesX * 0.005 * x)),
 			new SliderItem(TCTextC("GraniteCaves"), 10f, () => Main.setting.GraniteCaveMultiplier, x => Main.setting.GraniteCaveMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + (int)(8 * (Main.maxTilesX / 4200f) * x) + "-" + (int)(13 * (Main.maxTilesX / 4200f) * x)),
@@ -263,6 +282,36 @@ namespace Terraria.TerraCustom
 			new SliderItem(TCTextC("UndergroundCabins"), 10f, () => Main.setting.UndergroundCabinMultiplier, x => Main.setting.UndergroundCabinMultiplier = x, x => Math.Round((double)(x * 100f)) + "%" + " -> " + ((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier)) + " " + (((int)(Main.setting.UndergroundCabinMultiplier * 2f * (float)(Main.maxTilesX * Main.maxTilesY) / 5040000f)+(int)((double)(Main.maxTilesX * Main.maxTilesY) * 1.6E-05 * Main.setting.UndergroundCabinMultiplier))>800?" Warning: Might Fail, too many chests.":"")),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+		};
+
+		static int WidthVal() {
+			int SkV = 1;
+			if (Main.setting.WorldWidth > 8000)
+				SkV++;
+
+			if (Main.setting.WorldWidth > 6000)
+				SkV++;
+
+			return SkV;
+		}
+
+		static TerraCustomMenuItem[] SkyIslandSettings = new TerraCustomMenuItem[] {
+			new ActionLabel(ResetMenu(TCText("MicroBiomes")), Setting.initializeMicroBiomesAmount) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
+			new PlainLabel(TCTextC("Setting100ForDefaultAmountBiomesNote")) {labelScale = 0.6f},
+			new SliderItem(TCTextC("SkyIslands"), 10f, () => Main.setting.SkyIslandMultiplier, x => Main.setting.SkyIslandMultiplier = x, x => "~" + Math.Round(x * 100f) + "%"),
+			new SliderItem(TCTextC("SkyLakes"), 5f, () => Main.setting.SkyLakeMultiplier, x => Main.setting.SkyLakeMultiplier = x, x => "Between 0 and " + Math.Ceiling(x * WidthVal()) + " Sky Lakes"),
+			new SliderItem(TCTextC("ColdIslands"), 10f, () => Main.setting.SnowIslands, x => Main.setting.SnowIslands = x, x => "Between 0 and " + Math.Floor(x) + " Cold Sky Islands"),
+			new SliderItem(TCTextC("SandIslands"), 10f, () => Main.setting.SandIslands, x => Main.setting.SandIslands = x, x => "Between 0 and " + Math.Floor(x) + " Sandy Sky Islands"),
+			new SliderItem(TCTextC("JungleIslands"), 10f, () => Main.setting.JungleIslands, x => Main.setting.JungleIslands = x, x => "Between 0 and " + Math.Floor(x) + " Jungle Sky Islands"),
+			new SliderItem(TCTextC("MushroomIslands"), 10f, () => Main.setting.MushroomIslands, x => Main.setting.MushroomIslands = x, x => "Between 0 and " + Math.Floor(x) + " Mushroom Sky Islands"),
+			new SliderItem(TCTextC("RainIslands"), 10f, () => Main.setting.RainIslands, x => Main.setting.RainIslands = x, x => "Between 0 and " + Math.Floor(x) + " Rainy Sky Islands"),
+			new SliderItem(TCTextC("SnowIslands"), 10f, () => Main.setting.Snow2Islands, x => Main.setting.Snow2Islands = x, x => "Between 0 and " + Math.Floor(x) + " Snow Sky Islands"),
+			new SliderItem(TCTextC("UnderworldIslands"), 10f, () => Main.setting.UnderworldIslands, x => Main.setting.UnderworldIslands = x, x => "Between 0 and " + Math.Floor(x) + " Underworld Sky Islands"),
+			//new SliderItem(TCTextC("Cloud"), 10f, () => Main.setting.Clouds, x => Main.setting.Clouds = x, x => "Between 0 and " + Math.Floor(x) + " Clouds"),
+			//new SliderItem(TCTextC("SIslands"), 10f, () => Main.setting.SandIslands, x => Main.setting.SandIslands = x, x => "Between 0 and " + Math.Floor(x) + " Sandy Sky Islands"),
+			
+			//new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.MicroBiomes2; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
+			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.MicroBiomes1; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
 
 		static TerraCustomMenuItem[] MicroBiomesMenuItems2 = new TerraCustomMenuItem[] {
@@ -331,6 +380,9 @@ namespace Terraria.TerraCustom
 			new ActionLabel(ResetMenu(TCText("Terrain")), Setting.initializeTerrain) { labelScale = 0.53f, additionalHorizontalSpacingPre = -5 },
 			new PlainLabel(TCText("Use100ForDefaultBehaviorNote")) {labelScale = 0.6f},
 			new OptionLabel(CreateDisabledEnabledArray(TCText("NoGravitate")), () => Main.setting.NoGravitate ? 1 : 0, x => Main.setting.NoGravitate = x > 0 ? true :false),
+			new SliderItem(TCText("BeachDepth"),4f,() => Main.setting.BeachDepthMultiplier -.1f, x => Main.setting.BeachDepthMultiplier = x +.1f, x => Math.Round((double)(Main.setting.BeachDepthMultiplier * 100f)) + "%"),// -> " + (int)(175*Main.setting.BeachDepthMultiplier)  + "-" +  (int)(250*Main.setting.BeachDepthMultiplier) +" ???"),
+			new SliderItem(TCText("DirtMounds"), 50f,() => Main.setting.MountCaveMult, x => Main.setting.MountCaveMult = x, x => Math.Round(Main.setting.MountCaveMult * 100f) + "%"),
+			new SliderItem(TCText("MoundArea"), 1.85f,() => Main.setting.MountCaveArea - 0.05f, x => Main.setting.MountCaveArea = x + 0.05f, x => Math.Round(Main.setting.MountCaveArea * 100f) + "%"),
 			new ActionLabel("Next Page", ()=> { Main.menuMode = (int)MenuModes.Terrain; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 			new ActionLabel(Lang.menu[5].Value, ()=> { Main.menuMode = (int)MenuModes.Settings; }){ labelScale = 0.93f, additionalHorizontalSpacingPre = 10 },
 		};
@@ -494,6 +546,9 @@ namespace Terraria.TerraCustom
 			{
 				GenericMenu(main, MicroBiomesMenuItems1, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
+			else if (Main.menuMode == (int)MenuModes.SkyIslandSettings) {
+				GenericMenu(main, SkyIslandSettings, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
 			else if (Main.menuMode == (int)MenuModes.MicroBiomes2)
 			{
 				GenericMenu(main, MicroBiomesMenuItems2, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
@@ -527,6 +582,9 @@ namespace Terraria.TerraCustom
 			else if (Main.menuMode == (int)MenuModes.ChallengeOption)
 			{
 				GenericMenu(main, ChallengeOptionMenuItems, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
+			}
+			else if (Main.menuMode == (int)MenuModes.ChallengeOption2) {
+				GenericMenu(main, ChallengeOptionMenuItems2, array, clickableLabelText, clickableLabelScale, array4, ref num, ref defaultLabelSpacing, ref numberClickableLabels);
 			}
 			else if (Main.menuMode == (int)MenuModes.Debug)
 			{
