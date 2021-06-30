@@ -38,7 +38,7 @@ body:
       Describe your issue(s) here. What is the issue?
       Please keep this as concise as possible, preferably a single line describing the issue. 
       For example: "When I press X button in menu Y, the component Z becomes unclickable"
-- type: input
+- type: textarea
   attributes:
     label: Log File
     description: |
