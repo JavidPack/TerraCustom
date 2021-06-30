@@ -25,10 +25,10 @@ body:
     description: What version are you running?
     multiple: false
     options:
-      - label: Official Release
-      - label: 1.4 Branch
-      - label: 1.4_mergedtesting Branch
-      - label: Other (please specify elsewhere)
+      - Official Release
+      - 1.4 Branch
+      - 1.4_mergedtesting Branch
+      - Other (please specify elsewhere)
   validations:
     required: true
 - type: textarea
